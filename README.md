@@ -1,4 +1,4 @@
-### room_occupancy
+### Room Occupancy System
 Final Year Project
 
 ## Roadmap
