@@ -1,5 +1,5 @@
 # Final Year Project
-## Project: Room Occupancy System
+Project: Room Occupancy System
 
 
 # Roadmap
