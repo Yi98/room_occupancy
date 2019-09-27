@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
 const cors = require('cors');
+const mongoose = require('mongoose');
 const app = express();
 
 const dashboardApi = require('./server/api/dashboard');
@@ -9,6 +10,14 @@ const chartApi = require('./server/api/chart');
 const reportApi = require('./server/api/report');
 
 const port = 3000;
+
+mongoose.connect('mongodb+srv://user1:pass1word@roomoccupancy-qayg2.mongodb.net/test?retryWrites=true&w=majority', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+});
+const db = mongoose.connection;
+db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+
 
 app.use(cors());
 app.use(express.static(path.join(__dirname, 'public')));

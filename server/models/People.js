@@ -1,8 +1,9 @@
 const mongoose = require('mongoose');
 
 const peopleSchema = mongoose.Schema({
-  time: { type: Date, required: true },
-  data: { type: Number, required: true },
+  from: { type: mongoose.Schema.Types.ObjectId, ref: 'Room' },
+  time: { type: String, required: true, default: Date(Date.now()).toString() },
+  data: { type: Number, required: true }
 });
 
-module.exports = mongoose.model('People', temperatureSchema);
+module.exports = mongoose.model('People', peopleSchema);
