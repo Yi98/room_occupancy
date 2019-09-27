@@ -3,9 +3,7 @@ const session = require('express-session');
 
 const User = require('../models/User');
 
-// * = complete implementation
-
-// *get one user with specific id ->  /api/user/:id (GET)
+// get one user with specific id ->  /api/user/:id (GET)
 exports.getUser = (req, res) => {
   User.findById({_id: req.params.id})
     .exec()
@@ -24,7 +22,7 @@ exports.getUser = (req, res) => {
 }
 
 
-// *get all users ->  /api/user (GET)
+// get all users ->  /api/user (GET)
 exports.getUsers = (req, res) => {
   User.find({})
     .exec()
@@ -44,7 +42,7 @@ exports.getUsers = (req, res) => {
 }
 
 
-// *add a new user ->  /api/user (POST)
+// add a new user ->  /api/user (POST)
 exports.addUser = (req, res) => {
   User.findOne({email: req.body.email})
     .then(user => {
@@ -79,7 +77,7 @@ exports.addUser = (req, res) => {
 }
 
 
-// *edit a user ->  /api/user/:id (PUT)
+// edit a user ->  /api/user/:id (PUT)
 exports.editUser = (req, res) => {
   User.findById(req.params.id)
     .then(user => {
@@ -105,7 +103,7 @@ exports.editUser = (req, res) => {
 }
 
 
-// *delete a user ->  /api/user/:id (DELETE)
+// delete a user ->  /api/user/:id (DELETE)
 exports.deleteUser = (req, res) => {
   User.findByIdAndDelete(req.params.id)
     .then(deletedUser => {
@@ -120,7 +118,7 @@ exports.deleteUser = (req, res) => {
 }
 
 
-// *check login cridentials -> /api/user/login (POST)
+// check login cridentials -> /api/user/login (POST)
 exports.login = (req, res) => {
   let fetchedUser;
 
@@ -146,8 +144,3 @@ exports.login = (req, res) => {
       })
     })
 }
-
-
-
-
-
