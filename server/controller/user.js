@@ -98,9 +98,30 @@ exports.deleteUser = (req, res) => {
 }
 
 
-// check login cridentials -> /api/user/login (POST)
+// *check login cridentials -> /api/user/login (POST)
 exports.login = (req, res) => {
+  let fetchedUser;
 
+  User.findOne({email: req.body.email})
+    .then(user => {
+      if (!user) {
+        return res.status(404).json({
+          message: 'Email is not recognized'
+        })
+      }
+      fetchedUser = user;
+      return bcrypt.compare(req.body.password, user.password);
+    })
+    .then(result => {
+      if (!result) {
+        return res.status(401).json({message: 'Login credentials invalid'});
+      }
+      res.status(200).json({
+        userId: fetchedUser._id,
+        username: fetchedUser.username,
+        role: fetchedUser.role
+      })
+    })
 }
 
 
