@@ -8,16 +8,16 @@ const dashboardApi = require('./server/api/dashboard');
 const userApi = require('./server/api/user');
 const chartApi = require('./server/api/chart');
 const reportApi = require('./server/api/report');
-
 const port = 3000;
 
 mongoose.connect('mongodb+srv://user1:pass1word@roomoccupancy-qayg2.mongodb.net/test?retryWrites=true&w=majority', {
   useNewUrlParser: true,
-  useUnifiedTopology: true
+  useUnifiedTopology: true,
+  dbName: 'RoomOccupancy'
 });
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
-
+mongoose.Promise = global.Promise;
 
 app.use(cors());
 app.use(express.static(path.join(__dirname, 'public')));

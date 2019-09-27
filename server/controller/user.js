@@ -1,59 +1,45 @@
 const User = require('../models/User');
-const db_connection = require('../db_connection');
 
+// get one user with specific id ->  /api/user/:id
 exports.getUser = (req, res) => {
-  User.find({role: 'staff'})
+  User.findById({_id: req.params.id})
     .exec()
     .then(user => {
       if (!user) {
-        return res.status(404).json({
-          message: 'Not found'
-        })
+        return res.status(404).json({ message: 'User not found' })
       }
-
       res.status(200).json({user});
     })
     .catch(err => {
       res.status(500).json({
-        message: 'Failed to get users'
+        message: `Failed to get user ${req.params.id}`,
+        err
       })
     })
-
-  // db_connection.connect(err => {
-  //   const User = db_connection.db("RoomOccupancy").collection("User");
-
-  //   UserModel.find({}, (err, user) => {
-  //     if (err) {
-  //       return res.status(500).json({err});
-  //     }
-  //     res.status(200).json({user});
-  //   })
-    // User.findById(req.params.id, (err, user => {
-    //   if (err) {
-    //     return res.status(500).json({err});
-    //   }
-    //   res.status(200).json({user});
-    // }))
-  // })
 }
 
+// get all users ->  /api/users
 exports.getUsers = (req, res) => {
-  db_connection.connect(err => {
-    const User = db_connection.db("RoomOccupancy").collection("User");
-
-    User.find({}).toArray((err, users) => {
-      if (err) {
-        return res.status(500).json({err});
+  User.find({})
+    .exec()
+    .then(users => {
+      if (!users) {
+        return res.status(404).json({message: 'Users not found'})
       }
       res.status(200).json({users});
     })
-
-    db_connection.close();
-  });
+    .catch(err => {
+      res.status(500).json({
+        message: 'Failed to get users',
+        err
+      })
+    })
 }
 
 exports.addUser = (req, res) => {
-  
+  // hash password
+  const newUser = new User(req.body.username, req.body.email, req.body.password, req.body.role);
+  return newUser.save();
 }
 
 exports.editUser = (req, res) => {
@@ -61,7 +47,12 @@ exports.editUser = (req, res) => {
 }
 
 exports.deleteUser = (req, res) => {
-
+  User.findByIdAndDelete(req.body.id, (err, data) => {
+    if (err) {
+      return console.log(err);
+    }
+    console.log('deleted');
+  })
 }
 
 exports.login = (req, res) => {
