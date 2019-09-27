@@ -83,14 +83,18 @@ exports.editUser = (req, res) => {
 }
 
 
-// delete a user ->  /api/user/:id (DELETE)
+// *delete a user ->  /api/user/:id (DELETE)
 exports.deleteUser = (req, res) => {
-  User.findByIdAndDelete(req.body.id, (err, data) => {
-    if (err) {
-      return console.log(err);
-    }
-    console.log('deleted');
-  })
+  User.findByIdAndDelete(req.params.id)
+    .then(deletedUser => {
+      if (!deletedUser) {
+        return res.status(404).json({message: `User ${req.params.id} was not found`});
+      }
+      return res.status(200).json({
+        message: 'User was succesfully deleted',
+        deletedUser
+      })
+    })
 }
 
 
