@@ -1,6 +1,8 @@
 const User = require('../models/User');
 
-// get one user with specific id ->  /api/user/:id
+// * = complete implementation
+
+// *get one user with specific id ->  /api/user/:id (GET)
 exports.getUser = (req, res) => {
   User.findById({_id: req.params.id})
     .exec()
@@ -18,7 +20,8 @@ exports.getUser = (req, res) => {
     })
 }
 
-// get all users ->  /api/users
+
+// *get all users ->  /api/user (GET)
 exports.getUsers = (req, res) => {
   User.find({})
     .exec()
@@ -36,16 +39,51 @@ exports.getUsers = (req, res) => {
     })
 }
 
+
+// add a new user ->  /api/user (POST)
 exports.addUser = (req, res) => {
-  // hash password
-  const newUser = new User(req.body.username, req.body.email, req.body.password, req.body.role);
-  return newUser.save();
+  /*
+  ToDo
+  1. Hash password
+  */
+
+  User.findOne({email: req.body.email})
+    .then(user => {
+      if (user) {
+        return res.status(500).json({
+          message: 'Email already existed',
+          existing: user
+        });
+      }
+
+      const newUser = new User({
+        username: req.body.username,
+        email: req.body.email,
+        password: req.body.password,
+        role: req.body.role
+      });
+
+      return newUser.save();
+    })
+    .then(user => {
+      res.status(201).json({
+        message: 'New user was created',
+        newUser: user
+      })
+    })
+    .catch(err => {
+      res.status(500).json({message: 'Failed to add user'});
+    })
 }
 
+
+// edit a user ->  /api/user/:id (PUT)
 exports.editUser = (req, res) => {
 
 }
 
+
+// delete a user ->  /api/user/:id (DELETE)
 exports.deleteUser = (req, res) => {
   User.findByIdAndDelete(req.body.id, (err, data) => {
     if (err) {
@@ -55,6 +93,8 @@ exports.deleteUser = (req, res) => {
   })
 }
 
+
+// check login cridentials -> /api/user/login (POST)
 exports.login = (req, res) => {
 
 }
