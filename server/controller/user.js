@@ -1,3 +1,5 @@
+const bcrypt = require('bcrypt');
+
 const User = require('../models/User');
 
 // * = complete implementation
@@ -40,13 +42,8 @@ exports.getUsers = (req, res) => {
 }
 
 
-// add a new user ->  /api/user (POST)
+// *add a new user ->  /api/user (POST)
 exports.addUser = (req, res) => {
-  /*
-  ToDo
-  1. Hash password
-  */
-
   User.findOne({email: req.body.email})
     .then(user => {
       if (user) {
@@ -56,10 +53,13 @@ exports.addUser = (req, res) => {
         });
       }
 
+      return bcrypt.hash(req.body.password, 5)
+    })
+    .then(hash => {
       const newUser = new User({
         username: req.body.username,
         email: req.body.email,
-        password: req.body.password,
+        password: hash,
         role: req.body.role
       });
 
