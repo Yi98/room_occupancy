@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 const cors = require('cors');
 const mongoose = require('mongoose');
+const session = require('express-session');
 const app = express();
 
 const dashboardApi = require('./server/api/dashboard');
@@ -20,6 +21,12 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 mongoose.Promise = global.Promise;
 
 app.use(cors());
+app.use(session({
+  secret: 'fyp room occupancy',
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: true }
+}))
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));

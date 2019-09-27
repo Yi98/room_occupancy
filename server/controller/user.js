@@ -1,4 +1,5 @@
 const bcrypt = require('bcrypt');
+const session = require('express-session');
 
 const User = require('../models/User');
 
@@ -31,6 +32,7 @@ exports.getUsers = (req, res) => {
       if (!users) {
         return res.status(404).json({message: 'Users not found'})
       }
+      console.log(req.session.userId);
       res.status(200).json({users});
     })
     .catch(err => {
@@ -79,7 +81,7 @@ exports.addUser = (req, res) => {
 
 // edit a user ->  /api/user/:id (PUT)
 exports.editUser = (req, res) => {
-
+  
 }
 
 
@@ -116,12 +118,14 @@ exports.login = (req, res) => {
       if (!result) {
         return res.status(401).json({message: 'Login credentials invalid'});
       }
+      req.session.userId = fetchedUser._id;
+
       res.status(200).json({
-        userId: fetchedUser._id,
         username: fetchedUser.username,
         role: fetchedUser.role
       })
     })
+
 }
 
 
