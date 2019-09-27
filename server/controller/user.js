@@ -79,9 +79,29 @@ exports.addUser = (req, res) => {
 }
 
 
-// edit a user ->  /api/user/:id (PUT)
+// *edit a user ->  /api/user/:id (PUT)
 exports.editUser = (req, res) => {
-  
+  User.findById(req.params.id)
+    .then(user => {
+      if (!user) {
+        return res.status(404).json({message: `User ${req.params.id} not found`});
+      }
+
+      if (user.role == 'staff') {
+        user.role = 'manager';
+      }
+      else if (user.role == 'manager') {
+        user.role = 'staff';
+      }
+
+      return user.save();
+    })
+    .then(updatedUser => {
+      res.status(200).json({
+        message: "User's role has been changed",
+        updatedUser
+      });
+    })
 }
 
 
@@ -125,7 +145,6 @@ exports.login = (req, res) => {
         role: fetchedUser.role
       })
     })
-
 }
 
 
