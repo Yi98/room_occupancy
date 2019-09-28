@@ -2,7 +2,7 @@
 const Temperature = require('../models/Temperature');
 const Room = require('../models/Room');
 
-// get all temperature data of a room ->  /api/details/:roomId/temperature (GET)
+// get all temperature data of a room ->  /api/data/:roomId/temperature (GET)
 exports.getTemperature = (req, res) => {
   Room.findById(req.params.roomId)
     .populate('temperature')
@@ -22,7 +22,7 @@ exports.getTemperature = (req, res) => {
 };
 
 
-// post new temperature data of a room ->  /api/details/:roomId/temperature (POST)
+// post new temperature data of a room ->  /api/data/:roomId/temperature (POST)
 exports.postTemperature = (req, res) => {
   const currentTemp = new Temperature({data: req.body.data});
   currentTemp.save()

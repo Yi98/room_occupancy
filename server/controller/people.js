@@ -2,7 +2,7 @@
 const People = require('../models/People');
 const Room = require('../models/Room');
 
-// get all number of people data of a room ->  /api/details/:roomId/people (GET)
+// get all number of people data of a room ->  /api/data/:roomId/people (GET)
 exports.getPeople = (req, res) => {
   Room.findById(req.params.roomId)
     .populate('people')
@@ -22,7 +22,7 @@ exports.getPeople = (req, res) => {
 };
 
 
-// post number of people of a room ->  /api/details/:roomId/people (POST)
+// post number of people of a room ->  /api/data/:roomId/people (POST)
 exports.postPeople = (req, res) => {
   const currentPeople = new People({data: req.body.data});
   currentPeople.save()

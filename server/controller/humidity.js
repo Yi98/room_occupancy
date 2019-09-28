@@ -2,7 +2,7 @@
 const Humidity = require('../models/Humidity');
 const Room = require('../models/Room');
 
-// get all humidity data of a room ->  /api/details/:roomId/humidity (GET)
+// get all humidity data of a room ->  /api/data/:roomId/humidity (GET)
 exports.getHumidity = (req, res) => {
   Room.findById(req.params.roomId)
     .populate('humidity')
@@ -22,7 +22,7 @@ exports.getHumidity = (req, res) => {
 };
 
 
-// post new humidity data of a room ->  /api/details/:roomId/humidity (POST)
+// post new humidity data of a room ->  /api/data/:roomId/humidity (POST)
 exports.postHumidity = (req, res) => {
   const currentHumid = new Humidity({data: req.body.data});
   currentHumid.save()
