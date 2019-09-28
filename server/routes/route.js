@@ -26,4 +26,9 @@ router.get('/user', (req, res) => {
   res.sendFile(path.join(__dirname, '../../views/user.html'));
 })
 
+//  Page not found
+router.get('*', (req, res) => {
+  res.redirect('/dashboard');
+})
+
 module.exports = router;
