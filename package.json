@@ -1,0 +1,29 @@
+{
+  "name": "room_occupancy",
+  "version": "1.0.0",
+  "description": "Final Year Project",
+  "main": "app.js",
+  "dependencies": {
+    "bcrypt": "^3.0.6",
+    "cors": "^2.8.5",
+    "express-session": "^1.16.2",
+    "express": "^4.17.1",
+    "mongoose": "^5.7.1",
+    "mongodb": "^3.3.2",
+    "nodemailer": "^6.3.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Yi98/room_occupancy.git"
+  },
+  "author": "Ng Yi",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Yi98/room_occupancy/issues"
+  },
+  "homepage": "https://github.com/Yi98/room_occupancy#readme"
+}
