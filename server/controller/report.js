@@ -1,3 +1,0 @@
-exports.getReport = (req, res) => {
-
-}

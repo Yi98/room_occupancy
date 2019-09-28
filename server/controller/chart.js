@@ -1,2 +1,0 @@
-exports.getChart = (req, res) => {
-}

@@ -1,5 +1,4 @@
 const bcrypt = require('bcrypt');
-const session = require('express-session');
 
 const User = require('../models/User');
 
@@ -30,7 +29,6 @@ exports.getUsers = (req, res) => {
       if (!users) {
         return res.status(404).json({message: 'Users not found'})
       }
-      console.log(req.session.userId);
       res.status(200).json({users});
     })
     .catch(err => {

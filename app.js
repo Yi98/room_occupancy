@@ -7,7 +7,7 @@ const app = express();
 
 const dashboardApi = require('./server/api/dashboard');
 const userApi = require('./server/api/user');
-const chartApi = require('./server/api/chart');
+const detailsApi = require('./server/api/details');
 const reportApi = require('./server/api/report');
 const port = 3000;
 
@@ -33,10 +33,10 @@ app.use(express.urlencoded({extended: true}));
 
 app.use('/api/dashboard', dashboardApi);
 app.use('/api/user', userApi);
-app.use('/api/chart', chartApi);
+app.use('/api/details', detailsApi);
 app.use('/api/report', reportApi);
 
-app.get('*', (req, res) => {
+app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'views/dashboard.html'));
 })
 
