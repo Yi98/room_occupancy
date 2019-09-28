@@ -18,7 +18,7 @@ exports.getUser = (req, res) => {
         err
       })
     })
-}
+};
 
 
 // get all users ->  /api/user (GET)
@@ -37,7 +37,7 @@ exports.getUsers = (req, res) => {
         err
       })
     })
-}
+};
 
 
 // add a new user ->  /api/user (POST)
@@ -72,7 +72,7 @@ exports.addUser = (req, res) => {
     .catch(err => {
       res.status(500).json({message: 'Failed to add user'});
     })
-}
+};
 
 
 // edit a user ->  /api/user/:id (PUT)
@@ -98,7 +98,7 @@ exports.editUser = (req, res) => {
         updatedUser
       });
     })
-}
+};
 
 
 // delete a user ->  /api/user/:id (DELETE)
@@ -113,7 +113,7 @@ exports.deleteUser = (req, res) => {
         deletedUser
       })
     })
-}
+};
 
 
 // check login cridentials -> /api/user/login (POST)
@@ -141,4 +141,4 @@ exports.login = (req, res) => {
         role: fetchedUser.role
       })
     })
-}
+};

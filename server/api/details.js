@@ -11,4 +11,11 @@ router.get('/:roomId/humidity', HumidityController.getHumidity);
 
 router.get('/:roomId/people', PeopleController.getPeople);
 
+router.post('/:roomId/temperature', TemperatureController.postTemperature);
+
+router.post('/:roomId/humidity', HumidityController.postHumidity);
+
+router.post('/:roomId/people', PeopleController.postPeople);
+
+
 module.exports = router;

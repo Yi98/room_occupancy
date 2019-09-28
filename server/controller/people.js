@@ -17,6 +17,30 @@ exports.getPeople = (req, res) => {
       res.status(500).json({
         message: `Failed to get number of people of room ${req.params.roomId}`,
         err
-      })
+      });
     })  
-}
+};
+
+
+// post number of people of a room ->  /api/details/:roomId/people (POST)
+exports.postPeople = (req, res) => {
+  const currentPeople = new People({data: req.body.data});
+  currentPeople.save()
+    .then(people => {
+      if (!people) {
+        return res.status(500).json({message: 'Failed to post number of people'});
+      }
+      return Room.findById(req.params.roomId);
+    })
+    .then(room => {
+      room.people.push(currentPeople);
+      room.save();
+      res.status(200).json({message: 'Successfully post number of people'});
+    })
+    .catch(err => {
+      res.status(500).json({
+        message: 'Failed to post number of people',
+        err
+      });
+    })
+};

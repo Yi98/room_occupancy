@@ -17,6 +17,30 @@ exports.getHumidity = (req, res) => {
       res.status(500).json({
         message: `Failed to get humidty of room ${req.params.roomId}`,
         err
-      })
+      });
     })  
-}
+};
+
+
+// post new humidity data of a room ->  /api/details/:roomId/humidity (POST)
+exports.postHumidity = (req, res) => {
+  const currentHumid = new Humidity({data: req.body.data});
+  currentHumid.save()
+    .then(humid => {
+      if (!humid) {
+        return res.status(500).json({message: 'Failed to post humidity data'});
+      }
+      return Room.findById(req.params.roomId);
+    })
+    .then(room => {
+      room.humidity.push(currentHumid);
+      room.save();
+      res.status(200).json({message: 'Successfully post humidity data'});
+    })
+    .catch(err => {
+      res.status(500).json({
+        message: 'Failed to post humidity data',
+        err
+      });
+    })
+};
