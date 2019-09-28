@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const session = require('express-session');
 const app = express();
 
+const userRoutes = require('./server/routes/user');
 const dashboardApi = require('./server/api/dashboard');
 const userApi = require('./server/api/user');
 const dataApi = require('./server/api/data');
@@ -35,11 +36,7 @@ app.use('/api/dashboard', dashboardApi);
 app.use('/api/user', userApi);
 app.use('/api/data', dataApi);
 app.use('/api/report', reportApi);
-
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'views/dashboard.html'));
-})
-
+app.use('/', userRoutes);
 
 app.listen((process.env.PORT || port), _ => {
   console.log('Server running on ' + port);
