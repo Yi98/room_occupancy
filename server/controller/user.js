@@ -1,4 +1,5 @@
 const bcrypt = require('bcrypt');
+const nodemailer = require('nodemailer');
 
 const User = require('../models/User');
 
@@ -51,7 +52,7 @@ exports.addUser = (req, res) => {
         });
       }
 
-      return bcrypt.hash(req.body.password, 5)
+      return bcrypt.hash(req.body.password, 15)
     })
     .then(hash => {
       const newUser = new User({
@@ -141,4 +142,58 @@ exports.login = (req, res) => {
         role: fetchedUser.role
       })
     })
+};
+
+
+exports.resetPassword = (req, res) => {
+  User.find({email: req.body.email})
+    .then(user => {
+      if (user.length < 1) {
+        return res.status(404).json({message: 'User does not exist'});
+      }
+    
+      // create reusable transporter object using the default SMTP transport
+      let transporter = nodemailer.createTransport({
+          service: 'gmail',
+          auth: {
+              user: 'fyproomoccupancy@gmail.com',
+              pass: 'fyp_room'
+          }
+      });
+  
+      // send mail with defined transport object
+      transporter.sendMail({
+          from: '"FYP Team" fyproomoccupancy@gmail.com', // sender address
+          to: 'ngyi07285@hotmail.com', // list of receivers
+          subject: 'Password Reset', // Subject line
+          html: `
+          <h3>Hi there,</h3>
+          <p>You recently requested to reset your password for your room occupancy account. Click the button below to reset it.</p>
+          <a href="http://localhost:3000/resetPassword">Reset your password</a>
+          <p>If you did not request a password reset, please ignore this email or reply to let us know.</p>
+          <p>Thanks,<br>FYP Team</p>
+          <p>This is the link to password reset.</p>
+          `
+      }, (err, info) => {
+        if (err) {  
+          console.log(err);
+        }
+        else {
+          console.log(info);
+        }
+      });
+    
+      res.status(200).json({message: 'Email sent to the user'});
+    })
+    .catch(err => {
+      res.status(500).json({
+        message: 'Failed to send email to the user',
+        err
+      })
+    })
+};
+
+
+exports.updatePassword = (req, res) => {
+  console.log(req.body.password);
 };

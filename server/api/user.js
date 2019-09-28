@@ -16,4 +16,8 @@ router.post('/', UserController.addUser);
 
 router.post('/login', UserController.login);
 
+router.post('/resetPassword', UserController.resetPassword);
+
+router.post('/updatePassword', UserController.updatePassword);
+
 module.exports = router;
