@@ -1,1 +1,114 @@
-<h1>chart</h1>
+<!DOCTYPE html>
+<html lang = "en">
+    <head>
+        <title>Chart</title>
+        <meta name = "viewport" content="width=device-width, initial-scale=1.0" />
+        <link href = "https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
+        <link rel="stylesheet" href="https://formden.com/static/cdn/font-awesome/4.4.0/css/font-awesome.min.css" />
+        
+    </head>
+    <body>
+        <div class = "container-fluid">
+            <div class = "row">
+                <div class = "col-md-3">
+                    <nav class = "navbar navbar-inverse">
+                       <div class = "navbar-header">
+                           <a href = "dashboard.html"><img src = "https://www.swinburne.edu.my/openday/_assets/img/nav-swin-logo.png" class = "img-fluid" alt = "logo"></a>
+                           <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>                        
+                          </button>
+                       </div>
+                       
+                       <div class = "collapse navbar-collapse" id = "myNavbar">
+                          <ul class = "nav navbar-nav">
+                               <li><a href = "dashboard.html">Dashboard</a></li>
+                               <li><a href = "report.html">View</a></li>
+                               <li><a href = "user.html">Users</a></li>
+                           </ul>
+                       </div>
+                    </nav>
+               </div>
+               
+                <div class = "col-md-9">
+                  
+                   <nav class = "navbar navbar-inverse">
+                      <div class = "container-fluid">
+                           <ul class = "nav navbar-nav navbar-right">
+                               <li><a href = "#"><i class="fa fa-sign-out"></i></a></li>
+                           </ul>
+                        </div>
+                   </nav>
+                   
+                   <div class = "row">
+                       <div class ="col-md-12">
+                           <h1>Chart</h1>
+                       </div>
+                   </div>
+                   
+                   <hr />
+                   
+                    <div class = "row">
+                      <div class = "col-md-6 col-sm-6 col-xs-12 mt-5 mb-4">
+                           <div class = "col-md-2 col-sm-4 col-xs-4">
+                               Type
+                           </div>
+
+                           <div class = "col-md-6 col-sm-6 col-xs-6">
+                               <select>
+                                   <option disabled selected>Pick one Type</option>
+                                   <option value = "Number of People">Number of People</option>
+                                   <option value = "Temperature">Temperature</option>
+                                   <option value = "Humidity">Humidity</option>
+                               </select>
+                           </div>
+                      </div>
+                   
+                       <div class = "col-md-5 col-sm-6 col-xs-8">
+                           <form class = "form-horizontal">
+                               <div class = "form-group ml-4">
+                                   <label class = "control-label requiredField" for = "date">
+                                       Date
+                                   </label>
+                                   <div class="input-group">
+                                        <div class="input-group-addon">
+                                             <i class="fa fa-calendar"></i>
+                                        </div>
+                                        <input class="form-control" id="date" name="date" placeholder="MM/DD/YYYY" type="text"/>
+                                    </div>
+                               </div>
+                           </form>
+                       </div>
+                   
+                   </div>
+                   
+                       <!-- Chart -->
+                   
+                   
+                       <button class = "btn btn-primary" id = "footage" style = "float: right">Show Footage</button>
+                </div>
+               
+               
+            </div>
+        </div>
+    </body>
+</html>
+
+
+<style>
+hr {
+    border-top: 2px solid #000;
+}
+</style>
+
+
+<!-- Include Date Range Picker -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+
+<script type = "text/javascript" src="../public/js/script.js"></script>
+
