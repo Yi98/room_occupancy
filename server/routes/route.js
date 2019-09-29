@@ -26,7 +26,7 @@ router.get('/user', (req, res) => {
   res.sendFile(path.join(__dirname, '../../views/user.html'));
 })
 
-router.get('/resetPassword', (req, res) => {
+router.get('/reset/:token', (req, res) => {
   res.sendFile(path.join(__dirname, '../../views/password_reset.html'));
 })
 

@@ -20,7 +20,7 @@ exports.getTemperature = (req, res) => {
       });
     })  
 };
-
+ 
 
 // post new temperature data of a room ->  /api/data/:roomId/temperature (POST)
 exports.postTemperature = (req, res) => {
@@ -33,6 +33,7 @@ exports.postTemperature = (req, res) => {
       return Room.findById(req.params.roomId);
     })
     .then(room => {
+      console.log(currentTemp);
       room.temperature.push(currentTemp);
       room.save();
       res.status(200).json({message: 'Successfully post temperature data'});

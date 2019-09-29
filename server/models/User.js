@@ -5,6 +5,8 @@ const userSchema = mongoose.Schema({
   email: { type: String, required: true },
   password: { type: String, required: true },
   role: { type: String, required: true, default: 'staff' },
+  resetPasswordToken: {type: String, required: false},
+  resetPasswordExpires: {type: Date, required: false}
 });
 
 module.exports = mongoose.model('User', userSchema, 'users');

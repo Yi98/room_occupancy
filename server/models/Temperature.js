@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const temperatureSchema = mongoose.Schema({
-  time: { type: String, required: true, default: Date(Date.now()).toString() },
+  time: { type: Date, required: true, default: Date.now },
   data: { type: Number, required: true }
 });
 

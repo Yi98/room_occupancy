@@ -1,6 +1,8 @@
 const bcrypt = require('bcrypt');
 const nodemailer = require('nodemailer');
 
+const crypto = require('crypto');
+
 const User = require('../models/User');
 
 // get one user with specific id ->  /api/user/:id (GET)
@@ -99,6 +101,12 @@ exports.editUser = (req, res) => {
         updatedUser
       });
     })
+    .catch(err => {
+      res.status(500).json({
+        message: "Failed to change user's role",
+        err
+      })
+    })
 };
 
 
@@ -113,6 +121,12 @@ exports.deleteUser = (req, res) => {
         message: 'User was succesfully deleted',
         deletedUser
       })
+    })
+    .catch(err => {
+      res.status(500).json({
+        message: 'Failed to delete user',
+        err
+      });
     })
 };
 
@@ -142,48 +156,55 @@ exports.login = (req, res) => {
         role: fetchedUser.role
       })
     })
+    .catch(err => {
+      res.status(500).json({
+        message: 'Fail to login',
+        err});
+    })
 };
 
 
-exports.resetPassword = (req, res) => {
-  User.find({email: req.body.email})
+exports.forgotPassword = (req, res) => {
+  User.findOne({email: req.body.email})
     .then(user => {
-      if (user.length < 1) {
+      if (!user) {
         return res.status(404).json({message: 'User does not exist'});
       }
+
+      const token = crypto.randomBytes(20).toString('hex');
+      user.resetPasswordToken = token,
+      user.resetPasswordExpires = Date.now() + 300000;  // link only active for 5 minutes
+      user.save();
     
-      // create reusable transporter object using the default SMTP transport
-      let transporter = nodemailer.createTransport({
+      const transporter = nodemailer.createTransport({
           service: 'gmail',
           auth: {
               user: 'fyproomoccupancy@gmail.com',
               pass: 'fyp_room'
           }
       });
-  
-      // send mail with defined transport object
-      transporter.sendMail({
-          from: '"FYP Team" fyproomoccupancy@gmail.com', // sender address
-          to: 'ngyi07285@hotmail.com', // list of receivers
-          subject: 'Password Reset', // Subject line
-          html: `
-          <h3>Hi there,</h3>
-          <p>You recently requested to reset your password for your room occupancy account. Click the button below to reset it.</p>
-          <a href="http://localhost:3000/resetPassword">Reset your password</a>
-          <p>If you did not request a password reset, please ignore this email or reply to let us know.</p>
-          <p>Thanks,<br>FYP Team</p>
-          <p>This is the link to password reset.</p>
-          `
-      }, (err, info) => {
+
+      const mailOptions = {
+        from: '"FYP Team" fyproomoccupancy@gmail.com',
+        to: `${user.email}`,
+        subject: 'Link to password reset',
+        html: `
+        <h3>Hi there,</h3>
+        <p>You recently requested to reset your password for your room occupancy account. Click the link below to reset it.</p>
+        <a href="http://localhost:3000/reset/${token}">Reset your password</a>
+        <p>This link will only be active for 5 minutes</p>
+        <p>If you did not request a password reset, please ignore this email or reply to let us know.</p>
+        <p>Thanks,<br>FYP Team</p>`
+      }
+      
+      transporter.sendMail(mailOptions, (err, info) => {
         if (err) {  
-          console.log(err);
+          console.log(`There was an err sending email ${err}`);
         }
         else {
-          console.log(info);
+          res.status(200).json({message: 'Recovery email sent to the user'});
         }
       });
-    
-      res.status(200).json({message: 'Email sent to the user'});
     })
     .catch(err => {
       res.status(500).json({
@@ -194,6 +215,37 @@ exports.resetPassword = (req, res) => {
 };
 
 
-exports.updatePassword = (req, res) => {
-  console.log(req.body.password);
+exports.resetPassword = (req, res) => {
+  let fetchedUser;
+  
+  User.findOne({resetPasswordToken: req.params.token})
+    .then(user => {
+      if (!user) {
+        return res.redirect('/login');
+      }
+
+      // console.log(user.resetPasswordExpires);
+      // console.log(new Date());
+
+      if (user.resetPasswordExpires < Date.now()) {
+        return res.status(500).json({message: 'Reset password link has expired'});
+      }
+
+      fetchedUser = user;
+      return bcrypt.hash(req.body.password, 15);
+    })
+    .then (hash => {
+      fetchedUser.password = hash;
+      fetchedUser.resetPasswordToken = null;
+      fetchedUser.resetPasswordExpires = null;
+      fetchedUser.save();
+
+      return res.redirect('/login');
+    })
+    .catch (err => {
+      return res.status(500).json({
+        message: 'Failed to reset password',
+        err
+      });
+    })
 };

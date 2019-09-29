@@ -6,7 +6,7 @@ $(document).ready(function(){
 			autoclose: true,
 		})
         
-        var date_input=$('input[name="endDate"]'); //our date input has the name "endDate"
+    var date_input=$('input[name="endDate"]'); //our date input has the name "endDate"
 		date_input.datepicker({
 			format: 'dd/mm/yyyy',
 			todayHighlight: true,

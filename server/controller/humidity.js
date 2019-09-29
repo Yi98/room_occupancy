@@ -33,6 +33,7 @@ exports.postHumidity = (req, res) => {
       return Room.findById(req.params.roomId);
     })
     .then(room => {
+      console.log(currentHumid);
       room.humidity.push(currentHumid);
       room.save();
       res.status(200).json({message: 'Successfully post humidity data'});
