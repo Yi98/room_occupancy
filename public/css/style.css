@@ -1,0 +1,118 @@
+/* START dashboard.html */
+
+hr {
+	border-top: 2px solid #000;
+}
+
+.thumbnail {
+	border: 5;
+	box-shadow: 5;
+	text-align: center;
+}
+
+.left-menu-1 {
+	background-color: #E50621;
+}
+
+.left-menu-2{
+	background-color: #E50621;
+	padding-top:1%;
+}
+
+.left-menu-2 ul{
+	width:100%;
+}
+
+.right-menu-1{
+	background-color: #FFFFFD;
+	padding: 2% 1% 2% 1%;
+
+}
+
+.right-menu-2 {
+	background-color: #F8F9F5;
+}
+
+.right-menu-1 {
+
+}
+
+
+.right-menu-icons{
+	font-size:1.5em;
+}
+
+.right-menu-icons a{
+	margin:0 10% 0 10%;
+}
+
+.nav-wrapper {
+	background-color: #ED1B2E;
+	text-align: left;
+	height: 10vh;
+}
+
+.logo {
+	width:65%;
+	margin:0 8% 0 8%;
+}
+
+#myNavbar ul li a{
+	color:white;
+	font-family: "Roboto", "Helvetica Neue", "Arial", "sans-serif";
+	font-weight: 400;
+	text-transform:uppercase;
+}
+
+#myNavbar ul li a:hover{
+	background-color:white;
+	color:black;
+	font-family: "Roboto", "Helvetica Neue", "Arial", "sans-serif";
+	font-weight: bold;
+	border-radius: 5px;
+}
+
+#myNavbar ul li .active{
+	background-color:white;
+	color:black;
+	font-family: "Roboto", "Helvetica Neue", "Arial", "sans-serif";
+	font-weight: bold;
+	border-radius: 5px;
+}
+
+.searchRoom{
+	width:30%;
+
+}
+
+.searchRoom:focus{
+	border:2px solid red;
+}
+
+.searchCol{
+
+}
+
+.main-wrapper{
+	height:90vh;
+}
+
+.pageTitle{
+	font-family: "Roboto", "Helvetica Neue", "Arial", "sans-serif";
+	font-size: 1.5em;
+}
+
+.content-wrapper{
+	margin-top: 2%;
+}
+
+.col-page-title{
+	text-align: center;
+}
+
+.thumbnail h4{
+	font-family: "Verdana", "Arial", "sans-serif";
+	font-weight: bold;
+}
+
+/* END dashboard.html */
