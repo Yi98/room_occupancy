@@ -100,6 +100,7 @@ hr {
 .pageTitle{
 	font-family: "Roboto", "Helvetica Neue", "Arial", "sans-serif";
 	font-size: 1.5em;
+	font-weight: 600;
 }
 
 .content-wrapper{
