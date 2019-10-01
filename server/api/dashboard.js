@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
 
-const DashboardController = require('../controller/dashboard');
+const RoomController = require('../controller/room');
 
-router.get('/', DashboardController.getDashboard);
+router.get('/', RoomController.getRooms);
 
 module.exports = router;
