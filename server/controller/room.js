@@ -1,7 +1,11 @@
 const Room = require('../models/Room');
 
+// get all rooms ->  /api/room (GET)
 exports.getRooms = (req, res) => {
   Room.find({})
+    .populate('temperature')
+    .populate('humidity')
+    .populate('people')
     .exec()
     .then(rooms => {
       if (!rooms) {
@@ -16,6 +20,7 @@ exports.getRooms = (req, res) => {
       });
     })
 }
+
 
 exports.addRoom = (req, res) => {
   const room = new Room({name: req.body.name});
@@ -33,5 +38,26 @@ exports.addRoom = (req, res) => {
     })
     .catch(err => {
       res.status(500).json({message: 'Failed to add room'});
+    })
+};
+
+
+exports.deleteRoom = (req, res) => {
+  Room.findByIdAndDelete({_id: req.params.roomId})
+    .then(room => {
+      if (!room) {
+        return res.status(404).json({message: `Room ${req.params.roomId} not found`});
+      }
+
+      res.status(200).json({
+        message: `Room ${req.params.roomId} is deleted`,
+        room
+      });
+    })
+    .catch(err => {
+      res.status(500).json({
+        message: `Failed to deleted room ${req.params.roomId}`,
+        err
+      });
     })
 }

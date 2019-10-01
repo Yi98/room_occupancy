@@ -24,17 +24,31 @@ exports.getPeople = (req, res) => {
 
 // post number of people of a room ->  /api/data/:roomId/people (POST)
 exports.postPeople = (req, res) => {
-  const currentPeople = new People({data: req.body.data});
-  currentPeople.save()
+  let fetchedRoom;
+
+  Room.findById(req.params.roomId)
+    .then(room => {
+      if (!room) {
+        return res.status(404).json({message: `Room ${req.params.roomId} not found`});
+      }
+
+      fetchedRoom = room;
+      const currentPeople = new People({data: req.body.data});
+      return currentPeople.save();
+    })
     .then(people => {
       if (!people) {
         return res.status(500).json({message: 'Failed to post number of people'});
       }
-      return Room.findById(req.params.roomId);
+
+      fetchedRoom.people.push(people);
+      return fetchedRoom.save();
     })
-    .then(room => {
-      room.people.push(currentPeople);
-      room.save();
+    .then (room => {
+      if (!room) {
+        return res.status(404).json({message: 'Fail to post number of people to room'});
+      }
+
       res.status(200).json({message: 'Successfully post number of people'});
     })
     .catch(err => {
