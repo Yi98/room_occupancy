@@ -103,6 +103,27 @@ hr {
 	margin-top: 2%;
 }
 
+.content-wrapper a div{
+	text-decoration: none;
+	color:black;
+	
+	transition: transform .5s ease;
+
+}
+
+.content-wrapper a:hover{
+	text-decoration: none;
+	opacity: 0.5;
+	color:black;
+}
+
+.content-wrapper a div:hover{
+	text-decoration: none;
+	opacity:0.5;
+	color:black;
+	transform: scale(1.05);	
+}
+
 .col-page-title{
 	text-align: center;
 }
@@ -110,6 +131,11 @@ hr {
 .thumbnail h4{
 	font-family: "Verdana", "Arial", "sans-serif";
 	font-weight: bold;
+}
+
+a.disabled {
+  pointer-events: none;
+  cursor: default;
 }
 
 
