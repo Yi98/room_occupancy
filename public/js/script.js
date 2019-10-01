@@ -32,8 +32,13 @@ xhttp.responseType = 'json';
 xhttp.onreadystatechange = function () {
 	if(this.readyState == 4 && this.status == 200) {
 		var result = this.response;
-		console.log(result);
-//		document.getElementById("test").innerHTML = ;
+		for(var room in result.rooms){
+			document.getElementById("showRoom").innerHTML += '<div class="col-md-4 col-sm-4 col-xs-6" ><a onclick="window.open(\'/chart\')"><div class="img-thumbnail">' +
+									'<h4>' + result.rooms[room].name + '</h4>' +
+									'<p>' + 'Number of People: ' + result.rooms[room].people.length + '</p>' +
+									'<p>' + 'Temperature: ' + result.rooms[room].temperature[0].data + '&#x2103;</p>' +
+									'<p>' + 'Humidity: ' + result.rooms[room].humidity[0].data + '</p></div></a></div>';
+		};
 	}
 };
 
@@ -154,4 +159,3 @@ stream.on("finish", function() {
   iframe.src = url;
 });
 
->>>>>>> 8ca46d11a651aba1adfe8665cd0cc0977ba52bb9
