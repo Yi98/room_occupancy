@@ -21,13 +21,8 @@
 //		})
 //});
 
-<<<<<<< HEAD
-//$(document).ready(function() {
-//		$('.tooltip').tooltipster();
-//});
-//
-//$('.tooltip').tooltipster({
-//    theme: 'tooltipster-noir'
+//$(document).ready(function(){
+//  $('[data-toggle="tooltip"]').tooltip();
 //});
 
 function showDashboard(){
@@ -46,10 +41,8 @@ xhttp.open("GET","http://localhost:3000/api/room",true);
 xhttp.send();
 	
 };
-=======
-$(document).ready(function(){
-  $('[data-toggle="tooltip"]').tooltip();
-});
+
+
 
 
 var filesLoaded = 0;
