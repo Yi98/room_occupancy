@@ -24,18 +24,31 @@ exports.getTemperature = (req, res) => {
 
 // post new temperature data of a room ->  /api/data/:roomId/temperature (POST)
 exports.postTemperature = (req, res) => {
-  const currentTemp = new Temperature({data: req.body.data});
-  currentTemp.save()
+  let fetchedRoom;
+
+  Room.findById(req.params.roomId)
+    .then(room => {
+      if (!room) {
+        return res.status(404).json({message: `Room ${req.params.roomId} not found`});
+      }
+
+      fetchedRoom = room;
+      const currentTemp = new Temperature({data: req.body.data});
+      return currentTemp.save();
+    })
     .then(temp => {
       if (!temp) {
         return res.status(500).json({message: 'Failed to post temperature data'});
       }
-      return Room.findById(req.params.roomId);
+
+      fetchedRoom.temperature.push(temp);
+      return fetchedRoom.save();
     })
-    .then(room => {
-      console.log(currentTemp);
-      room.temperature.push(currentTemp);
-      room.save();
+    .then (room => {
+      if (!room) {
+        return res.status(404).json({message: 'Fail to post temperature data to room'});
+      }
+
       res.status(200).json({message: 'Successfully post temperature data'});
     })
     .catch(err => {

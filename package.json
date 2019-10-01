@@ -5,17 +5,23 @@
   "main": "app.js",
   "dependencies": {
     "bcrypt": "^3.0.6",
+    "blob-stream": "^0.1.3",
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "express-session": "^1.16.2",
     "mongodb": "^3.3.2",
     "mongoose": "^5.7.1",
     "nodemailer": "^6.3.0",
+<<<<<<< HEAD
     "nodemon": "^1.19.3"
+=======
+    "pdfkit": "^0.10.0"
+>>>>>>> 8ca46d11a651aba1adfe8665cd0cc0977ba52bb9
   },
   "devDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "bundle" : "browserify public/js/pdf.js -o public/js/bundle.js"
   },
   "repository": {
     "type": "git",
