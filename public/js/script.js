@@ -33,11 +33,24 @@ xhttp.onreadystatechange = function () {
 	if(this.readyState == 4 && this.status == 200) {
 		var result = this.response;
 		for(var room in result.rooms){
+			var status = result.rooms[room].people.length;
+			if(status < 25){
+				var statusMsg = "Low";
+			}
+			
+			if(status > 25){
+				var statusMsg = "Moderate";
+			}
+			
+			if(status > 50){
+				var statusMsg = "Full";
+			}
 			document.getElementById("showRoom").innerHTML += '<div class="col-md-4 col-sm-4 col-xs-6" ><a onclick="window.open(\'/chart\')"><div class="img-thumbnail">' +
 									'<h4>' + result.rooms[room].name + '</h4>' +
 									'<p>' + 'Number of People: ' + result.rooms[room].people.length + '</p>' +
 									'<p>' + 'Temperature: ' + result.rooms[room].temperature[0].data + '&#x2103;</p>' +
-									'<p>' + 'Humidity: ' + result.rooms[room].humidity[0].data + '</p></div></a></div>';
+									'<p>' + 'Humidity: ' + result.rooms[room].humidity[0].data + '</p>' + 
+									'<p>' + 'Status: ' + statusMsg + '<p></div></a></div>';
 		};
 	}
 };
