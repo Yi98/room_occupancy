@@ -37,9 +37,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
-app.use('/api/room', roomApi);
+app.use('/api/rooms', roomApi);
 app.use('/api/data', dataApi);
-app.use('/api/user', userApi);
+app.use('/api/users', userApi);
 app.use('/', routes);
 
 
