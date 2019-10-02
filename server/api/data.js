@@ -1,21 +1,17 @@
 const express = require('express');
 const router = express.Router();
 
-const TemperatureController = require('../controller/temperature');
-const HumidityController = require('../controller/humidity');
-const PeopleController = require('../controller/people');
+const DataController = require('../controller/data');
 
-router.get('/:roomId/temperature', TemperatureController.getTemperature);
+router.get('/:roomId/temperature', DataController.getTemperature);
 
-router.get('/:roomId/humidity', HumidityController.getHumidity);
+router.get('/:roomId/humidity', DataController.getHumidity);
 
-router.get('/:roomId/people', PeopleController.getPeople);
+router.get('/:roomId/people', DataController.getPeople);
 
-router.post('/:roomId/temperature', TemperatureController.postTemperature);
+router.post('/:roomId/sensor', DataController.postSensorData);
 
-router.post('/:roomId/humidity', HumidityController.postHumidity);
-
-router.post('/:roomId/people', PeopleController.postPeople);
+router.post('/:roomId/people', DataController.postPeople);
 
 
 module.exports = router;
