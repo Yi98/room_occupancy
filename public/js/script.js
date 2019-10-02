@@ -92,6 +92,38 @@ function showChart(){
 	xhr.send();
 };
 
+function showUserTable(){
+var xhttp = new XMLHttpRequest();
+xhttp.responseType = 'json';
+
+xhttp.onreadystatechange = function () {
+	if(this.readyState == 4 && this.status == 200) {
+		var result = this.response;
+		for(var user in result.users){
+			document.getElementById("showUser").innerHTML += '<div class="table-responsive" style = "text-align: center"><table class = "table table-striped table-hover">' + '<tr>' + '<th>' + 'UserID' + '</th>' +
+            '<th>' + 'Name' + '</th>' +
+            '<th>' + 'Email' + '</th>' +
+            '<th>' + 'Contact Number' + '</th>' +
+            '<th>' + 'Role' + '</th>' +
+            '<th>' + 'Edit' + '</th>' +
+            '<th>' + 'Delete' + '</th>' +'</tr>' + '<tr>' +
+            '<td>' + result.users[user]._id + '</td>' +
+            '<td>' + result.users[user].username + '</td>' +
+            '<td>' + result.users[user].email + '</td>' +
+            '<td>' + 'empty' + '</td>' +
+            '<td>' + result.users[user].role + '</td>' +
+            '<td>' + '<button class = "btn btn-success"><span class="fa fa-edit" style = "color: white"></span></button>' + '</td>' +
+            '<td>' + '<button class = "btn btn-danger"><span class="fa fa-trash" style = "color: white"></span></button>' + '</td>' + '</tr>' + '</table></div>';
+                                   
+		};
+	}
+};
+
+xhttp.open("GET","http://localhost:3000/api/users",true);
+xhttp.send();
+	
+};
+
 var filesLoaded = 0;
 
 var files = {
@@ -200,4 +232,3 @@ stream.on("finish", function() {
   const iframe = document.querySelector('iframe')
   iframe.src = url;
 });
-
