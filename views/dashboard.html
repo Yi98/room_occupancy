@@ -16,29 +16,7 @@
 	<meta name="HandheldFriendly" content="true">
 	<link rel="stylesheet" href="/css/style.css" type="text/css"/>
 	
-	<!-- javascript -->
-	<script src="js/script.js" type="text/javascript"></script>
-
-  	<!-- dashboard's javascript  -->
-	  <script src="js/dashboard.js" type="text/javascript"></script>
-	  
-	  <script src="/socket.io/socket.io.js"></script>
-	  <script>
-		  var socket = io();
-			socket.on("temperature", function(msg) {
-				document.getElementsByClassName("temperature")[0].innerHTML = msg.data;
-				//console.log(""+msg.data)
-			});
-			socket.on("humidity", function(msg) {
-				document.getElementsByClassName("humidity")[0].innerHTML = msg.data;
-				//console.log(""+msg.data)
-			});
-	  </script>
-
-	<link rel="stylesheet" href="css/style.css" type="text/css"/>
-	
-	<!-- javascript -->
-	<script src="js/script.js" type="text/javascript"></script>
+	<script src="/socket.io/socket.io.js"></script>	
 	
 	<!-- embed font -->
 	<link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
@@ -83,8 +61,6 @@
           </ul>
         </nav>
 	  </div>
-	  <p class="temperature"></p>
-	  <p class="humidity"></p>
       <div class="col-md-10 col-sm-12 col-xs-12 c right-menu-2">
 				<div class="container content-wrapper">
 					<div class="row" id="showRoom">
@@ -93,5 +69,8 @@
     	</div>
 		</div>
   </div>
+
+  	<!-- javascript -->
+	<script src="js/script.js" type="text/javascript"></script>
 </body>
 </html>

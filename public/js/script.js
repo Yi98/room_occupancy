@@ -4,7 +4,7 @@
 //			format: 'dd/mm/yyyy',
 //			todayHighlight: true,
 //			autoclose: true,
-//		})
+//		})  
 //        
 //    var date_input=$('input[name="endDate"]'); //our date input has the name "endDate"
 //		date_input.datepicker({
@@ -24,6 +24,8 @@
 //$(document).ready(function(){
 //  $('[data-toggle="tooltip"]').tooltip();
 //});
+
+
 
 function showDashboard(){
 var xhttp = new XMLHttpRequest();
@@ -45,12 +47,13 @@ xhttp.onreadystatechange = function () {
 			if(status > 50){
 				var statusMsg = "Full";
 			}
-			document.getElementById("showRoom").innerHTML += '<div class="col-md-4 col-sm-4 col-xs-6" ><a onclick="window.open(\'/chart\')"><div class="img-thumbnail">' +
+			document.getElementById("showRoom").innerHTML += '<div class="room-card col-md-4 col-sm-4 col-xs-6" ><a onclick="window.open(\'/chart\')"><div class="img-thumbnail">' +
 									'<h4>' + result.rooms[room].name + '</h4>' +
 									'<p>' + 'Number of People: ' + result.rooms[room].people.length + '</p>' +
-									'<p>' + 'Temperature: ' + result.rooms[room].temperature[0].data + '&#x2103;</p>' +
-									'<p>' + 'Humidity: ' + result.rooms[room].humidity[0].data + '</p>' + 
-									'<p>' + 'Status: ' + statusMsg + '<p></div></a></div>';
+									'<p>' + 'Temperature: ' + "<span class='temperature'>0</span>" + '&#x2103;</p>' +
+									'<p>' + 'Humidity: ' + "<span class='humidity'>0</span>" + '</p>' + 
+                  '<p>' + 'Status: ' + statusMsg + '<p>' + 
+                  '<p class="room-id" style="display:none">'+ result.rooms[room]._id +'<p></div></a></div>';
 		};
 	}
 };
@@ -60,6 +63,19 @@ xhttp.send();
 	
 };
 
+var socket = io();
+socket.on("sensor", function(msg) {
+  console.log(msg.temperature);
+  // for loop assign to all room their respective sensor data
+  roomCards = document.getElementsByClassName("room-card");
+  for (let i = 0; i < roomCards.length; i++) {
+    roomId = roomCards[i].getElementsByClassName("room-id");
+    if (roomId[0].innerHTML == msg.roomId) {
+      document.getElementsByClassName("temperature")[i].innerHTML = msg.temperature;
+      document.getElementsByClassName("humidity")[i].innerHTML = msg.humidity;
+    }
+  }
+});
 
 
 

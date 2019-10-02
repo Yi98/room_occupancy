@@ -4,6 +4,15 @@ const Humidity = require('../models/Humidity');
 const People = require('../models/People');
 const Room = require('../models/Room');
 
+let socket;
+
+exports.sensorSocket = (io) => {
+  socket = io;
+  socket.on("connection", function(socket) {
+    console.log("sensor socket connected");
+  })
+}
+
 // get all temperature data of a room ->  /api/data/:roomId/temperature (GET)
 exports.getTemperature = (req, res) => {
   Room.findById(req.params.roomId)
@@ -67,7 +76,8 @@ exports.getPeople = (req, res) => {
 // post temp and humid data of a room ->  /api/data/:roomId/sensor (POST)
 exports.postSensorData = (req, res) => {
   let fetchedRoom;
-
+  // need store parameter
+  socket.emit("sensor", {temperature: req.body.tempData, humidity: req.body.humidData, roomId: req.params.roomId});
   Room.findById(req.params.roomId)
     .then(room => {
       if (!room) {
