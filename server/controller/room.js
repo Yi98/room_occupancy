@@ -1,6 +1,6 @@
 const Room = require('../models/Room');
 
-// get one rooms ->  /api/room/:roomId (GET)
+// get one room with specific id ->  /api/room/:roomId (GET)
 exports.getRoom = (req, res) => {
   Room.findById(req.params.roomId)  
     .populate('temperature')
