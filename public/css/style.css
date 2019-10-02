@@ -1,3 +1,17 @@
+/*Start login.html*/
+#loginForm {
+    margin-top: 120px;
+}
+
+#userEmail {
+    margin-top: 40px;
+}
+
+#btn {
+    float: right;
+}
+/*End login.html/
+
 /* START dashboard.html */
 
 hr {

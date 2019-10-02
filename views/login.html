@@ -5,19 +5,24 @@
         <meta name = "viewport" content="width=device-width, initial-scale=1.0" />
         <link href = "https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" />
         <link rel="stylesheet" href="https://formden.com/static/cdn/font-awesome/4.4.0/css/font-awesome.min.css" />
+        
+        <!-- CSS -->
+        <link rel="stylesheet" href="/css/style.css" type="text/css"/>
+        
     </head>
+    
     <body>
         <div class = "container">
-            <div class = "row" style = "margin-top: 120px">
+            <div class = "row" id = "loginForm">
                 <div class = "col-md-6 offset-md-3 col-xs-6 offset-xs-3">
                    <form>
                        <div class = "row">
-                           <div class = "col-md-6 offset-md-3 col-xs-6 offset-xs-3">
+                           <div class = "col-md-6 offset-md-3 col-sm-6 offset-sm-3 col-xs-6 offset-xs-3">
                                <img src = "https://www.swinburne.edu.my/openday/_assets/img/nav-swin-logo.png" class = "img-fluid" alt = "logo">
                            </div>
                        </div>
                        
-                        <div class = "form-group" style = "margin-top: 40px">
+                        <div class = "form-group" id = "userEmail">
                             <span class = "fa fa-user"></span>
                             <label for = "uid">Email address</label>
                             <input type = "email" class="form-control" id = "uid" placeholder = "Enter emaill address">
@@ -29,12 +34,15 @@
                             <input type = "password" class = "form-control" id = "upassword" placeholder = "Password">
                         </div>
                         
-                        <a href = "#">Forget Password</a> 
-                        <button type = "submit" class = "btn btn-primary" style = "float: right">Submit</button>
+                        <a href = "password_reset.html">Forget Password</a> 
+                        <button type = "submit" id = "btn" class = "btn btn-primary">Submit</button>
                         
                     </form>
                 </div>
             </div>
         </div>
+        
+        <!-- javascript -->
+	<script src="/js/script.js" type="text/javascript"></script>
     </body>
 </html>
