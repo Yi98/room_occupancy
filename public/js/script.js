@@ -60,8 +60,23 @@ xhttp.send();
 	
 };
 
+function showChart(){
+	var xhr = new XMLHttpRequest();
+	xhr.responseType = 'json';
+	
+	xhr.onreadystatechange = function (){
+		if(this.readyState == 4 && this.status == 200){
+			var result = this.response;
+			for(var room in result.rooms){
+			}
+			
+			console.log(result.rooms[room]);
 
-
+		}
+	};
+	xhr.open("GET","http://localhost:3000/api/room",true);
+	xhr.send();
+};
 
 var filesLoaded = 0;
 
