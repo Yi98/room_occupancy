@@ -63,7 +63,6 @@ xhttp.send();
 	
 };
 
-<<<<<<< HEAD
 function showChart(){
 	var xhr = new XMLHttpRequest();
 	xhr.responseType = 'json';
