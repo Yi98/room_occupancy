@@ -2,6 +2,15 @@
 const Temperature = require('../models/Temperature');
 const Room = require('../models/Room');
 
+let socket;
+
+exports.temperatureSocket = (io) => {
+  socket = io;
+  socket.on("connection", function(socket) {
+    console.log("temperature socket connected");
+  })
+}
+
 // get all temperature data of a room ->  /api/data/:roomId/temperature (GET)
 exports.getTemperature = (req, res) => {
   Room.findById(req.params.roomId)
@@ -21,27 +30,31 @@ exports.getTemperature = (req, res) => {
     })  
 };
  
-
 // post new temperature data of a room ->  /api/data/:roomId/temperature (POST)
 exports.postTemperature = (req, res) => {
   const currentTemp = new Temperature({data: req.body.data});
-  currentTemp.save()
-    .then(temp => {
-      if (!temp) {
-        return res.status(500).json({message: 'Failed to post temperature data'});
-      }
-      return Room.findById(req.params.roomId);
-    })
-    .then(room => {
-      console.log(currentTemp);
-      room.temperature.push(currentTemp);
-      room.save();
-      res.status(200).json({message: 'Successfully post temperature data'});
-    })
-    .catch(err => {
-      res.status(500).json({
-        message: 'Failed to post temperature data',
-        err
-      });
-    })
+  console.log("Received Temperature");
+  socket.emit("temperature", {data: req.body.data});
+  res.status(200).json({message: 'Successfully post temperature data'});
+  
+  // currentTemp.save()
+  //   .then(temp => {
+  //     if (!temp) {
+  //       return res.status(500).json({message: 'Failed to post temperature data'});
+  //     }
+  //     return Room.findById(req.params.roomId);
+  //   })
+  //   .then(room => {
+  //     console.log(currentTemp);
+  //     room.temperature.push(currentTemp);
+  //     room.save();
+  //     res.status(200).json({message: 'Successfully post temperature data'});
+  //   })
+  //   .catch(err => {
+  //     res.status(500).json({
+  //       message: 'Failed to post temperature data',
+  //       err
+  //     });
+  //   })
 };
+

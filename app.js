@@ -10,6 +10,8 @@ const dashboardApi = require('./server/api/dashboard');
 const userApi = require('./server/api/user');
 const dataApi = require('./server/api/data');
 const reportApi = require('./server/api/report');
+const temperatureController = require("./server/controller/temperature");
+const humidityController = require("./server/controller/humidity");
 const port = 3000;
 
 mongoose.connect('mongodb+srv://user1:pass1word@roomoccupancy-qayg2.mongodb.net/test?retryWrites=true&w=majority', {
@@ -20,6 +22,15 @@ mongoose.connect('mongodb+srv://user1:pass1word@roomoccupancy-qayg2.mongodb.net/
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 mongoose.Promise = global.Promise;
+
+// Testing part ----------------------
+const server = require("http").createServer(app);
+const io = require("socket.io")(server);
+
+// Pass the socket to other files
+temperatureController.temperatureSocket(io);
+humidityController.humiditySocket(io);
+// ----------------------
 
 app.use(cors());
 app.use(session({
@@ -38,6 +49,6 @@ app.use('/api/data', dataApi);
 app.use('/api/report', reportApi);
 app.use('/', routes);
 
-app.listen((process.env.PORT || port), _ => {
+server.listen((process.env.PORT || port), _ => {
   console.log('Server running on ' + port);
 });
