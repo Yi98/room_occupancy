@@ -13,11 +13,13 @@
     "mongoose": "^5.7.1",
     "nodemailer": "^6.3.0",
     "pdfkit": "^0.10.0",
-    "socket.io": "^2.3.0"
+    "socket.io": "^2.3.0",
+    "nodemon": "^1.19.3"
   },
   "devDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "bundle" : "browserify public/js/pdf.js -o public/js/bundle.js"
   },
   "repository": {
     "type": "git",

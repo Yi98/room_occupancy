@@ -164,6 +164,7 @@ exports.login = (req, res) => {
 };
 
 
+// send reset link via email to the user that forgot password -> api/user/forgotPassword (POST)
 exports.forgotPassword = (req, res) => {
   User.findOne({email: req.body.email})
     .then(user => {
@@ -215,6 +216,7 @@ exports.forgotPassword = (req, res) => {
 };
 
 
+// reset the password of the user ->  api/user/resetPassword (POST)
 exports.resetPassword = (req, res) => {
   let fetchedUser;
   
