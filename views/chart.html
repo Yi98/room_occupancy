@@ -19,13 +19,8 @@
 	<!-- embed font -->
 	<link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
 	<link rel="stylesheet" href="https://formden.com/static/cdn/font-awesome/4.4.0/css/font-awesome.min.css" />
-	
-	<!-- tooltipster -->
- 	<link rel="stylesheet" type="text/css" href="tooltipster-master/dist/css/tooltipster.bundle.min.css" />
-	<script type="text/javascript" src="http://code.jquery.com/jquery-1.10.0.min.js"></script>
-	<script type="text/javascript" src="tooltipster-master/dist/js/tooltipster.bundle.min.js"></script>
 </head>
-<body>
+<body onload="showChart()">
   <div class="container-fluid">
     <div class="row nav-wrapper">
       <div class="col-md-2 col-sm-12 col-xs-12 left-menu-1">
@@ -58,7 +53,7 @@
       </div>
       <div class="col-md-10 col-sm-12 col-xs-12 c right-menu-2">
 				<div class="container chart-wrapper">
-					<div class="row">
+					<div class="row" id="showChart">
 						<div class="col-md-12 col-sm-12 col-xs-12">
 							<div class="img-thumbnail">
 								<h4>Number of people</h4>
