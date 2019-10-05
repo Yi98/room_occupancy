@@ -148,26 +148,40 @@ xhttp.send();
 
 function addUser() {
   var xhttp = new XMLHttpRequest();
-
-let data = JSON.stringify({
-    email: document.getElementById("uemail").value,
-    password: document.getElementById("upsd").value
-});
-
-xhttp.open("POST","http://localhost:3000/api/users");
-xhttp.setRequestHeader("Content-type", "application/json; charset=utf-8");
-xhttp.send(data);  
+    var url = 'http://localhost:3000/api/users';
+    var params = 'username=peter&email=peter@gmail.com&password=12345';
+    xhttp.open('POST',url,true);
     
-xhttp.onload = function (){
-var users = JSON.parse(xhttp.responseText);
-if (xhttp.readyState == 4 & xhttp.status == "201") {
-    console.table(users);
-} 
-else
-{
-    console.error(users);
-}
-}    
+    xhttp.setRequestHeader('Content-type','application/x-www-form-urlencoded');
+    
+    xhttp.onreadystatechange = function() {
+        if(xhttp.readyState == 4 && xhttp.status == 200) {
+            alert(xhttp.responseText);
+        }
+    }
+    
+    xhttp.send(params);
+
+
+//let data = JSON.stringify({
+//    email: document.getElementById("uemail").value,
+//    password: document.getElementById("upsd").value
+//});
+//
+//xhttp.open("POST","http://localhost:3000/api/users");
+//xhttp.setRequestHeader("Content-type", "application/json; charset=utf-8");
+//xhttp.send(data);  
+//    
+//xhttp.onload = function (){
+//var users = JSON.parse(xhttp.responseText);
+//if (xhttp.readyState == 4 & xhttp.status == "201") {
+//    console.table(users);
+//} 
+//else
+//{
+//    console.error(users);
+//}
+//}    
 
 };
 
