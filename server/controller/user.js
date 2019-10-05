@@ -139,6 +139,7 @@ exports.login = (req, res) => {
     .then(user => {
       if (!user) {
         return res.status(404).json({
+          status: 'fail',
           message: 'Email is not recognized'
         })
       }
@@ -147,17 +148,19 @@ exports.login = (req, res) => {
     })
     .then(result => {
       if (!result) {
-        return res.status(401).json({message: 'Login credentials invalid'});
+        return res.status(401).json({status: 'fail'});
       }
       req.session.userId = fetchedUser._id;
 
       res.status(200).json({
+        status: 'success',
         username: fetchedUser.username,
         role: fetchedUser.role
       })
     })
     .catch(err => {
       res.status(500).json({
+        status: 'fail',
         message: 'Fail to login',
         err});
     })
