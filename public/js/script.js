@@ -92,7 +92,6 @@ function showChart(){
 	};
 	xhr.open("GET","http://localhost:3000/api/room",true);
 	xhr.send();
-<<<<<<< HEAD
 };
 
 function showUserTable(){
