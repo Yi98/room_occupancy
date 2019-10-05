@@ -74,11 +74,11 @@
               
               <div class="col-md-10 col-sm-12 col-xs-12 c right-menu-2">
                     <div class="container content-wrapper">
-                    
+
                     <h6>Required<span class="star">&#x2605;</span></h6>
-                    
+
                         <div class = "row mt-4">
-                      
+
                            <div class = "col-md-2 col-sm-4 col-xs-4">
                                Name
                                <span class="star">&#x2605;</span>
@@ -87,9 +87,9 @@
                            <div class = "col-md-4 col-sm-4 col-xs-4">
                                <input type = "text" id = "uname" placeholder = "Your name" /> 
                            </div>
-                       
+
                          </div>
-                   
+
                        <div class = "row mt-2">
 
                            <div class = "col-md-6 col-sm-12 col-xs-12">
@@ -156,31 +156,156 @@
                            </div>
 
                            <div class = "col-md-4 col-sm-4 col-xs-4">
-                               <select name = "role">
-                                   <option disabled selected>Pick a Role</option>
-                                   <option value = "Admin">Admin</option>
-                                   <option value = "Staff">Staff</option>
+                              
+                               <select id = "role">
+                               
+                                    <option disabled selected value = "Pick a Role">Pick a Role</option>
+                                    <option value = "Admin">Admin</option>
+                                    <option value = "Staff">Staff</option>
+
                                </select>
                            </div>
 
                        </div>
 
                        <div class = "row mb-5" style = "float: right">
+                        
                          <div class = "col-md-4 col-sm-4 col-xs-4 mr-2">
-                              <button class = "btn btn-success" id = "add">Add</button>
+                              <button class = "btn btn-success" id = "add" onclick = "addUser()">Add</button>
                          </div>
 
                          <div class = "col-md-4 col-sm-4 col-xs-4">
-                              <button class = "btn btn-danger" id = "cancel">Cancel</button>
+                              <button class = "btn btn-danger" id = "cancel" onclick = "cancel()">Cancel</button>
                          </div>
 
                        </div>
                    
                       <div class = "container">
+                         
                           <div id = "showUser">
                               
                           </div>
+                      
                       </div>
+                      
+                      <div class = "modal" id = "myModal">
+                          <div class = "modal-content">
+                                <div class = "modal-header">
+                                    <h2>Edit User</h2>
+                                </div>
+                                 
+                                <div class = "modal-body">
+                                    
+                                    <h6>Required<span class="star">&#x2605;</span></h6>
+
+                                    <div class = "row mt-4">
+
+                                       <div class = "col-md-2 col-sm-4 col-xs-4">
+                                           Name
+                                           <span class="star">&#x2605;</span>
+                                       </div>
+
+                                       <div class = "col-md-4 col-sm-4 col-xs-4">
+                                           <input type = "text" id = "edit_uname" /> 
+                                       </div>
+
+                                     </div>
+
+                                   <div class = "row mt-2">
+
+                                       <div class = "col-md-6 col-sm-12 col-xs-12">
+                                          <div class = "row pt-3">
+                                              <div class = "col-md-4 col-sm-4 col-xs-4">
+                                                  Password
+                                                  <span class="star">&#x2605;</span>
+                                              </div>
+
+                                              <div class = "col-md-4 col-sm-6 col-xs-6">
+                                                  <input type = "password" id = "edit_upsd" />
+                                              </div>
+                                          </div>
+                                       </div>
+
+                                       <div class = "col-md-6 col-sm-12 col-xs-12">
+                                          <div class = "row pt-3">
+                                              <div class = "col-md-5 col-sm-4 col-xs-4">
+                                                  Confirm Password
+                                                  <span class="star">&#x2605;</span>
+                                              </div>
+
+                                              <div class = "col-md-4 col-sm-6 col-xs-6">
+                                                  <input type = "password" id = "edit_cupsd" />
+                                              </div>
+                                          </div>
+                                       </div>
+
+                                   </div>
+
+
+
+                                   <div class = "row mt-4">
+
+                                       <div class = "col-md-2 col-sm-4 col-xs-4">
+                                           Email
+                                           <span class="star">&#x2605;</span>
+                                       </div>
+
+                                       <div class = "col-md-6 col-sm-6 col-xs-6">
+                                           <input type = "email" id = "edit_uemail"/> 
+                                       </div>
+
+                                   </div>
+
+                                    <div class = "row mt-4">
+
+                                       <div class = "col-md-2 col-sm-4 col-xs-4">
+                                           Contact Number
+                                           <span class="star">&#x2605;</span>
+                                       </div>
+
+                                       <div class = "col-md-6 col-sm-6 col-xs-6">
+                                           <input type = "number" id = "edit_unumber"/> 
+                                       </div>
+
+                                   </div>
+
+                                   <div class = "row mt-4">
+
+                                       <div class = "col-md-2 col-sm-4 col-xs-4">
+                                           Role
+                                           <span class="star">&#x2605;</span>
+                                       </div>
+
+                                       <div class = "col-md-4 col-sm-4 col-xs-4">
+
+                                           <select id = "edit_role">
+
+                                                <option disabled selected value = "Pick a Role">Pick a Role</option>
+                                                <option value = "Admin">Admin</option>
+                                                <option value = "Staff">Staff</option>
+
+                                           </select>
+                                       </div>
+                                       
+                                       <div class = "row mt-5" style = "float: right">
+
+                                         <div class = "col-md-4 col-sm-4 col-xs-4 mr-4">
+                                              <button class = "btn btn-success">Update</button>
+                                         </div>
+
+                                         <div class = "col-md-4 col-sm-4 col-xs-4">
+                                              <button class = "btn btn-danger" onclick = "closeModal()">Close</button>
+                                         </div>
+
+                                       </div>
+
+                                   </div>
+                              </div>
+                              
+                          </div>
+                      </div>
+                      
+                      
                 
                     </div>
                 </div>
