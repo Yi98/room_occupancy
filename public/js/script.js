@@ -149,7 +149,7 @@ xhttp.send();
 function addUser() {
   var xhttp = new XMLHttpRequest();
     var url = 'http://localhost:3000/api/users';
-    var params = 'username=alice&email=alice@gmail.com&password="12345';
+    var params = 'username=peter&email=peter@gmail.com&password=12345';
     xhttp.open('POST',url,true);
     
     xhttp.setRequestHeader('Content-type','application/x-www-form-urlencoded');
