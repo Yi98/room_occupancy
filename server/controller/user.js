@@ -73,7 +73,10 @@ exports.addUser = (req, res) => {
       })
     })
     .catch(err => {
-      res.status(500).json({message: 'Failed to add user'});
+      res.status(500).json({
+        message: 'Failed to add user',
+        err
+      });
     })
 };
 
