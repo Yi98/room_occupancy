@@ -127,29 +127,14 @@ xhttp.send();
 };
 
 
-//function addUser(){
-//var xhttp = new XMLHttpRequest();
-////xhttp.responseType = 'json';
-//
-//xhttp.onreadystatechange = function () {
-//	if(this.readyState == 4 && this.status == 200) {
-//		var result = this.response;
-////        console.log(document.getElementById("uemail").value);
-//        document.getElementById("uemail").innerHTML = result;
-//	}
-//};
-//
-//xhttp.open("POST","http://localhost:3000/api/users",true);
-//xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-//xhttp.send("email=alice@gmail.com");
-//	
-//};
-//
-
 function addUser() {
   var xhttp = new XMLHttpRequest();
     var url = 'http://localhost:3000/api/users';
-    var params = 'username=peter&email=peter@gmail.com&password=12345';
+    var params = 'role=' + document.getElementById("role").value 
+                + '&username=' + document.getElementById("uname").value 
+                + '&email=' + document.getElementById('uemail').value
+                + '&password=' + document.getElementById('upsd').value;
+    
     xhttp.open('POST',url,true);
     
     xhttp.setRequestHeader('Content-type','application/x-www-form-urlencoded');
@@ -160,28 +145,7 @@ function addUser() {
         }
     }
     
-    xhttp.send(params);
-
-
-//let data = JSON.stringify({
-//    email: document.getElementById("uemail").value,
-//    password: document.getElementById("upsd").value
-//});
-//
-//xhttp.open("POST","http://localhost:3000/api/users");
-//xhttp.setRequestHeader("Content-type", "application/json; charset=utf-8");
-//xhttp.send(data);  
-//    
-//xhttp.onload = function (){
-//var users = JSON.parse(xhttp.responseText);
-//if (xhttp.readyState == 4 & xhttp.status == "201") {
-//    console.table(users);
-//} 
-//else
-//{
-//    console.error(users);
-//}
-//}    
+    xhttp.send(params);   
 
 };
 
