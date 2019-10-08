@@ -39,7 +39,6 @@ var socket = io();
 	});
 
 
-
 function showDashboard(){
 var xhttp = new XMLHttpRequest();
 xhttp.responseType = 'json';
@@ -60,14 +59,13 @@ xhttp.onreadystatechange = function () {
 			if(status > 50){
 				var statusMsg = "Full";
 			}
-			document.getElementById("showRoom").innerHTML += '<div class="room-card col-md-4 col-sm-4 col-xs-6" ><a onclick="window.open(\'/chart\')"><div class="img-thumbnail">' +
+			document.getElementById("showRoom").innerHTML += '<div class="room-card col-md-4 col-sm-4 col-xs-6" ><a onclick="window.open(\'/chart/' + result.rooms[room]._id + '\')"><div class="img-thumbnail">' +
 									'<h4>' + result.rooms[room].name + '</h4>' +
 									'<p>' + 'Number of People: ' + result.rooms[room].people.length + '</p>' +
 									'<p>' + 'Temperature: ' + "<span class='temperature'>0</span>" + '&#x2103;</p>' +
 									'<p>' + 'Humidity: ' + "<span class='humidity'>0</span>" + '</p>' + 
-                  '<p>' + 'Status: ' + statusMsg + '<p>' + 
-                  '<p class="room-id" style="display:none">'+ result.rooms[room]._id +'<p></div></a></div>';
-		};
+                  '<p>' + 'Status: ' + statusMsg + '</p></div></a></div>';
+		}
 	}
 };
 
@@ -77,20 +75,136 @@ xhttp.send();
 };
 
 function showChart(){
+	var url_string = window.location.href;
+	var url = new URL(url_string);
+	var pathname = url.pathname;
+	var split = pathname.split("/"); 
+	var roomId = split[2];	
+	var peopleNo = []; //No of people in array from Jan-Dec
+	var tempNo = []; //Temperature value in array from Jan-Dec
+	var humidNo = []; //Humidity value in array from Jan-Dec
+
+	
+	
 	var xhr = new XMLHttpRequest();
 	xhr.responseType = 'json';
 	
 	xhr.onreadystatechange = function (){
 		if(this.readyState == 4 && this.status == 200){
-			var result = this.response;
-			for(var room in result.rooms){
-				
+			var result = this.response;	
+			var tp = []; 
+			var counter = [];
+			for(var room in result.rooms){	
+				if(result.rooms[room]._id == roomId){
+					
+					for(var i = 0; i < 12; i++){
+							tp[i] = 0;
+							counter[i] = 0;
+					}
+					
+					for(var people in result.rooms[room].people){
+						var time = result.rooms[room].people[people].time;
+						var date = new Date(time);
+						
+						for(var i = 0; i < 12; i ++){
+							if(date.getMonth() == i+1)
+								tp[i] += result.rooms[room].people[people].data;
+								counter[i] = counter[i] + 1;
+						}
+						
+						for(var i = 0; i < 12; i++){
+							peopleNo[i] = (tp[i]/counter[i]).toFixed(1);
+							peopleNo[i] = parseInt(peopleNo[i]);
+						}						
+					}
+					
+
+					for(var i = 0; i < 12; i++){
+							tp[i] = 0;
+							counter[i] = 0;
+					}
+					
+					for(var temp in result.rooms[room].temperature){
+						var time = result.rooms[room].temperature[temp].time;
+						var date = new Date(time);
+						for(var i = 0; i < 12; i++){
+							if(date.getMonth() == i+1)
+								tp[i] += result.rooms[room].temperature[temp].data;
+								counter[i] = counter[i] + 1;
+						}
+						
+						for(var i = 0; i < 12; i++){
+							tempNo[i] = (tp[i]/counter[i]).toFixed(1);
+							tempNo[i] = parseInt(tempNo[i]);
+						}
+						
+					}
+					
+					for(var i = 0; i < 12; i++){
+							tp[i] = 0;
+							counter[i] = 0;
+					}
+					
+					for(var humid in result.rooms[room].humidity){
+						var time = result.rooms[room].humidity[humid].time;
+						var date = new Date(time);
+						for(var i = 0; i < 12; i++){
+							if(date.getMonth() == i+1)
+								tp[i] += result.rooms[room].humidity[humid].data;
+								counter[i] = counter[i] + 1;
+						}
+						
+						for(var i = 0; i < 12; i++){
+							humidNo[i] = (tp[i]/counter[i]).toFixed(1);
+							humidNo[i] = parseInt(humidNo[i]);
+						}
+					}
+					
+				}
 			}
 			
 			
+			Highcharts.chart('peopleChart', {
+					title: {
+							text: 'Number Of People'
+					},
+					xAxis: {
+							categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+					},
+					series: [{
+							data: peopleNo,
+							name: 'People Count'
+					}]
+			});
+			
+			Highcharts.chart('temperatureChart', {
+					title: {
+							text: 'Temperature'
+					},
+					xAxis: {
+							categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+					},
+					series: [{
+							data: tempNo,
+							name: 'Temperature'
+					}]
+			});
+			
+			Highcharts.chart('humidityChart', {
+					title: {
+							text: 'Humidity'
+					},
+					xAxis: {
+							categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+					},
+					series: [{
+							data: humidNo,
+							name: 'Humidity'
+					}]
+			});
 		}
 	};
-	xhr.open("GET","http://localhost:3000/api/room",true);
+	xhr.open("GET","http://localhost:3000/api/rooms" ,true);
 	xhr.send();
 };
 
