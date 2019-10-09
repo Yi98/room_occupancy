@@ -216,20 +216,15 @@ xhttp.onreadystatechange = function () {
 	if(this.readyState == 4 && this.status == 200) {
 		var result = this.response;
 		for(var user in result.users){
-			document.getElementById("showUser").innerHTML += '<div class="table-responsive" style = "text-align: center"><table class = "table table-striped table-hover">' + '<tr>' + '<th>' + 'UserID' + '</th>' +
-            '<th>' + 'Name' + '</th>' +
-            '<th>' + 'Email' + '</th>' +
-            '<th>' + 'Contact Number' + '</th>' +
-            '<th>' + 'Role' + '</th>' +
-            '<th>' + 'Edit' + '</th>' +
-            '<th>' + 'Delete' + '</th>' +'</tr>' + '<tr>' +
+			document.getElementById("showUser").innerHTML += 
+            '<tbody>' + 
             '<td>' + result.users[user]._id + '</td>' +
             '<td>' + result.users[user].username + '</td>' +
             '<td>' + result.users[user].email + '</td>' +
             '<td>' + 'empty' + '</td>' +
             '<td>' + result.users[user].role + '</td>' +
             '<td>' + '<button class = "btn btn-success" onclick = "showModal()"><span class="fa fa-edit" style = "color: white"></span></button>' + '</td>' +
-            '<td>' + '<button class = "btn btn-danger"><span class="fa fa-trash" style = "color: white"></span></button>' + '</td>' + '</tr>' + '</table></div>';
+            '<td>' + '<button class = "btn btn-danger"><span class="fa fa-trash" style = "color: white"></span></button>' + '</td>' + '</tr>' + '</tbody>';
                                    
 		};
 	}
@@ -242,7 +237,7 @@ xhttp.send();
 
 
 function addUser() {
-  var xhttp = new XMLHttpRequest();
+    var xhttp = new XMLHttpRequest();
     var url = 'http://localhost:3000/api/users';
     var params = 'role=' + document.getElementById("role").value 
                 + '&username=' + document.getElementById("uname").value 
@@ -253,13 +248,17 @@ function addUser() {
     
     xhttp.setRequestHeader('Content-type','application/x-www-form-urlencoded');
     
+    alert('A new user has been add!!');
+    
     xhttp.onreadystatechange = function() {
         if(xhttp.readyState == 4 && xhttp.status == 200) {
             alert(xhttp.responseText);
         }
     }
     
-    xhttp.send(params);   
+    xhttp.send(params); 
+    
+    clear();
 
 };
 
@@ -272,6 +271,16 @@ function addUser() {
 //    
 //};
 
+function clear() {
+    document.getElementById("uname").value = '';  
+    document.getElementById("upsd").value = '';  
+    document.getElementById("cupsd").value = '';  
+    document.getElementById("uemail").value = '';  
+    document.getElementById("unumber").value = '';  
+    var r = document.getElementById("role");
+    var role = r.options[r.selectedIndex].value = 'Pick a Role';
+    document.getElementById("role").value = role;
+};
 
 
 function cancel() {
@@ -293,13 +302,73 @@ function cancel() {
 function showModal(){
     var modal = document.getElementById("myModal");
     modal.style.display = "block";
+    
+    var table = document.getElementsByTagName("table")[0];
+    
+    var tbody = table.getElementsByTagName("tbody")[0];
+    
+    tbody.onclick = function (e) {
+        e = e || window.event;
+        var target = e.srcElement || e.target;
+        while (target && target.nodeName !== "TR") {
+            target = target.parentNode;
+        }
+        if (target) 
+        {
+            
+            var cells = target.getElementsByTagName("td");
+
+        }
+
+        var xhttp = new XMLHttpRequest();
+        xhttp.responseType = 'json';
+        
+        var url = 'http://localhost:3000/api/users/' + cells[0].innerHTML;
+        
+        document.getElementById("id").value = cells[0].innerHTML;
+
+        xhttp.onreadystatechange = function () {
+            if(this.readyState == 4 && this.status == 200) {
+                var result = this.response;
+                
+                document.getElementById("edit_role").value = result.user.role;
+            }
+        };
+        
+        xhttp.open("GET",url,true);
+
+        xhttp.send();
+        
+        
+    };
 };
+
+function updateUser() {
+ 
+    var xhttp = new XMLHttpRequest();
+    var url = 'http://localhost:3000/api/users/' + document.getElementById("id").value;
+    var params = 'role=' + document.getElementById("edit_role").value;
+    
+    xhttp.open('PUT',url,true);
+    
+    xhttp.setRequestHeader('Content-type','application/x-www-form-urlencoded');
+    
+    xhttp.onreadystatechange = function() {
+        if(xhttp.readyState == 4 && xhttp.status == 200) 
+        {
+            alert("Update user successfully!!");
+        }
+    }
+    
+    xhttp.send(params); 
+    
+    closeModal();
+  
+};
+
 
 function closeModal(){
     var modal = document.getElementById("myModal");
     modal.style.display = "none";
 };
 
-function editUser(){
-    
-};

@@ -75,7 +75,7 @@
               <div class="col-md-10 col-sm-12 col-xs-12 c right-menu-2">
                     <div class="container content-wrapper">
 
-                    <h6>Required<span class="star">&#x2605;</span></h6>
+                    <h6>Required field<span class="star">&#x2605;</span></h6>
 
                         <div class = "row mt-4">
 
@@ -85,7 +85,7 @@
                            </div>
 
                            <div class = "col-md-4 col-sm-4 col-xs-4">
-                               <input type = "text" id = "uname" placeholder = "Your name" /> 
+                               <input type = "text" id = "uname" placeholder = "Your name" required /> 
                            </div>
 
                          </div>
@@ -160,7 +160,7 @@
                                <select id = "role">
                                
                                     <option disabled selected value = "Pick a Role">Pick a Role</option>
-                                    <option value = "admin">Admin</option>
+                                    <option value = "manager">Manager</option>
                                     <option value = "staff">Staff</option>
 
                                </select>
@@ -182,7 +182,28 @@
                    
                       <div class = "container">
                          
-                          <div id = "showUser">
+                          <div class = "table-responsive" style = text-align: center>
+                             <table class = "table table-striped table-hover" id = "userTable">
+                                 <thead>
+                                     <tr>
+                                         <th>UserID</th>
+                                         <th>Name</th>
+                                         <th>Email</th>
+                                         <th>Contact Number</th>
+                                         <th>Role</th>
+                                         <th>Edit</th>
+                                         <th>Delete</th>
+                                     </tr>
+                                 </thead>
+                                 
+                                 <tbody id = "showUser">
+                                     
+                                 </tbody>
+                             </table>
+                              
+                          </div>
+                          
+                          <div id = "showTable">
                               
                           </div>
                       
@@ -196,78 +217,7 @@
                                  
                                 <div class = "modal-body">
                                     
-                                    <h6>Required<span class="star">&#x2605;</span></h6>
-
-                                    <div class = "row mt-4">
-
-                                       <div class = "col-md-2 col-sm-4 col-xs-4">
-                                           Name
-                                           <span class="star">&#x2605;</span>
-                                       </div>
-
-                                       <div class = "col-md-4 col-sm-4 col-xs-4">
-                                           <input type = "text" id = "edit_uname" /> 
-                                       </div>
-
-                                     </div>
-
-                                   <div class = "row mt-2">
-
-                                       <div class = "col-md-6 col-sm-12 col-xs-12">
-                                          <div class = "row pt-3">
-                                              <div class = "col-md-4 col-sm-4 col-xs-4">
-                                                  Password
-                                                  <span class="star">&#x2605;</span>
-                                              </div>
-
-                                              <div class = "col-md-4 col-sm-6 col-xs-6">
-                                                  <input type = "password" id = "edit_upsd" />
-                                              </div>
-                                          </div>
-                                       </div>
-
-                                       <div class = "col-md-6 col-sm-12 col-xs-12">
-                                          <div class = "row pt-3">
-                                              <div class = "col-md-5 col-sm-4 col-xs-4">
-                                                  Confirm Password
-                                                  <span class="star">&#x2605;</span>
-                                              </div>
-
-                                              <div class = "col-md-4 col-sm-6 col-xs-6">
-                                                  <input type = "password" id = "edit_cupsd" />
-                                              </div>
-                                          </div>
-                                       </div>
-
-                                   </div>
-
-
-
-                                   <div class = "row mt-4">
-
-                                       <div class = "col-md-2 col-sm-4 col-xs-4">
-                                           Email
-                                           <span class="star">&#x2605;</span>
-                                       </div>
-
-                                       <div class = "col-md-6 col-sm-6 col-xs-6">
-                                           <input type = "email" id = "edit_uemail"/> 
-                                       </div>
-
-                                   </div>
-
-                                    <div class = "row mt-4">
-
-                                       <div class = "col-md-2 col-sm-4 col-xs-4">
-                                           Contact Number
-                                           <span class="star">&#x2605;</span>
-                                       </div>
-
-                                       <div class = "col-md-6 col-sm-6 col-xs-6">
-                                           <input type = "number" id = "edit_unumber"/> 
-                                       </div>
-
-                                   </div>
+                                    <h6>Required field<span class="star">&#x2605;</span></h6>
 
                                    <div class = "row mt-4">
 
@@ -281,16 +231,18 @@
                                            <select id = "edit_role">
 
                                                 <option disabled selected value = "Pick a Role">Pick a Role</option>
-                                                <option value = "Admin">Admin</option>
-                                                <option value = "Staff">Staff</option>
+                                                <option value = "manager">Manager</option>
+                                                <option value = "staff">Staff</option>
 
                                            </select>
                                        </div>
                                        
+                                       <div id = "id"></div>
+                                       
                                        <div class = "row mt-5" style = "float: right">
 
                                          <div class = "col-md-4 col-sm-4 col-xs-4 mr-4">
-                                              <button class = "btn btn-success">Update</button>
+                                              <button class = "btn btn-success" onclick = "updateUser()">Update</button>
                                          </div>
 
                                          <div class = "col-md-4 col-sm-4 col-xs-4">
