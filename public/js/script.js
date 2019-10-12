@@ -1,3 +1,5 @@
+const canvg = require("canvg");
+
 //$(document).ready(function(){
 //		var date_input=$('input[name="startDate"]'); //our date input has the name "startDate"
 //		date_input.datepicker({
@@ -74,7 +76,7 @@ xhttp.send();
 	
 };
 
-function showChart(){
+function showChart() {
 	var url_string = window.location.href;
 	var url = new URL(url_string);
 	var pathname = url.pathname;
@@ -83,13 +85,11 @@ function showChart(){
 	var peopleNo = []; //No of people in array from Jan-Dec
 	var tempNo = []; //Temperature value in array from Jan-Dec
 	var humidNo = []; //Humidity value in array from Jan-Dec
-
-	
 	
 	var xhr = new XMLHttpRequest();
 	xhr.responseType = 'json';
 	
-	xhr.onreadystatechange = function (){
+	xhr.onreadystatechange = function () {
 		if(this.readyState == 4 && this.status == 200){
 			var result = this.response;	
 			var tp = []; 
@@ -117,7 +117,6 @@ function showChart(){
 							peopleNo[i] = parseInt(peopleNo[i]);
 						}						
 					}
-					
 
 					for(var i = 0; i < 12; i++){
 							tp[i] = 0;
@@ -163,8 +162,7 @@ function showChart(){
 				}
 			}
 			
-			
-			Highcharts.chart('peopleChart', {
+			new Highcharts.chart('peopleChart', {
 					title: {
 							text: 'Number Of People'
 					},
@@ -176,8 +174,8 @@ function showChart(){
 							name: 'People Count'
 					}]
 			});
-			
-			Highcharts.chart('temperatureChart', {
+
+			new Highcharts.chart('temperatureChart', {
 					title: {
 							text: 'Temperature'
 					},
@@ -190,7 +188,7 @@ function showChart(){
 					}]
 			});
 			
-			Highcharts.chart('humidityChart', {
+			new Highcharts.chart('humidityChart', {
 					title: {
 							text: 'Humidity'
 					},
@@ -207,6 +205,35 @@ function showChart(){
 	xhr.open("GET","http://localhost:3000/api/rooms" ,true);
 	xhr.send();
 };
+
+// Bugs:
+// 1. the generate report only work after the chart has been generated on the web page
+function directToPdf() {
+	let peopleChart, temperatureChart, humidityChart;
+	let charts = Highcharts.charts; // Obtain all the Highcharts objects
+
+	// Loop through the Highcharts object array and make assignment according to the their respective renderTo.id
+	for (let i = 0; i < charts.length; i++) {
+		if (charts[i].renderTo.id == "peopleChart") {
+			peopleChart = charts[i].getSVG();
+		}
+		if (charts[i].renderTo.id == "temperatureChart") {
+			temperatureChart = charts[i].getSVG();
+		}
+		if (charts[i].renderTo.id == "humidityChart") {
+			humidityChart = charts[i].getSVG();
+		}
+	}
+	
+	// Open the new window that show the PDF file
+	let report_window = window.open("/report");
+	report_window.focus();
+
+	// After the window load, run the function in the new opened window with those parameters
+	report_window.addEventListener("load", function() {
+		report_window.generateReport({}, peopleChart, temperatureChart, humidityChart);
+	})
+}
 
 function showUserTable(){
 var xhttp = new XMLHttpRequest();

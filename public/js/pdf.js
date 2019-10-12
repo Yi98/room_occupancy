@@ -1,47 +1,39 @@
-// create a document and pipe to a blob
-const PDFDocument = require('pdfkit');
+const PDFDocument = require("pdfkit");
 const blobStream  = require('blob-stream');
+const canvg = require("canvg");
 
-var doc = new PDFDocument();
-var stream = doc.pipe(blobStream());
+// Bugs:
+// 1. When hard reload the pdf file won't load
+// 2. When ctrl+shift+tab the pdf file won't display the previous one
+window.generateReport = function (data, peopleChart, temperatureChart, humidityChart) {
+    let doc = new PDFDocument();
+    let canvas = document.createElement("CANVAS");
 
-// draw some text
-doc.fontSize(25).text('Here is some vector graphics...', 100, 80);
+    canvg(canvas, peopleChart);
+    let peopleChart64 = canvas.toDataURL("image/png").slice('data:image/png;base64,'.length);
 
-// some vector graphics
-doc
-  .save()
-  .moveTo(100, 150)
-  .lineTo(100, 250)
-  .lineTo(200, 250)
-  .fill('#FF3300');
+    canvg(canvas, temperatureChart);
+    let temperatureChart64 = canvas.toDataURL("image/png").slice('data:image/png;base64,'.length);
 
-doc.circle(280, 200, 50).fill('#6600FF');
+    canvg(canvas, humidityChart);
+    let humidityChart64 = canvas.toDataURL("image/png").slice('data:image/png;base64,'.length);
 
-// an SVG path
-doc
-  .scale(0.6)
-  .translate(470, 130)
-  .path('M 250,75 L 323,301 131,161 369,161 177,301 z')
-  .fill('red', 'even-odd')
-  .restore();
+    let stream = doc.pipe(blobStream());
 
-// and some justified text wrapped into columns
-doc
-  .text('And here is some wrapped text...', 100, 300)
-  .font('Times-Roman', 13)
-  .moveDown()
-  .text('lorem', {
-    width: 412,
-    align: 'justify',
-    indent: 30,
-    columns: 2,
-    height: 300,
-    ellipsis: true
-  });
+    doc.fontSize(25).text("Chart for number of people", 100, 80);
+    let peopleChartFinal = new Buffer(peopleChart64, "base64");
+    doc.image(peopleChartFinal, {height:200});
 
-// end and display the document in the iframe to the right
-doc.end();
-stream.on('finish', function() {
-   document.getElementById('pdf-display').src = stream.toBlobURL('application/pdf');
-});
+    doc.fontSize(25).text("Chart for temperature", 100, 300);
+    let temperatureChartFinal = new Buffer(temperatureChart64, "base64");
+    doc.image(temperatureChartFinal, {height:200});
+
+    doc.fontSize(25).text("Chart for humidity", 100, 520);
+    let humidityChartFinal = new Buffer(humidityChart64, "base64");
+    doc.image(humidityChartFinal, {height:200});
+
+    doc.end();
+    stream.on('finish', function() {
+        document.getElementById('pdf-display').src = stream.toBlobURL('application/pdf');
+    });	
+}
