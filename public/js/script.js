@@ -300,12 +300,14 @@ function addUser() {
         xhttp.onreadystatechange = function() {
             if(xhttp.readyState == 4 && xhttp.status == 200) {
                 alert(xhttp.responseText);
+                window.location.reload(true);
             }
         }
 
         xhttp.send(params); 
 
         clear();
+
     }
 };
 
@@ -414,12 +416,14 @@ function updateUser() {
             if(xhttp.readyState == 4 && xhttp.status == 200) 
             {
                 alert("Update user successfully!!");
+                window.location.reload(true);
             }
         }
 
         xhttp.send(params); 
 
         closeModal();
+    
     }
     else
     {
@@ -462,6 +466,7 @@ function deleteUser(){
             xhttp.onreadystatechange = function () {
                 if(this.readyState == 4 && this.status == 200) {
                     alert("User has been delete!!");
+                    window.location.reload(true);
                 }
             };
 
