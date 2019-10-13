@@ -23,8 +23,6 @@ exports.getUser = (req, res) => {
     })
 };
 
-// get all users ->  /api/users  (GET)
->>>>>>> 9115ed81ff6b586e6817414e2621da1d474d31ac
 exports.getUsers = (req, res) => {
   User.find({})
     .exec()
