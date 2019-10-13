@@ -94,7 +94,6 @@ function showChart() {
 	var peopleNo = []; //No of people in array from Jan-Dec
 	var tempNo = []; //Temperature value in array from Jan-Dec
 	var humidNo = []; //Humidity value in array from Jan-Dec
-
 	
 	var xhr = new XMLHttpRequest();
 	xhr.responseType = 'json';
@@ -127,7 +126,6 @@ function showChart() {
 							peopleNo[i] = parseInt(peopleNo[i]);
 						}						
 					}
-					
 
 					for(var i = 0; i < 12; i++){
 							tp[i] = 0;
@@ -173,7 +171,6 @@ function showChart() {
 				}
 			}
 			
-			
 			new Highcharts.chart('peopleChart', {
 					title: {
 							text: 'Number Of People'
@@ -186,7 +183,7 @@ function showChart() {
 							name: 'People Count'
 					}]
 			});
-			
+
 			new Highcharts.chart('temperatureChart', {
 					title: {
 							text: 'Temperature'

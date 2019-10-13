@@ -23,8 +23,8 @@ exports.getUser = (req, res) => {
     })
 };
 
-
-// get all users ->  /api/users (GET)
+// get all users ->  /api/users  (GET)
+>>>>>>> 9115ed81ff6b586e6817414e2621da1d474d31ac
 exports.getUsers = (req, res) => {
   User.find({})
     .exec()
@@ -45,7 +45,7 @@ exports.getUsers = (req, res) => {
 
 // add a new user ->  /api/users (POST)
 exports.addUser = (req, res) => {
-  User.findOne({email: req.body.email})
+    User.findOne({email: req.body.email})
     .then(user => {
       if (user) {
         return res.status(500).json({
@@ -66,7 +66,7 @@ exports.addUser = (req, res) => {
 
       return newUser.save();
     })
-    .then(user => {
+    .then(user => { 
       res.status(201).json({
         message: 'New user was created',
         newUser: user
@@ -113,7 +113,7 @@ exports.editUser = (req, res) => {
 };
 
 
-// delete a user ->  /api/user/:id (DELETE)
+// delete a user ->  /api/users/:id (DELETE)
 exports.deleteUser = (req, res) => {
   User.findByIdAndDelete(req.params.id)
     .then(deletedUser => {
