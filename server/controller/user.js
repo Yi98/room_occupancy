@@ -5,7 +5,7 @@ const crypto = require('crypto');
 
 const User = require('../models/User');
 
-// get one user with specific id ->  /api/user/:id (GET)
+// get one user with specific id ->  /api/users/:id (GET)
 exports.getUser = (req, res) => {
   User.findById({_id: req.params.id})
     .exec()
@@ -24,7 +24,7 @@ exports.getUser = (req, res) => {
 };
 
 
-// get all users ->  /api/user (GET)
+// get all users ->  /api/users (GET)
 exports.getUsers = (req, res) => {
   User.find({})
     .exec()
@@ -43,7 +43,7 @@ exports.getUsers = (req, res) => {
 };
 
 
-// add a new user ->  /api/user (POST)
+// add a new user ->  /api/users (POST)
 exports.addUser = (req, res) => {
   User.findOne({email: req.body.email})
     .then(user => {
@@ -81,7 +81,7 @@ exports.addUser = (req, res) => {
 };
 
 
-// edit a user ->  /api/user/:id (PUT)
+// edit a user ->  /api/users/:id (PUT)
 exports.editUser = (req, res) => {
   User.findById(req.params.id)
     .then(user => {
@@ -134,7 +134,7 @@ exports.deleteUser = (req, res) => {
 };
 
 
-// check login cridentials -> /api/user/login (POST)
+// check login cridentials -> /api/users/login (POST)
 exports.login = (req, res) => {
   let fetchedUser;
 
@@ -170,7 +170,7 @@ exports.login = (req, res) => {
 };
 
 
-// send reset link via email to the user that forgot password -> api/user/forgotPassword (POST)
+// send reset link via email to the user that forgot password -> api/users/forgotPassword (POST)
 exports.forgotPassword = (req, res) => {
   User.findOne({email: req.body.email})
     .then(user => {
@@ -222,7 +222,7 @@ exports.forgotPassword = (req, res) => {
 };
 
 
-// reset the password of the user ->  api/user/resetPassword (POST)
+// reset the password of the user ->  api/users/resetPassword (POST)
 exports.resetPassword = (req, res) => {
   let fetchedUser;
   
