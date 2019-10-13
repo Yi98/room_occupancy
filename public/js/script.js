@@ -460,13 +460,14 @@ function deleteUser(){
         {
             var xhttp = new XMLHttpRequest();
             xhttp.responseType = 'json';
+            window.location.reload(true);
+            window.location.reload(true);
 
             var url = 'http://localhost:3000/api/users/' + cells[0].innerHTML;
 
             xhttp.onreadystatechange = function () {
                 if(this.readyState == 4 && this.status == 200) {
                     alert("User has been delete!!");
-                    window.location.reload(true);
                 }
             };
 
@@ -475,4 +476,69 @@ function deleteUser(){
             xhttp.send();
         }   
     };
+};
+
+
+function login(){
+    
+    if(document.getElementById("email_login").value === "")
+    {
+        alert("Please enter your username!!");
+    }
+    
+    if(document.getElementById("password_login").value === "")
+    {
+        alert("Please enter your password!!");
+    }
+    
+    if(document.getElementById("email_login").value !== "" && document.getElementById("password_login").value !== "")
+    {
+        var xhttp = new XMLHttpRequest();
+        var url = 'http://localhost:3000/api/users/login';
+        var params = 'email=' + document.getElementById("email_login").value
+                    + '&password=' + document.getElementById("password_login").value;
+
+        xhttp.open('POST',url,true);
+
+        xhttp.setRequestHeader('Content-type','application/x-www-form-urlencoded');
+
+
+        xhttp.onreadystatechange = function() {
+            if(xhttp.readyState == 4 && xhttp.status == 200) {
+                alert(xhttp.responseText);
+                console.log(xhttp.responseText);
+            }
+        }
+
+        xhttp.send(params); 
+    }
+};
+
+function openForgetEmail() {
+    var modal = document.getElementById("modalEmail");
+    modal.style.display = "block";  
+};
+
+function closeForget() {
+    var modal = document.getElementById("modalEmail");
+    modal.style.display = "none";  
+};
+
+function checkEmail(){
+    var xhttp = new XMLHttpRequest();
+    var url = 'http://localhost:3000/api/users/forgotPassword';
+    var params = 'email=' + document.getElementById("forgetEmail").value;
+
+    xhttp.open('POST',url,true);
+
+    xhttp.setRequestHeader('Content-type','application/x-www-form-urlencoded');
+
+    xhttp.onreadystatechange = function() {
+        if(xhttp.readyState == 4 && xhttp.status == 200) 
+        {
+            alert(xhttp.responseText);
+        }
+    }
+
+    xhttp.send(params); 
 };

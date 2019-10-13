@@ -7,10 +7,10 @@
         <link rel="stylesheet" href="https://formden.com/static/cdn/font-awesome/4.4.0/css/font-awesome.min.css" />
         
         <!-- stylesheet -->
-        <link rel="stylesheet" href="/css/style.css" type="text/css"/>
+        <link rel="stylesheet" href="../css/style.css" type="text/css"/>
         
         <!-- javascript -->
-	    <script src="/js/script.js" type="text/javascript"></script>
+	    <script src="../js/script.js" type="text/javascript"></script>
         
     </head>
     
@@ -18,7 +18,7 @@
         <div class = "container">
             <div class = "row" id = "loginForm">
                 <div class = "col-md-6 offset-md-3 col-xs-6 offset-xs-3">
-                   <form>
+                   <form method="POST" action="http://localhost:3000/api/users/login">
                        <div class = "row">
                            <div class = "col-md-6 offset-md-3 col-sm-6 offset-sm-3 col-xs-6 offset-xs-3">
                                <img src = "https://www.swinburne.edu.my/openday/_assets/img/nav-swin-logo.png" class = "img-fluid" alt = "logo">
@@ -28,19 +28,35 @@
                         <div class = "form-group" id = "userEmail">
                             <span class = "fa fa-user"></span>
                             <label for = "uemail">Email address</label>
-                            <input type = "email" class="form-control" id = "uemail" placeholder = "Enter emaill address">
+                            <input type = "email" class="form-control" id = "email" placeholder = "Enter emaill address">
                         </div>
                         
                         <div class = "form-group">
                             <span class = "fa fa-key"></span>
                             <label for = "upassword">Password</label>
-                            <input type = "password" class = "form-control" id = "upassword" placeholder = "Password">
+                            <input type = "password" class = "form-control" id = "password" placeholder = "Password">
                         </div>
                         
-                        <a href = "/views/password_reset.html">Forget Password</a> 
-                        <button type = "submit" id = "btn" class = "btn btn-primary">Submit</button>
+                        <a href = "#" onclick = "openForgetEmail()">Forget Password</a> 
+                        <input type="submit" value="Submit">
                         
                     </form>
+                </div>
+            </div>
+            
+            <div class = "modal" id = "modalEmail">
+               
+               <div class = "modal-header" id = "emailHeader">
+                   <h2>Email</h2>
+               </div>
+               
+                <div class = "modal-content" id = "emailContent">
+                    <h6>Please fill in your email</h6>
+                    <input type = "email" id = "forgetEmail" placeholder = "example@gmail.com" />
+                    
+                    <button class = "btn btn-success" id = "submitEmail" onclick = "checkEmail()">Submit</button>
+                    
+                    <button class = "btn btn-danger" id = "close_forget" onclick = "closeForget()">Close</button>
                 </div>
             </div>
         </div>
