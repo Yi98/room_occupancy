@@ -35,18 +35,19 @@
 //});
 
 var socket = io();
-	socket.on("sensor", function(msg) {
-		console.log(msg.temperature);
-		// for loop assign to all room their respective sensor data
-		roomCards = document.getElementsByClassName("room-card");
-		for (let i = 0; i < roomCards.length; i++) {
-			roomId = roomCards[i].getElementsByClassName("room-id");
-			if (roomId[0].innerHTML == msg.roomId) {
-				document.getElementsByClassName("temperature")[i].innerHTML = msg.temperature;
-				document.getElementsByClassName("humidity")[i].innerHTML = msg.humidity;
-			}
+
+socket.on("sensor", function(msg) {
+	console.log(msg.temperature);
+	// for loop assign to all room their respective sensor data
+	roomCards = document.getElementsByClassName("room-card");
+	for (let i = 0; i < roomCards.length; i++) {
+		roomId = roomCards[i].getElementsByClassName("room-id");
+		if (roomId[0].innerHTML == msg.roomId) {
+			document.getElementsByClassName("temperature")[i].innerHTML = msg.temperature;
+			document.getElementsByClassName("humidity")[i].innerHTML = msg.humidity;
 		}
-	});
+	}
+});
 
 
 function showDashboard(){
