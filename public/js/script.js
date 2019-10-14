@@ -1,3 +1,5 @@
+const canvg = require("canvg");
+
 //$(document).ready(function() {
 //    $('#userTable').DataTable();
 //    function RefreshTable()
