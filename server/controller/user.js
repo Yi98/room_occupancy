@@ -197,9 +197,9 @@ exports.forgotPassword = (req, res) => {
         to: `${user.email}`,
         subject: 'Link to password reset',
         html: `
-        <h3>Hi there,</h3>
+        <h3>Hey ${user.username},</h3>
         <p>You recently requested to reset your password for your room occupancy account. Click the link below to reset it.</p>
-        <a href="http://localhost:3000/reset/${token}">Reset your password</a>
+        <a href="http://localhost:3000/resetPassword/${token}">Reset your password</a>
         <p>This link will only be active for 5 minutes</p>
         <p>If you did not request a password reset, please ignore this email or reply to let us know.</p>
         <p>Thanks,<br>FYP Team</p>`
@@ -227,10 +227,10 @@ exports.forgotPassword = (req, res) => {
 exports.resetPassword = (req, res) => {
   let fetchedUser;
   
-  User.findOne({resetPasswordToken: req.params.token})
+  User.findOne({resetPasswordToken: req.body.token})
     .then(user => {
       if (!user) {
-        return res.redirect('/login');
+        return res.status(404).json({message: 'User not found'})
       }
 
       // console.log(user.resetPasswordExpires);
@@ -249,7 +249,7 @@ exports.resetPassword = (req, res) => {
       fetchedUser.resetPasswordExpires = null;
       fetchedUser.save();
 
-      return res.redirect('/login');
+      return res.status(200).json({message: 'success'});
     })
     .catch (err => {
       return res.status(500).json({

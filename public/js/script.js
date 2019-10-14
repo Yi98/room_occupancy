@@ -579,3 +579,32 @@ function checkEmail(){
 
     xhttp.send(params); 
 };
+
+function onResetPassword() {
+    var xhttp = new XMLHttpRequest();
+    xhttp.responseType = 'json';
+
+    var url = 'http://localhost:3000/api/users/resetPassword';
+
+    const token = window.location.pathname.split('/')[2];
+    const password = document.getElementById('password').value;
+
+    var params = `token=${token}&password=${password}`;
+
+    xhttp.open('POST', url, true);
+
+    xhttp.setRequestHeader('Content-type','application/x-www-form-urlencoded');
+
+    xhttp.onreadystatechange = function() {
+        if(xhttp.readyState == 4 && xhttp.status == 200) {
+            if (xhttp.response.message == 'success') {
+                alert('Successfully reset password');
+            }
+            else {
+                alert('Failed to reset password');
+            }
+        }
+    }
+
+    xhttp.send(params);
+}
