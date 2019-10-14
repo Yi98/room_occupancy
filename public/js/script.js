@@ -1,14 +1,14 @@
-const canvg = require("canvg");
-
 //$(document).ready(function() {
 //    $('#userTable').DataTable();
-//    function RefreshTable()
-//    {
-//        $('#showUser').load();
-//    }
-//    
-//    $('#updatebtn').on("click",RefreshTable);
+////    function RefreshTable()
+////    {
+////        $('#showUser').load();
+////    }
+////    
+////    $('#updatebtn').on("click",RefreshTable);
 //});
+
+const canvg = require("canvg");
 
 //$(document).ready(function(){
 //		var date_input=$('input[name="startDate"]'); //our date input has the name "startDate"
@@ -256,7 +256,7 @@ xhttp.onreadystatechange = function () {
 		for(var user in result.users){
 			document.getElementById("showUser").innerHTML += 
             '<tbody>' + '<tr>' +
-            '<td>' + result.users[user]._id + '</td>' +
+            '<td style="display: none;">' + result.users[user]._id + '</td>' +
             '<td>' + result.users[user].username + '</td>' +
             '<td>' + result.users[user].email + '</td>' +
             '<td>' + result.users[user].role + '</td>' +
@@ -328,7 +328,7 @@ function addUser() {
         xhttp.onreadystatechange = function() {
             if(xhttp.readyState == 4 && xhttp.status == 200) {
                 alert(xhttp.responseText);
-                window.location.reload(true);
+                
             }
         }
 
@@ -433,10 +433,12 @@ function updateUser() {
     if(document.getElementById("previousRole").value !== document.getElementById("edit_role").value)
     {
         var xhttp = new XMLHttpRequest();
+        xhttp.responseType = 'json';
         var url = 'http://localhost:3000/api/users/' + document.getElementById("id").value;
         var params = 'role=' + document.getElementById("edit_role").value;
 
         xhttp.open('PUT',url,true);
+        
 
         xhttp.setRequestHeader('Content-type','application/x-www-form-urlencoded');
 
@@ -444,7 +446,12 @@ function updateUser() {
             if(xhttp.readyState == 4 && xhttp.status == 200) 
             {
                 alert("Update user successfully!!");
-                window.location.reload(true);
+                console.log(xhttp.response);
+                console.log(xhttp.response.message);
+                
+//                console.log(xhttp.responseText.message);
+//                console.log(typeof(xhttp.response));
+//                window.location.reload(true);
             }
         }
 
@@ -506,25 +513,24 @@ function deleteUser(){
     };
 };
 
-
 function login(){
     
-    if(document.getElementById("email_login").value === "")
+    if(document.getElementById("email").value === "")
     {
         alert("Please enter your username!!");
     }
     
-    if(document.getElementById("password_login").value === "")
+    if(document.getElementById("password").value === "")
     {
         alert("Please enter your password!!");
     }
     
-    if(document.getElementById("email_login").value !== "" && document.getElementById("password_login").value !== "")
+    if(document.getElementById("email").value !== "" && document.getElementById("password").value !== "")
     {
         var xhttp = new XMLHttpRequest();
+        xhttp.responseType = 'json';
         var url = 'http://localhost:3000/api/users/login';
-        var params = 'email=' + document.getElementById("email_login").value
-                    + '&password=' + document.getElementById("password_login").value;
+        var params = 'email=' + document.getElementById("email").value + '&password=' + document.getElementById("password").value;
 
         xhttp.open('POST',url,true);
 
@@ -534,12 +540,15 @@ function login(){
         xhttp.onreadystatechange = function() {
             if(xhttp.readyState == 4 && xhttp.status == 200) {
                 alert(xhttp.responseText);
-                console.log(xhttp.responseText);
+                console.log(xhttp.response);
             }
         }
 
         xhttp.send(params); 
     }
+    
+    
+    alert(login);
 };
 
 function openForgetEmail() {
