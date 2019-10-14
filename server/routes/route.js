@@ -32,7 +32,8 @@ router.get('/reset/:token', (req, res) => {
 
 //  Page not found
 router.get('*', (req, res) => {
-  res.redirect('/dashboard');
+  res.send("Page not found");
+  // res.redirect('/dashboard');
 })
 
 module.exports = router;

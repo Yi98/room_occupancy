@@ -149,7 +149,10 @@ exports.login = (req, res) => {
     })
     .then(result => {
       if (!result) {
-        return res.status(401).json({status: 'fail'});
+        return res.status(401).json({
+          status: 'fail',
+          message: 'Wrong password'
+        });
       }
       req.session.userId = fetchedUser._id;
 
