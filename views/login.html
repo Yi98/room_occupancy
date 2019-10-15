@@ -19,7 +19,7 @@
         <div class = "container">
             <div class = "row" id = "loginForm">
                 <div class = "col-md-6 offset-md-3 col-xs-6 offset-xs-3">
-                   <form method="POST" action="http://localhost:3000/api/users/login">
+                   <form>
                        <div class = "row">
                            <div class = "col-md-6 offset-md-3 col-sm-6 offset-sm-3 col-xs-6 offset-xs-3">
                                <img src = "https://www.swinburne.edu.my/openday/_assets/img/nav-swin-logo.png" class = "img-fluid" alt = "logo">
@@ -39,7 +39,7 @@
                         </div>
                         
                         <a href = "#" onclick = "openForgetEmail()">Forget Password</a> 
-                        <input type="submit" value="Submit">
+                        <button class = "btn btn-primary" onclick = "login()">submit</button>
                         
                     </form>
                 </div>
