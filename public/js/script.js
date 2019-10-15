@@ -352,18 +352,16 @@ function addUser() {
         xhttp.open('POST',url,true);
 
         xhttp.setRequestHeader('Content-type','application/x-www-form-urlencoded');
+        xhttp.setRequestHeader('Authorization','Bearer ' + localStorage.getItem('token'));
 
 //        alert('A new user has been add!!');
 
         xhttp.onreadystatechange = function() {
-            console.log(xhttp.readyState);
             if(xhttp.readyState == 4 && xhttp.status == 201) {
-                console.log(xhttp.response.message); 
                 alert(xhttp.response.message); 
             }
             
             if(xhttp.readyState == 4 && xhttp.status == 500) {
-                console.log(xhttp.response.message); 
                 alert(xhttp.response.message); 
             }
         }
@@ -475,6 +473,7 @@ function updateUser() {
         
 
         xhttp.setRequestHeader('Content-type','application/x-www-form-urlencoded');
+        xhttp.setRequestHeader('Authorization','Bearer ' + localStorage.getItem('token'));
 
         xhttp.onreadystatechange = function() {
             if(xhttp.readyState == 4 && xhttp.status == 200) 
@@ -528,13 +527,16 @@ function deleteUser(){
 
             var url = 'http://localhost:3000/api/users/' + cells[0].innerHTML;
 
+            xhttp.open("DELETE",url,true);
+
+            xhttp.setRequestHeader('Authorization','Bearer ' + localStorage.getItem('token'));
+
             xhttp.onreadystatechange = function () {
                 if(this.readyState == 4 && this.status == 200) {
                     alert(xhttp.response.message);
                 }
             };
 
-            xhttp.open("DELETE",url,true);
 
             xhttp.send();
         }   
@@ -543,8 +545,6 @@ function deleteUser(){
 
 
 function login(){
-    
-    
     if(document.getElementById("loginEmail").value == "")
     {
         alert("Please enter your username!!");
@@ -574,6 +574,7 @@ function login(){
                 
                 if(xhttp.response.status == "success")
                 {
+                    localStorage.setItem('token', xhttp.response.token);
                     window.location.replace("/dashboard");
                 }
 

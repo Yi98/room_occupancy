@@ -44,45 +44,52 @@ exports.getUsers = (req, res) => {
 
 // add a new user ->  /api/users (POST)
 exports.addUser = (req, res) => {
-    User.findOne({email: req.body.email})
-    .then(user => {
-      if (user) {
-        return res.status(500).json({
-          message: 'Email already existed',
-          existing: user
-        });
-      }
+  if (req.userData.role != 'manager') {
+    return res.status(401).json({message: 'Only manager can edit user'});
+  }
 
-      return bcrypt.hash(req.body.password, 15)
-    })
-    .then(hash => {
-      const newUser = new User({
-        username: req.body.username,
-        email: req.body.email,
-        password: hash,
-        role: req.body.role
+  User.findOne({email: req.body.email})
+  .then(user => {
+    if (user) {
+      return res.status(500).json({
+        message: 'Email already existed',
+        existing: user
       });
+    }
 
-      return newUser.save();
+    return bcrypt.hash(req.body.password, 15)
+  })
+  .then(hash => {
+    const newUser = new User({
+      username: req.body.username,
+      email: req.body.email,
+      password: hash,
+      role: req.body.role
+    });
+
+    return newUser.save();
+  })
+  .then(user => {
+    res.status(201).json({
+      message: 'New user was created',
+      newUser: user
     })
-    .then(user => {
-      console.log(user);
-      res.status(201).json({
-        message: 'New user was created',
-        newUser: user
-      })
-    })
-    .catch(err => {
-      res.status(500).json({
-        message: 'Failed to add user',
-        err
-      });
-    })
+  })
+  .catch(err => {
+    res.status(500).json({
+      message: 'Failed to add user',
+      err
+    });
+  })
 };
 
 
 // edit a user ->  /api/users/:id (PUT)
 exports.editUser = (req, res) => {
+  if (req.userData.role != 'manager') {
+    return res.status(401).json({message: 'Only manager can edit user'});
+  }
+
   User.findById(req.params.id)
     .then(user => {
       if (!user) {
@@ -115,6 +122,10 @@ exports.editUser = (req, res) => {
 
 // delete a user ->  /api/users/:id (DELETE)
 exports.deleteUser = (req, res) => {
+  if (req.userData.role != 'manager') {
+    return res.status(401).json({message: 'Only manager can edit user'});
+  }
+
   User.findByIdAndDelete(req.params.id)
     .then(deletedUser => {
       if (!deletedUser) {
@@ -165,12 +176,11 @@ exports.login = (req, res) => {
         'fyp_room',
         { expiresIn: '1d'}
       );
+      // changed jwt hash word into process.env.JWT_KEY
 
       res.status(200).json({
         status: 'success',
-        token,
-        username: fetchedUser.username,
-        role: fetchedUser.role
+        token
       })
     })
     .catch(err => {
