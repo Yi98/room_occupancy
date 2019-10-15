@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt');
 const nodemailer = require('nodemailer');
+const jwt = require('jsonwebtoken');
 
 const crypto = require('crypto');
 
@@ -154,10 +155,19 @@ exports.login = (req, res) => {
           message: 'Wrong password'
         });
       }
-      req.session.userId = fetchedUser._id;
+      const token = jwt.sign(
+        { username: fetchedUser.username,
+          email: fetchedUser.email,
+          userId: fetchedUser._id,
+          role: fetchedUser.role
+        },
+        'fyp_room',
+        { expiresIn: '1d'}
+      );
 
       res.status(200).json({
         status: 'success',
+        token,
         username: fetchedUser.username,
         role: fetchedUser.role
       })
