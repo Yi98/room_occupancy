@@ -64,7 +64,8 @@ exports.addUser = (req, res) => {
 
       return newUser.save();
     })
-    .then(user => { 
+    .then(user => {
+      console.log(user);
       res.status(201).json({
         message: 'New user was created',
         newUser: user
@@ -135,7 +136,7 @@ exports.deleteUser = (req, res) => {
 // check login cridentials -> /api/users/login (POST)
 exports.login = (req, res) => {
   let fetchedUser;
-
+    
   User.findOne({email: req.body.email})
     .then(user => {
       if (!user) {
