@@ -1,12 +1,13 @@
-//$(document).ready(function() {
-//    $('#userTable').DataTable();
-////    function RefreshTable()
-////    {
-////        $('#showUser').load();
-////    }
-////    
-////    $('#updatebtn').on("click",RefreshTable);
-//});
+////$(document).ready(function() {
+////    $('#userTable').DataTable();
+//////    function RefreshTable()
+//////    {
+//////        $('#showUser').load();
+//////    }
+//////    
+//////    $('#updatebtn').on("click",RefreshTable);
+////});
+//
 
 const canvg = require("canvg");
 
@@ -247,28 +248,28 @@ function directToPdf() {
 }
 
 function showUserTable(){
-var xhttp = new XMLHttpRequest();
-xhttp.responseType = 'json';
+    var xhttp = new XMLHttpRequest();
+    xhttp.responseType = 'json';
 
-xhttp.onreadystatechange = function () {
-	if(this.readyState == 4 && this.status == 200) {
-		var result = this.response;
-		for(var user in result.users){
-			document.getElementById("showUser").innerHTML += 
-            '<tbody>' + '<tr>' +
-            '<td style="display: none;">' + result.users[user]._id + '</td>' +
-            '<td>' + result.users[user].username + '</td>' +
-            '<td>' + result.users[user].email + '</td>' +
-            '<td>' + result.users[user].role + '</td>' +
-            '<td>' + '<button class = "btn btn-success" id = "editbtn" onclick = "showModal()"><span class="fa fa-edit" style = "color: white"></span></button>' + '</td>' +
-            '<td>' + '<button class = "btn btn-danger" id = "deletebtn" onclick = "deleteUser()"><span class="fa fa-trash" style = "color: white"></span></button>' + '</td>' + '</tr>' + '</tbody>';
-                                   
-		};
-	}
-};
+    xhttp.onreadystatechange = function () {
+        if(this.readyState == 4 && this.status == 200) {
+            var result = this.response;
+            for(var user in result.users){
+                document.getElementById("showUser").innerHTML += 
+                '<tbody>' + '<tr>' +
+                '<td style="display: none;">' + result.users[user]._id + '</td>' +
+                '<td>' + result.users[user].username + '</td>' +
+                '<td>' + result.users[user].email + '</td>' +
+                '<td>' + result.users[user].role + '</td>' +
+                '<td>' + '<button class = "btn btn-success" id = "editbtn" onclick = "showModal()"><span class="fa fa-edit" style = "color: white"></span></button>' + '</td>' +
+                '<td>' + '<button class = "btn btn-danger" id = "deletebtn" onclick = "deleteUser()"><span class="fa fa-trash" style = "color: white"></span></button>' + '</td>' + '</tr>' + '</tbody>';
 
-xhttp.open("GET","http://localhost:3000/api/users",true);
-xhttp.send();
+            };
+        }
+    };
+
+    xhttp.open("GET","http://localhost:3000/api/users",true);
+    xhttp.send();
 	
 };
 
@@ -305,6 +306,34 @@ function addUser() {
         alert("Your Password and Confirm Password is not the same. Please fill in again!!");
     }
     
+//    var count = 0;
+//    var xhr = new XMLHttpRequest();
+//    xhr.responseType = 'json';
+//
+//    xhr.onreadystatechange = function () {
+//        if(this.readyState == 4 && this.status == 200) {
+//            var result = this.response;
+//            for(var user in result.users){
+//                if (document.getElementById("uemail").value === result.users[user].email)
+//                {
+//                    alert("Email has been registered before.\nPlease try a new email to register!!!");
+//                    count = 1;
+//                }
+//                else
+//                {
+//                    count = 2;
+//                }
+//
+//            };
+//        }
+//    };
+//
+//        
+//    xhr.open("GET","http://localhost:3000/api/users",true);
+//    xhr.send();
+    
+    
+    
     if(document.getElementById("uname").value !== "" 
        && document.getElementById("upsd").value !== "" 
        && document.getElementById("cupsd").value !== "" 
@@ -313,6 +342,7 @@ function addUser() {
        && (document.getElementById("upsd").value === document.getElementById("cupsd").value))
     {
         var xhttp = new XMLHttpRequest();
+        xhttp.responseType = 'json';
         var url = 'http://localhost:3000/api/users';
         var params = 'role=' + document.getElementById("role").value 
                     + '&username=' + document.getElementById("uname").value 
@@ -323,18 +353,24 @@ function addUser() {
 
         xhttp.setRequestHeader('Content-type','application/x-www-form-urlencoded');
 
-        alert('A new user has been add!!');
+//        alert('A new user has been add!!');
 
         xhttp.onreadystatechange = function() {
-            if(xhttp.readyState == 4 && xhttp.status == 200) {
-                alert(xhttp.responseText);
-                
+            console.log(xhttp.readyState);
+            if(xhttp.readyState == 4 && xhttp.status == 201) {
+                console.log(xhttp.response.message); 
+                alert(xhttp.response.message); 
+            }
+            
+            if(xhttp.readyState == 4 && xhttp.status == 500) {
+                console.log(xhttp.response.message); 
+                alert(xhttp.response.message); 
             }
         }
 
         xhttp.send(params); 
 
-        clear();
+//        clear();
 
     }
 };
@@ -443,13 +479,7 @@ function updateUser() {
         xhttp.onreadystatechange = function() {
             if(xhttp.readyState == 4 && xhttp.status == 200) 
             {
-                alert("Update user successfully!!");
-                console.log(xhttp.response);
-                console.log(xhttp.response.message);
-                
-//                console.log(xhttp.responseText.message);
-//                console.log(typeof(xhttp.response));
-//                window.location.reload(true);
+                alert(xhttp.response.message);
             }
         }
 
@@ -500,7 +530,7 @@ function deleteUser(){
 
             xhttp.onreadystatechange = function () {
                 if(this.readyState == 4 && this.status == 200) {
-                    alert("User has been delete!!");
+                    alert(xhttp.response.message);
                 }
             };
 
@@ -511,42 +541,62 @@ function deleteUser(){
     };
 };
 
+
 function login(){
     
-    if(document.getElementById("email").value === "")
+    
+    if(document.getElementById("loginEmail").value == "")
     {
         alert("Please enter your username!!");
     }
     
-    if(document.getElementById("password").value === "")
+    if(document.getElementById("loginPassword").value == "")
     {
         alert("Please enter your password!!");
     }
     
-    if(document.getElementById("email").value !== "" && document.getElementById("password").value !== "")
+    
+    if((document.getElementById("loginEmail").value != "") && (document.getElementById("loginPassword").value != ""))
     {
         var xhttp = new XMLHttpRequest();
         xhttp.responseType = 'json';
         var url = 'http://localhost:3000/api/users/login';
-        var params = 'email=' + document.getElementById("email").value + '&password=' + document.getElementById("password").value;
+        var params = 'email=' + document.getElementById("loginEmail").value + '&password=' + document.getElementById("loginPassword").value;
 
+                
         xhttp.open('POST',url,true);
 
         xhttp.setRequestHeader('Content-type','application/x-www-form-urlencoded');
 
-
         xhttp.onreadystatechange = function() {
+
             if(xhttp.readyState == 4 && xhttp.status == 200) {
-                alert(xhttp.responseText);
-                console.log(xhttp.response);
+                
+                if(xhttp.response.status == "success")
+                {
+                    window.location.replace("/dashboard");
+                }
+
+            }
+            
+            if((xhttp.readyState == 4 && xhttp.status == 401) || (xhttp.readyState == 4 && xhttp.status == 404)) {
+                
+                alert("Login credentials invalid!!");
+                
+            }
+            
+            if(xhttp.readyState == 4 && xhttp.status == 500) {
+                
+                alert(xhttp.response.message + " maybe something is wrong with the server");
+                
             }
         }
 
+
         xhttp.send(params); 
+        
+        
     }
-    
-    
-    alert(login);
 };
 
 function openForgetEmail() {
@@ -561,18 +611,25 @@ function closeForget() {
 
 function checkEmail(){
     var xhttp = new XMLHttpRequest();
+    xhttp.responseType = 'json';
     var url = 'http://localhost:3000/api/users/forgotPassword';
     var params = 'email=' + document.getElementById("forgetEmail").value;
 
     xhttp.open('POST',url,true);
-
     xhttp.setRequestHeader('Content-type','application/x-www-form-urlencoded');
-
+    
     xhttp.onreadystatechange = function() {
         if(xhttp.readyState == 4 && xhttp.status == 200) 
         {
-            alert(xhttp.responseText);
+            alert(xhttp.response.message);
         }
+        
+        if(xhttp.status == 404) 
+        {
+            alert(xhttp.response.message);
+        }
+        
+        
     }
 
     xhttp.send(params); 
@@ -597,6 +654,7 @@ function onResetPassword() {
         if(xhttp.readyState == 4 && xhttp.status == 200) {
             if (xhttp.response.message == 'success') {
                 alert('Successfully reset password');
+                window.location.replace("/login");
             }
             else {
                 alert('Failed to reset password');
