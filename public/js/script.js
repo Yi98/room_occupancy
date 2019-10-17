@@ -1,15 +1,12 @@
-////$(document).ready(function() {
-////    $('#userTable').DataTable();
-//////    function RefreshTable()
-//////    {
-//////        $('#showUser').load();
-//////    }
-//////    
-//////    $('#updatebtn').on("click",RefreshTable);
-////});
-//
-
-const canvg = require("canvg");
+//$(document).ready(function() {
+//    $('#userTable').DataTable();
+//    function RefreshTable()
+//    {
+//        $('#showUser').load();
+//    }
+//    
+//    $('#updatebtn').on("click",RefreshTable);
+//});
 
 //$(document).ready(function(){
 //		var date_input=$('input[name="startDate"]'); //our date input has the name "startDate"
@@ -36,6 +33,445 @@ const canvg = require("canvg");
 //$(document).ready(function(){
 //  $('[data-toggle="tooltip"]').tooltip();
 //});
+
+
+function showChart() {
+  var url_string = window.location.href;
+  var url = new URL(url_string);
+  var pathname = url.pathname;
+  var split = pathname.split("/");
+  var roomId = split[2];
+	
+  $('#choosenRange').on('DOMSubtreeModified', function() {
+    var dateRange = document.getElementById("choosenRange").innerHTML.toString();
+    var startDate = new Date(dateRange.substring(11, 0));
+    var endDate = new Date(dateRange.substring(25, 14));
+    var diff_in_days = (endDate.getTime() - startDate.getTime()) / (1000 * 3600 * 24);
+    var peopleData = []; // people data
+		var peopleDataCounter = []; // people data counter
+    var tempData = []; // temp data
+    var tempDataCounter = []; // temp data counter
+    var humidData = []; // humidity data
+    var humidDataCounter = []; // humidity data counter
+		var hourTime = ['8:00','10:00','12:00','14:00','16:00','18:00','20:00','22:00','00:00'];
+		var dailyTime = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+		var weeklyTime = ['Week 1', 'Week 2','Week 3', 'Week 4'];
+		var monthlyTime = ['January', 'February','March','April','May','June','July','August','September','Octorber','November','December'];
+		
+		
+		
+    var xhttp = new XMLHttpRequest();
+    xhttp.responseType = 'json';
+    xhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        var result = this.response;
+
+        for (var room in result.rooms) {
+          if (result.rooms[room]._id == roomId) {
+						//Today Chart
+						if(diff_in_days == 0){
+							
+							//Initialise the array
+							for(var i=0; i<hourTime.length; i++){
+								peopleData[i] = 0;
+								peopleDataCounter[i] = 0;
+								tempData[i] = 0;
+								tempDataCounter[i] = 0;
+								humidData[i] = 0;
+								humidDataCounter[i] = 0;
+							}
+							
+							//People Chart
+							for(var index in result.rooms[room].people) {
+								var dataDate = new Date(result.rooms[room].people[index].time);
+									if((dataDate.getUTCDate() == startDate.getDate())){
+										for(var i=0; i<hourTime.length;i++){
+											if(dataDate.getUTCHours().toString().concat(':00') == hourTime[i]){
+												peopleData[i] = peopleData[i] + result.rooms[room].people[index].data;
+												peopleDataCounter[i] ++;
+											}
+										}
+									}
+							}
+							
+							//Temperature Chart
+							for(var index in result.rooms[room].temperature) {
+								var dataDate = new Date(result.rooms[room].temperature[index].time);
+									if((dataDate.getUTCDate() == startDate.getDate())){
+										for(var i=0; i<hourTime.length;i++){
+											if(dataDate.getUTCHours().toString().concat(':00') == hourTime[i]){
+												tempData[i] = tempData[i] + result.rooms[room].temperature[index].data;
+												tempDataCounter[i] ++;
+											}
+										}
+									}
+							}
+							
+							//Humidity Chart
+							for(var index in result.rooms[room].humidity) {
+								var dataDate = new Date(result.rooms[room].humidity[index].time);
+									if((dataDate.getUTCDate() == startDate.getDate())){
+										for(var i=0; i<hourTime.length; i++){
+											if(dataDate.getUTCHours().toString().concat(':00') == hourTime[i]){
+												humidData[i] = humidData[i] + result.rooms[room].humidity[index].data;
+												humidDataCounter[i] ++;
+											}
+										}
+									}
+							}
+							
+							//Get the average for each data in the time
+							for(var i=0; i<peopleData.length; i++){
+								peopleData[i] = Math.round((peopleData[i]/peopleDataCounter[i]) * 100) / 100;
+							}
+							
+							for(var i=0; i<tempData.length; i++){
+								tempData[i] = Math.round((tempData[i]/tempDataCounter[i]) * 100) / 100;
+							}
+							
+							for(var i=0; i<humidData.length; i++){
+								humidData[i] = Math.round((humidData[i]/humidDataCounter[i]) * 100) / 100;
+							}
+							
+							
+							showPeopleChart(hourTime, peopleData); //Illustrate the chart
+							showTemperatureChart(hourTime, tempData); //Illustrate the chart
+							showHumidityChart(hourTime, humidData); //Illustrate the chart
+						}
+						
+						//Daily Chart
+						if(diff_in_days > 0 && diff_in_days <= 6){
+							//Initialise the array
+							for(var i=0; i<dailyTime.length; i++){
+								peopleData[i] = 0;
+								peopleDataCounter[i] = 0;
+								tempData[i] = 0;
+								tempDataCounter[i] = 0;
+								humidData[i] = 0;
+								humidDataCounter[i] = 0;
+							}
+							
+							//People Chart
+							for(var index in result.rooms[room].people) {
+								var dataDate = new Date(result.rooms[room].people[index].time);
+									if(dataDate >= startDate && dataDate <= endDate){
+										for(var i=0; i<dailyTime.length;i++){
+											if(dataDate.getUTCDay() == dailyTime.indexOf(dailyTime[i])){
+												peopleData[i] = peopleData[i] + result.rooms[room].people[index].data;
+												peopleDataCounter[i] ++;
+											}
+										}
+									}
+							}
+							
+							//Temperature Chart
+							for(var index in result.rooms[room].temperature) {
+								var dataDate = new Date(result.rooms[room].temperature[index].time);
+									if(dataDate >= startDate && dataDate <= endDate){
+										for(var i=0; i<dailyTime.length;i++){
+											if(dataDate.getUTCDay() == dailyTime.indexOf(dailyTime[i])){
+												tempData[i] = tempData[i] + result.rooms[room].temperature[index].data;
+												tempDataCounter[i] ++;
+											}
+										}
+									}
+							}
+							
+							//Humidity Chart
+							for(var index in result.rooms[room].humidity) {
+								var dataDate = new Date(result.rooms[room].humidity[index].time);
+									if(dataDate >= startDate && dataDate <= endDate){
+										for(var i=0; i<dailyTime.length; i++){
+											if(dataDate.getUTCDay() == dailyTime.indexOf(dailyTime[i])){
+												humidData[i] = humidData[i] + result.rooms[room].humidity[index].data;
+												humidDataCounter[i] ++;
+											}
+										}
+									}
+							}
+							
+							//Get the average for each data in the time
+							for(var i=0; i<peopleData.length; i++){
+								peopleData[i] = Math.round((peopleData[i]/peopleDataCounter[i]) * 100) / 100;
+							}
+							
+							for(var i=0; i<tempData.length; i++){
+								tempData[i] = Math.round((tempData[i]/tempDataCounter[i]) * 100) / 100;
+							}
+							
+							for(var i=0; i<humidData.length; i++){
+								humidData[i] = Math.round((humidData[i]/humidDataCounter[i]) * 100) / 100;
+							}
+							
+							
+							showPeopleChart(dailyTime, peopleData); //Illustrate the chart
+							showTemperatureChart(dailyTime, tempData); //Illustrate the chart
+							showHumidityChart(dailyTime, humidData); //Illustrate the chart
+						}
+							
+						//Weekly Chart
+						if(diff_in_days > 6 && diff_in_days <= 29){
+							
+							//Initialise the array
+							for(var i=0; i<weeklyTime.length; i++){
+								peopleData[i] = 0;
+								peopleDataCounter[i] = 0;
+								tempData[i] = 0;
+								tempDataCounter[i] = 0;
+								humidData[i] = 0;
+								humidDataCounter[i] = 0;
+							}
+							
+							//People Chart
+							for(var index in result.rooms[room].people) {
+								var dataDate = new Date(result.rooms[room].people[index].time);
+									if(dataDate >= startDate && dataDate <= endDate){
+										for(var i=0; i<weeklyTime.length;i++){
+											if(dataDate.getUTCDate() >= 1 && dataDate.getUTCDate() <= 7 && weeklyTime[i] == 'Week 1'){
+												peopleData[i] = peopleData[i] + result.rooms[room].people[index].data;
+												peopleDataCounter[i] ++;
+											}
+											if(dataDate.getUTCDate() >= 8 && dataDate.getUTCDate() <= 15 && weeklyTime[i] == 'Week 2'){
+												peopleData[i] = peopleData[i] + result.rooms[room].people[index].data;
+												peopleDataCounter[i] ++;
+											}
+											if(dataDate.getUTCDate() >= 16 && dataDate.getUTCDate() <= 23 && weeklyTime[i] == 'Week 3'){
+												peopleData[i] = peopleData[i] + result.rooms[room].people[index].data;
+												peopleDataCounter[i] ++;
+											}
+											if(dataDate.getUTCDate() >= 24  && dataDate.getUTCDate() <= 31 && weeklyTime[i] == 'Week 4'){
+												peopleData[i] = peopleData[i] + result.rooms[room].people[index].data;
+												peopleDataCounter[i] ++;
+											}
+										}
+									}
+							}
+							
+							//Temperature Chart
+							for(var index in result.rooms[room].temperature) {
+								var dataDate = new Date(result.rooms[room].temperature[index].time);
+									if(dataDate >= startDate && dataDate <= endDate){
+										for(var i=0; i<weeklyTime.length;i++){
+											if(dataDate.getUTCDate() >= 1 && dataDate.getUTCDate() <= 7 && weeklyTime[i] == 'Week 1'){
+												tempData[i] = tempData[i] + result.rooms[room].temperature[index].data;
+												tempDataCounter[i] ++;
+											}
+											if(dataDate.getUTCDate() >= 8 && dataDate.getUTCDate() <= 15 && weeklyTime[i] == 'Week 2'){
+												tempData[i] = tempData[i] + result.rooms[room].temperature[index].data;
+												tempDataCounter[i] ++;
+											}
+											if(dataDate.getUTCDate() >= 16 && dataDate.getUTCDate() <= 23 && weeklyTime[i] == 'Week 3'){
+												tempData[i] = tempData[i] + result.rooms[room].temperature[index].data;
+												tempDataCounter[i] ++;
+											}
+											if(dataDate.getUTCDate() >= 24  && dataDate.getUTCDate() <= 31 && weeklyTime[i] == 'Week 4'){
+												tempData[i] = tempData[i] + result.rooms[room].temperature[index].data;
+												tempDataCounter[i] ++;
+											}
+										}
+									}
+							}
+							
+							//Humidity Chart
+							for(var index in result.rooms[room].humidity) {
+								var dataDate = new Date(result.rooms[room].humidity[index].time);
+									if(dataDate >= startDate && dataDate <= endDate){
+										for(var i=0; i<weeklyTime.length; i++){
+											for(var i=0; i<weeklyTime.length;i++){
+											if(dataDate.getUTCDate() >= 1 && dataDate.getUTCDate() <= 7 && weeklyTime[i] == 'Week 1'){
+												humidData[i] = humidData[i] + result.rooms[room].humidity[index].data;
+												humidDataCounter[i] ++;
+											}
+											if(dataDate.getUTCDate() >= 8 && dataDate.getUTCDate() <= 15 && weeklyTime[i] == 'Week 2'){
+												humidData[i] = humidData[i] + result.rooms[room].humidity[index].data;
+												humidDataCounter[i] ++;
+											}
+											if(dataDate.getUTCDate() >= 16 && dataDate.getUTCDate() <= 23 && weeklyTime[i] == 'Week 3'){
+												humidData[i] = humidData[i] + result.rooms[room].humidity[index].data;
+												humidDataCounter[i] ++;
+											}
+											if(dataDate.getUTCDate() >= 24  && dataDate.getUTCDate() <= 31 && weeklyTime[i] == 'Week 4'){
+												humidData[i] = humidData[i] + result.rooms[room].humidity[index].data;
+												humidDataCounter[i] ++;
+											}
+										}
+										}
+									}
+							}
+							
+							//Get the average for each data in the time
+							for(var i=0; i<peopleData.length; i++){
+								peopleData[i] = Math.round((peopleData[i]/peopleDataCounter[i]) * 100) / 100;
+							}
+							
+							for(var i=0; i<tempData.length; i++){
+								tempData[i] = Math.round((tempData[i]/tempDataCounter[i]) * 100) / 100;
+							}
+							
+							for(var i=0; i<humidData.length; i++){
+								humidData[i] = Math.round((humidData[i]/humidDataCounter[i]) * 100) / 100;
+							}
+							
+							showPeopleChart(weeklyTime, peopleData); //Illustrate the chart
+							showTemperatureChart(weeklyTime, tempData); //Illustrate the chart
+							showHumidityChart(weeklyTime, humidData); //Illustrate the chart
+						}
+						
+						//Monthly Chart
+						if(diff_in_days > 29 && diff_in_days <= 364){
+							//Initialise the array
+							for(var i=0; i<monthlyTime.length; i++){
+								peopleData[i] = 0;
+								peopleDataCounter[i] = 0;
+								tempData[i] = 0;
+								tempDataCounter[i] = 0;
+								humidData[i] = 0;
+								humidDataCounter[i] = 0;
+							}
+							
+							//People Chart
+							for(var index in result.rooms[room].people) {
+								var dataDate = new Date(result.rooms[room].people[index].time);
+									if(dataDate >= startDate && dataDate <= endDate){
+										for(var i=0; i<monthlyTime.length;i++){
+											if(dataDate.getUTCMonth() == monthlyTime.indexOf(monthlyTime[i])){
+												peopleData[i] = peopleData[i] + result.rooms[room].people[index].data;
+												peopleDataCounter[i] ++;
+											}
+										}
+									}
+							}
+							
+							//Temperature Chart
+							for(var index in result.rooms[room].temperature) {
+								var dataDate = new Date(result.rooms[room].temperature[index].time);
+									if(dataDate >= startDate && dataDate <= endDate){
+										for(var i=0; i<monthlyTime.length;i++){
+											if(dataDate.getUTCMonth() == monthlyTime.indexOf(monthlyTime[i])){
+												tempData[i] = tempData[i] + result.rooms[room].temperature[index].data;
+												tempDataCounter[i] ++;
+											}
+										}
+									}
+							}
+							
+							//Humidity Chart
+							for(var index in result.rooms[room].humidity) {
+								var dataDate = new Date(result.rooms[room].humidity[index].time);
+									if(dataDate >= startDate && dataDate <= endDate){
+										for(var i=0; i<monthlyTime.length; i++){
+											if(dataDate.getUTCMonth() == monthlyTime.indexOf(monthlyTime[i])){
+												humidData[i] = humidData[i] + result.rooms[room].humidity[index].data;
+												humidDataCounter[i] ++;
+											}
+										}
+									}
+							}
+							
+							//Get the average for each data in the time
+							for(var i=0; i<peopleData.length; i++){
+								peopleData[i] = Math.round((peopleData[i]/peopleDataCounter[i]) * 100) / 100;
+							}
+							
+							for(var i=0; i<tempData.length; i++){
+								tempData[i] = Math.round((tempData[i]/tempDataCounter[i]) * 100) / 100;
+							}
+							
+							for(var i=0; i<humidData.length; i++){
+								humidData[i] = Math.round((humidData[i]/humidDataCounter[i]) * 100) / 100;
+							}
+							
+							
+							showPeopleChart(monthlyTime, peopleData); //Illustrate the chart
+							showTemperatureChart(monthlyTime, tempData); //Illustrate the chart
+							showHumidityChart(monthlyTime, humidData); //Illustrate the chart
+
+						}
+					}
+				}
+			}
+		};
+    xhttp.open("GET", "http://localhost:3000/api/rooms", true);
+    xhttp.send();
+  });
+};
+
+
+function showPeopleChart(x,y){
+	new Highcharts.chart('peopleChart', {
+					credits: false,
+				
+					exporting:{
+						buttons:{
+							contextButton:{
+									enabled:false
+								}
+						}
+					},
+				
+					title: {
+							text: 'Number Of People'
+					},
+					xAxis: {
+							categories: x
+					},
+					series: [{
+							data: y	,
+							name: 'People Count'
+					}]
+			});
+}
+
+function showTemperatureChart(x,y){
+	new Highcharts.chart('temperatureChart', {
+					credits: false,
+				
+					exporting:{
+						buttons:{
+							contextButton:{
+									enabled:false
+								}
+						}
+					},
+				
+					title: {
+							text: 'Temperature'
+					},
+					xAxis: {
+							categories: x
+					},
+					series: [{
+							data: y,
+							name: '°C'
+					}]
+			});
+}
+
+function showHumidityChart(x,y){
+	new Highcharts.chart('humidityChart', {
+					credits: false,
+				
+					exporting:{
+						buttons:{
+							contextButton:{
+									enabled:false
+								}
+						}
+					},
+				
+					title: {
+							text: 'Humidity'
+					},
+					xAxis: {
+							categories: x
+					},
+					series: [{
+							data: y,
+							name: '%'
+					}]
+			});
+}
+
 
 var socket = io();
 
@@ -88,136 +524,6 @@ xhttp.send();
 	
 };
 
-function showChart() {
-	var url_string = window.location.href;
-	var url = new URL(url_string);
-	var pathname = url.pathname;
-	var split = pathname.split("/"); 
-	var roomId = split[2];	
-	var peopleNo = []; //No of people in array from Jan-Dec
-	var tempNo = []; //Temperature value in array from Jan-Dec
-	var humidNo = []; //Humidity value in array from Jan-Dec
-	
-	var xhr = new XMLHttpRequest();
-	xhr.responseType = 'json';
-	
-	xhr.onreadystatechange = function () {
-		if(this.readyState == 4 && this.status == 200){
-			var result = this.response;	
-			var tp = []; 
-			var counter = [];
-			for(var room in result.rooms){	
-				if(result.rooms[room]._id == roomId){
-					
-					for(var i = 0; i < 12; i++){
-							tp[i] = 0;
-							counter[i] = 0;
-					}
-					
-					for(var people in result.rooms[room].people){
-						var time = result.rooms[room].people[people].time;
-						var date = new Date(time);
-						
-						for(var i = 0; i < 12; i ++){
-							if(date.getMonth() == i+1)
-								tp[i] += result.rooms[room].people[people].data;
-								counter[i] = counter[i] + 1;
-						}
-						
-						for(var i = 0; i < 12; i++){
-							peopleNo[i] = (tp[i]/counter[i]).toFixed(1);
-							peopleNo[i] = parseInt(peopleNo[i]);
-						}						
-					}
-
-					for(var i = 0; i < 12; i++){
-							tp[i] = 0;
-							counter[i] = 0;
-					}
-					
-					for(var temp in result.rooms[room].temperature){
-						var time = result.rooms[room].temperature[temp].time;
-						var date = new Date(time);
-						for(var i = 0; i < 12; i++){
-							if(date.getMonth() == i+1)
-								tp[i] += result.rooms[room].temperature[temp].data;
-								counter[i] = counter[i] + 1;
-						}
-						
-						for(var i = 0; i < 12; i++){
-							tempNo[i] = (tp[i]/counter[i]).toFixed(1);
-							tempNo[i] = parseInt(tempNo[i]);
-						}
-						
-					}
-					
-					for(var i = 0; i < 12; i++){
-							tp[i] = 0;
-							counter[i] = 0;
-					}
-					
-					for(var humid in result.rooms[room].humidity){
-						var time = result.rooms[room].humidity[humid].time;
-						var date = new Date(time);
-						for(var i = 0; i < 12; i++){
-							if(date.getMonth() == i+1)
-								tp[i] += result.rooms[room].humidity[humid].data;
-								counter[i] = counter[i] + 1;
-						}
-						
-						for(var i = 0; i < 12; i++){
-							humidNo[i] = (tp[i]/counter[i]).toFixed(1);
-							humidNo[i] = parseInt(humidNo[i]);
-						}
-					}
-					
-				}
-			}
-			
-			new Highcharts.chart('peopleChart', {
-					title: {
-							text: 'Number Of People'
-					},
-					xAxis: {
-							categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-					},
-					series: [{
-							data: peopleNo,
-							name: 'People Count'
-					}]
-			});
-
-			new Highcharts.chart('temperatureChart', {
-					title: {
-							text: 'Temperature'
-					},
-					xAxis: {
-							categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-					},
-					series: [{
-							data: tempNo,
-							name: 'Temperature'
-					}]
-			});
-			
-			new Highcharts.chart('humidityChart', {
-					title: {
-							text: 'Humidity'
-					},
-					xAxis: {
-							categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-					},
-					series: [{
-							data: humidNo,
-							name: 'Humidity'
-					}]
-			});
-		}
-	};
-	xhr.open("GET","http://localhost:3000/api/rooms" ,true);
-	xhr.send();
-};
-
 // Bugs:
 // 1. the generate report only work after the chart has been generated on the web page
 function directToPdf() {
@@ -248,28 +554,28 @@ function directToPdf() {
 }
 
 function showUserTable(){
-    var xhttp = new XMLHttpRequest();
-    xhttp.responseType = 'json';
+var xhttp = new XMLHttpRequest();
+xhttp.responseType = 'json';
 
-    xhttp.onreadystatechange = function () {
-        if(this.readyState == 4 && this.status == 200) {
-            var result = this.response;
-            for(var user in result.users){
-                document.getElementById("showUser").innerHTML += 
-                '<tbody>' + '<tr>' +
-                '<td style="display: none;">' + result.users[user]._id + '</td>' +
-                '<td>' + result.users[user].username + '</td>' +
-                '<td>' + result.users[user].email + '</td>' +
-                '<td>' + result.users[user].role + '</td>' +
-                '<td>' + '<button class = "btn btn-success" id = "editbtn" onclick = "showModal()"><span class="fa fa-edit" style = "color: white"></span></button>' + '</td>' +
-                '<td>' + '<button class = "btn btn-danger" id = "deletebtn" onclick = "deleteUser()"><span class="fa fa-trash" style = "color: white"></span></button>' + '</td>' + '</tr>' + '</tbody>';
+xhttp.onreadystatechange = function () {
+	if(this.readyState == 4 && this.status == 200) {
+		var result = this.response;
+		for(var user in result.users){
+			document.getElementById("showUser").innerHTML += 
+            '<tbody>' + '<tr>' +
+            '<td>' + result.users[user]._id + '</td>' +
+            '<td>' + result.users[user].username + '</td>' +
+            '<td>' + result.users[user].email + '</td>' +
+            '<td>' + result.users[user].role + '</td>' +
+            '<td>' + '<button class = "btn btn-success" id = "editbtn" onclick = "showModal()"><span class="fa fa-edit" style = "color: white"></span></button>' + '</td>' +
+            '<td>' + '<button class = "btn btn-danger" id = "deletebtn" onclick = "deleteUser()"><span class="fa fa-trash" style = "color: white"></span></button>' + '</td>' + '</tr>' + '</tbody>';
+                                   
+		};
+	}
+};
 
-            };
-        }
-    };
-
-    xhttp.open("GET","http://localhost:3000/api/users",true);
-    xhttp.send();
+xhttp.open("GET","http://localhost:3000/api/users",true);
+xhttp.send();
 	
 };
 
@@ -306,34 +612,6 @@ function addUser() {
         alert("Your Password and Confirm Password is not the same. Please fill in again!!");
     }
     
-//    var count = 0;
-//    var xhr = new XMLHttpRequest();
-//    xhr.responseType = 'json';
-//
-//    xhr.onreadystatechange = function () {
-//        if(this.readyState == 4 && this.status == 200) {
-//            var result = this.response;
-//            for(var user in result.users){
-//                if (document.getElementById("uemail").value === result.users[user].email)
-//                {
-//                    alert("Email has been registered before.\nPlease try a new email to register!!!");
-//                    count = 1;
-//                }
-//                else
-//                {
-//                    count = 2;
-//                }
-//
-//            };
-//        }
-//    };
-//
-//        
-//    xhr.open("GET","http://localhost:3000/api/users",true);
-//    xhr.send();
-    
-    
-    
     if(document.getElementById("uname").value !== "" 
        && document.getElementById("upsd").value !== "" 
        && document.getElementById("cupsd").value !== "" 
@@ -342,7 +620,6 @@ function addUser() {
        && (document.getElementById("upsd").value === document.getElementById("cupsd").value))
     {
         var xhttp = new XMLHttpRequest();
-        xhttp.responseType = 'json';
         var url = 'http://localhost:3000/api/users';
         var params = 'role=' + document.getElementById("role").value 
                     + '&username=' + document.getElementById("uname").value 
@@ -352,23 +629,19 @@ function addUser() {
         xhttp.open('POST',url,true);
 
         xhttp.setRequestHeader('Content-type','application/x-www-form-urlencoded');
-        xhttp.setRequestHeader('Authorization','Bearer ' + localStorage.getItem('token'));
 
-//        alert('A new user has been add!!');
+        alert('A new user has been add!!');
 
         xhttp.onreadystatechange = function() {
-            if(xhttp.readyState == 4 && xhttp.status == 201) {
-                alert(xhttp.response.message); 
-            }
-            
-            if(xhttp.readyState == 4 && xhttp.status == 500) {
-                alert(xhttp.response.message); 
+            if(xhttp.readyState == 4 && xhttp.status == 200) {
+                alert(xhttp.responseText);
+                window.location.reload(true);
             }
         }
 
         xhttp.send(params); 
 
-//        clear();
+        clear();
 
     }
 };
@@ -457,6 +730,8 @@ function showModal(){
         xhttp.open("GET",url,true);
 
         xhttp.send();
+        
+        
     };
 };
 
@@ -465,20 +740,18 @@ function updateUser() {
     if(document.getElementById("previousRole").value !== document.getElementById("edit_role").value)
     {
         var xhttp = new XMLHttpRequest();
-        xhttp.responseType = 'json';
         var url = 'http://localhost:3000/api/users/' + document.getElementById("id").value;
         var params = 'role=' + document.getElementById("edit_role").value;
 
         xhttp.open('PUT',url,true);
-        
 
         xhttp.setRequestHeader('Content-type','application/x-www-form-urlencoded');
-        xhttp.setRequestHeader('Authorization','Bearer ' + localStorage.getItem('token'));
 
         xhttp.onreadystatechange = function() {
             if(xhttp.readyState == 4 && xhttp.status == 200) 
             {
-                alert(xhttp.response.message);
+                alert("Update user successfully!!");
+                window.location.reload(true);
             }
         }
 
@@ -527,16 +800,13 @@ function deleteUser(){
 
             var url = 'http://localhost:3000/api/users/' + cells[0].innerHTML;
 
-            xhttp.open("DELETE",url,true);
-
-            xhttp.setRequestHeader('Authorization','Bearer ' + localStorage.getItem('token'));
-
             xhttp.onreadystatechange = function () {
                 if(this.readyState == 4 && this.status == 200) {
-                    alert(xhttp.response.message);
+                    alert("User has been delete!!");
                 }
             };
 
+            xhttp.open("DELETE",url,true);
 
             xhttp.send();
         }   
@@ -545,58 +815,37 @@ function deleteUser(){
 
 
 function login(){
-    if(document.getElementById("loginEmail").value == "")
+    
+    if(document.getElementById("email_login").value === "")
     {
         alert("Please enter your username!!");
     }
     
-    if(document.getElementById("loginPassword").value == "")
+    if(document.getElementById("password_login").value === "")
     {
         alert("Please enter your password!!");
     }
     
-    
-    if((document.getElementById("loginEmail").value != "") && (document.getElementById("loginPassword").value != ""))
+    if(document.getElementById("email_login").value !== "" && document.getElementById("password_login").value !== "")
     {
         var xhttp = new XMLHttpRequest();
-        xhttp.responseType = 'json';
         var url = 'http://localhost:3000/api/users/login';
-        var params = 'email=' + document.getElementById("loginEmail").value + '&password=' + document.getElementById("loginPassword").value;
+        var params = 'email=' + document.getElementById("email_login").value
+                    + '&password=' + document.getElementById("password_login").value;
 
-                
         xhttp.open('POST',url,true);
 
         xhttp.setRequestHeader('Content-type','application/x-www-form-urlencoded');
 
+
         xhttp.onreadystatechange = function() {
-
             if(xhttp.readyState == 4 && xhttp.status == 200) {
-                
-                if(xhttp.response.status == "success")
-                {
-                    localStorage.setItem('token', xhttp.response.token);
-                    window.location.replace("/dashboard");
-                }
-
-            }
-            
-            if((xhttp.readyState == 4 && xhttp.status == 401) || (xhttp.readyState == 4 && xhttp.status == 404)) {
-                
-                alert("Login credentials invalid!!");
-                
-            }
-            
-            if(xhttp.readyState == 4 && xhttp.status == 500) {
-                
-                alert(xhttp.response.message + " maybe something is wrong with the server");
-                
+                alert(xhttp.responseText);
+                console.log(xhttp.responseText);
             }
         }
 
-
         xhttp.send(params); 
-        
-        
     }
 };
 
@@ -612,56 +861,21 @@ function closeForget() {
 
 function checkEmail(){
     var xhttp = new XMLHttpRequest();
-    xhttp.responseType = 'json';
     var url = 'http://localhost:3000/api/users/forgotPassword';
     var params = 'email=' + document.getElementById("forgetEmail").value;
 
     xhttp.open('POST',url,true);
+
     xhttp.setRequestHeader('Content-type','application/x-www-form-urlencoded');
-    
+
     xhttp.onreadystatechange = function() {
         if(xhttp.readyState == 4 && xhttp.status == 200) 
         {
-            alert(xhttp.response.message);
+            alert(xhttp.responseText);
         }
-        
-        if(xhttp.status == 404) 
-        {
-            alert(xhttp.response.message);
-        }
-        
-        
     }
 
     xhttp.send(params); 
 };
 
-function onResetPassword() {
-    var xhttp = new XMLHttpRequest();
-    xhttp.responseType = 'json';
 
-    var url = 'http://localhost:3000/api/users/resetPassword';
-
-    const token = window.location.pathname.split('/')[2];
-    const password = document.getElementById('password').value;
-
-    var params = `token=${token}&password=${password}`;
-
-    xhttp.open('POST', url, true);
-
-    xhttp.setRequestHeader('Content-type','application/x-www-form-urlencoded');
-
-    xhttp.onreadystatechange = function() {
-        if(xhttp.readyState == 4 && xhttp.status == 200) {
-            if (xhttp.response.message == 'success') {
-                alert('Successfully reset password');
-                window.location.replace("/login");
-            }
-            else {
-                alert('Failed to reset password');
-            }
-        }
-    }
-
-    xhttp.send(params);
-}
