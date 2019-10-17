@@ -70,9 +70,9 @@ window.generateReport = function (data, peopleChart, temperatureChart, humidityC
     let peopleChartFinal = new Buffer(peopleChart64, "base64");
     doc.image(peopleChartFinal, {height:300});
 
-    doc.moveDown();
+    // Move to next page
+    doc.moveDown(doc.page.height);
 
-    // NOW WORKING ON MAKING THE CONTENT ON THE NEXT PAGE
     // Temperature's chart on specific time range
     doc.fontSize(15).text("Temperature from 10 September 2019 - 20 September 2019", 50, doc.y);
     let temperatureChartFinal = new Buffer(temperatureChart64, "base64");
