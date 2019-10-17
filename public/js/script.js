@@ -396,7 +396,6 @@ function showChart() {
   });
 };
 
-
 function showPeopleChart(x,y){
 	new Highcharts.chart('peopleChart', {
 					credits: false,
