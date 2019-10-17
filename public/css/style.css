@@ -30,18 +30,6 @@
 #emailHeader {
     text-align: center;
 }
-
-#loginSubmitbtn {
-    float: right;
-}
-
-#submitEmail {
-    float: left;
-}
-
-#close_forget {
-    float: right;
-}
 /*End login.html/
 
 /* START dashboard.html */
@@ -151,6 +139,13 @@ hr {
 	box-shadow: 0px 0px 8px 2px rgba(0,0,0,0.75);
 	margin-top:4%;
 	text-align: center;
+	width:500px;
+	height:200px;
+}
+
+.add-icon{
+	width: 15%;
+	margin: 70px 0 70px 0;
 }
 
 .chart-wrapper{
@@ -229,5 +224,29 @@ a.disabled {
 
 #reportrange{
 	background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%
+}
+
+#overlay {
+  position: fixed; /* Sit on top of the page content */
+  display: none; /* Hidden by default */
+  width: 100%; /* Full width (cover the whole page) */
+  height: 100%; /* Full height (cover the whole page) */
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0,0,0,0.5); /* Black background with opacity */
+  z-index: 2; /* Specify a stack order in case you're using a different order for other elements */
+  cursor: pointer; /* Add a pointer on hover */
+}
+
+#text{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  font-size: 20px;
+  color: white;
+  transform: translate(-50%,-50%);
+  -ms-transform: translate(-50%,-50%);
 }
 /* End user.html*/

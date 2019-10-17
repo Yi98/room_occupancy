@@ -33,6 +33,31 @@
 //$(document).ready(function(){
 //  $('[data-toggle="tooltip"]').tooltip();
 //});
+function searchRoom(){
+	var input, filter, ul, li, i, a, txtValue;
+	input = document.getElementById("search");
+	filter = input.value.toUpperCase();
+	ul = document.getElementById("showRoom");
+	li = ul.getElementsByTagName("div");
+	for (i = 0; i < li.length; i++) {
+		a = li[i].getElementsByTagName("h4")[0];
+		txtValue = a.textContent || a.innerText;
+		if (txtValue.toUpperCase().indexOf(filter) > -1) {
+				li[i].style.display = "";
+		} else {
+				li[i].style.display = "none";
+		}
+	}
+}
+
+
+function on() {
+  document.getElementById("overlay").style.display = "block";
+}
+
+function off() {
+  document.getElementById("overlay").style.display = "none";
+}
 
 
 function showChart() {
@@ -396,7 +421,6 @@ function showChart() {
   });
 };
 
-
 function showPeopleChart(x,y){
 	new Highcharts.chart('peopleChart', {
 					credits: false,
@@ -516,6 +540,8 @@ xhttp.onreadystatechange = function () {
 									'<p>' + 'Humidity: ' + "<span class='humidity'>0</span>" + '</p>' + 
                   '<p>' + 'Status: ' + statusMsg + '</p></div></a></div>';
 		}
+		
+		document.getElementById("showRoom").innerHTML += '<div class="room-card col-md-4 col-sm-4 col-xs-6"><a onclick="on()"><div class="img-thumbnail"><img src="https://image.flaticon.com/icons/svg/109/109615.svg" class="add-icon" title="Lyolya"/></div></a></div>';
 	}
 };
 
