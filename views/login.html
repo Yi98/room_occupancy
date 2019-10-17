@@ -19,7 +19,7 @@
         <div class = "container">
             <div class = "row" id = "loginForm">
                 <div class = "col-md-6 offset-md-3 col-xs-6 offset-xs-3">
-                   <form method="POST" action="http://localhost:3000/api/users/login">
+                   <form>
                        <div class = "row">
                            <div class = "col-md-6 offset-md-3 col-sm-6 offset-sm-3 col-xs-6 offset-xs-3">
                                <img src = "https://www.swinburne.edu.my/openday/_assets/img/nav-swin-logo.png" class = "img-fluid" alt = "logo">
@@ -28,20 +28,19 @@
                        
                         <div class = "form-group" id = "userEmail">
                             <span class = "fa fa-user"></span>
-                            <label for = "uemail">Email address</label>
-                            <input type = "email" class="form-control" id = "email" placeholder = "Enter emaill address">
+                            <label for = "loginEmail">Email address</label>
+                            <input type = "email" class="form-control" id = "loginEmail" name="email" placeholder = "Enter emaill address">
                         </div>
                         
                         <div class = "form-group">
                             <span class = "fa fa-key"></span>
-                            <label for = "upassword">Password</label>
-                            <input type = "password" class = "form-control" id = "password" placeholder = "Password">
+                            <label for = "loginPassword">Password</label>
+                            <input type = "password" class = "form-control" id = "loginPassword" name="password" placeholder = "Password">
                         </div>
                         
-                        <a href = "#" onclick = "openForgetEmail()">Forget Password</a> 
-                        <input type="submit" value="Submit">
-                        
+                        <a href = "#" onclick = "openForgetEmail()">Forget Password</a>                         
                     </form>
+                    <button class = "btn btn-primary" onclick = "login()" id = "loginSubmitbtn">Submit</button>
                 </div>
             </div>
             

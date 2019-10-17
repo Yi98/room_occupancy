@@ -3,6 +3,7 @@ const path = require('path');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const session = require('express-session');
+const bodyParser = require('body-parser');
 const app = express();
 const server = require("http").createServer(app);
 const io = require("socket.io")(server);
@@ -34,8 +35,9 @@ app.use(session({
   cookie: { secure: true }
 }))
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.json());
-app.use(express.urlencoded({extended: true}));
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json())
+
 
 app.use('/api/rooms', roomApi);
 app.use('/api/data', dataApi);

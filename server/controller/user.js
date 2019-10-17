@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt');
 const nodemailer = require('nodemailer');
+const jwt = require('jsonwebtoken');
 
 const crypto = require('crypto');
 
@@ -43,44 +44,52 @@ exports.getUsers = (req, res) => {
 
 // add a new user ->  /api/users (POST)
 exports.addUser = (req, res) => {
-    User.findOne({email: req.body.email})
-    .then(user => {
-      if (user) {
-        return res.status(500).json({
-          message: 'Email already existed',
-          existing: user
-        });
-      }
+  if (req.userData.role != 'manager') {
+    return res.status(401).json({message: 'Only manager can edit user'});
+  }
 
-      return bcrypt.hash(req.body.password, 15)
-    })
-    .then(hash => {
-      const newUser = new User({
-        username: req.body.username,
-        email: req.body.email,
-        password: hash,
-        role: req.body.role
+  User.findOne({email: req.body.email})
+  .then(user => {
+    if (user) {
+      return res.status(500).json({
+        message: 'Email already existed',
+        existing: user
       });
+    }
 
-      return newUser.save();
+    return bcrypt.hash(req.body.password, 15)
+  })
+  .then(hash => {
+    const newUser = new User({
+      username: req.body.username,
+      email: req.body.email,
+      password: hash,
+      role: req.body.role
+    });
+
+    return newUser.save();
+  })
+  .then(user => {
+    res.status(201).json({
+      message: 'New user was created',
+      newUser: user
     })
-    .then(user => { 
-      res.status(201).json({
-        message: 'New user was created',
-        newUser: user
-      })
-    })
-    .catch(err => {
-      res.status(500).json({
-        message: 'Failed to add user',
-        err
-      });
-    })
+  })
+  .catch(err => {
+    res.status(500).json({
+      message: 'Failed to add user',
+      err
+    });
+  })
 };
 
 
 // edit a user ->  /api/users/:id (PUT)
 exports.editUser = (req, res) => {
+  if (req.userData.role != 'manager') {
+    return res.status(401).json({message: 'Only manager can edit user'});
+  }
+
   User.findById(req.params.id)
     .then(user => {
       if (!user) {
@@ -113,6 +122,10 @@ exports.editUser = (req, res) => {
 
 // delete a user ->  /api/users/:id (DELETE)
 exports.deleteUser = (req, res) => {
+  if (req.userData.role != 'manager') {
+    return res.status(401).json({message: 'Only manager can edit user'});
+  }
+
   User.findByIdAndDelete(req.params.id)
     .then(deletedUser => {
       if (!deletedUser) {
@@ -135,7 +148,7 @@ exports.deleteUser = (req, res) => {
 // check login cridentials -> /api/users/login (POST)
 exports.login = (req, res) => {
   let fetchedUser;
-
+    
   User.findOne({email: req.body.email})
     .then(user => {
       if (!user) {
@@ -149,14 +162,25 @@ exports.login = (req, res) => {
     })
     .then(result => {
       if (!result) {
-        return res.status(401).json({status: 'fail'});
+        return res.status(401).json({
+          status: 'fail',
+          message: 'Wrong password'
+        });
       }
-      req.session.userId = fetchedUser._id;
+      const token = jwt.sign(
+        { username: fetchedUser.username,
+          email: fetchedUser.email,
+          userId: fetchedUser._id,
+          role: fetchedUser.role
+        },
+        'fyp_room',
+        { expiresIn: '1d'}
+      );
+      // changed jwt hash word into process.env.JWT_KEY
 
       res.status(200).json({
         status: 'success',
-        username: fetchedUser.username,
-        role: fetchedUser.role
+        token
       })
     })
     .catch(err => {
@@ -194,9 +218,9 @@ exports.forgotPassword = (req, res) => {
         to: `${user.email}`,
         subject: 'Link to password reset',
         html: `
-        <h3>Hi there,</h3>
+        <h3>Hey ${user.username},</h3>
         <p>You recently requested to reset your password for your room occupancy account. Click the link below to reset it.</p>
-        <a href="http://localhost:3000/reset/${token}">Reset your password</a>
+        <a href="http://localhost:3000/resetPassword/${token}">Reset your password</a>
         <p>This link will only be active for 5 minutes</p>
         <p>If you did not request a password reset, please ignore this email or reply to let us know.</p>
         <p>Thanks,<br>FYP Team</p>`
@@ -224,10 +248,10 @@ exports.forgotPassword = (req, res) => {
 exports.resetPassword = (req, res) => {
   let fetchedUser;
   
-  User.findOne({resetPasswordToken: req.params.token})
+  User.findOne({resetPasswordToken: req.body.token})
     .then(user => {
       if (!user) {
-        return res.redirect('/login');
+        return res.status(404).json({message: 'User not found'})
       }
 
       // console.log(user.resetPasswordExpires);
@@ -246,7 +270,7 @@ exports.resetPassword = (req, res) => {
       fetchedUser.resetPasswordExpires = null;
       fetchedUser.save();
 
-      return res.redirect('/login');
+      return res.status(200).json({message: 'success'});
     })
     .catch (err => {
       return res.status(500).json({

@@ -26,13 +26,14 @@ router.get('/user', (req, res) => {
   res.sendFile(path.join(__dirname, '../../views/user.html'));
 });
 
-router.get('/reset/:token', (req, res) => {
+router.get('/resetPassword/:token', (req, res) => {
   res.sendFile(path.join(__dirname, '../../views/password_reset.html'));
 })
 
 //  Page not found
 router.get('*', (req, res) => {
-  res.redirect('/dashboard');
+  res.send("Page not found");
+  // res.redirect('/dashboard');
 })
 
 module.exports = router;

@@ -30,6 +30,18 @@
 #emailHeader {
     text-align: center;
 }
+
+#loginSubmitbtn {
+    float: right;
+}
+
+#submitEmail {
+    float: left;
+}
+
+#close_forget {
+    float: right;
+}
 /*End login.html/
 
 /* START dashboard.html */
