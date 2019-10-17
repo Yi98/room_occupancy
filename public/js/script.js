@@ -1,14 +1,3 @@
-////$(document).ready(function() {
-////    $('#userTable').DataTable();
-//////    function RefreshTable()
-//////    {
-//////        $('#showUser').load();
-//////    }
-//////    
-//////    $('#updatebtn').on("click",RefreshTable);
-////});
-//
-
 const canvg = require("canvg");
 
 //$(document).ready(function(){
@@ -247,12 +236,19 @@ function directToPdf() {
 	})
 }
 
+
 function showUserTable(){
+    $("#spinner_adduser").hide();
+    $("#userAlert").hide();
+    $("#userEditAlert").hide();
+    $("#userEditModalAlert").hide();
+    
     var xhttp = new XMLHttpRequest();
     xhttp.responseType = 'json';
 
     xhttp.onreadystatechange = function () {
         if(this.readyState == 4 && this.status == 200) {
+            $("#spinner").hide();
             var result = this.response;
             for(var user in result.users){
                 document.getElementById("showUser").innerHTML += 
@@ -276,63 +272,41 @@ function showUserTable(){
 
 function addUser() {
     
-    if(document.getElementById("uname").value === "")
+    if(document.getElementById("role").value === "Pick a Role")
     {
-        alert("Please fill in your name!!");
-    } 
-    
-    if(document.getElementById("upsd").value === "")
+        document.getElementById("userAlert").innerHTML = '<strong>Please pick a role!!</strong> <button type="button" class="close" onclick="closeUserAlert()"><span>&times;</span></button>';
+        $("#userAlert").show();
+    }
+
+    if(document.getElementById("uemail").value === "")
     {
-        alert("Please fill in your password!!");
+        document.getElementById("userAlert").innerHTML = '<strong>Please fill in your email!!</strong> <button type="button" class="close" onclick="closeUserAlert()"><span>&times;</span></button>';
+        $("#userAlert").show();
     }
     
     if(document.getElementById("cupsd").value === "")
     {
-        alert("Please fill in your confirm password!!");
+        document.getElementById("userAlert").innerHTML = '<strong>Please fill in your confirm password!!</strong> <button type="button" class="close" onclick="closeUserAlert()"><span>&times;</span></button>';
+        $("#userAlert").show();
     }
     
-    if(document.getElementById("uemail").value === "")
+     if(document.getElementById("upsd").value === "")
     {
-        alert("Please fill in your email!!");
+        document.getElementById("userAlert").innerHTML = '<strong>Please fill in your password!!</strong> <button type="button" class="close" onclick="closeUserAlert()"><span>&times;</span></button>';
+        $("#userAlert").show();
     }
     
-    if(document.getElementById("role").value === "Pick a Role")
+    if(document.getElementById("uname").value === "")
     {
-        alert("Please pick a role!!");
-    }
+        document.getElementById("userAlert").innerHTML = '<strong>Please fill in your name!!</strong> <button type="button" class="close" onclick="closeUserAlert()"><span>&times;</span></button>';
+        $("#userAlert").show();
+    } 
     
     if(document.getElementById("upsd").value !== document.getElementById("cupsd").value )
     {
-        alert("Your Password and Confirm Password is not the same. Please fill in again!!");
+        document.getElementById("userAlert").innerHTML = '<strong>Your Password and Confirm Password is not the same. Please fill in again!!</strong> <button type="button" class="close" onclick="closeUserAlert()"><span>&times;</span></button>';
+        $("#userAlert").show();
     }
-    
-//    var count = 0;
-//    var xhr = new XMLHttpRequest();
-//    xhr.responseType = 'json';
-//
-//    xhr.onreadystatechange = function () {
-//        if(this.readyState == 4 && this.status == 200) {
-//            var result = this.response;
-//            for(var user in result.users){
-//                if (document.getElementById("uemail").value === result.users[user].email)
-//                {
-//                    alert("Email has been registered before.\nPlease try a new email to register!!!");
-//                    count = 1;
-//                }
-//                else
-//                {
-//                    count = 2;
-//                }
-//
-//            };
-//        }
-//    };
-//
-//        
-//    xhr.open("GET","http://localhost:3000/api/users",true);
-//    xhr.send();
-    
-    
     
     if(document.getElementById("uname").value !== "" 
        && document.getElementById("upsd").value !== "" 
@@ -341,6 +315,7 @@ function addUser() {
        && document.getElementById("role").value !== "Pick a Role" 
        && (document.getElementById("upsd").value === document.getElementById("cupsd").value))
     {
+        $("#spinner_adduser").show();
         var xhttp = new XMLHttpRequest();
         xhttp.responseType = 'json';
         var url = 'http://localhost:3000/api/users';
@@ -353,36 +328,33 @@ function addUser() {
 
         xhttp.setRequestHeader('Content-type','application/x-www-form-urlencoded');
 
-//        alert('A new user has been add!!');
-
         xhttp.onreadystatechange = function() {
-            console.log(xhttp.readyState);
             if(xhttp.readyState == 4 && xhttp.status == 201) {
-                console.log(xhttp.response.message); 
-                alert(xhttp.response.message); 
+                $("#spinner_adduser").hide();
+                
+                clear();
+                
+                document.getElementById("showUser").innerHTML = "";
+                var table = document.getElementById("showUser").innerHTML;
+                table = showUserTable();
+                
+                document.getElementById("userAlert").innerHTML = '<strong>' + xhttp.response.message + '</strong> <button type="button" class="close" onclick="closeUserAlert()"><span>&times;</span></button>';
+                $("#userAlert").show();
+    
             }
             
             if(xhttp.readyState == 4 && xhttp.status == 500) {
-                console.log(xhttp.response.message); 
-                alert(xhttp.response.message); 
+                $("#spinner_adduser").hide();
+                document.getElementById("userAlert").innerHTML = '<strong>' + xhttp.response.message + '</strong> <button type="button" class="close" onclick="closeUserAlert()"><span>&times;</span></button>';
+                
+                $("#userAlert").show();
             }
         }
 
         xhttp.send(params); 
 
-//        clear();
-
     }
 };
-
-//function show() {
-//  console.log(document.getElementById("uname").value);  
-//  console.log(document.getElementById("upsd").value);  
-//  console.log(document.getElementById("cupsd").value);  
-//  console.log(document.getElementById("uemail").value);  
-//  console.log(document.getElementById("unumber").value);  
-//    
-//};
 
 function clear() {
     document.getElementById("uname").value = '';  
@@ -468,6 +440,7 @@ function updateUser() {
     
     if(document.getElementById("previousRole").value !== document.getElementById("edit_role").value)
     {
+        $("#spinner").show();
         var xhttp = new XMLHttpRequest();
         xhttp.responseType = 'json';
         var url = 'http://localhost:3000/api/users/' + document.getElementById("id").value;
@@ -481,18 +454,25 @@ function updateUser() {
         xhttp.onreadystatechange = function() {
             if(xhttp.readyState == 4 && xhttp.status == 200) 
             {
-                alert(xhttp.response.message);
+                $("#spinner").hide();
+                
+                document.getElementById("showUser").innerHTML = "";
+                var table = document.getElementById("showUser").innerHTML;
+                table = showUserTable();
+                
+                document.getElementById("userEditAlert").innerHTML = '<strong>' + xhttp.response.message + '</strong> <button type="button" class="close" onclick="closeUserEditAlert()"><span>&times;</span></button>';
+                $("#userEditAlert").show();
             }
         }
 
         xhttp.send(params); 
-
+        
         closeModal();
-    
     }
     else
     {
-        alert("User's role remain the same.\nTo update please change the role else click cancel")
+        document.getElementById("userEditModalAlert").innerHTML = '<strong>User role remain the same.\nTo update please change the role else click cancel</strong> <button type="button" class="close" onclick="closeUserEditModalAlert()"><span>&times;</span></button>';
+        $("#userEditModalAlert").show();
     }
 };
 
@@ -503,6 +483,8 @@ function closeModal(){
 };
 
 function deleteUser(){
+    $("#spinner").show();
+    
     var table = document.getElementsByTagName("table")[0];
     
     var tbody = table.getElementsByTagName("tbody")[0];
@@ -525,41 +507,58 @@ function deleteUser(){
         {
             var xhttp = new XMLHttpRequest();
             xhttp.responseType = 'json';
-            window.location.reload(true);
-            window.location.reload(true);
 
             var url = 'http://localhost:3000/api/users/' + cells[0].innerHTML;
 
             xhttp.onreadystatechange = function () {
                 if(this.readyState == 4 && this.status == 200) {
-                    alert(xhttp.response.message);
+                    $("#spinner").hide();
+                    
+                    document.getElementById("showUser").innerHTML = "";
+                    var table = document.getElementById("showUser").innerHTML;
+                    table = showUserTable();
+                    
+                    document.getElementById("userEditAlert").innerHTML = '<strong>' + xhttp.response.message + '</strong> <button type="button" class="close" onclick="closeUserEditAlert()"><span>&times;</span></button>';
+                    $("#userEditAlert").show();
                 }
             };
 
             xhttp.open("DELETE",url,true);
 
             xhttp.send();
-        }   
+        }
+        else
+        {
+            $("#spinner").hide();
+        }
     };
 };
 
 
+function loginPage() {
+    $("#spinner_login").hide(); 
+    $("#spinner_forget").hide(); 
+    $("#loginAlert").hide();
+    $("#forgetAlert").hide();
+};
+
 function login(){
     
-    
-    if(document.getElementById("loginEmail").value == "")
+    if(document.getElementById("loginPassword").value === "")
     {
-        alert("Please enter your username!!");
+        document.getElementById("loginAlert").innerHTML = '<strong>Please enter your password!!</strong> <button type="button" class="close" onclick="closeLoginAlert()"><span>&times;</span></button>';
+        $("#loginAlert").show();
     }
     
-    if(document.getElementById("loginPassword").value == "")
+    if(document.getElementById("loginEmail").value === "")
     {
-        alert("Please enter your password!!");
+        document.getElementById("loginAlert").innerHTML = '<strong>Please enter your username!!</strong> <button type="button" class="close" onclick="closeLoginAlert()"><span>&times;</span></button>';
+        $("#loginAlert").show();
     }
-    
     
     if((document.getElementById("loginEmail").value != "") && (document.getElementById("loginPassword").value != ""))
     {
+        $("#spinner_login").show(); 
         var xhttp = new XMLHttpRequest();
         xhttp.responseType = 'json';
         var url = 'http://localhost:3000/api/users/login';
@@ -572,33 +571,58 @@ function login(){
 
         xhttp.onreadystatechange = function() {
 
-            if(xhttp.readyState == 4 && xhttp.status == 200) {
-                
+            if(xhttp.readyState == 4 && xhttp.status == 200) 
+            {
                 if(xhttp.response.status == "success")
                 {
+                    $("#spinner_login").hide(); 
                     window.location.replace("/dashboard");
                 }
-
             }
             
-            if((xhttp.readyState == 4 && xhttp.status == 401) || (xhttp.readyState == 4 && xhttp.status == 404)) {
-                
-                alert("Login credentials invalid!!");
+            if((xhttp.readyState == 4 && xhttp.status == 401) || (xhttp.readyState == 4 && xhttp.status == 404)) 
+            {
+                $("#spinner_login").hide(); 
+                document.getElementById("loginAlert").innerHTML = '<strong>Login credentials invalid!!</strong> <button type="button" class="close" onclick="closeLoginAlert()"><span>&times;</span></button>';
+                $("#loginAlert").show();
                 
             }
             
-            if(xhttp.readyState == 4 && xhttp.status == 500) {
-                
-                alert(xhttp.response.message + " maybe something is wrong with the server");
+            if(xhttp.readyState == 4 && xhttp.status == 500) 
+            {
+                $("#spinner_login").hide();
+                document.getElementById("loginAlert").innerHTML = '<strong>' + xhttp.response.message + ' maybe something is wrong with the server</strong> <button type="button" class="close" onclick="closeLoginAlert()"><span>&times;</span></button>';
+                $("#loginAlert").show();
                 
             }
         }
 
-
-        xhttp.send(params); 
-        
-        
+        xhttp.send(params);    
     }
+};
+
+function closeLoginAlert() {
+    $("#loginAlert").hide();
+};
+
+function closeForgetAlert() {
+    $("#forgetAlert").hide();
+};
+
+function closeUserAlert() {
+    $("#userAlert").hide();
+};
+
+function closeUserEditAlert() {
+    $("#userEditAlert").hide();
+};
+
+function closeUserEditModalAlert() {
+    $("#userEditModalAlert").hide();
+};
+
+function closeResetAlert() {
+    $("#resetAlert").hide();
 };
 
 function openForgetEmail() {
@@ -609,60 +633,176 @@ function openForgetEmail() {
 function closeForget() {
     var modal = document.getElementById("modalEmail");
     modal.style.display = "none";  
+    $('.alert').alert('close');
 };
 
 function checkEmail(){
-    var xhttp = new XMLHttpRequest();
-    xhttp.responseType = 'json';
-    var url = 'http://localhost:3000/api/users/forgotPassword';
-    var params = 'email=' + document.getElementById("forgetEmail").value;
-
-    xhttp.open('POST',url,true);
-    xhttp.setRequestHeader('Content-type','application/x-www-form-urlencoded');
     
-    xhttp.onreadystatechange = function() {
-        if(xhttp.readyState == 4 && xhttp.status == 200) 
-        {
-            alert(xhttp.response.message);
-        }
+    $("#spinner_forget").show();
+    
+    if(document.getElementById("forgetEmail").value === "")
+    {
+        $("#spinner_forget").hide();
         
-        if(xhttp.status == 404) 
-        {
-            alert(xhttp.response.message);
-        }
-        
-        
+        document.getElementById("forgetAlert").innerHTML = '<strong>Please enter an email!!</strong> <button type="button" class="close" onclick="closeForgetAlert()"><span>&times;</span></button>';
+        $("#forgetAlert").show();
     }
+    else 
+    {
+        var xhttp = new XMLHttpRequest();
+        xhttp.responseType = 'json';
+        var url = 'http://localhost:3000/api/users/forgotPassword';
+        var params = 'email=' + document.getElementById("forgetEmail").value;
 
-    xhttp.send(params); 
+        xhttp.open('POST',url,true);
+        xhttp.setRequestHeader('Content-type','application/x-www-form-urlencoded');
+
+        xhttp.onreadystatechange = function() {
+            if(xhttp.readyState == 4 && xhttp.status == 200) 
+            {
+                $("#spinner_forget").hide(); 
+                document.getElementById("forgetAlert").innerHTML = '<strong>' + xhttp.response.message +'</strong> <button type="button" class="close" onclick="closeForgetAlert()"><span>&times;</span></button>';
+                $("#forgetAlert").show();
+                document.getElementById("forgetEmail").value = "";
+
+            }
+
+            if(xhttp.status == 404) 
+            {
+                $("#spinner_forget").hide(); 
+                document.getElementById("forgetAlert").innerHTML = '<strong>' + xhttp.response.message +'</strong> <button type="button" class="close" onclick="closeForgetAlert()"><span>&times;</span></button>';
+                $("#forgetAlert").show();
+                
+            }
+
+        }
+
+        xhttp.send(params); 
+    } 
+};
+
+function resetPage() {
+    $("#spinner_reset").hide(); 
+    $("#resetAlert").hide();
 };
 
 function onResetPassword() {
-    var xhttp = new XMLHttpRequest();
-    xhttp.responseType = 'json';
-
-    var url = 'http://localhost:3000/api/users/resetPassword';
-
-    const token = window.location.pathname.split('/')[2];
-    const password = document.getElementById('password').value;
-
-    var params = `token=${token}&password=${password}`;
-
-    xhttp.open('POST', url, true);
-
-    xhttp.setRequestHeader('Content-type','application/x-www-form-urlencoded');
-
-    xhttp.onreadystatechange = function() {
-        if(xhttp.readyState == 4 && xhttp.status == 200) {
-            if (xhttp.response.message == 'success') {
-                alert('Successfully reset password');
-                window.location.replace("/login");
-            }
-            else {
-                alert('Failed to reset password');
-            }
-        }
+    
+    $("#spinner_reset").show(); 
+    
+    
+    if(document.getElementById("confirm_password").value === "") 
+    {
+        $("#spinner_reset").hide(); 
+        
+        document.getElementById("resetAlert").innerHTML = '<strong>Please fill in your confirm password!!</strong> <button type="button" class="close" onclick="closeResetAlert()"><span>&times;</span></button>';
+        $("#resetAlert").show();
+    }
+    
+    if(document.getElementById("password").value === "")
+    {
+        $("#spinner_reset").hide(); 
+        
+        document.getElementById("resetAlert").innerHTML = '<strong>Please fill in your new password!!</strong> <button type="button" class="close" onclick="closeResetAlert()"><span>&times;</span></button>';
+        $("#resetAlert").show();
     }
 
-    xhttp.send(params);
+    if(document.getElementById("password").value !== document.getElementById("confirm_password").value)
+    {
+        $("#spinner_reset").hide(); 
+        
+        document.getElementById("resetAlert").innerHTML = '<strong>Your new password and confirm password is not the same.\nPlease enter again!!</strong> <button type="button" class="close" onclick="closeResetAlert()"><span>&times;</span></button>';
+        $("#resetAlert").show();
+        
+    }
+
+    if(document.getElementById("password").value !== "" 
+       && document.getElementById("confirm_password").value !== "" 
+       && document.getElementById("password").value === document.getElementById("confirm_password").value)
+    {
+        var xhttp = new XMLHttpRequest();
+        xhttp.responseType = 'json';
+
+        var url = 'http://localhost:3000/api/users/resetPassword';
+
+        const token = window.location.pathname.split('/')[2];
+        const password = document.getElementById("password").value;
+
+        var params = `token=${token}&password=${password}`;
+
+        xhttp.open('POST', url, true);
+
+        xhttp.setRequestHeader('Content-type','application/x-www-form-urlencoded');
+
+        xhttp.onreadystatechange = function() {
+            if(xhttp.readyState == 4 && xhttp.status == 200) {
+                if (xhttp.response.message == 'success') {
+                    $("#spinner_reset").hide(); 
+                    
+                    alert("Successfully reset password");                    
+                    
+                    window.location.replace("/login");
+                }
+            }
+            
+            if(xhttp.readyState == 4 && xhttp.status == 404) {
+                $("#spinner_reset").hide(); 
+                
+                document.getElementById("resetAlert").innerHTML = '<strong>Failed to reset password.\nPlease go to enter your forget email again.</strong> <button type="button" class="close" onclick="closeResetAlert()"><span>&times;</span></button>';
+                $("#resetAlert").show();
+                
+            }
+            
+            
+            if(xhttp.readyState == 4 && xhttp.status == 500) {
+                $("#spinner_reset").hide(); 
+                
+                document.getElementById("resetAlert").innerHTML = '<strong>Failed to reset password due to internal server error.\n Please try again later</strong> <button type="button" class="close" onclick="closeResetAlert()"><span>&times;</span></button>';
+                $("#resetAlert").show();
+            }
+        }
+
+        xhttp.send(params);
+    }
+    
+};
+
+function tablePagination() {
+    var table = '#userTable'
+    $('#maxRows').on('change', function(){
+        $('.pagination').html('')
+        var trnum = 0
+        var maxRows = parseInt($(this).val())
+        var totalRows = $(table+' tbody tr').length
+        $(table+' tr:gt(0)').each(function(){
+            trnum++
+            if(trnum > maxRows){
+                $(this).hide()
+            }
+            if(trnum <= maxRows){
+                $(this).show()
+            }
+        })
+        if(totalRows > maxRows){
+            var pagenum = Math.ceil(totalRows/maxRows)
+            for(var i=1;i<=pagenum;){
+                $('.pagination').append('<li class = "active" data-page="'+i+'">\<span><a class="page-link">'+ i++ + '<span class="sr-only">(current)</span></span></a>\</li>').show()
+            }
+        }
+        $('.pagination li:first-child').addClass('active')
+        $('.pagination li').on('click',function(){
+            var pageNum = $(this).attr('data-page')
+            var trIndex = 0;
+            $('.pagination li').removeClass('active')
+            $(this).addClass('active')
+            $(table+' tr:gt(0)').each(function(){
+                trIndex++
+                if(trIndex > (maxRows*pageNum) || trIndex <= ((maxRows*pageNum)-maxRows)){
+                    $(this).hide()
+                } else{
+                    $(this).show()
+                }
+            })
+        })
+    })
 }
