@@ -63,14 +63,19 @@
 	  </div>
       <div class="col-md-10 col-sm-12 col-xs-12 c right-menu-2">
 				<div class="container content-wrapper">
-					<div class="row" id="showRoom">
-						<div class="room-card col-md-4 col-sm-4 col-xs-6" >
-							<a onclick="#"> <!-- To do implement -->
-							<div class="img-thumbnail">
-									<img src="https://image.flaticon.com/icons/svg/109/109615.svg" class="add-icon" title="Lyolya"/>
-							</div></a>
+					<div id="overlay" onclick="off()">
+						<div id="text">
+							<form action="#">
+								<div class="form-group">
+									<label for="room-name">Room name:</label>
+									<input type="text" class="form-control" id="room-name" name="room-name">
+								</div>
+
+								<input class="btn btn-danger" type="submit" value="Submit" onclick="off()"/>
+							</form>
 						</div>
 					</div>
+					<div class="row" id="showRoom"></div>
 				</div>
     	</div>
 		</div>

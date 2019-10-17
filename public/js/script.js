@@ -34,6 +34,14 @@
 //  $('[data-toggle="tooltip"]').tooltip();
 //});
 
+function on() {
+  document.getElementById("overlay").style.display = "block";
+}
+
+function off() {
+  document.getElementById("overlay").style.display = "none";
+}
+
 
 function showChart() {
   var url_string = window.location.href;
@@ -515,6 +523,8 @@ xhttp.onreadystatechange = function () {
 									'<p>' + 'Humidity: ' + "<span class='humidity'>0</span>" + '</p>' + 
                   '<p>' + 'Status: ' + statusMsg + '</p></div></a></div>';
 		}
+		
+		document.getElementById("showRoom").innerHTML += '<div class="room-card col-md-4 col-sm-4 col-xs-6"><a onclick="on()"><div class="img-thumbnail"><img src="https://image.flaticon.com/icons/svg/109/109615.svg" class="add-icon" title="Lyolya"/></div></a></div>';
 	}
 };
 
