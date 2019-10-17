@@ -8,7 +8,6 @@ const canvg = require("canvg");
 // 2. When ctrl+shift+tab the pdf file won't display the previous one
 // 3. The design for the pdf file is not yet set
 // 4. Some don't need to assigned to 'let' and can be straight away used in a function
-// 5. Should the chart be big or small
 window.generateReport = function (data, peopleChart, temperatureChart, humidityChart) {
     let doc = new PDFDocument();
     let canvas = document.createElement("CANVAS");

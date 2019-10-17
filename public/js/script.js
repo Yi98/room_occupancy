@@ -550,7 +550,7 @@ xhttp.send();
 	
 };
 
-// Bugs:
+// Issue:
 // 1. the generate report only work after the chart has been generated on the web page
 function directToPdf() {
 	let peopleChart, temperatureChart, humidityChart;
