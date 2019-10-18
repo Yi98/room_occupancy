@@ -320,3 +320,7 @@ a.disabled {
     margin-top: 30px;
 }
 /* End password_reset.html*/
+
+#logoutBtn:hover {
+    color: red;
+}

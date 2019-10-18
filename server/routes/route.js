@@ -23,7 +23,7 @@ router.get('/report', (req, res) => {
   res.sendFile(path.join(__dirname, '../../views/report.html'));
 });
 
-router.get('/user', (req, res) => {
+router.get('/users', (req, res) => {
   res.sendFile(path.join(__dirname, '../../views/user.html'));
 });
 
