@@ -1,29 +1,3 @@
-//$(document).ready(function(){
-//		var date_input=$('input[name="startDate"]'); //our date input has the name "startDate"
-//		date_input.datepicker({
-//			format: 'dd/mm/yyyy',
-//			todayHighlight: true,
-//			autoclose: true,
-//		})  
-//        
-//    var date_input=$('input[name="endDate"]'); //our date input has the name "endDate"
-//		date_input.datepicker({
-//			format: 'dd/mm/yyyy',
-//			todayHighlight: true,
-//			autoclose: true,
-//		})
-//		
-//		var date_input=$('input[name="date"]'); //our date input has the name "date"
-//		date_input.datepicker({
-//			format: 'dd/mm/yyyy',
-//			todayHighlight: true,
-//			autoclose: true,
-//		})
-//});
-//$(document).ready(function(){
-//  $('[data-toggle="tooltip"]').tooltip();
-//});
-
 const canvg = require("canvg");
 
 function searchRoom(){
@@ -78,7 +52,8 @@ function showChart() {
 		
 	let room_name_found = false;
     var xhttp = new XMLHttpRequest();
-    xhttp.responseType = 'json';
+		xhttp.responseType = 'json';
+
     xhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {
         var result = this.response;
@@ -413,7 +388,9 @@ function showChart() {
 				}
 			}
 		};
-    xhttp.open("GET", "http://localhost:3000/api/rooms", true);
+		xhttp.open("GET", "http://localhost:3000/api/rooms", true);
+		xhttp.setRequestHeader('Authorization','Bearer ' + localStorage.getItem('token'));
+
     xhttp.send();
   });
 };
@@ -542,6 +519,8 @@ xhttp.onreadystatechange = function () {
 };
 
 xhttp.open("GET","http://localhost:3000/api/rooms",true);
+xhttp.setRequestHeader('Authorization','Bearer ' + localStorage.getItem('token'));
+
 xhttp.send();
 	
 };
@@ -584,7 +563,7 @@ function showUserTable(){
     $("#userEditModalAlert").hide();
     
     var xhttp = new XMLHttpRequest();
-    xhttp.responseType = 'json';
+		xhttp.responseType = 'json';
 
     xhttp.onreadystatechange = function () {
         if(this.readyState == 4 && this.status == 200) {
@@ -604,7 +583,9 @@ function showUserTable(){
         }
     };
 
-    xhttp.open("GET","http://localhost:3000/api/users",true);
+		xhttp.open("GET","http://localhost:3000/api/users",true);
+		xhttp.setRequestHeader('Authorization','Bearer ' + localStorage.getItem('token'));
+		
     xhttp.send();
 	
 };
@@ -767,9 +748,9 @@ function showModal(){
         }
 
         var xhttp = new XMLHttpRequest();
-        xhttp.responseType = 'json';
+				xhttp.responseType = 'json';
         
-        var url = 'http://localhost:3000/api/users/' + cells[0].innerHTML;
+				var url = 'http://localhost:3000/api/users/' + cells[0].innerHTML;
         
         document.getElementById("id").value = cells[0].innerHTML;
         document.getElementById("previousRole").value = cells[3].innerHTML;
@@ -783,7 +764,8 @@ function showModal(){
             }
         };
         
-        xhttp.open("GET",url,true);
+				xhttp.open("GET",url,true);
+				xhttp.setRequestHeader('Authorization','Bearer ' + localStorage.getItem('token'));
 
         xhttp.send();
         

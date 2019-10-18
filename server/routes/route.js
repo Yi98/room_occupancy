@@ -1,9 +1,10 @@
 const express = require('express');
 const path = require('path');
 const router = express.Router();
+const auth = require('../middleware/auth');
 
 router.get('/', (req, res) => {
-  res.redirect('/dashboard');
+  res.redirect('/login');
 });
 
 router.get('/dashboard', (req, res) => {
