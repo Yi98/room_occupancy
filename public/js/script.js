@@ -1527,6 +1527,7 @@ function addUser() {
     {
         $("#spinner_adduser").show();
         var xhttp = new XMLHttpRequest();
+        xhttp.responseType = 'json';
         var url = 'http://localhost:3000/api/users';
         var params = 'role=' + document.getElementById("role").value 
                     + '&username=' + document.getElementById("uname").value 
@@ -1650,6 +1651,7 @@ function updateUser() {
     {
         $("#spinner").show();
         var xhttp = new XMLHttpRequest();
+        xhttp.responseType = 'json';
         var url = 'http://localhost:3000/api/users/' + document.getElementById("id").value;
         var params = 'role=' + document.getElementById("edit_role").value;
 
@@ -1785,6 +1787,7 @@ function login(){
                 if(xhttp.response.status == "success")
                 {
                     $("#spinner_login").hide(); 
+                    localStorage.setItem('token', xhttp.response.token);
                     window.location.replace("/dashboard");
                 }
             }
