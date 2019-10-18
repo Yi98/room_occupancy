@@ -180,7 +180,9 @@ exports.login = (req, res) => {
 
       res.status(200).json({
         status: 'success',
-        token
+        token,
+		username: fetchedUser.username,
+        role: fetchedUser.role
       })
     })
     .catch(err => {

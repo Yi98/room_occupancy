@@ -7,17 +7,13 @@
     margin-top: 40px;
 }
 
-#btn {
-    float: right;
-}
-
 #modalEmail {
   display: none; /* Hidden by default */
   position: fixed; /* Stay in place */
   z-index: 1; /* Sit on top */
   padding-top: 150px; /* Location of the box */
-  padding-left: 150px; /* Location of the box */
-  padding-right: 150px; /* Location of the box */
+  padding-left: 350px; /* Location of the box */
+  padding-right: 250px; /* Location of the box */
   left: 0;
   top: 0;
   width: 100%; /* Full width */
@@ -27,10 +23,36 @@
   background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
 }
 
-#emailHeader {
-    text-align: center;
+.modal-header, .modal-content, #forgetAlert {
+    width: 600px;
 }
-/*End login.html/
+
+#loginSubmitbtn {
+    float: right;
+}
+
+#spinner_login{
+    position: absolute;
+    height: 80px;
+    width: 80px;
+    top: 45%;
+    left: 45%;
+    background-size: 80%;
+}
+
+#spinner_forget{
+    position: absolute;
+    height: 80px;
+    width: 80px;
+    top: 35%;
+    left: 45%;
+    background-size: 80%;
+}
+
+#loginAlert {
+    margin-top: 30px;
+}
+/*End login.html */
 
 /* START dashboard.html */
 
@@ -191,8 +213,6 @@ a.disabled {
   pointer-events: none;
   cursor: default;
 }
-
-
 /* END dashboard.html */
 
 /* Start user.html*/
@@ -211,7 +231,7 @@ a.disabled {
   position: fixed; /* Stay in place */
   z-index: 1; /* Sit on top */
   padding-top: 150px; /* Location of the box */
-  padding-left: 100px; /* Location of the box */
+  padding-left: 420px; /* Location of the box */
   padding-right: 100px; /* Location of the box */
   left: 0;
   top: 0;
@@ -249,4 +269,54 @@ a.disabled {
   transform: translate(-50%,-50%);
   -ms-transform: translate(-50%,-50%);
 }
+
+#spinner_adduser{
+    position: absolute;
+    height: 80px;
+    width: 80px;
+    top: 10%;
+    left: 45%;
+    background-size: 80%;
+}
+
+#spinner{
+    position: absolute;
+    height: 80px;
+    width: 80px;
+    top: 50%;
+    left: 45%;
+    background-size: 80%;
+}
+
+#rowDesc {
+    margin-top: 100px;
+}
+
+#maxRows {
+    margin-bottom: 20px;
+}
+
+#loginAlert {
+    margin-top: 30px;
+}
+
+#userID {
+   display: none;
+}
 /* End user.html*/
+
+
+/* Start password_reset.html*/
+#spinner_reset{
+    position: absolute;
+    height: 80px;
+    width: 80px;
+    top: 25%;
+    left: 40%;
+    background-size: 80%;
+}
+
+#resetAlert {
+    margin-top: 30px;
+}
+/* End password_reset.html*/
