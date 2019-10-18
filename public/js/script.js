@@ -389,7 +389,17 @@ function showChart() {
 			}
 		};
 		xhttp.open("GET", "http://localhost:3000/api/rooms", true);
-		xhttp.setRequestHeader('Authorization','Bearer ' + localStorage.getItem('token'));
+
+		const cookies = document.cookie.split("=");
+		let token;
+
+		for (let i=0; i<cookies.length; i++) {
+			if (cookies[i] == "token") {
+				token = cookies[i+1];
+			}
+		}
+
+		xhttp.setRequestHeader('Authorization','Bearer ' + token);
 
     xhttp.send();
   });
@@ -519,7 +529,17 @@ xhttp.onreadystatechange = function () {
 };
 
 xhttp.open("GET","http://localhost:3000/api/rooms",true);
-xhttp.setRequestHeader('Authorization','Bearer ' + localStorage.getItem('token'));
+
+const cookies = document.cookie.split("=");
+let token;
+
+for (let i=0; i<cookies.length; i++) {
+	if (cookies[i] == "token") {
+		token = cookies[i+1];
+	}
+}
+
+xhttp.setRequestHeader('Authorization','Bearer ' + token);
 
 xhttp.send();
 	
@@ -584,7 +604,17 @@ function showUserTable(){
     };
 
 		xhttp.open("GET","http://localhost:3000/api/users",true);
-		xhttp.setRequestHeader('Authorization','Bearer ' + localStorage.getItem('token'));
+
+		const cookies = document.cookie.split("=");
+		let token;
+		
+		for (let i=0; i<cookies.length; i++) {
+			if (cookies[i] == "token") {
+				token = cookies[i+1];
+			}
+		}
+
+		xhttp.setRequestHeader('Authorization','Bearer ' + token);
 		
     xhttp.send();
 	
@@ -645,10 +675,21 @@ function addUser() {
                     + '&email=' + document.getElementById('uemail').value
                     + '&password=' + document.getElementById('upsd').value;
 
-        xhttp.open('POST',url,true);
+				xhttp.open('POST',url,true);
+				
+				const cookies = document.cookie.split("=");
+				let token;
+				
+				for (let i=0; i<cookies.length; i++) {
+					if (cookies[i] == "token") {
+						token = cookies[i+1];
+					}
+				}
 
-        xhttp.setRequestHeader('Content-type','application/x-www-form-urlencoded');
-        xhttp.setRequestHeader('Authorization','Bearer ' + localStorage.getItem('token'));
+				console.log(token);
+
+				xhttp.setRequestHeader('Content-type','application/x-www-form-urlencoded');
+        xhttp.setRequestHeader('Authorization','Bearer ' + token);
 
         xhttp.onreadystatechange = function() {
             if(xhttp.readyState == 4 && xhttp.status == 201) {
@@ -765,7 +806,17 @@ function showModal(){
         };
         
 				xhttp.open("GET",url,true);
-				xhttp.setRequestHeader('Authorization','Bearer ' + localStorage.getItem('token'));
+
+				const cookies = document.cookie.split("=");
+				let token;
+				
+				for (let i=0; i<cookies.length; i++) {
+					if (cookies[i] == "token") {
+						token = cookies[i+1];
+					}
+				}
+
+				xhttp.setRequestHeader('Authorization','Bearer ' + token);
 
         xhttp.send();
         
@@ -783,11 +834,20 @@ function updateUser() {
         var url = 'http://localhost:3000/api/users/' + document.getElementById("id").value;
         var params = 'role=' + document.getElementById("edit_role").value;
 
-        xhttp.open('PUT',url,true);
-        
+				xhttp.open('PUT',url,true);
+				
+				const cookies = document.cookie.split("=");
+				let token;
+				
+				for (let i=0; i<cookies.length; i++) {
+					if (cookies[i] == "token") {
+						token = cookies[i+1];
+					}
+				}
 
-        xhttp.setRequestHeader('Content-type','application/x-www-form-urlencoded');
-        xhttp.setRequestHeader('Authorization','Bearer ' + localStorage.getItem('token'));
+				xhttp.setRequestHeader('Content-type','application/x-www-form-urlencoded');
+				
+        xhttp.setRequestHeader('Authorization','Bearer ' + token);
 
         xhttp.onreadystatechange = function() {
             if(xhttp.readyState == 4 && xhttp.status == 200) 
@@ -860,9 +920,18 @@ function deleteUser(){
 
             var url = 'http://localhost:3000/api/users/' + cells[0].innerHTML;
             
-            xhttp.open("DELETE",url,true);
+						xhttp.open("DELETE",url,true);
+						
+						const cookies = document.cookie.split("=");
+						let token;
+						
+						for (let i=0; i<cookies.length; i++) {
+							if (cookies[i] == "token") {
+								token = cookies[i+1];
+							}
+						}
 
-            xhttp.setRequestHeader('Authorization','Bearer ' + localStorage.getItem('token'));
+            xhttp.setRequestHeader('Authorization','Bearer ' + token);
 
             xhttp.onreadystatechange = function () {
                 if(this.readyState == 4 && this.status == 200) {
@@ -938,8 +1007,8 @@ function login(){
             {
                 if(xhttp.response.status == "success")
                 {
-                    $("#spinner_login").hide(); 
-                    localStorage.setItem('token', xhttp.response.token);
+										$("#spinner_login").hide(); 
+										document.cookie = "token=" + xhttp.response.token;
                     window.location.replace("/dashboard");
                 }
             }
