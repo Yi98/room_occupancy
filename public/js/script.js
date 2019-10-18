@@ -1013,7 +1013,6 @@ function openForgetEmail() {
 function closeForget() {
     var modal = document.getElementById("modalEmail");
     modal.style.display = "none";  
-    $('.alert').alert('close');
 };
 
 function checkEmail(){
