@@ -541,7 +541,7 @@ function showChart() {
 		var monthlyTime = ['January', 'February','March','April','May','June','July','August','September','Octorber','November','December'];
 
 
-
+	let room_name_found = false;
     var xhttp = new XMLHttpRequest();
     xhttp.responseType = 'json';
     xhttp.onreadystatechange = function() {
@@ -550,6 +550,10 @@ function showChart() {
 
         for (var room in result.rooms) {
           if (result.rooms[room]._id == roomId) {
+			  			if (room_name_found == false) {
+							document.getElementById("room_name").innerHTML = result.rooms[room].name;
+							room_name_found = true;
+						}
 						//Today Chart
 						if(diff_in_days == 0){
 

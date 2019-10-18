@@ -85,7 +85,7 @@ window.generateReport = function (data, peopleChart, temperatureChart, humidityC
     doc.moveDown();
 
     // Humidity's chart on specific time range
-    doc.fontSize(15).text("Humidity for " + + data.date_range, 50, doc.y);
+    doc.fontSize(15).text("Humidity for " + data.date_range, 50, doc.y);
     let humidityChartFinal = new Buffer(humidityChart64, "base64");
     doc.image(humidityChartFinal, {height:300});
 
