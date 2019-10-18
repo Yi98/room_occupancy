@@ -40,7 +40,7 @@
 						<p class="pageTitle">Dashboard</p>
 					</div>
 					<div class="col-md-8 col-sm-8 col-xs-8">
-						<input type="text" id="search" class="form-control searchRoom" placeholder="Search for room here...">
+						<input type="text" id="search" class="form-control searchRoom" placeholder="Search for room here..." onkeyup="searchRoom()">
 					</div>
 					<div class="col-md-2 col-sm-4 col-xs-4">
 						<p class="right-menu-icons">
@@ -63,8 +63,20 @@
 	  </div>
       <div class="col-md-10 col-sm-12 col-xs-12 c right-menu-2">
 				<div class="container content-wrapper">
-					<div class="row" id="showRoom">
+					    <div id="overlay">
+						<div id="text">
+							<form action="#">
+								<div class="form-group">
+									<label for="room-name">Room name:</label>
+									<input type="text" class="form-control" id="room-name" name="room-name">
+								</div>
+
+								<input class="btn btn-primary" type="submit" value="Submit" onclick="off()"/>
+								<input class="btn btn-danger" type="button" value="Close" onclick="off()"/>
+							</form>
+						</div>
 					</div>
+					<div class="row" id="showRoom"></div>
 				</div>
     	</div>
 		</div>
