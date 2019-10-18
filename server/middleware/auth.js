@@ -2,7 +2,13 @@ const jwt = require('jsonwebtoken');
 
 module.exports = (req, res, next) => {
   try {
-    const token = req.headers.authorization.split(' ')[1];
+    let token;
+
+    if (req.headers.cookie) {
+      token = req.headers.cookie.split('=')[1];
+    } else {
+      token = req.headers.authorization.split(' ')[1];
+    }
 
     // const decoded = jwt.verify(token, process.env.JWT_KEY);
     const decoded = jwt.verify(token, 'fyp_room');
@@ -12,8 +18,7 @@ module.exports = (req, res, next) => {
   }
   catch(err) {
     res.status(401).json({
-      message: 'Please log in to continue',
-      err
+      message: 'Please log in to continue'
     });
   }
 };

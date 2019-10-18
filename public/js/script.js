@@ -1,6 +1,6 @@
 const canvg = require("canvg");
 
-function checkIsLogin() {				
+function checkIsLogin() {			
 	const cookies = document.cookie.split("=");
 	let token;
 	
@@ -10,10 +10,25 @@ function checkIsLogin() {
 			}
 		}
 
-	if (token == undefined) {
-		alert("Please login to continue");
-		window.location.replace('/login');
+	// if (token == undefined) {
+	// 	alert("Please login to continue");
+	// 	window.location.replace('/login');
+	// }
+
+	var http = new XMLHttpRequest();
+
+	http.open('GET', 'http://localhost:3000/', true);
+
+	http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+	http.setRequestHeader('Authorization','Bearer ' + token);
+
+	http.onreadystatechange = function() {
+			if(http.readyState == 4 && http.status == 200) {
+					console.log(http.response);
+			}
 	}
+
+	http.send();
 };
 
 function searchRoom(){
