@@ -23,9 +23,14 @@ window.generateReport = function (data, peopleChart, temperatureChart, humidityC
 
     let stream = doc.pipe(blobStream());
 
-    // Report Title 
+    // Report Title
     doc.font("Helvetica");
-    doc.fontSize(15).text("Report on Library Room", {align:"center"});
+    doc.fontSize(15).text("Report on " + data.room_name, {align:"center"});
+    doc.moveDown();
+
+    // Report Date
+    doc.font("Helvetica");
+    doc.fontSize(15).text("Date: " + data.date_range, {align:"center"});
     doc.moveDown();
 
     // Insight Title
@@ -65,7 +70,7 @@ window.generateReport = function (data, peopleChart, temperatureChart, humidityC
     doc.moveDown();
 
     // Number of People's chart on specific time range
-    doc.fontSize(15).text("Number of People from 10 September 2019 - 20 September 2019", 50, doc.y);
+    doc.fontSize(15).text("Number of People from " + data.date_range, 50, doc.y);
     let peopleChartFinal = new Buffer(peopleChart64, "base64");
     doc.image(peopleChartFinal, {height:300});
 
@@ -73,14 +78,14 @@ window.generateReport = function (data, peopleChart, temperatureChart, humidityC
     doc.moveDown(doc.page.height);
 
     // Temperature's chart on specific time range
-    doc.fontSize(15).text("Temperature from 10 September 2019 - 20 September 2019", 50, doc.y);
+    doc.fontSize(15).text("Temperature from " + data.date_range, 50, doc.y);
     let temperatureChartFinal = new Buffer(temperatureChart64, "base64");
     doc.image(temperatureChartFinal, {height:300});
 
     doc.moveDown();
 
     // Humidity's chart on specific time range
-    doc.fontSize(15).text("Humidity for 10 September 2019 - 20 September 2019", 50, doc.y);
+    doc.fontSize(15).text("Humidity for " + + data.date_range, 50, doc.y);
     let humidityChartFinal = new Buffer(humidityChart64, "base64");
     doc.image(humidityChartFinal, {height:300});
 
