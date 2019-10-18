@@ -1,5 +1,21 @@
 const canvg = require("canvg");
 
+function checkIsLogin() {				
+	const cookies = document.cookie.split("=");
+	let token;
+	
+	for (let i=0; i<cookies.length; i++) {
+		if (cookies[i] == "token") {
+			token = cookies[i+1];
+			}
+		}
+
+	if (token == undefined) {
+		alert("Please login to continue");
+		window.location.replace('/login');
+	}
+};
+
 function searchRoom(){
 	var input, filter, ul, li, i, a, txtValue;
 	input = document.getElementById("search");
