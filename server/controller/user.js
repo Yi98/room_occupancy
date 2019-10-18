@@ -44,17 +44,19 @@ exports.getUsers = (req, res) => {
 
 // add a new user ->  /api/users (POST)
 exports.addUser = (req, res) => {
-    if (req.userData.role != 'manager') {
-        return res.status(401).json({message: 'Only manager can edit user'});
-    }
-    User.findOne({email: req.body.email})
-    .then(user => {
-        if (user) {
-          return res.status(500).json({
-            message: 'Email already existed',
-            existing: user
+  if (req.userData.role != 'manager') {
+    return res.status(401).json({message: 'Only manager can edit user'});
+  }
+
+  User.findOne({email: req.body.email})
+  .then(user => {
+    if (user) {
+      return res.status(500).json({
+        message: 'Email already existed',
+        existing: user
       });
     }
+
     return bcrypt.hash(req.body.password, 15)
   })
   .then(hash => {
@@ -72,7 +74,7 @@ exports.addUser = (req, res) => {
       message: 'New user was created',
       newUser: user
     })
- })
+  })
   .catch(err => {
     res.status(500).json({
       message: 'Failed to add user',
@@ -87,7 +89,7 @@ exports.editUser = (req, res) => {
   if (req.userData.role != 'manager') {
     return res.status(401).json({message: 'Only manager can edit user'});
   }
-    
+
   User.findById(req.params.id)
     .then(user => {
       if (!user) {
@@ -123,7 +125,7 @@ exports.deleteUser = (req, res) => {
   if (req.userData.role != 'manager') {
     return res.status(401).json({message: 'Only manager can edit user'});
   }
-    
+
   User.findByIdAndDelete(req.params.id)
     .then(deletedUser => {
       if (!deletedUser) {
@@ -165,7 +167,6 @@ exports.login = (req, res) => {
           message: 'Wrong password'
         });
       }
-      
       const token = jwt.sign(
         { username: fetchedUser.username,
           email: fetchedUser.email,
@@ -179,7 +180,9 @@ exports.login = (req, res) => {
 
       res.status(200).json({
         status: 'success',
-        token
+        token,
+		username: fetchedUser.username,
+        role: fetchedUser.role
       })
     })
     .catch(err => {
