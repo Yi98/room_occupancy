@@ -24,6 +24,8 @@
 //  $('[data-toggle="tooltip"]').tooltip();
 //});
 
+const canvg = require("canvg");
+
 function searchRoom(){
 	var input, filter, ul, li, i, a, txtValue;
 	input = document.getElementById("search");
@@ -1120,7 +1122,8 @@ function onResetPassword() {
                     document.getElementById("resetAlert").innerHTML = '<strong>Successfully reset password</strong> <button type="button" class="close" onclick="closeResetAlert()"><span>&times;</span></button>';
                     $("#resetAlert").show();
                     
-                    window.location.replace("/login");
+                    setTimeout(function(){ window.location.replace("/login"); }, 3000);
+
                 }
             }
             
