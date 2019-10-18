@@ -74,8 +74,7 @@ function showChart() {
 		var weeklyTime = ['Week 1', 'Week 2','Week 3', 'Week 4'];
 		var monthlyTime = ['January', 'February','March','April','May','June','July','August','September','Octorber','November','December'];
 		
-		
-		
+	let room_name_found = false;
     var xhttp = new XMLHttpRequest();
     xhttp.responseType = 'json';
     xhttp.onreadystatechange = function() {
@@ -84,6 +83,11 @@ function showChart() {
 
         for (var room in result.rooms) {
           if (result.rooms[room]._id == roomId) {
+			  			if (room_name_found == false) {
+							document.getElementById("room_name").innerHTML = result.rooms[room].name;
+							room_name_found = true;
+						}
+						  
 						//Today Chart
 						if(diff_in_days == 0){
 							
@@ -487,7 +491,6 @@ function showHumidityChart(x,y){
 			});
 }
 
-
 var socket = io();
 
 socket.on("sensor", function(msg) {
@@ -564,9 +567,12 @@ function directToPdf() {
 	let report_window = window.open("/report");
 	report_window.focus();
 
+	let room_name = document.getElementById("room_name").innerHTML;
+	let date_range = document.getElementById("choosenRange").innerHTML;
+
 	// After the window load, run the function in the new opened window with those parameters
 	report_window.addEventListener("load", function() {
-		report_window.generateReport({}, peopleChart, temperatureChart, humidityChart);
+		report_window.generateReport({room_name: room_name, date_range: date_range}, peopleChart, temperatureChart, humidityChart);
 	})
 }
 function showUserTable(){
