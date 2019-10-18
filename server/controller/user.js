@@ -45,7 +45,7 @@ exports.getUsers = (req, res) => {
 // add a new user ->  /api/users (POST)
 exports.addUser = (req, res) => {
   if (req.userData.role != 'manager') {
-    return res.status(401).json({message: 'Only manager can edit user'});
+    return res.status(401).json({message: 'Only manager can add user'});
   }
 
   User.findOne({email: req.body.email})
@@ -123,7 +123,7 @@ exports.editUser = (req, res) => {
 // delete a user ->  /api/users/:id (DELETE)
 exports.deleteUser = (req, res) => {
   if (req.userData.role != 'manager') {
-    return res.status(401).json({message: 'Only manager can edit user'});
+    return res.status(401).json({message: 'Only manager can delete user'});
   }
 
   User.findByIdAndDelete(req.params.id)
