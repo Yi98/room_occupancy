@@ -204,7 +204,7 @@ exports.forgotPassword = (req, res) => {
 
       const token = crypto.randomBytes(20).toString('hex');
       user.resetPasswordToken = token,
-      user.resetPasswordExpires = Date.now() + 300000;  // link only active for 5 minutes
+      user.resetPasswordExpires = Date.now() + 600000;  // link only active for 5 minutes
       user.save();
     
       const transporter = nodemailer.createTransport({
@@ -223,7 +223,7 @@ exports.forgotPassword = (req, res) => {
         <h3>Hey ${user.username},</h3>
         <p>You recently requested to reset your password for your room occupancy account. Click the link below to reset it.</p>
         <a href="http://localhost:3000/resetPassword/${token}">Reset your password</a>
-        <p>This link will only be active for 5 minutes</p>
+        <p>This link will only be active for 10 minutes!</p>
         <p>If you did not request a password reset, please ignore this email or reply to let us know.</p>
         <p>Thanks,<br>FYP Team</p>`
       }
