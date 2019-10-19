@@ -10,11 +10,6 @@ function checkIsLogin() {
 			}
 		}
 
-	// if (token == undefined) {
-	// 	alert("Please login to continue");
-	// 	window.location.replace('/login');
-	// }
-
 	var http = new XMLHttpRequest();
 
 	http.open('GET', 'http://localhost:3000/', true);
@@ -1274,4 +1269,8 @@ function tablePagination() {
 function onLogout() {
 	window.location.replace('/login');
 	document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+}
+
+function pagenotfoundRedirect() {
+	window.location.replace('/dashboard');
 }

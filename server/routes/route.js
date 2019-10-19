@@ -33,8 +33,7 @@ router.get('/resetPassword/:token', (req, res) => {
 
 //  Page not found
 router.get('*', (req, res) => {
-  res.send("Page not found");
-  // res.redirect('/dashboard');
+  res.sendFile(path.join(__dirname, '../../views/page_not_found.html'));
 })
 
 module.exports = router;
