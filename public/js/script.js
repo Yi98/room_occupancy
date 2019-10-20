@@ -1001,6 +1001,8 @@ function loginPage() {
 };
 
 function login(){
+
+		$("#loginAlert").hide();
     
     if(document.getElementById("loginPassword").value === "")
     {

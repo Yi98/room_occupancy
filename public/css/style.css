@@ -51,6 +51,7 @@
 
 #loginAlert {
     margin-top: 30px;
+    display: none;
 }
 /*End login.html */
 
@@ -294,10 +295,6 @@ a.disabled {
 
 #maxRows {
     margin-bottom: 20px;
-}
-
-#loginAlert {
-    margin-top: 30px;
 }
 
 #userID {
