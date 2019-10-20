@@ -324,3 +324,7 @@ a.disabled {
 #logoutBtn:hover {
     color: red;
 }
+
+div.img-thumbnail:hover {
+    cursor: pointer;
+}
