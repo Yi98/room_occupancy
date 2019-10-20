@@ -181,7 +181,7 @@ exports.login = (req, res) => {
       res.status(200).json({
         status: 'success',
         token,
-		username: fetchedUser.username,
+		    username: fetchedUser.username,
         role: fetchedUser.role
       })
     })
@@ -252,13 +252,6 @@ exports.resetPassword = (req, res) => {
   
   User.findOne({resetPasswordToken: req.body.token})
     .then(user => {
-      if (!user) {
-        return res.status(404).json({message: 'User not found'})
-      }
-
-      // console.log(user.resetPasswordExpires);
-      // console.log(new Date());
-
       if (user.resetPasswordExpires < Date.now()) {
         return res.status(500).json({message: 'Reset password link has expired'});
       }
@@ -272,10 +265,10 @@ exports.resetPassword = (req, res) => {
       fetchedUser.resetPasswordExpires = null;
       fetchedUser.save();
 
-      return res.status(200).json({message: 'success'});
+      res.status(200).json({message: 'success'});
     })
     .catch (err => {
-      return res.status(500).json({
+      res.status(500).json({
         message: 'Failed to reset password',
         err
       });
