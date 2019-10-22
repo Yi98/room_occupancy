@@ -12,7 +12,7 @@ module.exports = (req, res, next) => {
 
     // const decoded = jwt.verify(token, process.env.JWT_KEY);
     const decoded = jwt.verify(token, 'fyp_room');
-
+    
     req.userData = { userId: decoded.userId, role: decoded.role };
     next();
   }

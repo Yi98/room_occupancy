@@ -621,7 +621,8 @@ function showUserTable(){
                 '<td style="display: none;">' + result.users[user]._id + '</td>' +
                 '<td>' + result.users[user].username + '</td>' +
                 '<td>' + result.users[user].email + '</td>' +
-                '<td>' + result.users[user].role + '</td>' +
+				'<td>' + result.users[user].role + '</td>' +
+				// This part change to toggle
                 '<td>' + '<button class = "btn btn-success" id = "editbtn" onclick = "showModal()"><span class="fa fa-edit" style = "color: white"></span></button>' + '</td>' +
                 '<td>' + '<button class = "btn btn-danger" id = "deletebtn" onclick = "deleteUser()"><span class="fa fa-trash" style = "color: white"></span></button>' + '</td>' + '</tr>' + '</tbody>';
 
@@ -1277,7 +1278,7 @@ function pagenotfoundRedirect() {
 	window.location.replace('/dashboard');
 }
 
-function loadNotifiation() {
+function loadNotification() {
 	var xhttp = new XMLHttpRequest();
 	xhttp.responseType = 'json';
 
