@@ -10,6 +10,9 @@
 
 	<!-- Latest compiled and minified CSS -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
 	<link rel="stylesheet" href="https://formden.com/static/cdn/font-awesome/4.4.0/css/font-awesome.min.css" />
 	<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
@@ -30,7 +33,7 @@
 
 </head>
 
-<body onload="showDashboard(); loadNotification()">
+<body onload="showDashboard()">
   <div class="container-fluid">
     <div class="row nav-wrapper">
       <div class="col-md-2 col-sm-12 col-xs-12 left-menu-1">
@@ -46,13 +49,13 @@
 					</div>
 					<div class="col-md-2 col-sm-4 col-xs-4">
 						<p class="right-menu-icons">
-							<a href="#" data-toggle="tooltip" data-placement="left" title="Notication"><i class="fa fa-bell"><sup id="notificationAlert"><span class="badge badge-pill badge-danger" id="notificationNum">0</span></sup></i></a>
+							<a href="#" data-toggle="tooltip" data-placement="left" title="Notication"><i class="fa fa-bell"  data-toggle="modal" data-target="#exampleModalLong"><sup id="notificationAlert"><span class="badge badge-pill badge-danger" id="notificationNum">0</span></sup></i></a>
 							<a href="#" data-placement="top" data-toggle="tooltip" title="Log Out"><i class="fa fa-sign-out" id="logoutBtn" onclick="onLogout()"></i></a>
 						</p>
 					</div>
 				</div>
       </div>
-    </div>
+		</div>
 		
     <div class="row main-wrapper">
       <div class="col-md-2 col-sm-12 col-xs-12 left-menu-2">
@@ -83,6 +86,56 @@
     	</div>
 		</div>
 	</div>
+
+	<!-- Modal -->
+	<div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+			<div class="modal-dialog modal-dialog-centered" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title mx-auto" id="exampleModalLongTitle">Notifications</h5>
+					</div>
+					<div class="modal-body">
+						<div class="row">
+							<div class="card text-white bg-info mb-3 mx-4 w-100">
+								<div class="card-body">
+									<div class="row">
+										<div class="col-md-11">
+												<p class="card-text"><strong>Info</strong>: Open Lab has dropped back to low capacity.</p>
+										</div>
+										<div class="col-md-1 deleteNotice"><i class="fa fa-times float-right text-light deleteNoticeIcon"></i></div>
+									</div>
+								</div>
+							</div>
+							<div class="card text-white bg-warning mb-3 mx-4 w-100">
+								<div class="card-body">
+									<div class="row">
+										<div class="col-md-11">
+												<p class="card-text"><strong>Warning</strong>: BYOD has reached moderate capacity.</p>
+										</div>
+										<div class="col-md-1 deleteNotice"><i class="fa fa-times float-right text-light deleteNoticeIcon"></i></div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+								<div class="card text-white bg-danger mb-3 mx-4 w-100">
+									<div class="card-body">
+										<div class="row">
+											<div class="col-md-11">
+													<p class="card-text text-left"><strong>Danger</strong>: Leisure Area has reached full capacity.</p>
+											</div>
+											<div class="col-md-1 deleteNotice"><i class="fa fa-times float-right text-light deleteNoticeIcon"></i></div>
+										</div>
+									</div>
+								</div>
+							</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+					</div>
+				</div>
+			</div>
+		</div>
 
   	<!-- javascript -->
 	<script src="js/script.js" type="text/javascript"></script>
