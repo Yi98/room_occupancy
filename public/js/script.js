@@ -52,16 +52,21 @@ function off() {
   document.getElementById("overlay").style.display = "none";
 }
 
-
 function showChart() {
   var url_string = window.location.href;
   var url = new URL(url_string);
   var pathname = url.pathname;
   var split = pathname.split("/");
-  var roomId = split[2];
-	
+	var roomId = split[2];
+	xhrChart(roomId);
+
   $('#choosenRange').on('DOMSubtreeModified', function() {
-    var dateRange = document.getElementById("choosenRange").innerHTML.toString();
+    xhrChart(roomId);
+  });
+};
+
+function xhrChart(roomId){
+	var dateRange = document.getElementById("choosenRange").innerHTML.toString();
     var startDate = new Date(dateRange.substring(11, 0));
     var endDate = new Date(dateRange.substring(25, 14));
     var diff_in_days = (endDate.getTime() - startDate.getTime()) / (1000 * 3600 * 24);
@@ -76,6 +81,7 @@ function showChart() {
 		var weeklyTime = ['Week 1', 'Week 2','Week 3', 'Week 4'];
 		var monthlyTime = ['January', 'February','March','April','May','June','July','August','September','Octorber','November','December'];
 		
+
 	let room_name_found = false;
     var xhttp = new XMLHttpRequest();
 		xhttp.responseType = 'json';
@@ -93,7 +99,7 @@ function showChart() {
 						  
 						//Today Chart
 						if(diff_in_days == 0){
-							
+							console.log(diff_in_days);
 							//Initialise the array
 							for(var i=0; i<hourTime.length; i++){
 								peopleData[i] = 0;
@@ -428,8 +434,7 @@ function showChart() {
 		xhttp.setRequestHeader('Authorization','Bearer ' + token);
 
     xhttp.send();
-  });
-};
+}
 
 function showPeopleChart(x,y){
 	new Highcharts.chart('peopleChart', {
@@ -1306,7 +1311,6 @@ function loadNotifiation() {
 			}
 
 			exceedStatusCount = moderateStatusCount + fullStatusCount;
-			console.log(exceedStatusCount);
 
 			if (exceedStatusCount > 0) {
 				document.getElementById('notificationNum').innerHTML = exceedStatusCount;
