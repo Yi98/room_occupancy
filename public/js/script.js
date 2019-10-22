@@ -1,21 +1,11 @@
 const canvg = require("canvg");
 
 function checkIsLogin() {			
-	const cookies = document.cookie.split("=");
-	let token;
-	
-	for (let i=0; i<cookies.length; i++) {
-		if (cookies[i] == "token") {
-			token = cookies[i+1];
-			}
-		}
-
 	var http = new XMLHttpRequest();
 
 	http.open('GET', 'http://localhost:3000/', true);
 
 	http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-	http.setRequestHeader('Authorization','Bearer ' + token);
 
 	http.onreadystatechange = function() {
 			if(http.readyState == 4 && http.status == 200) {
@@ -422,17 +412,6 @@ function xhrChart(roomId){
 		};
 		xhttp.open("GET", "http://localhost:3000/api/rooms", true);
 
-		const cookies = document.cookie.split("=");
-		let token;
-
-		for (let i=0; i<cookies.length; i++) {
-			if (cookies[i] == "token") {
-				token = cookies[i+1];
-			}
-		}
-
-		xhttp.setRequestHeader('Authorization','Bearer ' + token);
-
     xhttp.send();
 }
 
@@ -570,17 +549,6 @@ xhttp.onreadystatechange = function () {
 
 	xhttp.open("GET","http://localhost:3000/api/rooms",true);
 
-	const cookies = document.cookie.split("=");
-	let token;
-
-	for (let i=0; i<cookies.length; i++) {
-		if (cookies[i] == "token") {
-			token = cookies[i+1];
-		}
-	}
-
-	xhttp.setRequestHeader('Authorization','Bearer ' + token);
-
 	xhttp.send();
 
 };
@@ -645,17 +613,6 @@ function showUserTable(){
     };
 
 		xhttp.open("GET","http://localhost:3000/api/users",true);
-
-		const cookies = document.cookie.split("=");
-		let token;
-		
-		for (let i=0; i<cookies.length; i++) {
-			if (cookies[i] == "token") {
-				token = cookies[i+1];
-			}
-		}
-
-		xhttp.setRequestHeader('Authorization','Bearer ' + token);
 		
     xhttp.send();
 	
@@ -717,20 +674,8 @@ function addUser() {
                     + '&password=' + document.getElementById('upsd').value;
 
 				xhttp.open('POST',url,true);
-				
-				const cookies = document.cookie.split("=");
-				let token;
-				
-				for (let i=0; i<cookies.length; i++) {
-					if (cookies[i] == "token") {
-						token = cookies[i+1];
-					}
-				}
-
-				console.log(token);
 
 				xhttp.setRequestHeader('Content-type','application/x-www-form-urlencoded');
-        xhttp.setRequestHeader('Authorization','Bearer ' + token);
 
         xhttp.onreadystatechange = function() {
             if(xhttp.readyState == 4 && xhttp.status == 201) {
@@ -853,17 +798,6 @@ function showModal(){
         
 				xhttp.open("GET",url,true);
 
-				const cookies = document.cookie.split("=");
-				let token;
-				
-				for (let i=0; i<cookies.length; i++) {
-					if (cookies[i] == "token") {
-						token = cookies[i+1];
-					}
-				}
-
-				xhttp.setRequestHeader('Authorization','Bearer ' + token);
-
         xhttp.send();
         
         
@@ -881,20 +815,9 @@ function updateUser() {
         var params = 'role=' + document.getElementById("edit_role").value;
 
 				xhttp.open('PUT',url,true);
-				
-				const cookies = document.cookie.split("=");
-				let token;
-				
-				for (let i=0; i<cookies.length; i++) {
-					if (cookies[i] == "token") {
-						token = cookies[i+1];
-					}
-				}
 
 				xhttp.setRequestHeader('Content-type','application/x-www-form-urlencoded');
 				
-        xhttp.setRequestHeader('Authorization','Bearer ' + token);
-
         xhttp.onreadystatechange = function() {
             if(xhttp.readyState == 4 && xhttp.status == 200) 
             {
@@ -974,17 +897,6 @@ function deleteUser(){
             
 						xhttp.open("DELETE",url,true);
 						
-						const cookies = document.cookie.split("=");
-						let token;
-						
-						for (let i=0; i<cookies.length; i++) {
-							if (cookies[i] == "token") {
-								token = cookies[i+1];
-							}
-						}
-
-            xhttp.setRequestHeader('Authorization','Bearer ' + token);
-
             xhttp.onreadystatechange = function () {
                 if(this.readyState == 4 && this.status == 200) {
                     $("#spinner").hide();
