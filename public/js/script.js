@@ -1335,3 +1335,19 @@ function loadNotification() {
 
 	xhttp.send();
 }
+
+function onToggleCollapse() {
+	var isExpanded = $('#headingUser').attr("aria-expanded");
+	
+	const up = document.getElementById('up-icon');
+	const down = document.getElementById('down-icon');
+
+	if (isExpanded == 'true') {
+		up.style.display = 'none';
+		down.style.display = 'inline';
+	}
+	else {
+		up.style.display = 'inline';
+		down.style.display = 'none';
+	}
+}

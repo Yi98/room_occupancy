@@ -292,7 +292,7 @@ a.disabled {
 }
 
 #rowDesc {
-    margin-top: 100px;
+    margin-top: 50px;
 }
 
 #maxRows {
@@ -326,5 +326,9 @@ div.img-thumbnail:hover {
 }
 
 sup#notificationAlert {
+    display: none;
+}
+
+i#up-icon {
     display: none;
 }
