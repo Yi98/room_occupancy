@@ -1,9 +1,10 @@
 const express = require('express');
 const path = require('path');
 const router = express.Router();
+const auth = require('../middleware/auth');
 
 router.get('/', (req, res) => {
-  res.redirect('/dashboard');
+  res.redirect('/login');
 });
 
 router.get('/dashboard', (req, res) => {
@@ -22,7 +23,7 @@ router.get('/report', (req, res) => {
   res.sendFile(path.join(__dirname, '../../views/report.html'));
 });
 
-router.get('/user', (req, res) => {
+router.get('/users', (req, res) => {
   res.sendFile(path.join(__dirname, '../../views/user.html'));
 });
 
@@ -32,8 +33,7 @@ router.get('/resetPassword/:token', (req, res) => {
 
 //  Page not found
 router.get('*', (req, res) => {
-  res.send("Page not found");
-  // res.redirect('/dashboard');
+  res.sendFile(path.join(__dirname, '../../views/page_not_found.html'));
 })
 
 module.exports = router;

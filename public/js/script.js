@@ -1,30 +1,30 @@
-//$(document).ready(function(){
-//		var date_input=$('input[name="startDate"]'); //our date input has the name "startDate"
-//		date_input.datepicker({
-//			format: 'dd/mm/yyyy',
-//			todayHighlight: true,
-//			autoclose: true,
-//		})  
-//        
-//    var date_input=$('input[name="endDate"]'); //our date input has the name "endDate"
-//		date_input.datepicker({
-//			format: 'dd/mm/yyyy',
-//			todayHighlight: true,
-//			autoclose: true,
-//		})
-//		
-//		var date_input=$('input[name="date"]'); //our date input has the name "date"
-//		date_input.datepicker({
-//			format: 'dd/mm/yyyy',
-//			todayHighlight: true,
-//			autoclose: true,
-//		})
-//});
-//$(document).ready(function(){
-//  $('[data-toggle="tooltip"]').tooltip();
-//});
-
 const canvg = require("canvg");
+
+function checkIsLogin() {			
+	const cookies = document.cookie.split("=");
+	let token;
+	
+	for (let i=0; i<cookies.length; i++) {
+		if (cookies[i] == "token") {
+			token = cookies[i+1];
+			}
+		}
+
+	var http = new XMLHttpRequest();
+
+	http.open('GET', 'http://localhost:3000/', true);
+
+	http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+	http.setRequestHeader('Authorization','Bearer ' + token);
+
+	http.onreadystatechange = function() {
+			if(http.readyState == 4 && http.status == 200) {
+					console.log(http.response);
+			}
+	}
+
+	http.send();
+};
 
 function searchRoom(){
 	var input, filter, ul, li, i, a, txtValue;
@@ -52,16 +52,21 @@ function off() {
   document.getElementById("overlay").style.display = "none";
 }
 
-
 function showChart() {
   var url_string = window.location.href;
   var url = new URL(url_string);
   var pathname = url.pathname;
   var split = pathname.split("/");
-  var roomId = split[2];
-	
+	var roomId = split[2];
+	xhrChart(roomId);
+
   $('#choosenRange').on('DOMSubtreeModified', function() {
-    var dateRange = document.getElementById("choosenRange").innerHTML.toString();
+    xhrChart(roomId);
+  });
+};
+
+function xhrChart(roomId){
+	var dateRange = document.getElementById("choosenRange").innerHTML.toString();
     var startDate = new Date(dateRange.substring(11, 0));
     var endDate = new Date(dateRange.substring(25, 14));
     var diff_in_days = (endDate.getTime() - startDate.getTime()) / (1000 * 3600 * 24);
@@ -76,9 +81,11 @@ function showChart() {
 		var weeklyTime = ['Week 1', 'Week 2','Week 3', 'Week 4'];
 		var monthlyTime = ['January', 'February','March','April','May','June','July','August','September','Octorber','November','December'];
 		
+
 	let room_name_found = false;
     var xhttp = new XMLHttpRequest();
-    xhttp.responseType = 'json';
+		xhttp.responseType = 'json';
+
     xhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {
         var result = this.response;
@@ -92,7 +99,7 @@ function showChart() {
 						  
 						//Today Chart
 						if(diff_in_days == 0){
-							
+							console.log(diff_in_days);
 							//Initialise the array
 							for(var i=0; i<hourTime.length; i++){
 								peopleData[i] = 0;
@@ -413,10 +420,21 @@ function showChart() {
 				}
 			}
 		};
-    xhttp.open("GET", "http://localhost:3000/api/rooms", true);
+		xhttp.open("GET", "http://localhost:3000/api/rooms", true);
+
+		const cookies = document.cookie.split("=");
+		let token;
+
+		for (let i=0; i<cookies.length; i++) {
+			if (cookies[i] == "token") {
+				token = cookies[i+1];
+			}
+		}
+
+		xhttp.setRequestHeader('Authorization','Bearer ' + token);
+
     xhttp.send();
-  });
-};
+}
 
 function showPeopleChart(x,y){
 	new Highcharts.chart('peopleChart', {
@@ -534,16 +552,28 @@ xhttp.onreadystatechange = function () {
 									'<p>' + 'Number of People: ' + result.rooms[room].people.length + '</p>' +
 									'<p>' + 'Temperature: ' + "<span class='temperature'>0</span>" + '&#x2103;</p>' +
 									'<p>' + 'Humidity: ' + "<span class='humidity'>0</span>" + '</p>' + 
-                  '<p>' + 'Status: ' + statusMsg + '</p></div></a></div>';
+                  '<p>' + 'Status: <span class="roomStatus">' + statusMsg + '</span></p></div></a></div>';
 		}
 		
-		document.getElementById("showRoom").innerHTML += '<div class="room-card col-md-4 col-sm-4 col-xs-6"><a onclick="on()"><div class="img-thumbnail"><img src="https://image.flaticon.com/icons/svg/109/109615.svg" class="add-icon" title="Lyolya"/></div></a></div>';
+		document.getElementById("showRoom").innerHTML += '<div class="room-card col-md-4 col-sm-4 col-xs-6"><a onclick="on()"><div class="img-thumbnail"><img src="https://image.flaticon.com/icons/svg/109/109615.svg" class="add-icon" title="Lyolya"/></div></a></div>';	
 	}
 };
 
-xhttp.open("GET","http://localhost:3000/api/rooms",true);
-xhttp.send();
-	
+	xhttp.open("GET","http://localhost:3000/api/rooms",true);
+
+	const cookies = document.cookie.split("=");
+	let token;
+
+	for (let i=0; i<cookies.length; i++) {
+		if (cookies[i] == "token") {
+			token = cookies[i+1];
+		}
+	}
+
+	xhttp.setRequestHeader('Authorization','Bearer ' + token);
+
+	xhttp.send();
+
 };
 
 // Issue:
@@ -584,7 +614,7 @@ function showUserTable(){
     $("#userEditModalAlert").hide();
     
     var xhttp = new XMLHttpRequest();
-    xhttp.responseType = 'json';
+		xhttp.responseType = 'json';
 
     xhttp.onreadystatechange = function () {
         if(this.readyState == 4 && this.status == 200) {
@@ -596,7 +626,8 @@ function showUserTable(){
                 '<td style="display: none;">' + result.users[user]._id + '</td>' +
                 '<td>' + result.users[user].username + '</td>' +
                 '<td>' + result.users[user].email + '</td>' +
-                '<td>' + result.users[user].role + '</td>' +
+				'<td>' + result.users[user].role + '</td>' +
+				// This part change to toggle
                 '<td>' + '<button class = "btn btn-success" id = "editbtn" onclick = "showModal()"><span class="fa fa-edit" style = "color: white"></span></button>' + '</td>' +
                 '<td>' + '<button class = "btn btn-danger" id = "deletebtn" onclick = "deleteUser()"><span class="fa fa-trash" style = "color: white"></span></button>' + '</td>' + '</tr>' + '</tbody>';
 
@@ -604,7 +635,19 @@ function showUserTable(){
         }
     };
 
-    xhttp.open("GET","http://localhost:3000/api/users",true);
+		xhttp.open("GET","http://localhost:3000/api/users",true);
+
+		const cookies = document.cookie.split("=");
+		let token;
+		
+		for (let i=0; i<cookies.length; i++) {
+			if (cookies[i] == "token") {
+				token = cookies[i+1];
+			}
+		}
+
+		xhttp.setRequestHeader('Authorization','Bearer ' + token);
+		
     xhttp.send();
 	
 };
@@ -664,10 +707,21 @@ function addUser() {
                     + '&email=' + document.getElementById('uemail').value
                     + '&password=' + document.getElementById('upsd').value;
 
-        xhttp.open('POST',url,true);
+				xhttp.open('POST',url,true);
+				
+				const cookies = document.cookie.split("=");
+				let token;
+				
+				for (let i=0; i<cookies.length; i++) {
+					if (cookies[i] == "token") {
+						token = cookies[i+1];
+					}
+				}
 
-        xhttp.setRequestHeader('Content-type','application/x-www-form-urlencoded');
-        xhttp.setRequestHeader('Authorization','Bearer ' + localStorage.getItem('token'));
+				console.log(token);
+
+				xhttp.setRequestHeader('Content-type','application/x-www-form-urlencoded');
+        xhttp.setRequestHeader('Authorization','Bearer ' + token);
 
         xhttp.onreadystatechange = function() {
             if(xhttp.readyState == 4 && xhttp.status == 201) {
@@ -772,9 +826,9 @@ function showModal(){
         }
 
         var xhttp = new XMLHttpRequest();
-        xhttp.responseType = 'json';
+				xhttp.responseType = 'json';
         
-        var url = 'http://localhost:3000/api/users/' + cells[0].innerHTML;
+				var url = 'http://localhost:3000/api/users/' + cells[0].innerHTML;
         
         document.getElementById("id").value = cells[0].innerHTML;
         document.getElementById("previousRole").value = cells[3].innerHTML;
@@ -788,7 +842,18 @@ function showModal(){
             }
         };
         
-        xhttp.open("GET",url,true);
+				xhttp.open("GET",url,true);
+
+				const cookies = document.cookie.split("=");
+				let token;
+				
+				for (let i=0; i<cookies.length; i++) {
+					if (cookies[i] == "token") {
+						token = cookies[i+1];
+					}
+				}
+
+				xhttp.setRequestHeader('Authorization','Bearer ' + token);
 
         xhttp.send();
         
@@ -806,11 +871,20 @@ function updateUser() {
         var url = 'http://localhost:3000/api/users/' + document.getElementById("id").value;
         var params = 'role=' + document.getElementById("edit_role").value;
 
-        xhttp.open('PUT',url,true);
-        
+				xhttp.open('PUT',url,true);
+				
+				const cookies = document.cookie.split("=");
+				let token;
+				
+				for (let i=0; i<cookies.length; i++) {
+					if (cookies[i] == "token") {
+						token = cookies[i+1];
+					}
+				}
 
-        xhttp.setRequestHeader('Content-type','application/x-www-form-urlencoded');
-        xhttp.setRequestHeader('Authorization','Bearer ' + localStorage.getItem('token'));
+				xhttp.setRequestHeader('Content-type','application/x-www-form-urlencoded');
+				
+        xhttp.setRequestHeader('Authorization','Bearer ' + token);
 
         xhttp.onreadystatechange = function() {
             if(xhttp.readyState == 4 && xhttp.status == 200) 
@@ -889,9 +963,18 @@ function deleteUser(){
 
             var url = 'http://localhost:3000/api/users/' + cells[0].innerHTML;
             
-            xhttp.open("DELETE",url,true);
+						xhttp.open("DELETE",url,true);
+						
+						const cookies = document.cookie.split("=");
+						let token;
+						
+						for (let i=0; i<cookies.length; i++) {
+							if (cookies[i] == "token") {
+								token = cookies[i+1];
+							}
+						}
 
-            xhttp.setRequestHeader('Authorization','Bearer ' + localStorage.getItem('token'));
+            xhttp.setRequestHeader('Authorization','Bearer ' + token);
 
             xhttp.onreadystatechange = function () {
                 if(this.readyState == 4 && this.status == 200) {
@@ -941,6 +1024,8 @@ function loginPage() {
 };
 
 function login(){
+
+		$("#loginAlert").hide();
     
     if(document.getElementById("loginPassword").value === "")
     {
@@ -973,8 +1058,8 @@ function login(){
             {
                 if(xhttp.response.status == "success")
                 {
-                    $("#spinner_login").hide(); 
-                    localStorage.setItem('token', xhttp.response.token);
+										$("#spinner_login").hide(); 
+										document.cookie = "token=" + xhttp.response.token;
                     window.location.replace("/dashboard");
                 }
             }
@@ -1204,4 +1289,66 @@ function tablePagination() {
             })
         })
     })
+}
+
+function onLogout() {
+	window.location.replace('/login');
+	document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+}
+
+function pagenotfoundRedirect() {
+	window.location.replace('/dashboard');
+}
+
+function loadNotification() {
+	var xhttp = new XMLHttpRequest();
+	xhttp.responseType = 'json';
+
+	xhttp.onreadystatechange = function () {
+		if(this.readyState == 4 && this.status == 200) {
+			let	moderateStatusCount = 0;
+			let	fullStatusCount = 0;
+
+
+			var result = this.response;
+			for(var room in result.rooms){
+				var status = result.rooms[room].people.length;
+				if(status < 25){
+					var statusMsg = "Low";
+				}
+				
+				if(status >= 25){
+					var statusMsg = "Moderate";
+					moderateStatusCount++;
+				}
+				
+				if(status >= 50){
+					var statusMsg = "Full";
+					fullStatusCount++;
+				}
+			}
+
+			exceedStatusCount = moderateStatusCount + fullStatusCount;
+
+			if (exceedStatusCount > 0) {
+				document.getElementById('notificationNum').innerHTML = exceedStatusCount;
+				document.getElementById('notificationAlert').style.display = "inline";
+			}
+		}
+	};
+
+	xhttp.open("GET","http://localhost:3000/api/rooms",true);
+
+	const cookies = document.cookie.split("=");
+	let token;
+
+	for (let i=0; i<cookies.length; i++) {
+		if (cookies[i] == "token") {
+			token = cookies[i+1];
+		}
+	}
+
+	xhttp.setRequestHeader('Authorization','Bearer ' + token);
+
+	xhttp.send();
 }
