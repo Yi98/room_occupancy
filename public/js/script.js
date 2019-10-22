@@ -679,6 +679,10 @@ function addUser() {
                 var table = document.getElementById("showUser").innerHTML;
                 table = showUserTable();
                 
+                var element = document.getElementById("userAlert");
+                element.classList.remove("alert-danger")
+                element.classList.add("alert-success");
+                
                 document.getElementById("userAlert").innerHTML = '<strong>' + xhttp.response.message + '</strong> <button type="button" class="close" onclick="closeUserAlert()"><span>&times;</span></button>';
                 $("#userAlert").show();
     
@@ -700,6 +704,7 @@ function addUser() {
             
             if(xhttp.readyState == 4 && xhttp.status == 500) {
                 $("#spinner_adduser").hide();
+                
                 document.getElementById("userAlert").innerHTML = '<strong>' + xhttp.response.message + '</strong> <button type="button" class="close" onclick="closeUserAlert()"><span>&times;</span></button>';
                 
                 $("#userAlert").show();
@@ -816,6 +821,9 @@ function updateUser() {
                 var table = document.getElementById("showUser").innerHTML;
                 table = showUserTable();
                 
+                var element = document.getElementById("userEditAlert");
+                element.classList.add("alert-success");
+                
                 document.getElementById("userEditAlert").innerHTML = '<strong>' + xhttp.response.message + '</strong> <button type="button" class="close" onclick="closeUserEditAlert()"><span>&times;</span></button>';
                 $("#userEditAlert").show();
             }
@@ -827,6 +835,9 @@ function updateUser() {
                 document.getElementById("showUser").innerHTML = "";
                 var table = document.getElementById("showUser").innerHTML;
                 table = showUserTable();
+                
+                var element = document.getElementById("userEditAlert");
+                element.classList.add("alert-danger");
                 
                 document.getElementById("userEditAlert").innerHTML = '<strong>' + xhttp.response.message + '</strong> <button type="button" class="close" onclick="closeUserEditAlert()"><span>&times;</span></button>';
                 $("#userEditAlert").show();
@@ -890,6 +901,9 @@ function deleteUser(){
                     var table = document.getElementById("showUser").innerHTML;
                     table = showUserTable();
                     
+                    var element = document.getElementById("userEditAlert");
+                    element.classList.add("alert-success");
+                    
                     document.getElementById("userEditAlert").innerHTML = '<strong>' + xhttp.response.message + '</strong> <button type="button" class="close" onclick="closeUserEditAlert()"><span>&times;</span></button>';
                     $("#userEditAlert").show();
                 }
@@ -900,6 +914,9 @@ function deleteUser(){
                     document.getElementById("showUser").innerHTML = "";
                     var table = document.getElementById("showUser").innerHTML;
                     table = showUserTable();
+                    
+                    var element = document.getElementById("userEditAlert");
+                    element.classList.add("alert-danger");
                     
                     document.getElementById("userEditAlert").innerHTML = '<strong>' + xhttp.response.message + '</strong> <button type="button" class="close" onclick="closeUserEditAlert()"><span>&times;</span></button>';
                     $("#userEditAlert").show();
