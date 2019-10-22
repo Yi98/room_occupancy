@@ -547,28 +547,28 @@ xhttp.onreadystatechange = function () {
 									'<p>' + 'Number of People: ' + result.rooms[room].people.length + '</p>' +
 									'<p>' + 'Temperature: ' + "<span class='temperature'>0</span>" + '&#x2103;</p>' +
 									'<p>' + 'Humidity: ' + "<span class='humidity'>0</span>" + '</p>' + 
-                  '<p>' + 'Status: ' + statusMsg + '</p></div></a></div>';
+                  '<p>' + 'Status: <span class="roomStatus">' + statusMsg + '</span></p></div></a></div>';
 		}
 		
-		document.getElementById("showRoom").innerHTML += '<div class="room-card col-md-4 col-sm-4 col-xs-6"><a onclick="on()"><div class="img-thumbnail"><img src="https://image.flaticon.com/icons/svg/109/109615.svg" class="add-icon" title="Lyolya"/></div></a></div>';
+		document.getElementById("showRoom").innerHTML += '<div class="room-card col-md-4 col-sm-4 col-xs-6"><a onclick="on()"><div class="img-thumbnail"><img src="https://image.flaticon.com/icons/svg/109/109615.svg" class="add-icon" title="Lyolya"/></div></a></div>';	
 	}
 };
 
-xhttp.open("GET","http://localhost:3000/api/rooms",true);
+	xhttp.open("GET","http://localhost:3000/api/rooms",true);
 
-const cookies = document.cookie.split("=");
-let token;
+	const cookies = document.cookie.split("=");
+	let token;
 
-for (let i=0; i<cookies.length; i++) {
-	if (cookies[i] == "token") {
-		token = cookies[i+1];
+	for (let i=0; i<cookies.length; i++) {
+		if (cookies[i] == "token") {
+			token = cookies[i+1];
+		}
 	}
-}
 
-xhttp.setRequestHeader('Authorization','Bearer ' + token);
+	xhttp.setRequestHeader('Authorization','Bearer ' + token);
 
-xhttp.send();
-	
+	xhttp.send();
+
 };
 
 // Issue:
@@ -1275,4 +1275,58 @@ function onLogout() {
 
 function pagenotfoundRedirect() {
 	window.location.replace('/dashboard');
+}
+
+function loadNotifiation() {
+	var xhttp = new XMLHttpRequest();
+	xhttp.responseType = 'json';
+
+	xhttp.onreadystatechange = function () {
+		if(this.readyState == 4 && this.status == 200) {
+			let	moderateStatusCount = 0;
+			let	fullStatusCount = 0;
+
+
+			var result = this.response;
+			for(var room in result.rooms){
+				var status = result.rooms[room].people.length;
+				if(status < 25){
+					var statusMsg = "Low";
+				}
+				
+				if(status >= 25){
+					var statusMsg = "Moderate";
+					moderateStatusCount++;
+				}
+				
+				if(status >= 50){
+					var statusMsg = "Full";
+					fullStatusCount++;
+				}
+			}
+
+			exceedStatusCount = moderateStatusCount + fullStatusCount;
+			console.log(exceedStatusCount);
+
+			if (exceedStatusCount > 0) {
+				document.getElementById('notificationNum').innerHTML = exceedStatusCount;
+				document.getElementById('notificationAlert').style.display = "inline";
+			}
+		}
+	};
+
+	xhttp.open("GET","http://localhost:3000/api/rooms",true);
+
+	const cookies = document.cookie.split("=");
+	let token;
+
+	for (let i=0; i<cookies.length; i++) {
+		if (cookies[i] == "token") {
+			token = cookies[i+1];
+		}
+	}
+
+	xhttp.setRequestHeader('Authorization','Bearer ' + token);
+
+	xhttp.send();
 }

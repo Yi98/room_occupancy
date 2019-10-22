@@ -318,10 +318,11 @@ a.disabled {
 }
 /* End password_reset.html*/
 
-#logoutBtn:hover {
-    color: red;
-}
 
 div.img-thumbnail:hover {
     cursor: pointer;
+}
+
+sup#notificationAlert {
+    display: none;
 }
