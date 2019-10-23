@@ -292,7 +292,7 @@ a.disabled {
 }
 
 #rowDesc {
-    margin-top: 100px;
+    margin-top: 50px;
 }
 
 #maxRows {
@@ -327,4 +327,55 @@ div.img-thumbnail:hover {
 
 sup#notificationAlert {
     display: none;
+}
+
+i#up-icon {
+    display: none;
+}
+
+div.deleteNotice {
+  display: inline-flex; /* make element size relative to content */
+  align-items: center; /* vertical alignment of items */
+  line-height: 40px; /* vertically size by height, line-height or padding */
+  padding: 0px 10px; /* horizontal with padding-l/r */
+}
+
+i.deleteNoticeIcon:hover {
+  /* Start the shake animation and make the animation last for 0.5 seconds */
+	animation: shake 1.5s;
+	cursor: pointer;
+}
+
+@keyframes shake {
+  10%, 90% {
+    transform: translate3d(-1px, 0, 0);
+  }
+  
+  20%, 80% {
+    transform: translate3d(1px, 0, 0);
+  }
+
+  30%, 50%, 70% {
+    transform: translate3d(-1px, 0, 0);
+  }
+
+  40%, 60% {
+    transform: translate3d(1px, 0, 0);
+	}
+}
+
+#headingUser:hover {
+  cursor: pointer;
+}
+
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #E53333;
 }

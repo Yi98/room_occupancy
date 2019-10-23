@@ -10,6 +10,9 @@ const canvg = require("canvg");
 // 4. Some don't need to assigned to 'let' and can be straight away used in a function
 window.generateReport = function (data, peopleChart, temperatureChart, humidityChart) {
     let doc = new PDFDocument();
+
+    doc.info['Title'] = `${data.room_name} Report (${data.date_range})`;
+
     let canvas = document.createElement("CANVAS");
 
     canvg(canvas, peopleChart);
