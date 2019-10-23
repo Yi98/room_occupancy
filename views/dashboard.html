@@ -29,6 +29,7 @@
 	<!-- tooltipster -->
 	<link rel="stylesheet" type="text/css" href="tooltipster-master/dist/css/tooltipster.bundle.min.css" />
 	<script type="text/javascript" src="http://code.jquery.com/jquery-1.10.0.min.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.js"></script>
 	<script type="text/javascript" src="tooltipster-master/dist/js/tooltipster.bundle.min.js"></script>
 
 </head>
@@ -37,7 +38,7 @@
   <div class="container-fluid">
     <div class="row nav-wrapper">
       <div class="col-md-2 col-sm-12 col-xs-12 left-menu-1">
-        <a href="dashboard.html"><img src="images/logo.jpeg" class="img-fluid logo mt-3" alt="logo"></a>
+        <a href="dashboard.html"><img src="images/logo.jpeg" class="img-fluid logo mt-1" alt="logo"></a>
       </div>
       <div class="col-md-10 col-sm-12 col-xs-12 right-menu-1">
 				<div class="row">
@@ -68,18 +69,6 @@
 	  	</div>
       <div class="col-md-10 col-sm-12 col-xs-12 c right-menu-2">
 				<div class="container content-wrapper">
-					<div id="overlay">
-						<div id="text">
-							<form action="#">
-								<div class="form-group">
-									<label for="room-name">Room name:</label>
-									<input type="text" class="form-control" id="room-name" name="room-name">
-								</div>
-								<input class="btn btn-primary" type="submit" value="Submit" onclick="off()"/>
-								<input class="btn btn-danger" type="button" value="Close" onclick="off()"/>
-							</form>
-						</div>
-					</div>
 					<div class="row" id="showRoom"></div>
 					
 				</div>
@@ -136,7 +125,26 @@
 				</div>
 			</div>
 		</div>
-
+		<div class="modal fade" id="addRoomModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+			<div class="modal-dialog modal-dialog-centered" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title mx-auto" id="exampleModalLongTitle">Add Room</h5>
+					</div>
+					<div class="modal-body">
+						<div class="form-group shakeInput">
+							<label for="room-name">Room name:</label>
+							<input type="text" class="form-control" id="room-name" name="room-name" required="">
+						</div>
+						<div id="alertText"></div>
+					</div>
+					<div class="modal-footer mx-right">
+						<button class="btn btn-primary" type="button" onclick="addRoom()">Submit</button>
+						<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+					</div>
+				</div>
+			</div>
+		</div>
   	<!-- javascript -->
 	<script src="js/script.js" type="text/javascript"></script>
 </body>
