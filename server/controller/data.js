@@ -8,6 +8,7 @@ let socket;
 
 exports.sensorSocket = (io) => {
   socket = io;
+  console.log("Ehe");
   socket.on("connection", function(socket) {
     console.log("sensor socket connected");
   })

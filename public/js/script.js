@@ -1,4 +1,21 @@
-const canvg = require("canvg");
+
+var socket = io();
+
+socket.on("sensor", function(msg) {
+console.log(msg.temperature);
+// for loop assign to all room their respective sensor data
+roomCards = document.getElementsByClassName("room-card");
+for (let i = 0; i < roomCards.length; i++) {
+roomId = roomCards[i].getElementsByClassName("room-id");
+if (roomId[0].innerHTML == msg.roomId) {
+	document.getElementsByClassName("temperature")[i].innerHTML = msg.temperature;
+	document.getElementsByClassName("humidity")[i].innerHTML = msg.humidity;
+}
+}
+});
+
+
+
 
 function checkIsLogin() {			
 	const cookies = document.cookie.split("=");
@@ -25,6 +42,9 @@ function checkIsLogin() {
 
 	http.send();
 };
+
+
+
 
 function searchRoom(){
 	var input, filter, ul, li, i, a, txtValue;
@@ -511,20 +531,7 @@ function showHumidityChart(x,y){
 			});
 }
 
-var socket = io();
 
-socket.on("sensor", function(msg) {
-	console.log(msg.temperature);
-	// for loop assign to all room their respective sensor data
-	roomCards = document.getElementsByClassName("room-card");
-	for (let i = 0; i < roomCards.length; i++) {
-		roomId = roomCards[i].getElementsByClassName("room-id");
-		if (roomId[0].innerHTML == msg.roomId) {
-			document.getElementsByClassName("temperature")[i].innerHTML = msg.temperature;
-			document.getElementsByClassName("humidity")[i].innerHTML = msg.humidity;
-		}
-	}
-});
 
 
 function showDashboard(){
@@ -607,6 +614,9 @@ function directToPdf() {
 		report_window.generateReport({room_name: room_name, date_range: date_range}, peopleChart, temperatureChart, humidityChart);
 	})
 }
+
+
+
 function showUserTable(){
     $("#spinner_adduser").hide();
     $("#userAlert").hide();
@@ -621,18 +631,21 @@ function showUserTable(){
             $("#spinner").hide();
             var result = this.response;
             for(var user in result.users){
+				console.log(result.users[user]._id);
+				let id = (result.users[user].username).toString();
                 document.getElementById("showUser").innerHTML += 
                 '<tbody>' + '<tr>' +
                 '<td style="display: none;">' + result.users[user]._id + '</td>' +
                 '<td>' + result.users[user].username + '</td>' +
                 '<td>' + result.users[user].email + '</td>' +
 				'<td>' + result.users[user].role + '</td>' +
-				// This part change to toggle
-                '<td>' + '<button class = "btn btn-success" id = "editbtn" onclick = "showModal()"><span class="fa fa-edit" style = "color: white"></span></button>' + '</td>' +
+				'<td>' + '<input class="roleChangeButtons" onchange="testingCheckbox(this, ' + 123 + ')" type="checkbox" data-toggle="toggle" data-on="Manager" data-off="Staff" data-onstyle="warning" data-offstyle="secondary">' + '</td>' +
                 '<td>' + '<button class = "btn btn-danger" id = "deletebtn" onclick = "deleteUser()"><span class="fa fa-trash" style = "color: white"></span></button>' + '</td>' + '</tr>' + '</tbody>';
+			};
+			$("[data-toggle='toggle']").bootstrapToggle();
+			
+		}
 
-            };
-        }
     };
 
 		xhttp.open("GET","http://localhost:3000/api/users",true);
@@ -652,6 +665,16 @@ function showUserTable(){
 	
 };
 
+
+function testingCheckbox(checkbox, id) {
+	if (checkbox.checked) {
+		console.log("WATATA");
+		console.log(id);
+	} else {
+		console.log("UTETE");
+		console.log(id);
+	}
+}
 
 function addUser() {
     
@@ -856,8 +879,9 @@ function showModal(){
     };
 };
 
+
 function updateUser() {
-    
+	// Here need to get the checkbox value
     if(document.getElementById("previousRole").value !== document.getElementById("edit_role").value)
     {
         $("#spinner").show();
