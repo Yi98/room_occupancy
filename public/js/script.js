@@ -1,4 +1,22 @@
-const canvg = require("canvg");
+
+var socket = io();
+
+socket.on("sensor", function(msg) {
+	console.log(msg.temperature);
+	// for loop assign to all room their respective sensor data
+	let roomCards = document.getElementsByClassName("room-card");
+	for (let i = 0; i < roomCards.length; i++) {
+		let roomId = roomCards[i].getElementsByClassName("room-id");
+		// change 0 to i later
+		if (roomId[0].innerHTML == msg.roomId) {
+			document.getElementsByClassName("temperature")[i].innerHTML = msg.temperature;
+			document.getElementsByClassName("humidity")[i].innerHTML = msg.humidity;
+		}
+	}
+});
+
+
+
 
 function checkIsLogin() {			
 	var http = new XMLHttpRequest();
@@ -15,6 +33,9 @@ function checkIsLogin() {
 
 	http.send();
 };
+
+
+
 
 function searchRoom(){
 	var input, filter, ul, li, i, a, txtValue;
@@ -490,20 +511,7 @@ function showHumidityChart(x,y){
 			});
 }
 
-var socket = io();
 
-socket.on("sensor", function(msg) {
-	console.log(msg.temperature);
-	// for loop assign to all room their respective sensor data
-	roomCards = document.getElementsByClassName("room-card");
-	for (let i = 0; i < roomCards.length; i++) {
-		roomId = roomCards[i].getElementsByClassName("room-id");
-		if (roomId[0].innerHTML == msg.roomId) {
-			document.getElementsByClassName("temperature")[i].innerHTML = msg.temperature;
-			document.getElementsByClassName("humidity")[i].innerHTML = msg.humidity;
-		}
-	}
-});
 
 
 function showDashboard(){
@@ -537,7 +545,9 @@ xhttp.onreadystatechange = function () {
 									'<p>' + 'Number of People: ' + result.rooms[room].people.length + '</p>' +
 									'<p>' + 'Temperature: ' + "<span class='temperature'>0</span>" + '&#x2103;</p>' +
 									'<p>' + 'Humidity: ' + "<span class='humidity'>0</span>" + '</p>' + 
-                  '<p>' + 'Status: <span class="roomStatus">' + statusMsg + '</span></p></div></a></div>';
+				  '<p>' + 'Status: <span class="roomStatus">' + statusMsg + '</span></p>'+
+				  '<span style="display:none" class="room-id">'+ result.rooms[room]._id +'</span>' +
+				  '</div></a></div>';
 		}
 		
 		document.getElementById("showRoom").innerHTML += '<div class="room-card col-md-4 col-sm-4 col-xs-6" data-toggle="modal" data-target="#addRoomModal"><a><div class="img-thumbnail"><img src="https://image.flaticon.com/icons/svg/109/109615.svg" class="add-icon" title="Lyolya"/></div></a></div>';	
@@ -584,6 +594,9 @@ function directToPdf() {
 		report_window.generateReport({room_name: room_name, date_range: date_range}, peopleChart, temperatureChart, humidityChart);
 	})
 }
+
+
+
 function showUserTable(){
     $("#spinner_adduser").hide();
     $("#userAlert").hide();
@@ -591,7 +604,7 @@ function showUserTable(){
     $("#userEditModalAlert").hide();
     
     var xhttp = new XMLHttpRequest();
-		xhttp.responseType = 'json';
+	xhttp.responseType = 'json';
 
     xhttp.onreadystatechange = function () {
         if(this.readyState == 4 && this.status == 200) {
@@ -603,26 +616,39 @@ function showUserTable(){
                 '<td style="display: none;">' + result.users[user]._id + '</td>' +
                 '<td>' + result.users[user].username + '</td>' +
                 '<td>' + result.users[user].email + '</td>' +
-				'<td>' + result.users[user].role + '</td>' +
-				// This part change to toggle
-                '<td>' + '<button class = "btn btn-success" id = "editbtn" onclick = "showModal()"><span class="fa fa-edit" style = "color: white"></span></button>' + '</td>' +
-                '<td>' + '<button class = "btn btn-danger" id = "deletebtn" onclick = "deleteUser()"><span class="fa fa-trash" style = "color: white"></span></button>' + '</td>' + '</tr>' + '</tbody>';
+				// '<td>' + result.users[user].role + '</td>' +
+				'<td>' + '<input class="roleChangeButtons" onchange="updateUser(this, &#39;' + result.users[user]._id + '&#39;)" type="checkbox" data-toggle="toggle" data-on="Manager" data-off="Staff" data-onstyle="danger" data-offstyle="dark" data-size="sm">' + '</td>' +
+				'<td>' + '<button class = "btn btn-danger" id = "deletebtn" onclick = "deleteUser(&#39;'+ result.users[user]._id + '&#39;)"><span class="fa fa-trash" style = "color: white"></span></button>' + '</td>' + '</tr>' + '</tbody>';
+			};
 
-            };
-        }
+			// Set the checkbox checked value to either staff or manager according to the user roles
+			let roleChangeButtons = document.getElementsByClassName("roleChangeButtons");
+			for(var user in result.users) { 
+				if (result.users[user].role == "staff") {
+					roleChangeButtons[user].checked = false;
+				} else {
+					roleChangeButtons[user].checked = true;
+				}
+			}
+
+			// Initialize the checkbox to be applied by bootstrap toggle css
+			$("[data-toggle='toggle']").bootstrapToggle();
+		}
+
     };
 
-		xhttp.open("GET","http://localhost:3000/api/users",true);
-		
+	xhttp.open("GET","http://localhost:3000/api/users",true);	
     xhttp.send();
 	
 };
 
-
 function addUser() {
     
-    if(document.getElementById("role").value === "Pick a Role")
+    if(document.getElementById("role").value == "Pick a Role")
     {
+        var element = document.getElementById("userAlert");
+        element.classList.add("alert-danger");
+        
         document.getElementById("userAlert").innerHTML = '<strong>Please pick a role!!</strong> <button type="button" class="close" onclick="closeUserAlert()"><span>&times;</span></button>';
         $("#userAlert").show();
     }
@@ -656,6 +682,8 @@ function addUser() {
         document.getElementById("userAlert").innerHTML = '<strong>Your Password and Confirm Password is not the same. Please fill in again!!</strong> <button type="button" class="close" onclick="closeUserAlert()"><span>&times;</span></button>';
         $("#userAlert").show();
     }
+    
+    console.log
     
     if(document.getElementById("uname").value !== "" 
        && document.getElementById("upsd").value !== "" 
@@ -804,61 +832,58 @@ function showModal(){
     };
 };
 
-function updateUser() {
-    
-    if(document.getElementById("previousRole").value !== document.getElementById("edit_role").value)
-    {
-        $("#spinner").show();
-        var xhttp = new XMLHttpRequest();
-        xhttp.responseType = 'json';
-        var url = 'http://localhost:3000/api/users/' + document.getElementById("id").value;
-        var params = 'role=' + document.getElementById("edit_role").value;
 
-				xhttp.open('PUT',url,true);
+function updateUser(checkboxValue, id) {
+	let role;
+	if (checkboxValue.checked == true) {
+		role = "manager";
+	} else {
+		role = "staff";
+	}
+	
+	$("#spinner").show();
 
-				xhttp.setRequestHeader('Content-type','application/x-www-form-urlencoded');
-				
-        xhttp.onreadystatechange = function() {
-            if(xhttp.readyState == 4 && xhttp.status == 200) 
-            {
-                $("#spinner").hide();
-                
-                document.getElementById("showUser").innerHTML = "";
-                var table = document.getElementById("showUser").innerHTML;
-                table = showUserTable();
-                
-                var element = document.getElementById("userEditAlert");
-                element.classList.add("alert-success");
-                
-                document.getElementById("userEditAlert").innerHTML = '<strong>' + xhttp.response.message + '</strong> <button type="button" class="close" onclick="closeUserEditAlert()"><span>&times;</span></button>';
-                $("#userEditAlert").show();
-            }
-            
-            if(xhttp.readyState == 4 && xhttp.status == 401) 
-            {
-                $("#spinner").hide();
-                
-                document.getElementById("showUser").innerHTML = "";
-                var table = document.getElementById("showUser").innerHTML;
-                table = showUserTable();
-                
-                var element = document.getElementById("userEditAlert");
-                element.classList.add("alert-danger");
-                
-                document.getElementById("userEditAlert").innerHTML = '<strong>' + xhttp.response.message + '</strong> <button type="button" class="close" onclick="closeUserEditAlert()"><span>&times;</span></button>';
-                $("#userEditAlert").show();
-            }
-        }
+	var xhttp = new XMLHttpRequest();
+	xhttp.responseType = 'json';
+	var url = 'http://localhost:3000/api/users/' + id;
+	var params = 'role=' + role;
 
-        xhttp.send(params); 
-        
-        closeModal();
-    }
-    else
-    {
-        document.getElementById("userEditModalAlert").innerHTML = '<strong>User role remain the same.\nTo update please change the role else click cancel</strong> <button type="button" class="close" onclick="closeUserEditModalAlert()"><span>&times;</span></button>';
-        $("#userEditModalAlert").show();
-    }
+	xhttp.open('PUT',url,true);
+	xhttp.setRequestHeader('Content-type','application/x-www-form-urlencoded');
+			
+	xhttp.onreadystatechange = function() {
+		if(xhttp.readyState == 4 && xhttp.status == 200) 
+		{
+			$("#spinner").hide();
+			
+			document.getElementById("showUser").innerHTML = "";
+			var table = document.getElementById("showUser").innerHTML;
+			table = showUserTable();
+			
+			var element = document.getElementById("userEditAlert");
+			element.classList.add("alert-success");
+			
+			document.getElementById("userEditAlert").innerHTML = '<strong>' + xhttp.response.message + '</strong> <button type="button" class="close" onclick="closeUserEditAlert()"><span>&times;</span></button>';
+			$("#userEditAlert").show();
+		}
+		
+		if(xhttp.readyState == 4 && xhttp.status == 401) 
+		{
+			$("#spinner").hide();
+			
+			document.getElementById("showUser").innerHTML = "";
+			var table = document.getElementById("showUser").innerHTML;
+			table = showUserTable();
+			
+			var element = document.getElementById("userEditAlert");
+			element.classList.add("alert-danger");
+			
+			document.getElementById("userEditAlert").innerHTML = '<strong>' + xhttp.response.message + '</strong> <button type="button" class="close" onclick="closeUserEditAlert()"><span>&times;</span></button>';
+			$("#userEditAlert").show();
+		}
+	}
+
+	xhttp.send(params);
 };
 
 
@@ -867,73 +892,60 @@ function closeModal(){
     modal.style.display = "none";
 };
 
-function deleteUser(){
+function deleteUser(userIdDelete){
+    
     $("#spinner").show();
     
     var table = document.getElementsByTagName("table")[0];
     
     var tbody = table.getElementsByTagName("tbody")[0];
     
-    tbody.onclick = function (e) {
-        e = e || window.event;
-        var target = e.srcElement || e.target;
-        while (target && target.nodeName !== "TR") {
-            target = target.parentNode;
-        }
-        if (target) 
-        {
-            
-            var cells = target.getElementsByTagName("td");
+    var answer = window.confirm("Are you sure you want to delete this user?");
+    if (answer)
+    {
+        var xhttp = new XMLHttpRequest();
+        xhttp.responseType = 'json';
 
-        }
-        
-        var answer = window.confirm("Are you sure you want to delete this user?");
-        if (answer)
-        {
-            var xhttp = new XMLHttpRequest();
-            xhttp.responseType = 'json';
+        var url = 'http://localhost:3000/api/users/' + userIdDelete;
 
-            var url = 'http://localhost:3000/api/users/' + cells[0].innerHTML;
-            
-						xhttp.open("DELETE",url,true);
-						
-            xhttp.onreadystatechange = function () {
-                if(this.readyState == 4 && this.status == 200) {
-                    $("#spinner").hide();
-                    
-                    document.getElementById("showUser").innerHTML = "";
-                    var table = document.getElementById("showUser").innerHTML;
-                    table = showUserTable();
-                    
-                    var element = document.getElementById("userEditAlert");
-                    element.classList.add("alert-success");
-                    
-                    document.getElementById("userEditAlert").innerHTML = '<strong>' + xhttp.response.message + '</strong> <button type="button" class="close" onclick="closeUserEditAlert()"><span>&times;</span></button>';
-                    $("#userEditAlert").show();
-                }
-                
-                if(this.readyState == 4 && this.status == 401) {
-                    $("#spinner").hide();
-                    
-                    document.getElementById("showUser").innerHTML = "";
-                    var table = document.getElementById("showUser").innerHTML;
-                    table = showUserTable();
-                    
-                    var element = document.getElementById("userEditAlert");
-                    element.classList.add("alert-danger");
-                    
-                    document.getElementById("userEditAlert").innerHTML = '<strong>' + xhttp.response.message + '</strong> <button type="button" class="close" onclick="closeUserEditAlert()"><span>&times;</span></button>';
-                    $("#userEditAlert").show();
-                }
-            };
+        xhttp.open("DELETE",url,true);
 
-            xhttp.send();
-        }
-        else
-        {
-            $("#spinner").hide();
-        }
-    };
+        xhttp.onreadystatechange = function () {
+            if(this.readyState == 4 && this.status == 200) {
+                $("#spinner").hide();
+
+                document.getElementById("showUser").innerHTML = "";
+                var table = document.getElementById("showUser").innerHTML;
+                table = showUserTable();
+
+                var element = document.getElementById("userEditAlert");
+                element.classList.add("alert-success");
+
+                document.getElementById("userEditAlert").innerHTML = '<strong>' + xhttp.response.message + '</strong> <button type="button" class="close" onclick="closeUserEditAlert()"><span>&times;</span></button>';
+                $("#userEditAlert").show();
+            }
+
+            if(this.readyState == 4 && this.status == 401) {
+                $("#spinner").hide();
+
+                document.getElementById("showUser").innerHTML = "";
+                var table = document.getElementById("showUser").innerHTML;
+                table = showUserTable();
+
+                var element = document.getElementById("userEditAlert");
+                element.classList.add("alert-danger");
+
+                document.getElementById("userEditAlert").innerHTML = '<strong>' + xhttp.response.message + '</strong> <button type="button" class="close" onclick="closeUserEditAlert()"><span>&times;</span></button>';
+                $("#userEditAlert").show();
+            }
+        };
+
+        xhttp.send();
+    }
+    else
+    {
+        $("#spinner").hide();
+    }
 };
 
 
@@ -1047,6 +1059,10 @@ function checkEmail(){
     if(document.getElementById("forgetEmail").value === "")
     {
         $("#spinner_forget").hide();
+        
+        var element = document.getElementById("forgetAlert");
+        element.classList.add("alert-danger");
+        
         document.getElementById("forgetAlert").innerHTML = '<strong>Please enter an email!!</strong> <button type="button" class="close" onclick="closeForgetAlert()"><span>&times;</span></button>';
         $("#forgetAlert").show();
     }
@@ -1064,6 +1080,11 @@ function checkEmail(){
             if(xhttp.readyState == 4 && xhttp.status == 200) 
             {
                 $("#spinner_forget").hide(); 
+                
+                var element = document.getElementById("forgetAlert");
+                element.classList.remove("alert-danger");
+                element.classList.add("alert-success");
+                
                 document.getElementById("forgetAlert").innerHTML = '<strong>' + xhttp.response.message +'</strong> <button type="button" class="close" onclick="closeForgetAlert()"><span>&times;</span></button>';
                 $("#forgetAlert").show();
                 document.getElementById("forgetEmail").value = "";
@@ -1073,6 +1094,11 @@ function checkEmail(){
             if(xhttp.status == 404) 
             {
                 $("#spinner_forget").hide(); 
+                
+                console.log(xhttp.response.message);
+                var element = document.getElementById("forgetAlert");
+                element.classList.add("alert-danger");
+                
                 document.getElementById("forgetAlert").innerHTML = '<strong>' + xhttp.response.message +'</strong> <button type="button" class="close" onclick="closeForgetAlert()"><span>&times;</span></button>';
                 $("#forgetAlert").show();
                 
@@ -1214,7 +1240,11 @@ function tablePagination() {
 
 function onLogout() {
 	window.location.replace('/login');
+
+	var cookies = document.cookie.split(";");
+	
 	document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+	document.cookie = "io=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
 }
 
 function pagenotfoundRedirect() {

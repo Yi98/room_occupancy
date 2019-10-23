@@ -1,3 +1,7 @@
+html {
+  overflow-x: hidden;
+}
+
 /*Start login.html*/
 #loginForm {
     margin-top: 120px;
