@@ -78,10 +78,13 @@
                                         <span aria-hidden="true">&times;</span>
                                     </button>
                                     </div>
-                                    <div class="modal-body">
-                                        <div class="alert alert-danger alert-dismissible fade show" role="alert" id="forgetAlert"></div>
-                                        <p class="m-0">Please fill in your email: <input type = "email" id = "forgetEmail" placeholder = "example@gmail.com" class="ml-5"/></p>
+
+                                    <div class="modal-body text-center">
+                                        <div class="alert alert-dismissible fade show" role="alert" id="forgetAlert"></div>
+                                        <p>Please fill in your email</p>
+                                        <input type = "email" id = "forgetEmail" placeholder = "example@gmail.com" />
                                     </div>
+                                    
                                     <div class="modal-footer">
                                     <button type="button" class="btn btn-primary" id = "submitEmail" onclick="checkEmail()">Submit</button>
                                     <button type="button" class="btn btn-secondary" id = "close_forget" data-dismiss="modal">Close</button>

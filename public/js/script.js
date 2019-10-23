@@ -620,7 +620,7 @@ function showUserTable(){
                 '<td>' + result.users[user].email + '</td>' +
 				'<td>' + result.users[user].role + '</td>' +
 				'<td>' + '<input class="roleChangeButtons" onchange="testingCheckbox(this, ' + 123 + ')" type="checkbox" data-toggle="toggle" data-on="Manager" data-off="Staff" data-onstyle="warning" data-offstyle="secondary">' + '</td>' +
-                '<td>' + '<button class = "btn btn-danger" id = "deletebtn" onclick = "deleteUser()"><span class="fa fa-trash" style = "color: white"></span></button>' + '</td>' + '</tr>' + '</tbody>';
+				'<td>' + '<button class = "btn btn-danger" id = "deletebtn" onclick = "deleteUser(&#39;'+ result.users[user]._id + '&#39;)"><span class="fa fa-trash" style = "color: white"></span></button>' + '</td>' + '</tr>' + '</tbody>';
 			};
 			$("[data-toggle='toggle']").bootstrapToggle();
 			
@@ -647,8 +647,11 @@ function testingCheckbox(checkbox, id) {
 
 function addUser() {
     
-    if(document.getElementById("role").value === "Pick a Role")
+    if(document.getElementById("role").value == "Pick a Role")
     {
+        var element = document.getElementById("userAlert");
+        element.classList.add("alert-danger");
+        
         document.getElementById("userAlert").innerHTML = '<strong>Please pick a role!!</strong> <button type="button" class="close" onclick="closeUserAlert()"><span>&times;</span></button>';
         $("#userAlert").show();
     }
@@ -682,6 +685,8 @@ function addUser() {
         document.getElementById("userAlert").innerHTML = '<strong>Your Password and Confirm Password is not the same. Please fill in again!!</strong> <button type="button" class="close" onclick="closeUserAlert()"><span>&times;</span></button>';
         $("#userAlert").show();
     }
+    
+    console.log
     
     if(document.getElementById("uname").value !== "" 
        && document.getElementById("upsd").value !== "" 
@@ -894,73 +899,60 @@ function closeModal(){
     modal.style.display = "none";
 };
 
-function deleteUser(){
+function deleteUser(userIdDelete){
+    
     $("#spinner").show();
     
     var table = document.getElementsByTagName("table")[0];
     
     var tbody = table.getElementsByTagName("tbody")[0];
     
-    tbody.onclick = function (e) {
-        e = e || window.event;
-        var target = e.srcElement || e.target;
-        while (target && target.nodeName !== "TR") {
-            target = target.parentNode;
-        }
-        if (target) 
-        {
-            
-            var cells = target.getElementsByTagName("td");
+    var answer = window.confirm("Are you sure you want to delete this user?");
+    if (answer)
+    {
+        var xhttp = new XMLHttpRequest();
+        xhttp.responseType = 'json';
 
-        }
-        
-        var answer = window.confirm("Are you sure you want to delete this user?");
-        if (answer)
-        {
-            var xhttp = new XMLHttpRequest();
-            xhttp.responseType = 'json';
+        var url = 'http://localhost:3000/api/users/' + userIdDelete;
 
-            var url = 'http://localhost:3000/api/users/' + cells[0].innerHTML;
-            
-						xhttp.open("DELETE",url,true);
-						
-            xhttp.onreadystatechange = function () {
-                if(this.readyState == 4 && this.status == 200) {
-                    $("#spinner").hide();
-                    
-                    document.getElementById("showUser").innerHTML = "";
-                    var table = document.getElementById("showUser").innerHTML;
-                    table = showUserTable();
-                    
-                    var element = document.getElementById("userEditAlert");
-                    element.classList.add("alert-success");
-                    
-                    document.getElementById("userEditAlert").innerHTML = '<strong>' + xhttp.response.message + '</strong> <button type="button" class="close" onclick="closeUserEditAlert()"><span>&times;</span></button>';
-                    $("#userEditAlert").show();
-                }
-                
-                if(this.readyState == 4 && this.status == 401) {
-                    $("#spinner").hide();
-                    
-                    document.getElementById("showUser").innerHTML = "";
-                    var table = document.getElementById("showUser").innerHTML;
-                    table = showUserTable();
-                    
-                    var element = document.getElementById("userEditAlert");
-                    element.classList.add("alert-danger");
-                    
-                    document.getElementById("userEditAlert").innerHTML = '<strong>' + xhttp.response.message + '</strong> <button type="button" class="close" onclick="closeUserEditAlert()"><span>&times;</span></button>';
-                    $("#userEditAlert").show();
-                }
-            };
+        xhttp.open("DELETE",url,true);
 
-            xhttp.send();
-        }
-        else
-        {
-            $("#spinner").hide();
-        }
-    };
+        xhttp.onreadystatechange = function () {
+            if(this.readyState == 4 && this.status == 200) {
+                $("#spinner").hide();
+
+                document.getElementById("showUser").innerHTML = "";
+                var table = document.getElementById("showUser").innerHTML;
+                table = showUserTable();
+
+                var element = document.getElementById("userEditAlert");
+                element.classList.add("alert-success");
+
+                document.getElementById("userEditAlert").innerHTML = '<strong>' + xhttp.response.message + '</strong> <button type="button" class="close" onclick="closeUserEditAlert()"><span>&times;</span></button>';
+                $("#userEditAlert").show();
+            }
+
+            if(this.readyState == 4 && this.status == 401) {
+                $("#spinner").hide();
+
+                document.getElementById("showUser").innerHTML = "";
+                var table = document.getElementById("showUser").innerHTML;
+                table = showUserTable();
+
+                var element = document.getElementById("userEditAlert");
+                element.classList.add("alert-danger");
+
+                document.getElementById("userEditAlert").innerHTML = '<strong>' + xhttp.response.message + '</strong> <button type="button" class="close" onclick="closeUserEditAlert()"><span>&times;</span></button>';
+                $("#userEditAlert").show();
+            }
+        };
+
+        xhttp.send();
+    }
+    else
+    {
+        $("#spinner").hide();
+    }
 };
 
 
@@ -1074,6 +1066,10 @@ function checkEmail(){
     if(document.getElementById("forgetEmail").value === "")
     {
         $("#spinner_forget").hide();
+        
+        var element = document.getElementById("forgetAlert");
+        element.classList.add("alert-danger");
+        
         document.getElementById("forgetAlert").innerHTML = '<strong>Please enter an email!!</strong> <button type="button" class="close" onclick="closeForgetAlert()"><span>&times;</span></button>';
         $("#forgetAlert").show();
     }
@@ -1091,6 +1087,11 @@ function checkEmail(){
             if(xhttp.readyState == 4 && xhttp.status == 200) 
             {
                 $("#spinner_forget").hide(); 
+                
+                var element = document.getElementById("forgetAlert");
+                element.classList.remove("alert-danger");
+                element.classList.add("alert-success");
+                
                 document.getElementById("forgetAlert").innerHTML = '<strong>' + xhttp.response.message +'</strong> <button type="button" class="close" onclick="closeForgetAlert()"><span>&times;</span></button>';
                 $("#forgetAlert").show();
                 document.getElementById("forgetEmail").value = "";
@@ -1100,6 +1101,11 @@ function checkEmail(){
             if(xhttp.status == 404) 
             {
                 $("#spinner_forget").hide(); 
+                
+                console.log(xhttp.response.message);
+                var element = document.getElementById("forgetAlert");
+                element.classList.add("alert-danger");
+                
                 document.getElementById("forgetAlert").innerHTML = '<strong>' + xhttp.response.message +'</strong> <button type="button" class="close" onclick="closeForgetAlert()"><span>&times;</span></button>';
                 $("#forgetAlert").show();
                 
