@@ -367,3 +367,15 @@ i.deleteNoticeIcon:hover {
 #headingUser:hover {
   cursor: pointer;
 }
+
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #E53333;
+}
