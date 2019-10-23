@@ -604,46 +604,43 @@ function showUserTable(){
     $("#userEditModalAlert").hide();
     
     var xhttp = new XMLHttpRequest();
-		xhttp.responseType = 'json';
+	xhttp.responseType = 'json';
 
     xhttp.onreadystatechange = function () {
         if(this.readyState == 4 && this.status == 200) {
             $("#spinner").hide();
             var result = this.response;
             for(var user in result.users){
-				console.log(result.users[user]._id);
-				let id = (result.users[user].username).toString();
                 document.getElementById("showUser").innerHTML += 
                 '<tbody>' + '<tr>' +
                 '<td style="display: none;">' + result.users[user]._id + '</td>' +
                 '<td>' + result.users[user].username + '</td>' +
                 '<td>' + result.users[user].email + '</td>' +
-				'<td>' + result.users[user].role + '</td>' +
-				'<td>' + '<input class="roleChangeButtons" onchange="testingCheckbox(this, ' + 123 + ')" type="checkbox" data-toggle="toggle" data-on="Manager" data-off="Staff" data-onstyle="warning" data-offstyle="secondary">' + '</td>' +
+				// '<td>' + result.users[user].role + '</td>' +
+				'<td>' + '<input class="roleChangeButtons" onchange="updateUser(this, &#39;' + result.users[user]._id + '&#39;)" type="checkbox" data-toggle="toggle" data-on="Manager" data-off="Staff" data-onstyle="danger" data-offstyle="dark" data-size="sm">' + '</td>' +
 				'<td>' + '<button class = "btn btn-danger" id = "deletebtn" onclick = "deleteUser(&#39;'+ result.users[user]._id + '&#39;)"><span class="fa fa-trash" style = "color: white"></span></button>' + '</td>' + '</tr>' + '</tbody>';
 			};
+
+			// Set the checkbox checked value to either staff or manager according to the user roles
+			let roleChangeButtons = document.getElementsByClassName("roleChangeButtons");
+			for(var user in result.users) { 
+				if (result.users[user].role == "staff") {
+					roleChangeButtons[user].checked = false;
+				} else {
+					roleChangeButtons[user].checked = true;
+				}
+			}
+
+			// Initialize the checkbox to be applied by bootstrap toggle css
 			$("[data-toggle='toggle']").bootstrapToggle();
-			
 		}
 
     };
 
-		xhttp.open("GET","http://localhost:3000/api/users",true);
-		
+	xhttp.open("GET","http://localhost:3000/api/users",true);	
     xhttp.send();
 	
 };
-
-
-function testingCheckbox(checkbox, id) {
-	if (checkbox.checked) {
-		console.log("WATATA");
-		console.log(id);
-	} else {
-		console.log("UTETE");
-		console.log(id);
-	}
-}
 
 function addUser() {
     
@@ -836,61 +833,57 @@ function showModal(){
 };
 
 
-function updateUser() {
-	// Here need to get the checkbox value
-    if(document.getElementById("previousRole").value !== document.getElementById("edit_role").value)
-    {
-        $("#spinner").show();
-        var xhttp = new XMLHttpRequest();
-        xhttp.responseType = 'json';
-        var url = 'http://localhost:3000/api/users/' + document.getElementById("id").value;
-        var params = 'role=' + document.getElementById("edit_role").value;
+function updateUser(checkboxValue, id) {
+	let role;
+	if (checkboxValue.checked == true) {
+		role = "manager";
+	} else {
+		role = "staff";
+	}
+	
+	$("#spinner").show();
 
-				xhttp.open('PUT',url,true);
+	var xhttp = new XMLHttpRequest();
+	xhttp.responseType = 'json';
+	var url = 'http://localhost:3000/api/users/' + id;
+	var params = 'role=' + role;
 
-				xhttp.setRequestHeader('Content-type','application/x-www-form-urlencoded');
-				
-        xhttp.onreadystatechange = function() {
-            if(xhttp.readyState == 4 && xhttp.status == 200) 
-            {
-                $("#spinner").hide();
-                
-                document.getElementById("showUser").innerHTML = "";
-                var table = document.getElementById("showUser").innerHTML;
-                table = showUserTable();
-                
-                var element = document.getElementById("userEditAlert");
-                element.classList.add("alert-success");
-                
-                document.getElementById("userEditAlert").innerHTML = '<strong>' + xhttp.response.message + '</strong> <button type="button" class="close" onclick="closeUserEditAlert()"><span>&times;</span></button>';
-                $("#userEditAlert").show();
-            }
-            
-            if(xhttp.readyState == 4 && xhttp.status == 401) 
-            {
-                $("#spinner").hide();
-                
-                document.getElementById("showUser").innerHTML = "";
-                var table = document.getElementById("showUser").innerHTML;
-                table = showUserTable();
-                
-                var element = document.getElementById("userEditAlert");
-                element.classList.add("alert-danger");
-                
-                document.getElementById("userEditAlert").innerHTML = '<strong>' + xhttp.response.message + '</strong> <button type="button" class="close" onclick="closeUserEditAlert()"><span>&times;</span></button>';
-                $("#userEditAlert").show();
-            }
-        }
+	xhttp.open('PUT',url,true);
+	xhttp.setRequestHeader('Content-type','application/x-www-form-urlencoded');
+			
+	xhttp.onreadystatechange = function() {
+		if(xhttp.readyState == 4 && xhttp.status == 200) 
+		{
+			$("#spinner").hide();
+			
+			document.getElementById("showUser").innerHTML = "";
+			var table = document.getElementById("showUser").innerHTML;
+			table = showUserTable();
+			
+			var element = document.getElementById("userEditAlert");
+			element.classList.add("alert-success");
+			
+			document.getElementById("userEditAlert").innerHTML = '<strong>' + xhttp.response.message + '</strong> <button type="button" class="close" onclick="closeUserEditAlert()"><span>&times;</span></button>';
+			$("#userEditAlert").show();
+		}
+		
+		if(xhttp.readyState == 4 && xhttp.status == 401) 
+		{
+			$("#spinner").hide();
+			
+			document.getElementById("showUser").innerHTML = "";
+			var table = document.getElementById("showUser").innerHTML;
+			table = showUserTable();
+			
+			var element = document.getElementById("userEditAlert");
+			element.classList.add("alert-danger");
+			
+			document.getElementById("userEditAlert").innerHTML = '<strong>' + xhttp.response.message + '</strong> <button type="button" class="close" onclick="closeUserEditAlert()"><span>&times;</span></button>';
+			$("#userEditAlert").show();
+		}
+	}
 
-        xhttp.send(params); 
-        
-        closeModal();
-    }
-    else
-    {
-        document.getElementById("userEditModalAlert").innerHTML = '<strong>User role remain the same.\nTo update please change the role else click cancel</strong> <button type="button" class="close" onclick="closeUserEditModalAlert()"><span>&times;</span></button>';
-        $("#userEditModalAlert").show();
-    }
+	xhttp.send(params);
 };
 
 
