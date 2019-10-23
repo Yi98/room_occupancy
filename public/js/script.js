@@ -617,7 +617,7 @@ function showUserTable(){
                 '<td>' + result.users[user].username + '</td>' +
                 '<td>' + result.users[user].email + '</td>' +
 				// '<td>' + result.users[user].role + '</td>' +
-				'<td>' + '<input class="roleChangeButtons" onchange="updateUser(this, &#39;' + result.users[user]._id + '&#39;)" type="checkbox" data-toggle="toggle" data-on="Manager" data-off="Staff" data-onstyle="danger" data-offstyle="dark" data-size="sm">' + '</td>' +
+				'<td>' + '<input class="roleChangeButtons" onchange="updateUser(this, &#39;' + result.users[user]._id + '&#39;)" type="checkbox" data-toggle="toggle" data-on="Manager" data-off="Staff" data-onstyle="success" data-offstyle="outline-dark" data-size="xs">' + '</td>' +
 				'<td>' + '<button class = "btn btn-danger" id = "deletebtn" onclick = "deleteUser(&#39;'+ result.users[user]._id + '&#39;)"><span class="fa fa-trash" style = "color: white"></span></button>' + '</td>' + '</tr>' + '</tbody>';
 			};
 
@@ -855,11 +855,7 @@ function updateUser(checkboxValue, id) {
 		if(xhttp.readyState == 4 && xhttp.status == 200) 
 		{
 			$("#spinner").hide();
-			
-			document.getElementById("showUser").innerHTML = "";
-			var table = document.getElementById("showUser").innerHTML;
-			table = showUserTable();
-			
+
 			var element = document.getElementById("userEditAlert");
 			element.classList.add("alert-success");
 			
@@ -870,10 +866,6 @@ function updateUser(checkboxValue, id) {
 		if(xhttp.readyState == 4 && xhttp.status == 401) 
 		{
 			$("#spinner").hide();
-			
-			document.getElementById("showUser").innerHTML = "";
-			var table = document.getElementById("showUser").innerHTML;
-			table = showUserTable();
 			
 			var element = document.getElementById("userEditAlert");
 			element.classList.add("alert-danger");
