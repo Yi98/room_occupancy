@@ -81,7 +81,7 @@ hr {
 
 .right-menu-1{
 	background-color: #FFFFFD;
-	padding: 1% 1% 2% 1%;
+	padding: 1.5% 1% 2% 1%;
 
 }
 
@@ -103,7 +103,7 @@ hr {
 }
 
 .logo {
-	width:60%;
+	width:50%;
 	margin:0 8% 0 4%;
 }
 
@@ -296,11 +296,17 @@ a.disabled {
 }
 
 #rowDesc {
-    margin-top: 50px;
+	font-size:1.5em;
+	margin:0 0 2% 0;
 }
 
 #maxRows {
-    margin-bottom: 20px;
+	font-size:1em;
+	margin:0 0 2% 0;
+}
+
+.select{
+  margin-top:4%;
 }
 
 #userID {
@@ -383,3 +389,5 @@ i.deleteNoticeIcon:hover {
 ::-webkit-scrollbar-thumb {
   background: #E53333;
 }
+
+

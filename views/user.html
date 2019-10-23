@@ -195,16 +195,19 @@
                       </div>
   
                       <div class = "container">
-                        
-                        <h4 id = "rowDesc">Select Number of Rows</h4>
-                        <div class="form-group>">
-                            <select name="state" id="maxRows" class="form-control" style="width: 150px;">
-                                <option value="5000">Show All</option>
-                                <option value="5">5</option>
-                                <option value="10">10</option>
-                            </select>
-                        </div>
-                         
+                        <div class="row">
+													<div class="col-md-3 col-sm-6 col-xs-6" id ="rowDesc">Select Number of Rows </div>
+													<div class="col-md-2 col-sm-6 col-xs-6">
+														<div class="select">
+															<select name="state" id="maxRows" class="dropdown" style="width:150px;">
+																	<option value="5000">Show All</option>
+																	<option value="5">5</option>
+																	<option value="10">10</option>
+															</select>
+															<div class="select__arrow"></div>
+														</div>
+													</div>
+                        </div> 
                          <div class="alert alert-dismissible fade show" role="alert" id="userEditAlert"></div>
                          
                           <div class = "table-responsive" style = "text-align: center">
