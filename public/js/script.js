@@ -1160,6 +1160,10 @@ function onResetPassword() {
                 if (xhttp.response.message == 'success') {
                     $("#spinner_reset").hide(); 
                     
+                    var element = document.getElementById("resetAlert");
+                    element.classList.remove("alert-danger")
+                    element.classList.add("alert-success");
+                    
                     document.getElementById("resetAlert").innerHTML = '<strong>Successfully reset password</strong> <button type="button" class="close" onclick="closeResetAlert()"><span>&times;</span></button>';
                     $("#resetAlert").show();
                     
