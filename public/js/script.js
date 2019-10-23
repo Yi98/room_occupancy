@@ -621,8 +621,11 @@ function showUserTable(){
 
 function addUser() {
     
-    if(document.getElementById("role").value === "Pick a Role")
+    if(document.getElementById("role").value == "Pick a Role")
     {
+        var element = document.getElementById("userAlert");
+        element.classList.add("alert-danger");
+        
         document.getElementById("userAlert").innerHTML = '<strong>Please pick a role!!</strong> <button type="button" class="close" onclick="closeUserAlert()"><span>&times;</span></button>';
         $("#userAlert").show();
     }
@@ -656,6 +659,8 @@ function addUser() {
         document.getElementById("userAlert").innerHTML = '<strong>Your Password and Confirm Password is not the same. Please fill in again!!</strong> <button type="button" class="close" onclick="closeUserAlert()"><span>&times;</span></button>';
         $("#userAlert").show();
     }
+    
+    console.log
     
     if(document.getElementById("uname").value !== "" 
        && document.getElementById("upsd").value !== "" 
