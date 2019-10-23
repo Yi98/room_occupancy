@@ -2,16 +2,17 @@
 var socket = io();
 
 socket.on("sensor", function(msg) {
-console.log(msg.temperature);
-// for loop assign to all room their respective sensor data
-roomCards = document.getElementsByClassName("room-card");
-for (let i = 0; i < roomCards.length; i++) {
-roomId = roomCards[i].getElementsByClassName("room-id");
-if (roomId[0].innerHTML == msg.roomId) {
-	document.getElementsByClassName("temperature")[i].innerHTML = msg.temperature;
-	document.getElementsByClassName("humidity")[i].innerHTML = msg.humidity;
-}
-}
+	console.log(msg.temperature);
+	// for loop assign to all room their respective sensor data
+	let roomCards = document.getElementsByClassName("room-card");
+	for (let i = 0; i < roomCards.length; i++) {
+		let roomId = roomCards[i].getElementsByClassName("room-id");
+		// change 0 to i later
+		if (roomId[0].innerHTML == msg.roomId) {
+			document.getElementsByClassName("temperature")[i].innerHTML = msg.temperature;
+			document.getElementsByClassName("humidity")[i].innerHTML = msg.humidity;
+		}
+	}
 });
 
 
@@ -544,7 +545,9 @@ xhttp.onreadystatechange = function () {
 									'<p>' + 'Number of People: ' + result.rooms[room].people.length + '</p>' +
 									'<p>' + 'Temperature: ' + "<span class='temperature'>0</span>" + '&#x2103;</p>' +
 									'<p>' + 'Humidity: ' + "<span class='humidity'>0</span>" + '</p>' + 
-                  '<p>' + 'Status: <span class="roomStatus">' + statusMsg + '</span></p></div></a></div>';
+				  '<p>' + 'Status: <span class="roomStatus">' + statusMsg + '</span></p>'+
+				  '<span style="display:none" class="room-id">'+ result.rooms[room]._id +'</span>' +
+				  '</div></a></div>';
 		}
 		
 		document.getElementById("showRoom").innerHTML += '<div class="room-card col-md-4 col-sm-4 col-xs-6"><a onclick="on()"><div class="img-thumbnail"><img src="https://image.flaticon.com/icons/svg/109/109615.svg" class="add-icon" title="Lyolya"/></div></a></div>';	
