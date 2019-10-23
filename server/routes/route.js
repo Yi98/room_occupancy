@@ -7,7 +7,7 @@ router.get('/', (req, res) => {
   res.redirect('/login');
 });
 
-router.get('/dashboard', (req, res) => {
+router.get('/dashboard', auth, (req, res) => {
   res.sendFile(path.join(__dirname, '../../views/dashboard.html'));
 });
 
@@ -15,15 +15,15 @@ router.get('/login', (req, res) => {
   res.sendFile(path.join(__dirname, '../../views/login.html'));
 });
 
-router.get('/chart/:roomId', (req, res) => {
+router.get('/chart/:roomId', auth, (req, res) => {
   res.sendFile(path.join(__dirname, '../../views/chart.html'));
 });
 
-router.get('/report', (req, res) => {
+router.get('/report', auth, (req, res) => {
   res.sendFile(path.join(__dirname, '../../views/report.html'));
 });
 
-router.get('/users', (req, res) => {
+router.get('/users', auth, (req, res) => {
   res.sendFile(path.join(__dirname, '../../views/user.html'));
 });
 
@@ -32,7 +32,7 @@ router.get('/resetPassword/:token', (req, res) => {
 })
 
 //  Page not found
-router.get('*', (req, res) => {
+router.get('*', auth, (req, res) => {
   res.sendFile(path.join(__dirname, '../../views/page_not_found.html'));
 })
 

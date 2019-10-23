@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<title>Dashboard</title>
+<title>Charts</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
@@ -35,12 +35,12 @@
 <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
 	<link rel="stylesheet" href="https://formden.com/static/cdn/font-awesome/4.4.0/css/font-awesome.min.css" />
 </head>
-<body onload="showChart(); loadNotification()">
+<body onload="showChart()">
 	<div class="container-fluid">
 		<div class="row nav-wrapper">
 			<div class="col-md-2 col-sm-12 col-xs-12 left-menu-1">
 				<a href="dashboard.html">
-					<img src="https://www.swinburne.edu.au/content/dam/media/brand/swin-logo-h-RGB.jpg/_jcr_content/renditions/cq5dam.web.1280.1280.jpeg" class="img-fluid logo" alt="logo">
+					<img src="https://www.swinburne.edu.au/content/dam/media/brand/swin-logo-h-RGB.jpg/_jcr_content/renditions/cq5dam.web.1280.1280.jpeg" class="img-fluid logo mt-3" alt="logo">
 					</a>
 				</div>
 				<div class="col-md-10 col-sm-12 col-xs-12 right-menu-1">
@@ -60,6 +60,7 @@
 					</div>
 				</div>
 			</div>
+			
 			<div class="row main-wrapper">
 				<div class="col-md-2 col-sm-12 col-xs-12 left-menu-2">
 					<nav class="navbar text-center" id="myNavbar">
@@ -83,7 +84,9 @@
 									<span id="choosenRange"></span>
 									<i class="fa fa-caret-down"></i>
 								</div>
-								<script type="text/javascript">
+								
+								
+		<script type="text/javascript">
 
 
 				$(function() {

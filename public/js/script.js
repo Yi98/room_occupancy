@@ -1,21 +1,11 @@
 const canvg = require("canvg");
 
 function checkIsLogin() {			
-	const cookies = document.cookie.split("=");
-	let token;
-	
-	for (let i=0; i<cookies.length; i++) {
-		if (cookies[i] == "token") {
-			token = cookies[i+1];
-			}
-		}
-
 	var http = new XMLHttpRequest();
 
 	http.open('GET', 'http://localhost:3000/', true);
 
 	http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-	http.setRequestHeader('Authorization','Bearer ' + token);
 
 	http.onreadystatechange = function() {
 			if(http.readyState == 4 && http.status == 200) {
@@ -422,17 +412,6 @@ function xhrChart(roomId){
 		};
 		xhttp.open("GET", "http://localhost:3000/api/rooms", true);
 
-		const cookies = document.cookie.split("=");
-		let token;
-
-		for (let i=0; i<cookies.length; i++) {
-			if (cookies[i] == "token") {
-				token = cookies[i+1];
-			}
-		}
-
-		xhttp.setRequestHeader('Authorization','Bearer ' + token);
-
     xhttp.send();
 }
 
@@ -534,6 +513,9 @@ xhttp.responseType = 'json';
 xhttp.onreadystatechange = function () {
 	if(this.readyState == 4 && this.status == 200) {
 		var result = this.response;
+
+		const notifications = [];
+
 		for(var room in result.rooms){
 			var status = result.rooms[room].people.length;
 			if(status < 25){
@@ -547,6 +529,9 @@ xhttp.onreadystatechange = function () {
 			if(status > 50){
 				var statusMsg = "Full";
 			}
+
+			notifications.push([{name: result.rooms[room].name, status: statusMsg}]);
+
 			document.getElementById("showRoom").innerHTML += '<div class="room-card col-md-4 col-sm-4 col-xs-6" ><a onclick="window.open(\'/chart/' + result.rooms[room]._id + '\')"><div class="img-thumbnail">' +
 									'<h4>' + result.rooms[room].name + '</h4>' +
 									'<p>' + 'Number of People: ' + result.rooms[room].people.length + '</p>' +
@@ -556,21 +541,13 @@ xhttp.onreadystatechange = function () {
 		}
 		
 		document.getElementById("showRoom").innerHTML += '<div class="room-card col-md-4 col-sm-4 col-xs-6"><a onclick="on()"><div class="img-thumbnail"><img src="https://image.flaticon.com/icons/svg/109/109615.svg" class="add-icon" title="Lyolya"/></div></a></div>';	
+		
+		localStorage.setItem('notifications', JSON.stringify(notifications));
+		console.log(JSON.parse(localStorage.getItem('notifications')));
 	}
 };
 
 	xhttp.open("GET","http://localhost:3000/api/rooms",true);
-
-	const cookies = document.cookie.split("=");
-	let token;
-
-	for (let i=0; i<cookies.length; i++) {
-		if (cookies[i] == "token") {
-			token = cookies[i+1];
-		}
-	}
-
-	xhttp.setRequestHeader('Authorization','Bearer ' + token);
 
 	xhttp.send();
 
@@ -636,17 +613,6 @@ function showUserTable(){
     };
 
 		xhttp.open("GET","http://localhost:3000/api/users",true);
-
-		const cookies = document.cookie.split("=");
-		let token;
-		
-		for (let i=0; i<cookies.length; i++) {
-			if (cookies[i] == "token") {
-				token = cookies[i+1];
-			}
-		}
-
-		xhttp.setRequestHeader('Authorization','Bearer ' + token);
 		
     xhttp.send();
 	
@@ -708,20 +674,8 @@ function addUser() {
                     + '&password=' + document.getElementById('upsd').value;
 
 				xhttp.open('POST',url,true);
-				
-				const cookies = document.cookie.split("=");
-				let token;
-				
-				for (let i=0; i<cookies.length; i++) {
-					if (cookies[i] == "token") {
-						token = cookies[i+1];
-					}
-				}
-
-				console.log(token);
 
 				xhttp.setRequestHeader('Content-type','application/x-www-form-urlencoded');
-        xhttp.setRequestHeader('Authorization','Bearer ' + token);
 
         xhttp.onreadystatechange = function() {
             if(xhttp.readyState == 4 && xhttp.status == 201) {
@@ -844,17 +798,6 @@ function showModal(){
         
 				xhttp.open("GET",url,true);
 
-				const cookies = document.cookie.split("=");
-				let token;
-				
-				for (let i=0; i<cookies.length; i++) {
-					if (cookies[i] == "token") {
-						token = cookies[i+1];
-					}
-				}
-
-				xhttp.setRequestHeader('Authorization','Bearer ' + token);
-
         xhttp.send();
         
         
@@ -872,20 +815,9 @@ function updateUser() {
         var params = 'role=' + document.getElementById("edit_role").value;
 
 				xhttp.open('PUT',url,true);
-				
-				const cookies = document.cookie.split("=");
-				let token;
-				
-				for (let i=0; i<cookies.length; i++) {
-					if (cookies[i] == "token") {
-						token = cookies[i+1];
-					}
-				}
 
 				xhttp.setRequestHeader('Content-type','application/x-www-form-urlencoded');
 				
-        xhttp.setRequestHeader('Authorization','Bearer ' + token);
-
         xhttp.onreadystatechange = function() {
             if(xhttp.readyState == 4 && xhttp.status == 200) 
             {
@@ -951,18 +883,7 @@ function deleteUser(userIdDelete){
 
         var url = 'http://localhost:3000/api/users/' + userIdDelete;
 
-                    xhttp.open("DELETE",url,true);
-
-                    const cookies = document.cookie.split("=");
-                    let token;
-
-                    for (let i=0; i<cookies.length; i++) {
-                        if (cookies[i] == "token") {
-                            token = cookies[i+1];
-                        }
-                    }
-
-        xhttp.setRequestHeader('Authorization','Bearer ' + token);
+        xhttp.open("DELETE",url,true);
 
         xhttp.onreadystatechange = function () {
             if(this.readyState == 4 && this.status == 200) {
@@ -1301,56 +1222,18 @@ function pagenotfoundRedirect() {
 	window.location.replace('/dashboard');
 }
 
-function loadNotification() {
-    
-	var xhttp = new XMLHttpRequest();
-	xhttp.responseType = 'json';
+function onToggleCollapse() {
+	var isExpanded = $('#headingUser').attr("aria-expanded");
+	
+	const up = document.getElementById('up-icon');
+	const down = document.getElementById('down-icon');
 
-	xhttp.onreadystatechange = function () {
-		if(this.readyState == 4 && this.status == 200) {
-			let	moderateStatusCount = 0;
-			let	fullStatusCount = 0;
-
-
-			var result = this.response;
-			for(var room in result.rooms){
-				var status = result.rooms[room].people.length;
-				if(status < 25){
-					var statusMsg = "Low";
-				}
-				
-				if(status >= 25){
-					var statusMsg = "Moderate";
-					moderateStatusCount++;
-				}
-				
-				if(status >= 50){
-					var statusMsg = "Full";
-					fullStatusCount++;
-				}
-			}
-
-			exceedStatusCount = moderateStatusCount + fullStatusCount;
-
-			if (exceedStatusCount > 0) {
-				document.getElementById('notificationNum').innerHTML = exceedStatusCount;
-				document.getElementById('notificationAlert').style.display = "inline";
-			}
-		}
-	};
-
-	xhttp.open("GET","http://localhost:3000/api/rooms",true);
-
-	const cookies = document.cookie.split("=");
-	let token;
-
-	for (let i=0; i<cookies.length; i++) {
-		if (cookies[i] == "token") {
-			token = cookies[i+1];
-		}
+	if (isExpanded == 'true') {
+		up.style.display = 'none';
+		down.style.display = 'inline';
 	}
-
-	xhttp.setRequestHeader('Authorization','Bearer ' + token);
-
-	xhttp.send();
+	else {
+		up.style.display = 'inline';
+		down.style.display = 'none';
+	}
 }
