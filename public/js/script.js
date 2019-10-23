@@ -550,7 +550,7 @@ xhttp.onreadystatechange = function () {
 				  '</div></a></div>';
 		}
 		
-		document.getElementById("showRoom").innerHTML += '<div class="room-card col-md-4 col-sm-4 col-xs-6"><a onclick="on()"><div class="img-thumbnail"><img src="https://image.flaticon.com/icons/svg/109/109615.svg" class="add-icon" title="Lyolya"/></div></a></div>';	
+		document.getElementById("showRoom").innerHTML += '<div class="room-card col-md-4 col-sm-4 col-xs-6" data-toggle="modal" data-target="#addRoomModal"><a><div class="img-thumbnail"><img src="https://image.flaticon.com/icons/svg/109/109615.svg" class="add-icon" title="Lyolya"/></div></a></div>';	
 		
 		localStorage.setItem('notifications', JSON.stringify(notifications));
 		console.log(JSON.parse(localStorage.getItem('notifications')));
@@ -1256,5 +1256,31 @@ function onToggleCollapse() {
 	else {
 		up.style.display = 'inline';
 		down.style.display = 'none';
+	}
+}
+
+function addRoom(){
+	var newRoom = document.getElementById("room-name").value;
+	
+	if(newRoom == ""){
+		$( ".shakeInput" ).effect("shake",{direction: "left", distance:0.5, times:2}, 200);
+	} else {
+		var xhttp = new XMLHttpRequest();
+		xhttp.responseType = 'json';
+		var url = 'http://localhost:3000/api/rooms';
+		var params = 'name=' + document.getElementById("room-name").value;
+
+		xhttp.open('POST',url,true);
+
+		xhttp.setRequestHeader('Content-type','application/x-www-form-urlencoded');
+
+		xhttp.onreadystatechange = function() {
+			if(xhttp.readyState == 4 && xhttp.status == 200) {
+				alert("Added ".concat(newRoom.toString()));
+				location.reload(true);
+			}
+		}
+		xhttp.send(params);
+
 	}
 }
