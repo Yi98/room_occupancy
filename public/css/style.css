@@ -86,7 +86,7 @@ hr {
 }
 
 .right-menu-2 {
-	background-color: #F8F9F5;
+	background-color: rgb(246, 247, 244);
 }
 
 .right-menu-icons{
@@ -390,4 +390,7 @@ i.deleteNoticeIcon:hover {
   background: #E53333;
 }
 
-
+.carousel-control-next,
+.carousel-control-prev {
+    filter: invert(100%);
+}

@@ -1289,3 +1289,174 @@ function addRoom(){
 	}
 }
 
+
+// Chart.js
+// People Chart
+const dashPeopleChart = document.getElementById('dashPeopleChart').getContext('2d');
+const peopleChart = new Chart(dashPeopleChart, {
+    // The type of chart we want to create
+    type: 'bar',
+
+    // The data for our dataset
+    data: {
+        labels: ['BYOD', 'Leisure Area'],
+        datasets: [{
+						label: 'Number of people',						
+            backgroundColor: '#FED035',
+						borderColor: '#FED035',
+            data: [10, 8]
+        }]
+    },
+
+    // Configuration options go here
+    options: {
+			legend: {
+        display: false
+    	},
+			scales: {
+				xAxes: [{
+					barPercentage: 0.4
+				}],
+				yAxes: [{
+					scaleLabel: {
+						display: true,
+						labelString: 'People count'
+					},
+					ticks: {
+						beginAtZero: true
+					}
+				}]
+			} 
+		}
+});
+
+// Temperature Chart
+const dashTempChart = document.getElementById('dashTemperatureChart').getContext('2d');
+const tempChart = new Chart(dashTempChart, {
+    // The type of chart we want to create
+    type: 'bar',
+
+    // The data for our dataset
+    data: {
+        labels: ['BYOD', 'Leisure Area'],
+        datasets: [{
+            label: 'Temperature',
+            backgroundColor: '#FF4C3B',
+            borderColor: '#FF4C3B',
+            data: [25, 27]
+        }]
+    },
+
+    // Configuration options go here
+    options: {
+			legend: {
+				display: false
+			},
+			scales: {
+				xAxes: [{
+					barPercentage: 0.4
+				}],
+				yAxes: [{
+					scaleLabel: {
+						display: true,
+						labelString: 'Degree'
+					},
+					ticks: {
+						beginAtZero: true
+					}
+				}]
+			} 
+		}
+});
+
+// Humidity Chart
+const dashHumidChart = document.getElementById('dashHumidityChart').getContext('2d');
+const humidChart = new Chart(dashHumidChart, {
+    // The type of chart we want to create
+    type: 'bar',
+
+    // The data for our dataset
+    data: {
+        labels: ['BYOD', 'Leisure Area'],
+        datasets: [{
+            label: 'Humidity',
+            backgroundColor: '#0072BB',
+            borderColor: '#0072BB',
+            data: [67, 72]
+        }]
+    },
+
+    // Configuration options go here
+    options: {
+			legend: {
+				display: false
+			},
+			scales: {
+				xAxes: [{
+					barPercentage: 0.4
+				}],
+				yAxes: [{
+					scaleLabel: {
+						display: true,
+						labelString: 'RH'
+					},
+					ticks: {
+						beginAtZero: true
+					}
+				}]
+			} 
+		}
+});
+
+
+// Trend Chart
+const dashTrendChart = document.getElementById('dashTrendChart').getContext('2d');
+const trendChart = new Chart(dashTrendChart, {
+    // The type of chart we want to create
+    type: 'line',
+
+    // The data for our dataset
+    data: {
+        labels: ['9:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00'],
+        datasets: [{
+            label: 'Number of People',
+            backgroundColor: '#FED035',
+            borderColor: '#FED035',
+						data: ["19", "20", "15", "17", "10", "25", "30"],
+						fill: false
+						},
+						{
+							label: 'Temperature',
+							backgroundColor: '#FF4C3B',
+							borderColor: '#FF4C3B',
+							data: ["24", "23.5", "24.3", "24", "26", "25.1", "25.5"],
+							fill: false
+						},
+						{
+							label: 'Humidity',
+							backgroundColor: '#0072BB',
+							borderColor: '#0072BB',
+							data: ["78", "68", "69", "59", "72", "62", "70"],
+							fill: false
+						}
+				]
+    },
+
+    // Configuration options go here
+    options: {
+			scales: {
+				xAxes: [{
+					barPercentage: 0.4
+				}],
+				yAxes: [{
+					scaleLabel: {
+						display: true,
+						labelString: 'Status'
+					},
+					ticks: {
+						beginAtZero: true
+					}
+				}]
+			} 
+		}
+});

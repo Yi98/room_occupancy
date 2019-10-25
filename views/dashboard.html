@@ -32,6 +32,8 @@
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.js"></script>
 	<script type="text/javascript" src="tooltipster-master/dist/js/tooltipster.bundle.min.js"></script>
 
+	<!-- Chart.js -->
+	<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
 </head>
 
 <body onload="showDashboard()">
@@ -67,15 +69,183 @@
           </ul>
         </nav>
 	  	</div>
-      <div class="col-md-10 col-sm-12 col-xs-12 c right-menu-2">
-				<div class="container content-wrapper">
+			<div class="col-md-10 col-sm-12 col-xs-12 c right-menu-2">
+
+				<div class="row mt-3">
+					<div class="col-md-4">
+						<div class="row">
+							<div class="col-md-12">
+									<div class="card mx-auto border-0 shadow-sm p-2 mb-4 bg-white rounded" style="width: 24rem;">
+											<div class="card-body pt-2">
+												<h6 class="card-title mb-4">Current Number of People</h6>
+												<canvas id="dashPeopleChart"></canvas>
+											</div>
+										</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<div class="card mx-auto border-0 shadow-sm p-2 mb-4 bg-white rounded" style="width: 24rem;">
+									<div class="card-body pt-2">
+										<h6 class="card-title mb-4" style="display: inline-block">Today's insights</h6>
+										<div class="dropdown float-right">
+												<a class="btn btn-sm dropdown-toggle pt-0" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+													BYOD
+												</a>
+											
+												<div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+													<a class="dropdown-item" href="#">BYOD</a>
+													<a class="dropdown-item" href="#">Leisure Area</a>
+												</div>
+											</div>
+										<div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+												<div class="carousel-inner">
+													<div class="carousel-item active pt-2">
+														<h5 class="text-center">Highest no. of people</h5>
+														<p class="text-center"> 2:00pm - 30 people</p>
+													</div>
+													<div class="carousel-item  pt-2">
+														<h5 class="text-center">Highest temperature</h5>
+														<p class="text-center">5:00pm - 29°C</p>
+													</div>
+													<div class="carousel-item pt-2">
+														<h5 class="text-center">Lowest temperature</h5>
+														<p  class="text-center">4:00am - 22.5°C</p>
+													</div>
+													<div class="carousel-item pt-2">
+														<h5 class="text-center">Highest humidity</h5>
+														<p class="text-center">11:00pm - 75RH</p>
+													</div>
+													<div class="carousel-item pt-2">
+														<h5 class="text-center">Lowest humidity</h5>
+														<p class="text-center"> 1:00pm - 58RH</p>
+													</div>
+												</div>
+												<a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+													<span class="carousel-control-prev-icon text-dark" aria-hidden="true"></span>
+													<span class="sr-only">Previous</span>
+												</a>
+												<a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+													<span class="carousel-control-next-icon text-dark" aria-hidden="true"></span>
+													<span class="sr-only">Next</span>
+												</a>
+											</div>
+									</div>
+									</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<div class="card mx-auto border-0 shadow-sm p-2 mb-4 bg-white rounded" style="width: 24rem;">
+									<div class="card-body pt-2">
+										<h6 class="card-title mb-4">Notification<sup class="ml-1"><span class="badge badge-pill badge-danger">3</span></sup></h6>
+										<ul class="list-group">
+												<li class="list-group-item d-flex justify-content-between align-items-center border-0">
+													BYOD has exceeded maximum capacity
+													<span class="badge badge-primary badge-pill">14</span>
+												</li>
+												<li class="list-group-item d-flex justify-content-between align-items-center">
+													Leisure area has reached moderate capacity
+													<span class="badge badge-primary badge-pill">2</span>
+												</li>
+												<li class="list-group-item d-flex justify-content-between align-items-center">
+													Open lab has dropped to low capacity
+													<span class="badge badge-primary badge-pill">1</span>
+												</li>
+											</ul>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="col-md-8">
+						<div class="row">
+							<div class="col-md-6">
+								<div class="card mx-auto border-0 shadow-sm p-2 mb-4 bg-white rounded" style="width: 24rem;">
+										<div class="card-body pt-2">
+											<h6 class="card-title mb-4">Current Temperature</h6>
+											<canvas id="dashTemperatureChart"></canvas>
+										</div>
+									</div>
+							</div>
+							<div class="col-md-6">
+									<div class="card mx-auto border-0 shadow-sm p-2 mb-4 bg-white rounded" style="width: 24rem;">
+											<div class="card-body pt-2">
+												<h6 class="card-title mb-4">Current Humidity</h6>
+												<canvas id="dashHumidityChart"></canvas>
+											</div>
+										</div>
+								</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<div class="card border-0 shadow-sm p-2 mb-4 bg-white rounded" style="width: 100%;">
+									<div class="card-body pt-2">
+										<h6 class="card-title mb-4" style="display:inline-block;">Today's trends</h6>
+										<div class="dropdown float-right">
+												<a class="btn btn-sm dropdown-toggle py-0" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+													BYOD
+												</a>
+											
+												<div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+													<a class="dropdown-item" href="#">BYOD</a>
+													<a class="dropdown-item" href="#">Leisure Area</a>
+												</div>
+											</div>
+										<canvas id="dashTrendChart"></canvas>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>				
+
+				<!-- <div class="container content-wrapper">
 					<div class="row" id="showRoom"></div>
-					
-				</div>
+				</div> -->
     	</div>
 		</div>
 	</div>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
 	<!-- Modal -->
 	<div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
 			<div class="modal-dialog modal-dialog-centered" role="document">
@@ -147,6 +317,5 @@
 		</div>
   	<!-- javascript -->
 	<script src="js/script.js" type="text/javascript"></script>
-
 </body>
 </html>
