@@ -379,6 +379,7 @@ i.deleteNoticeIcon:hover {
 }
 
 ::-webkit-scrollbar {
+  height: 4px;
   width: 4px;
 }
 
@@ -387,10 +388,30 @@ i.deleteNoticeIcon:hover {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #E53333;
+  /* background: linear-gradient(to right, #B066FE, #63E2FF); */
+  background: linear-gradient(to right, #868f96, #596164);
+
 }
 
-.carousel-control-next,
+/* .carousel-control-next,
 .carousel-control-prev {
     filter: invert(100%);
+} */
+
+#insightItem {
+  background-image: linear-gradient(to left, #7cf2fa, #66a6ff);
+}
+
+.scrolling-wrapper {
+  overflow-x: auto;
+  overflow-y: hidden;
+  white-space: nowrap;
+}
+
+.card {
+  display: inline-block;
+}
+  
+.roomCard {
+  cursor: pointer;
 }
