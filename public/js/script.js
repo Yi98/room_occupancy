@@ -1293,6 +1293,19 @@ function addRoom(){
 // Chart.js
 // Trend Chart
 const dashTrendChart = document.getElementById('dashTrendChart').getContext('2d');
+
+const peopleGradient = dashTrendChart.createLinearGradient(500, 0, 100, 0);
+peopleGradient.addColorStop(0, "#667eea");
+peopleGradient.addColorStop(1, "#764ba2");
+
+const tempGradient = dashTrendChart.createLinearGradient(500, 0, 100, 0);
+tempGradient.addColorStop(0, "#fc4a1a");
+tempGradient.addColorStop(1, "#f7b733");
+
+const humidGradient = dashTrendChart.createLinearGradient(500, 0, 100, 0);
+humidGradient.addColorStop(0, "#ff758c");
+humidGradient.addColorStop(1, "#ff7eb3");
+
 const trendChart = new Chart(dashTrendChart, {
     // The type of chart we want to create
     type: 'line',
@@ -1302,22 +1315,22 @@ const trendChart = new Chart(dashTrendChart, {
         labels: ['9:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00'],
         datasets: [{
             label: 'Number of People',
-            backgroundColor: '#FED035',
-            borderColor: '#FED035',
+            backgroundColor: peopleGradient,
+            borderColor: peopleGradient,
 						data: ["19", "20", "15", "17", "10", "25", "30"],
 						fill: false
 						},
 						{
 							label: 'Temperature',
-							backgroundColor: '#FF4C3B',
-							borderColor: '#FF4C3B',
+							backgroundColor: tempGradient,
+							borderColor: tempGradient,
 							data: ["24", "23.5", "24.3", "24", "26", "25.1", "25.5"],
 							fill: false
 						},
 						{
 							label: 'Humidity',
-							backgroundColor: '#0072BB',
-							borderColor: '#0072BB',
+							backgroundColor: humidGradient,
+							borderColor: humidGradient,
 							data: ["78", "68", "69", "59", "72", "62", "70"],
 							fill: false
 						}

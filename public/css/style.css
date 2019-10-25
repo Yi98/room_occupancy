@@ -86,7 +86,7 @@ hr {
 }
 
 .right-menu-2 {
-	background-color: rgb(246, 247, 244);
+	background-color: rgb(243, 243, 243);
 }
 
 .right-menu-icons{
@@ -389,7 +389,7 @@ i.deleteNoticeIcon:hover {
 
 ::-webkit-scrollbar-thumb {
   /* background: linear-gradient(to right, #B066FE, #63E2FF); */
-  background: linear-gradient(to right, #868f96, #596164);
+  background: linear-gradient(to left, #93a5cf , #e4efe9);
 
 }
 
@@ -414,4 +414,8 @@ i.deleteNoticeIcon:hover {
   
 .roomCard {
   cursor: pointer;
+}
+
+.closeBtn {
+  outline: #FFFFFF !important;
 }
