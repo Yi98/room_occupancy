@@ -1355,3 +1355,37 @@ const trendChart = new Chart(dashTrendChart, {
 			} 
 		}
 });
+
+
+$( ".closeBtn" ).click(function() {
+  $(this.parentNode).fadeOut(500 , function() {
+		const noticeNum = document.getElementById('noticeNum');
+		noticeNum.innerHTML -= 1;
+
+		if (noticeNum.innerHTML == 0) {
+			const emptyNotice = document.getElementById('emptyNotice');
+
+			const noticeNum = document.getElementById('noticeNum');
+			noticeNum.style.display = "none";
+
+			$(emptyNotice).fadeIn(1500 , function() {
+				emptyNotice.style.display = "block";
+			});
+		}
+	});
+});
+
+
+$( "#clearNotice" ).click(function() {
+	const allNotice = this.parentNode.parentNode.getElementsByTagName('p');
+	const emptyNotice = document.getElementById('emptyNotice');
+
+  $(allNotice).fadeOut(300 , function() {
+		const noticeNum = document.getElementById('noticeNum');
+		noticeNum.style.display = "none";
+	});
+
+	$(emptyNotice).fadeIn(1500 , function() {
+		emptyNotice.style.display = "block";
+	});
+});
