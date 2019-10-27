@@ -536,3 +536,7 @@ div.skeleton-content-3 {
     background-position: top right;
   }
 }
+
+.roomData {
+  font-weight: 400;
+}
