@@ -16,8 +16,6 @@ socket.on("sensor", function(msg) {
 });
 
 
-
-
 function checkIsLogin() {			
 	var http = new XMLHttpRequest();
 
@@ -35,33 +33,36 @@ function checkIsLogin() {
 };
 
 
-
-
 function searchRoom(){
 	var input, filter, ul, li, i, a, txtValue;
 	input = document.getElementById("search");
 	filter = input.value.toUpperCase();
-	ul = document.getElementById("showRoom");
+	ul = document.getElementById("roomCardContainer");
 	li = ul.getElementsByTagName("div");
+
+	let available = 0
 	for (i = 0; i < li.length; i++) {
 		a = li[i].getElementsByTagName("h4")[0];
 		txtValue = a.textContent || a.innerText;
 		if (txtValue.toUpperCase().indexOf(filter) > -1) {
 				li[i].style.display = "";
+				available++;
 		} else {
 				li[i].style.display = "none";
 		}
 	}
+
+	if (available == 0) {
+		document.getElementById("roomCardContainer").innerHTML += `
+				<div class="roomCard card mr-4 border-0 shadow-sm py-4 mb-4 bg-white rounded" style="width: 24rem;"">
+					<div class="card-body pt-2 text-center">
+						<h4 class="card-title mb-4">Add new room</h4>
+					</div>
+				</div>
+			`
+	}
 }
 
-
-function on() {
-  document.getElementById("overlay").style.display = "block";
-}
-
-function off() {
-  document.getElementById("overlay").style.display = "none";
-}
 
 function showChart() {
   var url_string = window.location.href;
@@ -78,8 +79,8 @@ function showChart() {
 
 function xhrChart(roomId){
 	var dateRange = document.getElementById("choosenRange").innerHTML.toString();
-    var startDate = new Date(dateRange.substring(11, 0));
-    var endDate = new Date(dateRange.substring(25, 14));
+    var startDate = new Date(dateRange.substring(0, 10));
+    var endDate = new Date(dateRange.substring(13, 23));
     var diff_in_days = (endDate.getTime() - startDate.getTime()) / (1000 * 3600 * 24);
     var peopleData = []; // people data
 		var peopleDataCounter = []; // people data counter
@@ -87,7 +88,7 @@ function xhrChart(roomId){
     var tempDataCounter = []; // temp data counter
     var humidData = []; // humidity data
     var humidDataCounter = []; // humidity data counter
-		var hourTime = ['8:00','10:00','12:00','14:00','16:00','18:00','20:00','22:00','00:00'];
+		var hourTime = ['0:00','1:00','2:00','3:00','4:00','5:00','6:00','7:00','8:00','9:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00','18:00','19:00','20:00','21:00','22:00','23:00'];
 		var dailyTime = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
 		var weeklyTime = ['Week 1', 'Week 2','Week 3', 'Week 4'];
 		var monthlyTime = ['January', 'February','March','April','May','June','July','August','September','Octorber','November','December'];
@@ -110,7 +111,6 @@ function xhrChart(roomId){
 						  
 						//Today Chart
 						if(diff_in_days == 0){
-							console.log(diff_in_days);
 							//Initialise the array
 							for(var i=0; i<hourTime.length; i++){
 								peopleData[i] = 0;
@@ -173,7 +173,7 @@ function xhrChart(roomId){
 								humidData[i] = Math.round((humidData[i]/humidDataCounter[i]) * 100) / 100;
 							}
 							
-							
+							showAllChart(hourTime,peopleData,tempData,humidData);
 							showPeopleChart(hourTime, peopleData); //Illustrate the chart
 							showTemperatureChart(hourTime, tempData); //Illustrate the chart
 							showHumidityChart(hourTime, humidData); //Illustrate the chart
@@ -243,7 +243,7 @@ function xhrChart(roomId){
 								humidData[i] = Math.round((humidData[i]/humidDataCounter[i]) * 100) / 100;
 							}
 							
-							
+							showAllChart(dailyTime,peopleData,tempData,humidData);
 							showPeopleChart(dailyTime, peopleData); //Illustrate the chart
 							showTemperatureChart(dailyTime, tempData); //Illustrate the chart
 							showHumidityChart(dailyTime, humidData); //Illustrate the chart
@@ -352,6 +352,7 @@ function xhrChart(roomId){
 								humidData[i] = Math.round((humidData[i]/humidDataCounter[i]) * 100) / 100;
 							}
 							
+							showAllChart(weeklyTime,peopleData,tempData,humidData);
 							showPeopleChart(weeklyTime, peopleData); //Illustrate the chart
 							showTemperatureChart(weeklyTime, tempData); //Illustrate the chart
 							showHumidityChart(weeklyTime, humidData); //Illustrate the chart
@@ -421,7 +422,7 @@ function xhrChart(roomId){
 								humidData[i] = Math.round((humidData[i]/humidDataCounter[i]) * 100) / 100;
 							}
 							
-							
+							showAllChart(monthlyTime,peopleData,tempData,humidData);
 							showPeopleChart(monthlyTime, peopleData); //Illustrate the chart
 							showTemperatureChart(monthlyTime, tempData); //Illustrate the chart
 							showHumidityChart(monthlyTime, humidData); //Illustrate the chart
@@ -436,132 +437,244 @@ function xhrChart(roomId){
     xhttp.send();
 }
 
+function showAllChart(x,y1,y2,y3){
+	new Highcharts.chart('allChart', {
+			credits: false,
+
+			exporting:{
+				buttons:{
+					contextButton:{
+							enabled:false
+						}
+				}
+			},
+
+			title: {
+					text: 'Swinburne University of Technology Sarawak'
+			},
+			xAxis: {
+					categories: x
+			},
+			series: [{
+					data: y1,
+					name: 'People Count'
+			},
+		 {
+			 		data: y2,
+					name: 'Temperature'
+
+		 },
+		 {
+				  data: y3,
+					name: 'Humidity'
+		 }]
+	});
+}
+
 function showPeopleChart(x,y){
 	new Highcharts.chart('peopleChart', {
-					credits: false,
-				
-					exporting:{
-						buttons:{
-							contextButton:{
-									enabled:false
-								}
+			credits: false,
+
+			exporting:{
+				buttons:{
+					contextButton:{
+							enabled:false
 						}
-					},
-				
-					title: {
-							text: 'Number Of People'
-					},
-					xAxis: {
-							categories: x
-					},
-					series: [{
-							data: y	,
-							name: 'People Count'
-					}]
-			});
+				}
+			},
+
+			title: {
+					text: 'Number Of People'
+			},
+			xAxis: {
+					categories: x
+			},
+			series: [{
+					data: y	,
+					name: 'People Count'
+			}]
+	});
 }
 
 function showTemperatureChart(x,y){
 	new Highcharts.chart('temperatureChart', {
-					credits: false,
-				
-					exporting:{
-						buttons:{
-							contextButton:{
-									enabled:false
-								}
-						}
-					},
-				
-					title: {
-							text: 'Temperature'
-					},
-					xAxis: {
-							categories: x
-					},
-					series: [{
-							data: y,
-							name: '°C'
-					}]
-			});
+		credits: false,
+		
+		exporting:{
+			buttons:{
+				contextButton:{
+						enabled:false
+					}
+			}
+		},
+		
+		title: {
+            text: 'Temperature'
+		},
+		xAxis: {
+				categories: x
+		},
+		yAxis: {
+				title: {
+						text: 'Temperature (°C)'
+				},
+				plotLines: [{
+						value: 0,
+						width: 1,
+						color: '#808080'
+				}]
+		},
+		tooltip: {
+				valueSuffix: '°C'
+		},
+		series: [{
+				data: y,
+				name: "Room Temperature"
+		}]
+	});
 }
 
 function showHumidityChart(x,y){
 	new Highcharts.chart('humidityChart', {
-					credits: false,
-				
-					exporting:{
-						buttons:{
-							contextButton:{
-									enabled:false
-								}
-						}
-					},
-				
-					title: {
-							text: 'Humidity'
-					},
-					xAxis: {
-							categories: x
-					},
-					series: [{
-							data: y,
-							name: '%'
-					}]
-			});
+		credits: false,
+		
+		exporting:{
+			buttons:{
+				contextButton:{
+						enabled:false
+					}
+			}
+		},
+		
+		title: {
+            text: 'Humidity'
+		},
+		xAxis: {
+				categories: x
+		},
+		yAxis: {
+				title: {
+						text: 'Humidity (RH)'
+				},
+				plotLines: [{
+						value: 0,
+						width: 1,
+						color: '#808080'
+				}]
+		},
+		tooltip: {
+				valueSuffix: 'RH'
+		},
+		series: [{
+				data: y,
+				name: "Room Humidity"
+		}]
+	});
 }
 
 
+// function showDashboard(){
+// var xhttp = new XMLHttpRequest();
+// xhttp.responseType = 'json';
 
+// xhttp.onreadystatechange = function () {
+// 	if(this.readyState == 4 && this.status == 200) {
+// 		var result = this.response;
 
-function showDashboard(){
-var xhttp = new XMLHttpRequest();
-xhttp.responseType = 'json';
+// 		const notifications = [];
 
-xhttp.onreadystatechange = function () {
-	if(this.readyState == 4 && this.status == 200) {
-		var result = this.response;
+// 		for(var room in result.rooms){
+// 			var status = result.rooms[room].people.length;
+// 			if(status < 25){
+// 				var statusMsg = "Low";
+// 			}
+			
+// 			if(status > 25){
+// 				var statusMsg = "Moderate";
+// 			}
+			
+// 			if(status > 50){
+// 				var statusMsg = "Full";
+// 			}
 
-		const notifications = [];
+// 			notifications.push([{name: result.rooms[room].name, status: statusMsg}]);
 
-		for(var room in result.rooms){
-			var status = result.rooms[room].people.length;
-			if(status < 25){
-				var statusMsg = "Low";
+// 			document.getElementById("showRoom").innerHTML += '<div class="room-card col-md-4 col-sm-4 col-xs-6" ><a onclick="window.open(\'/chart/' + result.rooms[room]._id + '\')"><div class="img-thumbnail">' +
+// 									'<h4>' + result.rooms[room].name + '</h4>' +
+// 									'<p>' + 'Number of People: ' + result.rooms[room].people.length + '</p>' +
+// 									'<p>' + 'Temperature: ' + "<span class='temperature'>0</span>" + '&#x2103;</p>' +
+// 									'<p>' + 'Humidity: ' + "<span class='humidity'>0</span>" + '</p>' + 
+// 				  '<p>' + 'Status: <span class="roomStatus">' + statusMsg + '</span></p>'+
+// 				  '<span style="display:none" class="room-id">'+ result.rooms[room]._id +'</span>' +
+// 				  '</div></a></div>';
+// 		}
+		
+// 		document.getElementById("showRoom").innerHTML += '<div class="room-card col-md-4 col-sm-4 col-xs-6" data-toggle="modal" data-target="#addRoomModal"><a><div class="img-thumbnail"><img src="https://image.flaticon.com/icons/svg/109/109615.svg" class="add-icon" title="Lyolya"/></div></a></div>';	
+		
+// 		localStorage.setItem('notifications', JSON.stringify(notifications));
+// 		console.log(JSON.parse(localStorage.getItem('notifications')));
+// 	}
+// };
+
+// 	xhttp.open("GET","http://localhost:3000/api/rooms",true);
+
+// 	xhttp.send();
+
+// };
+
+function showDashboardRooms() {
+	var xhttp = new XMLHttpRequest();
+	xhttp.responseType = 'json';
+
+	xhttp.onreadystatechange = function () {
+		if(this.readyState == 4 && this.status == 200) {
+			var result = this.response;
+
+			const notifications = [];
+
+			const placeholderRooms = document.getElementById('placeholderRooms');
+			placeholderRooms.parentNode.removeChild(placeholderRooms);
+
+			for(var room in result.rooms){
+				var status = result.rooms[room].people.length;
+				if(status < 25){
+					var statusMsg = "Low";
+				}
+				
+				if(status > 25){
+					var statusMsg = "Moderate";
+				}
+				
+				if(status > 50){
+					var statusMsg = "Full";
+				}
+
+				notifications.push([{name: result.rooms[room].name, status: statusMsg}]);
+
+				document.getElementById("roomCardContainer").innerHTML += `
+					<div class="roomCard card mr-4 border-0 shadow-sm py-4 mb-4 bg-white rounded" style="width: 24rem;" onclick="onRoomClicked('${result.rooms[room].name}')">
+						<div class="card-body pt-2 text-center">
+							<h4 class="card-title mb-4">${result.rooms[room].name}</h4>
+							<h6>Number of people: <span class="roomData people">N/A</span></h6>
+							<h6>Temperature: <span class="roomData temperature">N/A</span></h6>
+							<h6>Humidity: <span class="roomData humidity">N/A</span></h6>
+						</div>
+					</div>
+				`
 			}
 			
-			if(status > 25){
-				var statusMsg = "Moderate";
-			}
+			// document.getElementById("showRoom").innerHTML += '<div class="room-card col-md-4 col-sm-4 col-xs-6" data-toggle="modal" data-target="#addRoomModal"><a><div class="img-thumbnail"><img src="https://image.flaticon.com/icons/svg/109/109615.svg" class="add-icon" title="Lyolya"/></div></a></div>';	
 			
-			if(status > 50){
-				var statusMsg = "Full";
-			}
-
-			notifications.push([{name: result.rooms[room].name, status: statusMsg}]);
-
-			document.getElementById("showRoom").innerHTML += '<div class="room-card col-md-4 col-sm-4 col-xs-6" ><a onclick="window.open(\'/chart/' + result.rooms[room]._id + '\')"><div class="img-thumbnail">' +
-									'<h4>' + result.rooms[room].name + '</h4>' +
-									'<p>' + 'Number of People: ' + result.rooms[room].people.length + '</p>' +
-									'<p>' + 'Temperature: ' + "<span class='temperature'>0</span>" + '&#x2103;</p>' +
-									'<p>' + 'Humidity: ' + "<span class='humidity'>0</span>" + '</p>' + 
-				  '<p>' + 'Status: <span class="roomStatus">' + statusMsg + '</span></p>'+
-				  '<span style="display:none" class="room-id">'+ result.rooms[room]._id +'</span>' +
-				  '</div></a></div>';
+			// localStorage.setItem('notifications', JSON.stringify(notifications));
+			// console.log(JSON.parse(localStorage.getItem('notifications')));
 		}
-		
-		document.getElementById("showRoom").innerHTML += '<div class="room-card col-md-4 col-sm-4 col-xs-6" data-toggle="modal" data-target="#addRoomModal"><a><div class="img-thumbnail"><img src="https://image.flaticon.com/icons/svg/109/109615.svg" class="add-icon" title="Lyolya"/></div></a></div>';	
-		
-		localStorage.setItem('notifications', JSON.stringify(notifications));
-		console.log(JSON.parse(localStorage.getItem('notifications')));
-	}
-};
+	};
 
 	xhttp.open("GET","http://localhost:3000/api/rooms",true);
 
 	xhttp.send();
+}
 
-};
 
 // Issue:
 // 1. the generate report only work after the chart has been generated on the web page
@@ -1287,4 +1400,111 @@ function addRoom(){
 		xhttp.send(params);
 
 	}
+}
+
+
+// Chart.js
+// Trend Chart
+const dashTrendChart = document.getElementById('dashTrendChart').getContext('2d');
+
+const peopleGradient = dashTrendChart.createLinearGradient(500, 0, 100, 0);
+peopleGradient.addColorStop(0, "#667eea");
+peopleGradient.addColorStop(1, "#764ba2");
+
+const tempGradient = dashTrendChart.createLinearGradient(500, 0, 100, 0);
+tempGradient.addColorStop(0, "#fc4a1a");
+tempGradient.addColorStop(1, "#f7b733");
+
+const humidGradient = dashTrendChart.createLinearGradient(500, 0, 100, 0);
+humidGradient.addColorStop(0, "#ff758c");
+humidGradient.addColorStop(1, "#ff7eb3");
+
+const trendChart = new Chart(dashTrendChart, {
+    // The type of chart we want to create
+    type: 'line',
+
+    // The data for our dataset
+    data: {
+        labels: ['9:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00'],
+        datasets: [{
+            label: 'Number of People',
+            backgroundColor: peopleGradient,
+            borderColor: peopleGradient,
+						data: ["19", "20", "15", "17", "10", "25", "30"],
+						fill: false
+						},
+						{
+							label: 'Temperature',
+							backgroundColor: tempGradient,
+							borderColor: tempGradient,
+							data: ["24", "23.5", "24.3", "24", "26", "25.1", "25.5"],
+							fill: false
+						},
+						{
+							label: 'Humidity',
+							backgroundColor: humidGradient,
+							borderColor: humidGradient,
+							data: ["78", "68", "69", "59", "72", "62", "70"],
+							fill: false
+						}
+				]
+    },
+
+    // Configuration options go here
+    options: {
+			scales: {
+				xAxes: [{
+					barPercentage: 0.4
+				}],
+				yAxes: [{
+					scaleLabel: {
+						display: true,
+						labelString: 'Status'
+					},
+					ticks: {
+						beginAtZero: true
+					}
+				}]
+			} 
+		}
+});
+
+
+$( ".closeBtn" ).click(function() {
+  $(this.parentNode).fadeOut(500 , function() {
+		const noticeNum = document.getElementById('noticeNum');
+		noticeNum.innerHTML -= 1;
+
+		if (noticeNum.innerHTML == 0) {
+			const emptyNotice = document.getElementById('emptyNotice');
+
+			const noticeNum = document.getElementById('noticeNum');
+			noticeNum.style.display = "none";
+
+			$(emptyNotice).fadeIn(1500 , function() {
+				emptyNotice.style.display = "block";
+			});
+		}
+	});
+});
+
+
+$( "#clearNotice" ).click(function() {
+	const allNotice = this.parentNode.parentNode.getElementsByTagName('p');
+	const emptyNotice = document.getElementById('emptyNotice');
+
+  $(allNotice).fadeOut(300 , function() {
+		const noticeNum = document.getElementById('noticeNum');
+		noticeNum.style.display = "none";
+	});
+
+	$(emptyNotice).fadeIn(1500 , function() {
+		emptyNotice.style.display = "block";
+	});
+});
+
+
+function onRoomClicked(roomName) {
+	document.getElementById('insightRoom').innerHTML = roomName;
+	document.getElementById('trendRoom').innerHTML = roomName;
 }
