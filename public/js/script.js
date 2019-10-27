@@ -16,8 +16,6 @@ socket.on("sensor", function(msg) {
 });
 
 
-
-
 function checkIsLogin() {			
 	var http = new XMLHttpRequest();
 
@@ -35,22 +33,33 @@ function checkIsLogin() {
 };
 
 
-
-
 function searchRoom(){
 	var input, filter, ul, li, i, a, txtValue;
 	input = document.getElementById("search");
 	filter = input.value.toUpperCase();
-	ul = document.getElementById("showRoom");
+	ul = document.getElementById("roomCardContainer");
 	li = ul.getElementsByTagName("div");
+
+	let available = 0
 	for (i = 0; i < li.length; i++) {
 		a = li[i].getElementsByTagName("h4")[0];
 		txtValue = a.textContent || a.innerText;
 		if (txtValue.toUpperCase().indexOf(filter) > -1) {
 				li[i].style.display = "";
+				available++;
 		} else {
 				li[i].style.display = "none";
 		}
+	}
+
+	if (available == 0) {
+		document.getElementById("roomCardContainer").innerHTML += `
+				<div class="roomCard card mr-4 border-0 shadow-sm py-4 mb-4 bg-white rounded" style="width: 24rem;"">
+					<div class="card-body pt-2 text-center">
+						<h4 class="card-title mb-4">Add new room</h4>
+					</div>
+				</div>
+			`
 	}
 }
 
@@ -564,56 +573,108 @@ function showHumidityChart(x,y){
 }
 
 
+// function showDashboard(){
+// var xhttp = new XMLHttpRequest();
+// xhttp.responseType = 'json';
 
+// xhttp.onreadystatechange = function () {
+// 	if(this.readyState == 4 && this.status == 200) {
+// 		var result = this.response;
 
-function showDashboard(){
-var xhttp = new XMLHttpRequest();
-xhttp.responseType = 'json';
+// 		const notifications = [];
 
-xhttp.onreadystatechange = function () {
-	if(this.readyState == 4 && this.status == 200) {
-		var result = this.response;
+// 		for(var room in result.rooms){
+// 			var status = result.rooms[room].people.length;
+// 			if(status < 25){
+// 				var statusMsg = "Low";
+// 			}
+			
+// 			if(status > 25){
+// 				var statusMsg = "Moderate";
+// 			}
+			
+// 			if(status > 50){
+// 				var statusMsg = "Full";
+// 			}
 
-		const notifications = [];
+// 			notifications.push([{name: result.rooms[room].name, status: statusMsg}]);
 
-		for(var room in result.rooms){
-			var status = result.rooms[room].people.length;
-			if(status < 25){
-				var statusMsg = "Low";
+// 			document.getElementById("showRoom").innerHTML += '<div class="room-card col-md-4 col-sm-4 col-xs-6" ><a onclick="window.open(\'/chart/' + result.rooms[room]._id + '\')"><div class="img-thumbnail">' +
+// 									'<h4>' + result.rooms[room].name + '</h4>' +
+// 									'<p>' + 'Number of People: ' + result.rooms[room].people.length + '</p>' +
+// 									'<p>' + 'Temperature: ' + "<span class='temperature'>0</span>" + '&#x2103;</p>' +
+// 									'<p>' + 'Humidity: ' + "<span class='humidity'>0</span>" + '</p>' + 
+// 				  '<p>' + 'Status: <span class="roomStatus">' + statusMsg + '</span></p>'+
+// 				  '<span style="display:none" class="room-id">'+ result.rooms[room]._id +'</span>' +
+// 				  '</div></a></div>';
+// 		}
+		
+// 		document.getElementById("showRoom").innerHTML += '<div class="room-card col-md-4 col-sm-4 col-xs-6" data-toggle="modal" data-target="#addRoomModal"><a><div class="img-thumbnail"><img src="https://image.flaticon.com/icons/svg/109/109615.svg" class="add-icon" title="Lyolya"/></div></a></div>';	
+		
+// 		localStorage.setItem('notifications', JSON.stringify(notifications));
+// 		console.log(JSON.parse(localStorage.getItem('notifications')));
+// 	}
+// };
+
+// 	xhttp.open("GET","http://localhost:3000/api/rooms",true);
+
+// 	xhttp.send();
+
+// };
+
+function showDashboardRooms() {
+	var xhttp = new XMLHttpRequest();
+	xhttp.responseType = 'json';
+
+	xhttp.onreadystatechange = function () {
+		if(this.readyState == 4 && this.status == 200) {
+			var result = this.response;
+
+			const notifications = [];
+
+			const placeholderRooms = document.getElementById('placeholderRooms');
+			placeholderRooms.parentNode.removeChild(placeholderRooms);
+
+			for(var room in result.rooms){
+				var status = result.rooms[room].people.length;
+				if(status < 25){
+					var statusMsg = "Low";
+				}
+				
+				if(status > 25){
+					var statusMsg = "Moderate";
+				}
+				
+				if(status > 50){
+					var statusMsg = "Full";
+				}
+
+				notifications.push([{name: result.rooms[room].name, status: statusMsg}]);
+
+				document.getElementById("roomCardContainer").innerHTML += `
+					<div class="roomCard card mr-4 border-0 shadow-sm py-4 mb-4 bg-white rounded" style="width: 24rem;" onclick="onRoomClicked('${result.rooms[room].name}')">
+						<div class="card-body pt-2 text-center">
+							<h4 class="card-title mb-4">${result.rooms[room].name}</h4>
+							<h6>Number of people: <span class="roomData people">N/A</span></h6>
+							<h6>Temperature: <span class="roomData temperature">N/A</span></h6>
+							<h6>Humidity: <span class="roomData humidity">N/A</span></h6>
+						</div>
+					</div>
+				`
 			}
 			
-			if(status > 25){
-				var statusMsg = "Moderate";
-			}
+			// document.getElementById("showRoom").innerHTML += '<div class="room-card col-md-4 col-sm-4 col-xs-6" data-toggle="modal" data-target="#addRoomModal"><a><div class="img-thumbnail"><img src="https://image.flaticon.com/icons/svg/109/109615.svg" class="add-icon" title="Lyolya"/></div></a></div>';	
 			
-			if(status > 50){
-				var statusMsg = "Full";
-			}
-
-			notifications.push([{name: result.rooms[room].name, status: statusMsg}]);
-
-			document.getElementById("showRoom").innerHTML += '<div class="room-card col-md-4 col-sm-4 col-xs-6" ><a onclick="window.open(\'/chart/' + result.rooms[room]._id + '\')"><div class="img-thumbnail">' +
-									'<h4>' + result.rooms[room].name + '</h4>' +
-									'<p>' + 'Number of People: ' + result.rooms[room].people.length + '</p>' +
-									'<p>' + 'Temperature: ' + "<span class='temperature'>0</span>" + '&#x2103;</p>' +
-									'<p>' + 'Humidity: ' + "<span class='humidity'>0</span>" + '</p>' + 
-				  '<p>' + 'Status: <span class="roomStatus">' + statusMsg + '</span></p>'+
-				  '<span style="display:none" class="room-id">'+ result.rooms[room]._id +'</span>' +
-				  '</div></a></div>';
+			// localStorage.setItem('notifications', JSON.stringify(notifications));
+			// console.log(JSON.parse(localStorage.getItem('notifications')));
 		}
-		
-		document.getElementById("showRoom").innerHTML += '<div class="room-card col-md-4 col-sm-4 col-xs-6" data-toggle="modal" data-target="#addRoomModal"><a><div class="img-thumbnail"><img src="https://image.flaticon.com/icons/svg/109/109615.svg" class="add-icon" title="Lyolya"/></div></a></div>';	
-		
-		localStorage.setItem('notifications', JSON.stringify(notifications));
-		console.log(JSON.parse(localStorage.getItem('notifications')));
-	}
-};
+	};
 
 	xhttp.open("GET","http://localhost:3000/api/rooms",true);
 
 	xhttp.send();
+}
 
-};
 
 // Issue:
 // 1. the generate report only work after the chart has been generated on the web page
@@ -1407,3 +1468,43 @@ const trendChart = new Chart(dashTrendChart, {
 			} 
 		}
 });
+
+
+$( ".closeBtn" ).click(function() {
+  $(this.parentNode).fadeOut(500 , function() {
+		const noticeNum = document.getElementById('noticeNum');
+		noticeNum.innerHTML -= 1;
+
+		if (noticeNum.innerHTML == 0) {
+			const emptyNotice = document.getElementById('emptyNotice');
+
+			const noticeNum = document.getElementById('noticeNum');
+			noticeNum.style.display = "none";
+
+			$(emptyNotice).fadeIn(1500 , function() {
+				emptyNotice.style.display = "block";
+			});
+		}
+	});
+});
+
+
+$( "#clearNotice" ).click(function() {
+	const allNotice = this.parentNode.parentNode.getElementsByTagName('p');
+	const emptyNotice = document.getElementById('emptyNotice');
+
+  $(allNotice).fadeOut(300 , function() {
+		const noticeNum = document.getElementById('noticeNum');
+		noticeNum.style.display = "none";
+	});
+
+	$(emptyNotice).fadeIn(1500 , function() {
+		emptyNotice.style.display = "block";
+	});
+});
+
+
+function onRoomClicked(roomName) {
+	document.getElementById('insightRoom').innerHTML = roomName;
+	document.getElementById('trendRoom').innerHTML = roomName;
+}

@@ -35,7 +35,7 @@
 	<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
 </head>
 
-<body onload="showDashboard()">
+<body onload="showDashboardRooms()">
   <div class="container-fluid">
     <div class="row nav-wrapper">
       <div class="col-md-2 col-sm-12 col-xs-12 left-menu-1">
@@ -69,45 +69,54 @@
         </nav>
 	  	</div>
 			<div class="col-md-10 col-sm-12 col-xs-12 c right-menu-2">
-
 				<div class="row mt-3 mb-4">
-						<div class="scrolling-wrapper">
-							<div class="col-md-12">
-								<div class="roomCard card mr-4 border-0 shadow-sm py-4 mb-4 bg-white rounded" style="width: 24rem;">
-									<div class="card-body pt-2 text-center">
-										<h4 class="card-title mb-4">BYOD</h4>
-										<h6>Number of people: 0</h6>
-										<h6>Temperature: 0</h6>
-										<h6>Humidity: 0</h6>
-									</div>
+					<div id="scrolling-wrapper">
+						<div id="roomCardContainer" class="col-md-12">
+							<div id="placeholderRooms">
+								<div class="roomCard card mr-4 border-0 shadow-sm py-4 mb-4 bg-white rounded" style="width: 24rem;" onclick="onRoomClicked('${result.rooms[room].name}')">
+										<div class="skeleton-wrapper-inner">
+											<div class="skeleton-wrapper-body">
+												<div class="skeleton-author"></div>
+												<div class="skeleton-content-1"></div>
+												<div class="skeleton-content-2"></div>
+												<div class="skeleton-content-3"></div>
+											</div>
+										</div>
 								</div>
 
-								<div class="roomCard card mr-4 border-0 shadow-sm py-4 mb-4 bg-white rounded" style="width: 24rem;">
-									<div class="card-body pt-2 text-center">
-										<h4 class="card-title mb-4">Leisure Area</h4>
-										<h6>Number of people: 0</h6>
-										<h6>Temperature: 0</h6>
-										<h6>Humidity: 0</h6>
-									</div>
+								<div class="roomCard card mr-4 border-0 shadow-sm py-4 mb-4 bg-white rounded" style="width: 24rem;" onclick="onRoomClicked('${result.rooms[room].name}')">
+										<div class="skeleton-wrapper-inner">
+											<div class="skeleton-wrapper-body">
+												<div class="skeleton-author"></div>
+												<div class="skeleton-content-1"></div>
+												<div class="skeleton-content-2"></div>
+												<div class="skeleton-content-3"></div>
+											</div>
+										</div>
 								</div>
 
-								<div class="roomCard card mr-4 border-0 shadow-sm py-4 mb-4 bg-white rounded" style="width: 24rem;">
-									<div class="card-body pt-2 text-center">
-										<h4 class="card-title mb-4">Open Lab</h4>
-										<h6>Number of people: 0</h6>
-										<h6>Temperature: 0</h6>
-										<h6>Humidity: 0</h6>
-									</div>
+								<div class="roomCard card mr-4 border-0 shadow-sm py-4 mb-4 bg-white rounded" style="width: 24rem;" onclick="onRoomClicked('${result.rooms[room].name}')">
+										<div class="skeleton-wrapper-inner">
+											<div class="skeleton-wrapper-body">
+												<div class="skeleton-author"></div>
+												<div class="skeleton-content-1"></div>
+												<div class="skeleton-content-2"></div>
+												<div class="skeleton-content-3"></div>
+											</div>
+										</div>
 								</div>
 
-								<div class="roomCard card mr-4 border-0 shadow-sm py-4 mb-4 bg-white rounded" style="width: 24rem;">
-									<div class="card-body pt-2 text-center">
-										<h4 class="card-title mb-4">Library</h4>
-										<h6>Number of people: 0</h6>
-										<h6>Temperature: 0</h6>
-										<h6>Humidity: 0</h6>
-									</div>
+								<div class="roomCard card mr-4 border-0 shadow-sm py-4 mb-4 bg-white rounded" style="width: 24rem;" onclick="onRoomClicked('${result.rooms[room].name}')">
+										<div class="skeleton-wrapper-inner">
+											<div class="skeleton-wrapper-body">
+												<div class="skeleton-author"></div>
+												<div class="skeleton-content-1"></div>
+												<div class="skeleton-content-2"></div>
+												<div class="skeleton-content-3"></div>
+											</div>
+										</div>
 								</div>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -120,14 +129,7 @@
 									<div class="card-body pt-2">
 										<h6 class="card-title mb-4" style="display: inline-block">Today's insights</h6>
 										<div class="dropdown float-right">
-												<a class="btn btn-sm dropdown-toggle pt-0" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-													BYOD
-												</a>
-											
-												<div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-													<a class="dropdown-item" href="#">BYOD</a>
-													<a class="dropdown-item" href="#">Leisure Area</a>
-												</div>
+												<p id="insightRoom">BYOD</p>
 											</div>
 										<div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
 												<div class="carousel-inner">
@@ -169,7 +171,7 @@
 							<div class="col-md-12">
 								<div id="noticeItem" class="card mx-auto border-0 shadow-sm p-2 mb-4 bg-white rounded" style="width: 24rem;">
 									<div class="card-body pt-2">
-										<h6 class="card-title mb-4 border-bottom pb-3"><i class="fa fa-bell mr-1"></i>Notification<span class="badge badge-pill badge-danger ml-2">2</span></h6>
+										<h6 class="card-title mb-4 border-bottom pb-3"><i class="fa fa-bell mr-1"></i>Notification<span class="badge badge-pill badge-danger ml-2" id="noticeNum">3</span><p id="clearNotice" class="float-right">Clear all</p></h6>
 										<p>BYOD has reached <strong>maximum</strong> capacity
 											<button type="button" class="close closeBtn" aria-label="Close">
 												<span aria-hidden="true">&times;</span>
@@ -185,6 +187,7 @@
 												<span aria-hidden="true">&times;</span>
 											</button>
 										</p>
+										<h6 id="emptyNotice">There is no notification right now :)</h6>
 									</div>
 								</div>
 							</div>
@@ -198,15 +201,8 @@
 									<div class="card-body pt-2">
 										<h6 class="card-title mb-4" style="display:inline-block;">Today's trends</h6>
 										<div class="dropdown float-right">
-												<a class="btn btn-sm dropdown-toggle py-0" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-													BYOD
-												</a>
-											
-												<div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-													<a class="dropdown-item" href="#">BYOD</a>
-													<a class="dropdown-item" href="#">Leisure Area</a>
-												</div>
-											</div>
+											<p id="trendRoom">BYOD</p>	
+										</div>
 										<canvas id="dashTrendChart"></canvas>
 									</div>
 								</div>
