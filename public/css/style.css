@@ -559,12 +559,12 @@ i.deleteNoticeIcon:hover {
 /* Series options */
 /* Default colors */
  .highcharts-color-0 {
-	 fill: #f45b5b ;
-	 stroke: #f45b5b;
+	 fill: #000000;
+	 stroke: #000000;
 }
  .highcharts-color-1 {
-	 fill: #90ee7e;
-	 stroke: #90ee7e;
+	 fill: #f45b5b ;
+	 stroke: #f45b5b;
 }
  .highcharts-color-2 {
 	 fill: #2b908f;
