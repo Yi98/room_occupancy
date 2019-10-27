@@ -55,14 +55,6 @@ function searchRoom(){
 }
 
 
-function on() {
-  document.getElementById("overlay").style.display = "block";
-}
-
-function off() {
-  document.getElementById("overlay").style.display = "none";
-}
-
 function showChart() {
   var url_string = window.location.href;
   var url = new URL(url_string);
@@ -78,8 +70,8 @@ function showChart() {
 
 function xhrChart(roomId){
 	var dateRange = document.getElementById("choosenRange").innerHTML.toString();
-    var startDate = new Date(dateRange.substring(11, 0));
-    var endDate = new Date(dateRange.substring(25, 14));
+    var startDate = new Date(dateRange.substring(0, 10));
+    var endDate = new Date(dateRange.substring(13, 23));
     var diff_in_days = (endDate.getTime() - startDate.getTime()) / (1000 * 3600 * 24);
     var peopleData = []; // people data
 		var peopleDataCounter = []; // people data counter
@@ -87,7 +79,7 @@ function xhrChart(roomId){
     var tempDataCounter = []; // temp data counter
     var humidData = []; // humidity data
     var humidDataCounter = []; // humidity data counter
-		var hourTime = ['8:00','10:00','12:00','14:00','16:00','18:00','20:00','22:00','00:00'];
+		var hourTime = ['0:00','1:00','2:00','3:00','4:00','5:00','6:00','7:00','8:00','9:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00','18:00','19:00','20:00','21:00','22:00','23:00'];
 		var dailyTime = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
 		var weeklyTime = ['Week 1', 'Week 2','Week 3', 'Week 4'];
 		var monthlyTime = ['January', 'February','March','April','May','June','July','August','September','Octorber','November','December'];
@@ -110,7 +102,6 @@ function xhrChart(roomId){
 						  
 						//Today Chart
 						if(diff_in_days == 0){
-							console.log(diff_in_days);
 							//Initialise the array
 							for(var i=0; i<hourTime.length; i++){
 								peopleData[i] = 0;
@@ -173,7 +164,7 @@ function xhrChart(roomId){
 								humidData[i] = Math.round((humidData[i]/humidDataCounter[i]) * 100) / 100;
 							}
 							
-							
+							showAllChart(hourTime,peopleData,tempData,humidData);
 							showPeopleChart(hourTime, peopleData); //Illustrate the chart
 							showTemperatureChart(hourTime, tempData); //Illustrate the chart
 							showHumidityChart(hourTime, humidData); //Illustrate the chart
@@ -243,7 +234,7 @@ function xhrChart(roomId){
 								humidData[i] = Math.round((humidData[i]/humidDataCounter[i]) * 100) / 100;
 							}
 							
-							
+							showAllChart(dailyTime,peopleData,tempData,humidData);
 							showPeopleChart(dailyTime, peopleData); //Illustrate the chart
 							showTemperatureChart(dailyTime, tempData); //Illustrate the chart
 							showHumidityChart(dailyTime, humidData); //Illustrate the chart
@@ -352,6 +343,7 @@ function xhrChart(roomId){
 								humidData[i] = Math.round((humidData[i]/humidDataCounter[i]) * 100) / 100;
 							}
 							
+							showAllChart(weeklyTime,peopleData,tempData,humidData);
 							showPeopleChart(weeklyTime, peopleData); //Illustrate the chart
 							showTemperatureChart(weeklyTime, tempData); //Illustrate the chart
 							showHumidityChart(weeklyTime, humidData); //Illustrate the chart
@@ -421,7 +413,7 @@ function xhrChart(roomId){
 								humidData[i] = Math.round((humidData[i]/humidDataCounter[i]) * 100) / 100;
 							}
 							
-							
+							showAllChart(monthlyTime,peopleData,tempData,humidData);
 							showPeopleChart(monthlyTime, peopleData); //Illustrate the chart
 							showTemperatureChart(monthlyTime, tempData); //Illustrate the chart
 							showHumidityChart(monthlyTime, humidData); //Illustrate the chart
@@ -436,79 +428,139 @@ function xhrChart(roomId){
     xhttp.send();
 }
 
+function showAllChart(x,y1,y2,y3){
+	new Highcharts.chart('allChart', {
+			credits: false,
+
+			exporting:{
+				buttons:{
+					contextButton:{
+							enabled:false
+						}
+				}
+			},
+
+			title: {
+					text: 'Swinburne University of Technology Sarawak'
+			},
+			xAxis: {
+					categories: x
+			},
+			series: [{
+					data: y1,
+					name: 'People Count'
+			},
+		 {
+			 		data: y2,
+					name: 'Temperature'
+
+		 },
+		 {
+				  data: y3,
+					name: 'Humidity'
+		 }]
+	});
+}
+
 function showPeopleChart(x,y){
 	new Highcharts.chart('peopleChart', {
-					credits: false,
-				
-					exporting:{
-						buttons:{
-							contextButton:{
-									enabled:false
-								}
+			credits: false,
+
+			exporting:{
+				buttons:{
+					contextButton:{
+							enabled:false
 						}
-					},
-				
-					title: {
-							text: 'Number Of People'
-					},
-					xAxis: {
-							categories: x
-					},
-					series: [{
-							data: y	,
-							name: 'People Count'
-					}]
-			});
+				}
+			},
+
+			title: {
+					text: 'Number Of People'
+			},
+			xAxis: {
+					categories: x
+			},
+			series: [{
+					data: y	,
+					name: 'People Count'
+			}]
+	});
 }
 
 function showTemperatureChart(x,y){
 	new Highcharts.chart('temperatureChart', {
-					credits: false,
-				
-					exporting:{
-						buttons:{
-							contextButton:{
-									enabled:false
-								}
-						}
-					},
-				
-					title: {
-							text: 'Temperature'
-					},
-					xAxis: {
-							categories: x
-					},
-					series: [{
-							data: y,
-							name: '°C'
-					}]
-			});
+		credits: false,
+		
+		exporting:{
+			buttons:{
+				contextButton:{
+						enabled:false
+					}
+			}
+		},
+		
+		title: {
+            text: 'Temperature'
+		},
+		xAxis: {
+				categories: x
+		},
+		yAxis: {
+				title: {
+						text: 'Temperature (°C)'
+				},
+				plotLines: [{
+						value: 0,
+						width: 1,
+						color: '#808080'
+				}]
+		},
+		tooltip: {
+				valueSuffix: '°C'
+		},
+		series: [{
+				data: y,
+				name: "Room Temperature"
+		}]
+	});
 }
 
 function showHumidityChart(x,y){
 	new Highcharts.chart('humidityChart', {
-					credits: false,
-				
-					exporting:{
-						buttons:{
-							contextButton:{
-									enabled:false
-								}
-						}
-					},
-				
-					title: {
-							text: 'Humidity'
-					},
-					xAxis: {
-							categories: x
-					},
-					series: [{
-							data: y,
-							name: '%'
-					}]
-			});
+		credits: false,
+		
+		exporting:{
+			buttons:{
+				contextButton:{
+						enabled:false
+					}
+			}
+		},
+		
+		title: {
+            text: 'Humidity'
+		},
+		xAxis: {
+				categories: x
+		},
+		yAxis: {
+				title: {
+						text: 'Humidity (RH)'
+				},
+				plotLines: [{
+						value: 0,
+						width: 1,
+						color: '#808080'
+				}]
+		},
+		tooltip: {
+				valueSuffix: 'RH'
+		},
+		series: [{
+				data: y,
+				name: "Room Humidity"
+		}]
+	});
 }
 
 
