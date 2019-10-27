@@ -52,11 +52,13 @@ function searchRoom(){
 		}
 	}
 
+
+	// fix here
 	if (available == 0) {
-		document.getElementById("roomCardContainer").innerHTML += `
-				<div class="roomCard card mr-4 border-0 shadow-sm py-4 mb-4 bg-white rounded" style="width: 24rem;"">
+		document.getElementById("roomCardContainer").innerHTML = `
+				<div class="roomCard card mr-4 border-0 shadow-sm py-4 mb-4 bg-white rounded"  data-toggle="modal" data-target="#addRoomModal" style="width: 24rem;"">
 					<div class="card-body pt-2 text-center">
-						<h4 class="card-title mb-4">Add new room</h4>
+						<h4 class="card-title mb-4">Add a new room</h4>
 					</div>
 				</div>
 			`
