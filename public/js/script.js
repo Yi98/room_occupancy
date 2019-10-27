@@ -563,6 +563,60 @@ xhttp.onreadystatechange = function () {
 
 };
 
+function showDashboardRooms() {
+	var xhttp = new XMLHttpRequest();
+	xhttp.responseType = 'json';
+
+	xhttp.onreadystatechange = function () {
+		if(this.readyState == 4 && this.status == 200) {
+			var result = this.response;
+
+			const notifications = [];
+
+			const placeholderRooms = document.getElementById('placeholderRooms');
+			placeholderRooms.parentNode.removeChild(placeholderRooms);
+
+			for(var room in result.rooms){
+				var status = result.rooms[room].people.length;
+				if(status < 25){
+					var statusMsg = "Low";
+				}
+				
+				if(status > 25){
+					var statusMsg = "Moderate";
+				}
+				
+				if(status > 50){
+					var statusMsg = "Full";
+				}
+
+				notifications.push([{name: result.rooms[room].name, status: statusMsg}]);
+
+				document.getElementById("roomCardContainer").innerHTML += `
+					<div class="roomCard card mr-4 border-0 shadow-sm py-4 mb-4 bg-white rounded" style="width: 24rem;" onclick="onRoomClicked('${result.rooms[room].name}')">
+						<div class="card-body pt-2 text-center">
+							<h4 class="card-title mb-4">${result.rooms[room].name}</h4>
+							<h6>Number of people: ${result.rooms[room].people.length}</h6>
+							<h6>Temperature: <span class="currentTemp">0</span></h6>
+							<h6>Humidity: <span class="currentHumid">0</span></h6>
+						</div>
+					</div>
+				`
+			}
+			
+			// document.getElementById("showRoom").innerHTML += '<div class="room-card col-md-4 col-sm-4 col-xs-6" data-toggle="modal" data-target="#addRoomModal"><a><div class="img-thumbnail"><img src="https://image.flaticon.com/icons/svg/109/109615.svg" class="add-icon" title="Lyolya"/></div></a></div>';	
+			
+			// localStorage.setItem('notifications', JSON.stringify(notifications));
+			// console.log(JSON.parse(localStorage.getItem('notifications')));
+		}
+	};
+
+	xhttp.open("GET","http://localhost:3000/api/rooms",true);
+
+	xhttp.send();
+}
+
+
 // Issue:
 // 1. the generate report only work after the chart has been generated on the web page
 function directToPdf() {
@@ -1389,3 +1443,9 @@ $( "#clearNotice" ).click(function() {
 		emptyNotice.style.display = "block";
 	});
 });
+
+
+function onRoomClicked(roomName) {
+	document.getElementById('insightRoom').innerHTML = roomName;
+	document.getElementById('trendRoom').innerHTML = roomName;
+}
