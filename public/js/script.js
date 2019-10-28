@@ -73,6 +73,7 @@ function showChart() {
 	xhrChart(roomId);
 
   $('#choosenRange').on('DOMSubtreeModified', function() {
+		document.getElementById("allChart").innerHTML = '<div class="d-flex h-100 justify-content-center"><div class="align-self-center"><div class="spinner-border text-danger" style="width:3rem; height:3rem;"><span class="sr-only">Loading...</span></div></div></div>';
     xhrChart(roomId);
   });
 };
