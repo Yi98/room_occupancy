@@ -48,7 +48,7 @@
               <div class="col-md-2 col-sm-12 col-xs-12 left-menu-1">
                 <a href="dashboard.html"><img src="images/logo.jpeg" class="img-fluid logo  mt-3" alt="logo"></a>
               </div>
-              <div class="col-md-10 col-sm-12 col-xs-12 right-menu-1">
+              <div class="col-md-10 col-sm-12 col-xs-12 right-menu-1 mt-4 align-self-center">
                 <div class="row">
                     <div class="col-md-2 col-page-title">
                         <p class="pageTitle m-0 mt-1">Users</p>
@@ -195,18 +195,22 @@
                       </div>
   
                       <div class = "container">
+
                         <div class="row">
-													<div class="col-md-10	 col-sm-6 col-xs-6" id ="rowDesc">User's list</div>
-													<div class="col-md-2 col-sm-6 col-xs-6">
-														<div class="select">
-															<select name="state" id="maxRows" class="dropdown" style="width:100px;">
-																	<option value="5000">Show All</option>
-																	<option value="5">5</option>
-																	<option value="10">10</option>
-															</select>
-															<div class="select__arrow"></div>
-														</div>
-													</div>
+                            <div class="col-md-10 col-sm-6 col-xs-6" id ="rowDesc">User's list</div>
+                            <div class="col-md-2 col-sm-6 col-xs-6">
+                                <div class="select">
+                                    <select name="state" id="maxRows" class="dropdown" style="width:100px;">
+                                            <option value="5000">Show All</option>
+                                            <option value="5">5</option>
+                                            <option value="10">10</option>
+                                    </select>
+                                    <div class="select__arrow"></div>
+                                </div>
+                            </div>
+                            <div class = "col-md-10 col-sm-6 col-xs-6">
+                                <input type = "text" id = "searchInput" onkeyup = "search()" placeholder = "&#61442; Search for user..." title = "Type in a name">
+                            </div>
                         </div> 
                          
                          <div class="alert alert-dismissible fade show" role="alert" id="userEditAlert"></div>
