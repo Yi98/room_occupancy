@@ -35,7 +35,7 @@
 	<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
 </head>
 
-<body onload="showDashboardRooms()">
+<body onload="showDashboardRooms(); loadTodayTrend();">
   <div class="container-fluid">
     <div class="row nav-wrapper">
       <div class="col-md-2 col-sm-12 col-xs-12 left-menu-1">
@@ -44,14 +44,13 @@
       <div class="col-md-10 col-sm-12 col-xs-12 right-menu-1">
 				<div class="row">
 					<div class="col-md-2 col-page-title">
-						<p class="pageTitle">Dashboard</p>
+						<p class="pageTitle m-0 mt-1">Dashboard</p>
 					</div>
-					<div class="col-md-8 col-sm-8 col-xs-8">
-						<input type="text" id="search" class="form-control searchRoom" placeholder="Search for room here..." onkeyup="searchRoom()">
+					<div class="col-md-8 col-sm-8 col-xs-8 p-0">
+						<input type="text" id="search" class="form-control searchRoom m-0" placeholder="Search for rooms ..." onkeyup="searchRoom()">
 					</div>
 					<div class="col-md-2 col-sm-4 col-xs-4">
-						<p class="right-menu-icons">
-							<a href="#" data-toggle="tooltip" data-placement="left" title="Notication"><i class="fa fa-bell"  data-toggle="modal" data-target="#exampleModalLong"><sup id="notificationAlert"><span class="badge badge-pill badge-danger" id="notificationNum">0</span></sup></i></a>
+						<p class="right-menu-icons float-right mr-4">
 							<a href="#" data-placement="top" data-toggle="tooltip" title="Log Out"><i class="fa fa-sign-out" id="logoutBtn" onclick="onLogout()"></i></a>
 						</p>
 					</div>
@@ -73,7 +72,7 @@
 					<div id="scrolling-wrapper">
 						<div id="roomCardContainer" class="col-md-12">
 							<div id="placeholderRooms">
-								<div class="roomCard card mr-4 border-0 shadow-sm py-4 mb-4 bg-white rounded" style="width: 24rem;" onclick="onRoomClicked('${result.rooms[room].name}')">
+								<div class="tempRoomCard card mr-4 border-0 shadow-sm py-4 mb-4 bg-white rounded" style="width: 24rem;" onclick="onRoomClicked('${result.rooms[room].name}')">
 										<div class="skeleton-wrapper-inner">
 											<div class="skeleton-wrapper-body">
 												<div class="skeleton-author"></div>
@@ -84,7 +83,7 @@
 										</div>
 								</div>
 
-								<div class="roomCard card mr-4 border-0 shadow-sm py-4 mb-4 bg-white rounded" style="width: 24rem;" onclick="onRoomClicked('${result.rooms[room].name}')">
+								<div class="tempRoomCard card mr-4 border-0 shadow-sm py-4 mb-4 bg-white rounded" style="width: 24rem;" onclick="onRoomClicked('${result.rooms[room].name}')">
 										<div class="skeleton-wrapper-inner">
 											<div class="skeleton-wrapper-body">
 												<div class="skeleton-author"></div>
@@ -95,7 +94,7 @@
 										</div>
 								</div>
 
-								<div class="roomCard card mr-4 border-0 shadow-sm py-4 mb-4 bg-white rounded" style="width: 24rem;" onclick="onRoomClicked('${result.rooms[room].name}')">
+								<div class="tempRoomCard card mr-4 border-0 shadow-sm py-4 mb-4 bg-white rounded" style="width: 24rem;" onclick="onRoomClicked('${result.rooms[room].name}')">
 										<div class="skeleton-wrapper-inner">
 											<div class="skeleton-wrapper-body">
 												<div class="skeleton-author"></div>
@@ -106,7 +105,7 @@
 										</div>
 								</div>
 
-								<div class="roomCard card mr-4 border-0 shadow-sm py-4 mb-4 bg-white rounded" style="width: 24rem;" onclick="onRoomClicked('${result.rooms[room].name}')">
+								<div class="tempRoomCard card mr-4 border-0 shadow-sm py-4 mb-4 bg-white rounded" style="width: 24rem;" onclick="onRoomClicked('${result.rooms[room].name}')">
 										<div class="skeleton-wrapper-inner">
 											<div class="skeleton-wrapper-body">
 												<div class="skeleton-author"></div>
@@ -122,10 +121,10 @@
 				</div>
 
 				<div class="row mt-3">
-					<div class="col-md-4">
+					<div class="col-lg-4 col-md-12">
 						<div class="row">
 							<div class="col-md-12">
-								<div id="insightItem" class="card mx-auto border-0 shadow-sm p-2 mb-4 bg-white rounded" style="width: 24rem;">
+								<div id="insightItem" class="card mx-auto border-0 shadow-sm p-2 mb-4 bg-white rounded" style="width: 100%;">
 									<div class="card-body pt-2">
 										<h6 class="card-title mb-4" style="display: inline-block">Today's insights</h6>
 										<div class="dropdown float-right">
@@ -169,7 +168,7 @@
 						</div>
 						<div class="row">
 							<div class="col-md-12">
-								<div id="noticeItem" class="card mx-auto border-0 shadow-sm p-2 mb-4 bg-white rounded" style="width: 24rem;">
+								<div id="noticeItem" class="card mx-auto border-0 shadow-sm p-2 mb-4 bg-white rounded" style="width: 100%;">
 									<div class="card-body pt-2">
 										<h6 class="card-title mb-4 border-bottom pb-3"><i class="fa fa-bell mr-1"></i>Notification<span class="badge badge-pill badge-danger ml-2" id="noticeNum">3</span><p id="clearNotice" class="float-right">Clear all</p></h6>
 										<p>BYOD has reached <strong>maximum</strong> capacity
@@ -194,7 +193,7 @@
 						</div>
 					</div>
 
-					<div class="col-md-8">
+					<div class="col-lg-8 col-md-12">
 						<div class="row">
 							<div class="col-md-12">
 								<div class="card border-0 shadow-sm p-2 mb-4 bg-white rounded" style="width: 100%;">
@@ -257,54 +256,6 @@
 
 	
 	<!-- Modal -->
-	<div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-			<div class="modal-dialog modal-dialog-centered" role="document">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h5 class="modal-title mx-auto" id="exampleModalLongTitle">Notifications</h5>
-					</div>
-					<div class="modal-body">
-						<div class="row">
-							<div class="card text-white bg-success mb-3 mx-4 w-100">
-								<div class="card-body">
-									<div class="row">
-										<div class="col-md-11">
-												<p class="card-text"><strong>Info</strong>: Open Lab has dropped back to low capacity.</p>
-										</div>
-										<div class="col-md-1 deleteNotice"><i class="fa fa-times float-right text-light deleteNoticeIcon"></i></div>
-									</div>
-								</div>
-							</div>
-							<div class="card text-white bg-warning mb-3 mx-4 w-100">
-								<div class="card-body">
-									<div class="row">
-										<div class="col-md-11">
-												<p class="card-text"><strong>Warning</strong>: BYOD has reached moderate capacity.</p>
-										</div>
-										<div class="col-md-1 deleteNotice"><i class="fa fa-times float-right text-light deleteNoticeIcon"></i></div>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="row">
-								<div class="card text-white bg-danger mb-3 mx-4 w-100">
-									<div class="card-body">
-										<div class="row">
-											<div class="col-md-11">
-													<p class="card-text text-left"><strong>Danger</strong>: Leisure Area has reached full capacity.</p>
-											</div>
-											<div class="col-md-1 deleteNotice"><i class="fa fa-times float-right text-light deleteNoticeIcon"></i></div>
-										</div>
-									</div>
-								</div>
-							</div>
-					</div>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-					</div>
-				</div>
-			</div>
-		</div>
 		<div class="modal fade" id="addRoomModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
 			<div class="modal-dialog modal-dialog-centered" role="document">
 				<div class="modal-content">

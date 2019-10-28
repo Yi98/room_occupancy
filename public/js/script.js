@@ -54,15 +54,15 @@ function searchRoom(){
 
 
 	// fix here
-	if (available == 0) {
-		document.getElementById("roomCardContainer").innerHTML = `
-				<div class="roomCard card mr-4 border-0 shadow-sm py-4 mb-4 bg-white rounded"  data-toggle="modal" data-target="#addRoomModal" style="width: 24rem;"">
-					<div class="card-body pt-2 text-center">
-						<h4 class="card-title mb-4">Add a new room</h4>
-					</div>
-				</div>
-			`
-	}
+	// if (available == 0) {
+	// 	document.getElementById("roomCardContainer").innerHTML = `
+	// 			<div class="roomCard card mr-4 border-0 shadow-sm py-4 mb-4 bg-white rounded"  data-toggle="modal" data-target="#addRoomModal" style="width: 24rem;"">
+	// 				<div class="card-body pt-2 text-center">
+	// 					<h4 class="card-title mb-4">Add a new room</h4>
+	// 				</div>
+	// 			</div>
+	// 		`
+	// }
 }
 
 
@@ -673,6 +673,60 @@ function showDashboardRooms() {
 	};
 
 	xhttp.open("GET","http://localhost:3000/api/rooms",true);
+
+	xhttp.send();
+}
+
+function loadTodayTrend() {
+	loadTodayTemperature();
+	loadTodayHumidity();
+	loadTodayPeople();
+}
+
+function loadTodayTemperature() {
+	var xhttp = new XMLHttpRequest();
+	xhttp.responseType = 'json';
+
+	xhttp.onreadystatechange = function () {
+		if(this.readyState == 4 && this.status == 200) {
+			var result = this.response;
+			console.log(result);
+		}
+	};
+
+	xhttp.open("GET","http://localhost:3000/api/data/5db583ed1c9d4400009a20f2/temperature?period=today",true);
+
+	xhttp.send();
+}
+
+function loadTodayHumidity() {
+	var xhttp = new XMLHttpRequest();
+	xhttp.responseType = 'json';
+
+	xhttp.onreadystatechange = function () {
+		if(this.readyState == 4 && this.status == 200) {
+			var result = this.response;
+			console.log(result);
+		}
+	};
+
+	xhttp.open("GET","http://localhost:3000/api/data/5db583ed1c9d4400009a20f2/humidity",true);
+
+	xhttp.send();
+}
+
+function loadTodayPeople() {
+	var xhttp = new XMLHttpRequest();
+	xhttp.responseType = 'json';
+
+	xhttp.onreadystatechange = function () {
+		if(this.readyState == 4 && this.status == 200) {
+			var result = this.response;
+			console.log(result);
+		}
+	};
+
+	xhttp.open("GET","http://localhost:3000/api/data/5db583ed1c9d4400009a20f2/people",true);
 
 	xhttp.send();
 }

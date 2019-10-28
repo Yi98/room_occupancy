@@ -135,12 +135,10 @@ hr {
 
 .searchRoom{
 	width:40%;
-
 }
 
 .searchRoom:focus{
-	border:2px solid red;
-	outline: none;
+	outline: none !important;
 }
 
 .fa{
@@ -416,7 +414,8 @@ i.deleteNoticeIcon:hover {
   display: inline-block;
 }
   
-.roomCard {
+.roomCard,
+.tempRoomCard {
   cursor: pointer;
 }
 
@@ -1159,4 +1158,82 @@ div.skeleton-content-3 {
 
 .roomData {
   font-weight: 400;
+}
+
+#search {
+	border-radius: 25px;	
+}
+
+textarea:hover, 
+input:hover, 
+textarea:active, 
+input:active, 
+textarea:focus, 
+input:focus,
+button:focus,
+button:active,
+button:hover,
+label:focus,
+.btn:active,
+.btn.active
+{
+    outline:0px !important;
+    -webkit-appearance:none;
+    box-shadow: none !important;
+}
+
+
+#search {
+	-webkit-appearance: textfield;
+	-webkit-box-sizing: content-box;
+	font-family: inherit;
+	font-size: 100%;
+}
+
+#search::-webkit-search-decoration,
+#search::-webkit-search-cancel-button {
+	display: none; 
+}
+
+
+#search {
+	background: #fff url(https://static.tumblr.com/ftv85bp/MIXmud4tx/search-icon.png) no-repeat 9px center;
+	border: solid 1px #ccc;
+	padding: 9px 10px 9px 40px;
+	width: 150px;
+	height: 20px;
+	
+	-webkit-border-radius: 10em;
+	-moz-border-radius: 10em;
+	border-radius: 10em;
+	
+	-webkit-transition: all .3s;
+	-moz-transition: all .3s;
+	transition: all .3s;
+}
+
+#search:focus {
+	width: 220px;
+	background-color: #fff;
+	
+	-webkit-box-shadow: 0 0 5px rgba(109,207,246,.5);
+	-moz-box-shadow: 0 0 5px rgba(109,207,246,.5);
+	box-shadow: 0 0 5px rgba(109,207,246,.5);
+}
+
+#search:-moz-placeholder {
+	color: #999;
+}
+
+#search::-webkit-input-placeholder {
+	color: #999;
+}
+
+
+#addRoomInput {
+	border: 0;
+  outline: 0;
+  background: transparent;
+	border-bottom: 1px solid white;
+	color: white;
 }
