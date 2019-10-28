@@ -1064,10 +1064,24 @@ i.deleteNoticeIcon:hover {
   width: 0;
 }
 
+.addCard:after {    
+  background: none repeat scroll 0 0 transparent;
+  top: 0;
+  content: "";
+  display: block;
+  height: 4px;
+  left: 50%;
+  position: absolute;
+  background: linear-gradient(to right, #ee623b, #ebb160);
+  transition: width 0.3s ease 0s, left 0.3s ease 0s;
+  width: 0;
+}
+
 .roomCard:hover:after { 
   width: 100%; 
   left: 0; 
 }
+
 
 #emptyNotice {
   display: none;
