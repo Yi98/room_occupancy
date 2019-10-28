@@ -790,7 +790,7 @@ function showDashboardRooms() {
 				notifications.push([{name: result.rooms[room].name, status: statusMsg}]);
 
 				document.getElementById("roomCardContainer").innerHTML += `
-					<div class="roomCard card mr-4 border-0 shadow-sm py-4 mb-4 bg-white rounded" style="width: 24rem;" onclick="onRoomClicked('${result.rooms[room].name}')">
+					<div class="roomCard card mr-4 border-0 shadow-sm py-4 mb-4 bg-white rounded" style="width: 24rem;" onclick="onRoomClicked('${result.rooms[room]._id}')">
 						<div class="card-body pt-2 text-center">
 							<h4 class="card-title mb-4">${result.rooms[room].name}</h4>
 							<h6>Number of people: <span class="roomData people">N/A</span></h6>
@@ -1717,7 +1717,8 @@ $( "#clearNotice" ).click(function() {
 });
 
 
-function onRoomClicked(roomName) {
-	document.getElementById('insightRoom').innerHTML = roomName;
-	document.getElementById('trendRoom').innerHTML = roomName;
+function onRoomClicked(roomId) {
+	window.location.replace(`/chart/${roomId}`);
+	// document.getElementById('insightRoom').innerHTML = roomName;
+	// document.getElementById('trendRoom').innerHTML = roomName;
 }
