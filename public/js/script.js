@@ -578,6 +578,12 @@ function showAllChart(x,y1,y2,y3){
 						}
 				}
 			},
+		
+			layout: {'vertical',
+            align: 'right',
+            verticalAlign: 'middle',
+            borderWidth: 0
+			},
 
 			title: {
 					text: 'Swinburne University of Technology Sarawak'

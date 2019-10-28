@@ -67,11 +67,11 @@ hr {
 }
 
 .left-menu-1 {
-	background-color: #231F20;
+	background-color: #212629;
 }
 
 .left-menu-2{
-	background-color: #231F20;
+	background-color: #212629;
 	padding-top:1.5%;
 }
 
@@ -81,7 +81,6 @@ hr {
 
 .right-menu-1{
 	background-color: #FFFFFD;
-	padding: 1.5% 1% 2% 1%;
 
 }
 
@@ -108,29 +107,28 @@ hr {
 }
 
 #myNavbar ul li a{
-	color:white;
+	color:#F6F7F9;
 	font-family: "Roboto", "Helvetica Neue", "Arial", "sans-serif";
-	font-weight: 400;
+	font-weight: 100;
 	text-transform:uppercase;
 	padding:6% 0 6% 0;
 }
 
 #myNavbar ul li a:hover{
-	background-color:#473f41;
+	background-color:#6D6E72;
 	opacity: 0.5;
 	color:white;
 	font-family: "Roboto", "Helvetica Neue", "Arial", "sans-serif";
-	font-weight: bold;
-	border-radius: 3px;
+	border-radius: 2px;
 }
 
 #myNavbar ul li .active{
-	background-color:#eeecec;
-	opacity:0.5;
+	background-color:#F6F7F9;
+	opacity: 0.6;
 	color:black;
 	font-family: "Roboto", "Helvetica Neue", "Arial", "sans-serif";
 	font-weight: bold;
-	border-radius: 5px;
+	border-radius: 2px;
 }
 
 .searchRoom{
@@ -459,7 +457,6 @@ i.deleteNoticeIcon:hover {
 }
 /* Titles */
  .highcharts-title {
-	 fill: #;
 	 text-transform: uppercase;
 	 font-size: 20px;
 }
@@ -481,7 +478,7 @@ i.deleteNoticeIcon:hover {
  .highcharts-axis-labels {
 	 fill: #3e3e40;
 	 cursor: default;
-	 font-size: 0.9em;
+	 font-size: 1.3em;
 }
  .highcharts-grid-line {
 	 fill: none;
@@ -510,7 +507,7 @@ i.deleteNoticeIcon:hover {
  .highcharts-credits {
 	 cursor: pointer;
 	 fill: #666;
-	 font-size: 0.7em;
+	 font-size: 1em;
 	 transition: fill 250ms, font-size 250ms;
 }
  .highcharts-credits:hover {
@@ -730,6 +727,8 @@ i.deleteNoticeIcon:hover {
 	 font-weight: bold;
 	 cursor: pointer;
 	 stroke-width: 0;
+	 font-size: 1.5em;
+
 }
  .highcharts-legend-item:hover text {
 	 fill: #fff;
@@ -881,6 +880,7 @@ i.deleteNoticeIcon:hover {
 }
  .highcharts-button text {
 	 fill: black;
+	 
 }
  .highcharts-button-hover {
 	 fill: #acf;
@@ -1167,4 +1167,8 @@ div.skeleton-content-3 {
 
 .roomData {
   font-weight: 400;
+}
+
+#myNavbar .nav-item .menu-li{
+	font-family: 'Montserrat', sans-serif;
 }

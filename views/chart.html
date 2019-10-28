@@ -41,9 +41,8 @@
 			<div class="col-md-2 col-sm-12 col-xs-12 left-menu-1">
 					<img src="https://www.swinburne.edu.au/content/dam/media/brand/swin-logo-h-RGB.jpg/_jcr_content/renditions/cq5dam.web.1280.1280.jpeg" class="img-fluid logo pt-3" alt="logo">
 				</div>
-				<div class="col-md-10 col-sm-12 col-xs-12 right-menu-1">
+				<div class="col-md-10 col-sm-12 col-xs-12 right-menu-1 mt-4 align-self-center">
 					<div class="row">
-
 						<div class="col-md-8 col-page-title text-left">
 							<p class="pageTitle">Room information : <span id="room_name"></span></p>
 						</div>
@@ -76,39 +75,39 @@
 				<div class="col-md-10 col-sm-12 col-xs-12 c right-menu-2">
 					<div class="chart-wrapper">
 						<div class="row container">
-									<div class="col-md-3" id="reportrange" style="display: inline-block">
-										<i class="fa fa-calendar"></i>&nbsp;
-										<span id="choosenRange"></span>
-										<i class="fa fa-caret-down"></i>
-									</div>
-									<div class="col-md-9 col-xs-12 col-sm-12">
-										<button type="button" class="btn float-left btn-info" onclick="directToPdf()">Generate Report</button>
-									</div>
+							<div class="col-md-3" id="reportrange" style="display: inline-block">
+								<i class="fa fa-calendar"></i>&nbsp;
+								<span id="choosenRange"></span>
+								<i class="fa fa-caret-down"></i>
+							</div>
+							<div class="col-md-9 col-xs-12 col-sm-12">
+								<button type="button" class="btn float-left btn-info" onclick="directToPdf()">Generate Report</button>
+							</div>
 										
-						<script type="text/javascript">
-								$(function() {
-										var start = moment();
-										var end = moment();
+							<script type="text/javascript">
+									$(function() {
+											var start = moment();
+											var end = moment();
 
-										function cb(start, end) {
-												$('#reportrange span').html(start.format('MM/DD/YYYY') + ' - ' + end.format('MM/DD/YYYY'));
-										}
+											function cb(start, end) {
+													$('#reportrange span').html(start.format('MM/DD/YYYY') + ' - ' + end.format('MM/DD/YYYY'));
+											}
 
-										$('#reportrange').daterangepicker({
-												startDate: start,
-												endDate: end,
-												ranges: {
-													 'Today': [moment(), moment()],
-													 'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1,'days')],
-													 'Last 7 Days': [moment().subtract(6, 'days'), moment()],
-													 'Last 30 Days': [moment().subtract(29, 'days'), moment()],
-													 'Last Year': [moment().subtract(364, 'days'), moment()]
-												}
-										}, cb);
+											$('#reportrange').daterangepicker({
+													startDate: start,
+													endDate: end,
+													ranges: {
+														 'Today': [moment(), moment()],
+														 'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1,'days')],
+														 'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+														 'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+														 'Last Year': [moment().subtract(364, 'days'), moment()]
+													}
+											}, cb);
 
-										cb(start, end);
+											cb(start, end);
 
-								});
+									});
 								</script>
 						</div>
 						<div class="row">
