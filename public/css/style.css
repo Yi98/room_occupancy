@@ -316,9 +316,65 @@ a.disabled {
 #searchInput {
     font-family: 'FontAwesome';
     font-size: 16px;
+    color: white;
     padding: 12px 10px 12px 15px;
     border: 1px solid #ddd;
     margin-bottom: 12px;
+    border-radius: 18px;
+    background: #3333FF;
+    padding: 20px; 
+    width: 180px;
+    height: 15px;  
+}
+
+#searchInput:focus, select:focus {
+    outline: none;
+}
+
+::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+  color: white;
+}
+::-moz-placeholder { /* Firefox 19+ */
+  color: white;
+}
+:-ms-input-placeholder { /* IE 10+ */
+  color: white;
+}
+:-moz-placeholder { /* Firefox 18- */
+  color: white;
+}
+
+select {
+    background: #3333FF;
+    color: white;
+    border-radius: 18px;
+    padding: 6px 10px 8px 15px;
+    border: 1px solid #ddd;
+    margin-bottom: 12px;
+    font-size: 16px;
+    width: 130px;
+}
+
+select option {
+    background: white;
+    color: black;
+}
+
+#userTableHeader {
+    background-color: #6eaafd;
+}
+
+#showUser tr:hover {
+    background-color: #99CCFF;
+}
+
+#headingUser {
+    background: #3333FF;
+    color: white;
+}
+
+#down-icon, #up-icon {
+    color: white;
 }
 /* End user.html*/
 
