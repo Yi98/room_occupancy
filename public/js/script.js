@@ -33,35 +33,41 @@ function checkIsLogin() {
 };
 
 
-function searchRoom(){
+function searchRoom() {
 	var input, filter, ul, li, i, a, txtValue;
 	input = document.getElementById("search");
 	filter = input.value.toUpperCase();
-	ul = document.getElementById("roomCardContainer");
-	li = ul.getElementsByTagName("div");
 
-	let available = 0
-	for (i = 0; i < li.length; i++) {
-		a = li[i].getElementsByTagName("h4")[0];
+	const roomCards = document.getElementsByClassName('roomCard');
+	let available = 0;
+
+	for (i = 0; i < roomCards.length; i++) {
+		a = roomCards[i].getElementsByTagName("h4")[0];
 		txtValue = a.textContent || a.innerText;
 		if (txtValue.toUpperCase().indexOf(filter) > -1) {
-				li[i].style.display = "";
-				available++;
+			roomCards[i].style.display = "";
+			available++;
 		} else {
-				li[i].style.display = "none";
+			roomCards[i].style.display = "none";
 		}
 	}
 
+	if (available == 0) {
+		document.getElementById('noRoomCard').style.display = "block";
+	}
+	else {
+		document.getElementById('noRoomCard').style.display = "none";
+	}
 
-	// fix here
-	// if (available == 0) {
-	// 	document.getElementById("roomCardContainer").innerHTML = `
-	// 			<div class="roomCard card mr-4 border-0 shadow-sm py-4 mb-4 bg-white rounded"  data-toggle="modal" data-target="#addRoomModal" style="width: 24rem;"">
-	// 				<div class="card-body pt-2 text-center">
-	// 					<h4 class="card-title mb-4">Add a new room</h4>
-	// 				</div>
-	// 			</div>
-	// 		`
+	// for (i = 0; i < li.length; i++) {
+	// 	a = li[i].getElementsByTagName("h4")[0];
+	// 	txtValue = a.textContent || a.innerText;
+	// 	// console.log(txtValue)
+	// 	if (txtValue.toUpperCase().indexOf(filter) > -1) {
+	// 			li[i].style.display = "";
+	// 	} else {
+	// 			li[i].style.display = "none";
+	// 	}
 	// }
 }
 
@@ -800,6 +806,17 @@ function showDashboardRooms() {
 					</div>
 				`;
 			}
+
+			document.getElementById("roomCardContainer").innerHTML += `
+				<div id="noRoomCard" class="card mr-4 border-0 shadow-sm py-4 mb-4 bg-white rounded" style="width: 24rem; height: 13rem; display: none"	>
+					<div class="card-body pt-2 text-center">
+						<h4 class="card-title mb-4">No room available</h4>
+						<h6 style="color: white">empty</h6>
+						<h6 style="color: white">empty</h6>
+						<h6 style="color: white">empty</h6>
+					</div>
+				</div>
+			`;
 			
 			// document.getElementById("showRoom").innerHTML += '<div class="room-card col-md-4 col-sm-4 col-xs-6" data-toggle="modal" data-target="#addRoomModal"><a><div class="img-thumbnail"><img src="https://image.flaticon.com/icons/svg/109/109615.svg" class="add-icon" title="Lyolya"/></div></a></div>';	
 			
@@ -909,7 +926,7 @@ function showUserTable(){
     $("#userEditModalAlert").hide();
     
     var xhttp = new XMLHttpRequest();
-	xhttp.responseType = 'json';
+		xhttp.responseType = 'json';
 
     xhttp.onreadystatechange = function () {
         if(this.readyState == 4 && this.status == 200) {
@@ -963,7 +980,6 @@ function search() {
             } else {
                 tr[i].style.display = "none";
             }
-            
         }
     }
 };
