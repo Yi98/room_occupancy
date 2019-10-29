@@ -1666,32 +1666,37 @@ const humidGradient = dashTrendChart.createLinearGradient(500, 0, 100, 0);
 humidGradient.addColorStop(0, "#ff758c");
 humidGradient.addColorStop(1, "#ff7eb3");
 
+let timeline = ['0:00', '1:00', '2:00', '3:00', '4:00', '5:00', '6:00', '7:00', '8:00', '9:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00', '24:00'];
+
+const currentHour = moment().hours();
+timeline = timeline.slice(0, currentHour + 1);
+
 const trendChart = new Chart(dashTrendChart, {
     // The type of chart we want to create
     type: 'line',
 
     // The data for our dataset
     data: {
-        labels: ['0:00', '1:00', '2:00', '3:00', '4:00', '5:00', '6:00', '7:00', '8:00', '9:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00', '24:00'],
+        labels: timeline,
         datasets: [{
             label: 'Number of People',
             backgroundColor: peopleGradient,
             borderColor: peopleGradient,
-						data: ["19", "20", "15", "17", "10", "25", "30"],
+						data: [],
 						fill: false
 						},
 						{
 							label: 'Temperature',
 							backgroundColor: tempGradient,
 							borderColor: tempGradient,
-							data: ["24", "23.5", "24.3", "24", "26", "25.1", "25.5"],
+							data: [],
 							fill: false
 						},
 						{
 							label: 'Humidity',
 							backgroundColor: humidGradient,
 							borderColor: humidGradient,
-							data: ["78", "68", "69", "59", "72", "62", "70"],
+							data: [],
 							fill: false
 						}
 				]
@@ -1752,18 +1757,30 @@ $( "#clearNotice" ).click(function() {
 
 
 function onRoomClicked(roomName, roomId) {
-	const today = moment().date();
+	const dotsLoaders = document.getElementsByClassName('dotsLoading');
+	const defaultRooms = document.getElementsByClassName('defaultRoom');
 
-	document.getElementById('insightRoom').innerHTML = roomName;
-	document.getElementById('trendRoom').innerHTML = roomName;
+	for (let i=0; i<dotsLoaders.length; i++) {
+		dotsLoaders[i].style.display = "inline";
+	}
 
-	document.getElementById('viewRoomDetails').href = `/chart/${roomId}`;
+	for (let i=0; i<defaultRooms.length; i++) {
+		defaultRooms[i].style.display = "none";
+	}
 
-	let time = ['0:00', '1:00', '2:00', '3:00', '4:00', '5:00', '6:00', '7:00', '8:00', '9:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00', '24:00'];
-
+	// Trend's variables
+	let timeline = ['0:00', '1:00', '2:00', '3:00', '4:00', '5:00', '6:00', '7:00', '8:00', '9:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00', '24:00'];
 	let newPeople = [];
 	let newTemperature = [];
 	let newHumidity = [];
+
+	// Insight's vatiables
+	let highestTemperature = {data: 0, time: null};
+	let highestHumidity = {data: 0, time: null};
+	let highestPeople = {data: 0, time: null};
+	let lowestTemperature = {data: 0, time: null};
+	let lowestHumidity = {data: 0, time: null};
+
 
 	var xhttp = new XMLHttpRequest();
 	xhttp.responseType = 'json';
@@ -1774,9 +1791,9 @@ function onRoomClicked(roomName, roomId) {
 
 			const currentHour = moment().hours();
 
-			time = time.slice(0, currentHour + 1);
+			timeline = timeline.slice(0, currentHour + 1);
 
-			for (let i=0; i<time.length; i++) {
+			for (let i=0; i<timeline.length; i++) {
 				newPeople.push(0);
 				newTemperature.push(0);
 				newHumidity.push(0);
@@ -1792,17 +1809,36 @@ function onRoomClicked(roomName, roomId) {
 					else {
 						newPeople[current] = result.room.people[i].data;
 					}
+
+					if (result.room.people[i].data > highestPeople.data) {
+						highestPeople.data = result.room.people[i].data;
+						highestPeople.time = result.room.people[i].time;
+					}
 				}
 			}
 
 			for (let i=0; i<result.room.temperature.length; i++) {
 				if (moment(result.room.temperature[i].time).isSame(new Date(), "day")) {
 					const current = moment(result.room.temperature[i].time).hours();
+
 					if (newTemperature[current] != 0) {
 						newTemperature[current] = (newTemperature[current] + result.room.temperature[i].data) / 2;
 					}
 					else {
 						newTemperature[current] = result.room.temperature[i].data;
+					}
+
+					if (result.room.temperature[i].data > highestTemperature.data) {
+						highestTemperature.data = result.room.temperature[i].data;
+						highestTemperature.time = result.room.temperature[i].time;
+					}
+
+					if (i == 0) {
+						lowestTemperature.data = result.room.temperature[i].data;
+					}
+					else if (result.room.temperature[i].data < lowestTemperature.data) {
+						lowestTemperature.data = result.room.temperature[i].data;
+						lowestTemperature.time = result.room.temperature[i].time;
 					}
 				}
 			}
@@ -1810,7 +1846,6 @@ function onRoomClicked(roomName, roomId) {
 
 			for (let i=0; i<result.room.humidity.length; i++) {
 				if (moment(result.room.humidity[i].time).isSame(new Date(), "day")){
-					console.log(result.room.humidity[i].data);
 					const current = moment(result.room.humidity[i].time).hours();
 					if (newHumidity[current] != 0) {
 						newHumidity[current] = (newHumidity[current] + result.room.humidity[i].data) / 2;
@@ -1818,18 +1853,68 @@ function onRoomClicked(roomName, roomId) {
 					else {
 						newHumidity[current] = result.room.humidity[i].data;
 					}
+
+					if (result.room.humidity[i].data > highestHumidity.data) {
+						highestHumidity.data = result.room.humidity[i].data;
+						highestHumidity.time = result.room.humidity[i].time;
+					}
+
+					if (i == 0) {
+						lowestHumidity.data = result.room.humidity[i].data;
+					}
+					else if (result.room.humidity[i].data < lowestHumidity.data) {
+						lowestHumidity.data = result.room.humidity[i].data;
+						lowestHumidity.time = result.room.humidity[i].time;
+					}
 				}
 			}
+
+			dashIngishtsController(highestPeople, highestTemperature, highestHumidity, lowestTemperature, lowestHumidity);
 
 			trendChart.data.datasets[0].data = newPeople;
 			trendChart.data.datasets[1].data = newTemperature;
 			trendChart.data.datasets[2].data = newHumidity;
 
-			trendChart.data.labels = time;
+			trendChart.data.labels = timeline;
 
 			trendChart.update();
+
+			for (let i=0; i<dotsLoaders.length; i++) {
+				dotsLoaders[i].style.display = "none";
+			}
+
+			for (let i=0; i<defaultRooms.length; i++) {
+				defaultRooms[i].style.display = "inline";
+			}
+
+			document.getElementById('insightRoom').innerHTML = " - " + roomName;
+			document.getElementById('trendRoom').innerHTML = " - " + roomName;
+			document.getElementById('viewRoomDetails').href = `/chart/${roomId}`;
 		}
 	};
+
+	function dashIngishtsController(highestPeople, highestTemperature, highestHumidity, lowestTemperature, lowestHumidity) {
+		if (highestPeople.time != null) {
+			document.getElementById('hPeople').innerHTML = `${moment(highestPeople.time).format('hh:mm a')} - ${highestPeople.data} people`;			
+		}
+
+		if (highestTemperature.time != null) {
+			document.getElementById('hTemp').innerHTML = `${moment(highestTemperature.time).format('hh:mm a')} - ${highestTemperature.data} °C`;
+		}
+
+		if (highestHumidity.time != null) {
+			document.getElementById('hHumid').innerHTML = `${moment(highestHumidity.time).format('hh:mm a')} - ${highestHumidity.data} RH`;
+		}
+
+		if (lowestTemperature.time != null) {
+			document.getElementById('lTemp').innerHTML = `${moment(lowestTemperature.time).format('hh:mm a')} - ${lowestTemperature.data} °C`;
+		}
+
+		if (lowestHumidity.time != null) {
+			document.getElementById('lHumid').innerHTML = `${moment(lowestHumidity.time).format('hh:mm a')} - ${lowestHumidity.data} RH`;
+		}
+
+	}
 
 	xhttp.open("GET",`http://localhost:3000/api/rooms/${roomId}`,true);
 
@@ -1842,7 +1927,7 @@ function horizontalWheelScroll() {
 	function scrollHorizontally(e) {
 			e = window.event || e;
 			var delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)));
-			document.getElementById('scrolling-wrapper').scrollLeft -= (delta*40); // Multiplied by 40
+			document.getElementById('scrolling-wrapper').scrollLeft -= (delta * 30); // Multiplied by 40
 			e.preventDefault();
 	}
 	if (document.getElementById('scrolling-wrapper').addEventListener) {
