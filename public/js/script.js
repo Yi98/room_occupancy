@@ -830,58 +830,22 @@ function showDashboardRooms() {
 	xhttp.send();
 }
 
+
 function loadTodayTrend() {
-	loadTodayTemperature();
-	loadTodayHumidity();
-	loadTodayPeople();
-}
+	// var xhttp = new XMLHttpRequest();
+	// xhttp.responseType = 'json';
 
-function loadTodayTemperature() {
-	var xhttp = new XMLHttpRequest();
-	xhttp.responseType = 'json';
+	// xhttp.onreadystatechange = function () {
+	// 	if(this.readyState == 4 && this.status == 200) {
+	// 		var result = this.response;
+	// 		console.log(result);
+	// 	}
+	// };
 
-	xhttp.onreadystatechange = function () {
-		if(this.readyState == 4 && this.status == 200) {
-			var result = this.response;
-			console.log(result);
-		}
-	};
+	// console.log(roomId);
+	// xhttp.open("GET",`http://localhost:3000/api/rooms/${roomId}`,true);
 
-	xhttp.open("GET","http://localhost:3000/api/data/5db583ed1c9d4400009a20f2/temperature?period=today",true);
-
-	xhttp.send();
-}
-
-function loadTodayHumidity() {
-	var xhttp = new XMLHttpRequest();
-	xhttp.responseType = 'json';
-
-	xhttp.onreadystatechange = function () {
-		if(this.readyState == 4 && this.status == 200) {
-			var result = this.response;
-			console.log(result);
-		}
-	};
-
-	xhttp.open("GET","http://localhost:3000/api/data/5db583ed1c9d4400009a20f2/humidity",true);
-
-	xhttp.send();
-}
-
-function loadTodayPeople() {
-	var xhttp = new XMLHttpRequest();
-	xhttp.responseType = 'json';
-
-	xhttp.onreadystatechange = function () {
-		if(this.readyState == 4 && this.status == 200) {
-			var result = this.response;
-			console.log(result);
-		}
-	};
-
-	xhttp.open("GET","http://localhost:3000/api/data/5db583ed1c9d4400009a20f2/people",true);
-
-	xhttp.send();
+	// xhttp.send();
 }
 
 
@@ -1637,8 +1601,8 @@ function addRoom(){
 const dashTrendChart = document.getElementById('dashTrendChart').getContext('2d');
 
 const peopleGradient = dashTrendChart.createLinearGradient(500, 0, 100, 0);
-peopleGradient.addColorStop(0, "#667eea");
-peopleGradient.addColorStop(1, "#764ba2");
+peopleGradient.addColorStop(0, "#764ba2");
+peopleGradient.addColorStop(1, "#667eea");
 
 const tempGradient = dashTrendChart.createLinearGradient(500, 0, 100, 0);
 tempGradient.addColorStop(0, "#fc4a1a");
@@ -1654,7 +1618,7 @@ const trendChart = new Chart(dashTrendChart, {
 
     // The data for our dataset
     data: {
-        labels: ['9:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00'],
+        labels: ['0:00', '1:00', '2:00', '3:00', '4:00', '5:00', '6:00', '7:00', '8:00', '9:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00', '24:00'],
         datasets: [{
             label: 'Number of People',
             backgroundColor: peopleGradient,
@@ -1734,8 +1698,87 @@ $( "#clearNotice" ).click(function() {
 
 
 function onRoomClicked(roomName, roomId) {
+	const today = moment().date();
+
 	document.getElementById('insightRoom').innerHTML = roomName;
 	document.getElementById('trendRoom').innerHTML = roomName;
 
 	document.getElementById('viewRoomDetails').href = `/chart/${roomId}`;
+
+	let time = ['0:00', '1:00', '2:00', '3:00', '4:00', '5:00', '6:00', '7:00', '8:00', '9:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00', '24:00'];
+
+	let newPeople = [];
+	let newTemperature = [];
+	let newHumidity = [];
+
+	var xhttp = new XMLHttpRequest();
+	xhttp.responseType = 'json';
+
+	xhttp.onreadystatechange = function () {
+		if(this.readyState == 4 && this.status == 200) {
+			var result = this.response;
+
+			const currentHour = moment().hours();
+
+			time = time.slice(0, currentHour + 1);
+
+			for (let i=0; i<time.length; i++) {
+				newPeople.push(0);
+				newTemperature.push(0);
+				newHumidity.push(0);
+			}
+			
+			
+			for (let i=0; i<result.room.people.length; i++) {
+				if (moment(result.room.people[i].time).isSame(new Date(), "day")) {
+					const current = moment(result.room.people[i].time).hours();
+					if (newPeople[current] != 0) {
+						newPeople[current] = (newPeople[current] + result.room.people[i].data) / 2;
+					}
+					else {
+						newPeople[current] = result.room.people[i].data;
+					}
+				}
+			}
+
+			for (let i=0; i<result.room.temperature.length; i++) {
+				if (moment(result.room.temperature[i].time).isSame(new Date(), "day")) {
+					const current = moment(result.room.temperature[i].time).hours();
+					if (newTemperature[current] != 0) {
+						newTemperature[current] = (newTemperature[current] + result.room.temperature[i].data) / 2;
+					}
+					else {
+						newTemperature[current] = result.room.temperature[i].data;
+					}
+				}
+			}
+
+
+			for (let i=0; i<result.room.humidity.length; i++) {
+				if (moment(result.room.humidity[i].time).isSame(new Date(), "day")){
+					console.log(result.room.humidity[i].data);
+					const current = moment(result.room.humidity[i].time).hours();
+					if (newHumidity[current] != 0) {
+						newHumidity[current] = (newHumidity[current] + result.room.humidity[i].data) / 2;
+					}
+					else {
+						newHumidity[current] = result.room.humidity[i].data;
+					}
+				}
+			}
+
+			trendChart.data.datasets[0].data = newPeople;
+			trendChart.data.datasets[1].data = newTemperature;
+			trendChart.data.datasets[2].data = newHumidity;
+
+			trendChart.data.labels = time;
+
+			trendChart.update();
+		}
+	};
+
+	xhttp.open("GET",`http://localhost:3000/api/rooms/${roomId}`,true);
+
+	xhttp.send();
+
 }
