@@ -82,8 +82,12 @@ function showChart() {
 
   $('#choosenRange').on('DOMSubtreeModified', function() {
 		document.getElementById("allChart").innerHTML = '<div class="d-flex h-100 justify-content-center"><div class="align-self-center"><div class="spinner-border text-danger" style="width:3rem; height:3rem;"><span class="sr-only">Loading...</span></div></div></div>';
-    xhrChart(roomId);
+		let charts = Highcharts.charts;
+		charts.splice(0,3);
+		console.log(charts);
+		xhrChart(roomId);
   });
+
 };
 
 function xhrChart(roomId){
@@ -104,7 +108,7 @@ function xhrChart(roomId){
 		var weeklyTime = [];
 		//var monthlyTime = ['January', 'February','March','April','May','June','July','August','September','Octorber','November','December'];
 		var monthlyTime = [];
-
+	
 	let room_name_found = false;
     var xhttp = new XMLHttpRequest();
 		xhttp.responseType = 'json';
@@ -183,6 +187,7 @@ function xhrChart(roomId){
 							for(var i=0; i<humidData.length; i++){
 								humidData[i] = Math.round((humidData[i]/humidDataCounter[i]) * 100) / 100;
 							}
+							
 							
 							showAllChart(hourTime,peopleData,tempData,humidData);
 							showPeopleChart(hourTime, peopleData); //Illustrate the chart
@@ -576,7 +581,8 @@ function xhrChart(roomId){
 }
 
 function showAllChart(x,y1,y2,y3){
-	new Highcharts.chart('allChart', {
+	
+	Highcharts.chart('allChart', {
 			credits: false,
 
 			exporting:{
@@ -616,7 +622,8 @@ function showAllChart(x,y1,y2,y3){
 }
 
 function showPeopleChart(x,y){
-	new Highcharts.chart('peopleChart', {
+	
+	Highcharts.chart('peopleChart', {
 			credits: false,
 
 			exporting:{
@@ -641,7 +648,8 @@ function showPeopleChart(x,y){
 }
 
 function showTemperatureChart(x,y){
-	new Highcharts.chart('temperatureChart', {
+	
+	Highcharts.chart('temperatureChart', {
 		credits: false,
 		
 		exporting:{
@@ -679,7 +687,8 @@ function showTemperatureChart(x,y){
 }
 
 function showHumidityChart(x,y){
-	new Highcharts.chart('humidityChart', {
+	
+	Highcharts.chart('humidityChart', {
 		credits: false,
 		
 		exporting:{
@@ -715,6 +724,8 @@ function showHumidityChart(x,y){
 		}]
 	});
 }
+
+
 
 
 // function showDashboard(){
