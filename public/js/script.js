@@ -790,7 +790,7 @@ function showDashboardRooms() {
 				notifications.push([{name: result.rooms[room].name, status: statusMsg}]);
 
 				document.getElementById("roomCardContainer").innerHTML += `
-					<div class="roomCard card mr-4 border-0 shadow-sm py-4 mb-4 bg-white rounded" style="width: 24rem;" onclick="onRoomClicked('${result.rooms[room].name}', '${result.rooms[room]._id}')">
+					<div class="roomCard card mr-4 border-0 shadow-sm py-4 mb-4 bg-white rounded" style="width: 24rem; height: 13rem;" onclick="onRoomClicked('${result.rooms[room].name}', '${result.rooms[room]._id}')">
 						<div class="card-body pt-2 text-center">
 							<h4 class="card-title mb-4">${result.rooms[room].name}</h4>
 							<h6>Number of people: <span class="roomData people">N/A</span></h6>
@@ -800,23 +800,6 @@ function showDashboardRooms() {
 					</div>
 				`;
 			}
-
-			document.getElementById("roomCardContainer").innerHTML += `
-				<div class="addCard roomCard card mr-4 border-0 shadow-sm py-4 mb-4 bg-white rounded" style="width: 24rem;" onclick="onRoomClicked('${result.rooms[room].name}', '${result.rooms[room]._id}')">
-					<div class="card-body pt-2 text-center">
-						<h4 class="card-title mb-4">Add new room</h4>
-						<input type="email" class="form-control mb-1" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter room name">
-						<div class="row">
-							<div class="col">
-								<input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Moderate capacity">
-							</div>
-							<div class="col">
-								<input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Maximum capacity">
-							</div>
-						</div>
-					</div>
-				</div>
-			`;
 			
 			// document.getElementById("showRoom").innerHTML += '<div class="room-card col-md-4 col-sm-4 col-xs-6" data-toggle="modal" data-target="#addRoomModal"><a><div class="img-thumbnail"><img src="https://image.flaticon.com/icons/svg/109/109615.svg" class="add-icon" title="Lyolya"/></div></a></div>';	
 			
