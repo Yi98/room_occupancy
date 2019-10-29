@@ -67,11 +67,11 @@ hr {
 }
 
 .left-menu-1 {
-	background-color: #231F20;
+	background-color: #212629;
 }
 
 .left-menu-2{
-	background-color: #231F20;
+	background-color: #212629;
 	padding-top:1.5%;
 }
 
@@ -81,7 +81,6 @@ hr {
 
 .right-menu-1{
 	background-color: #FFFFFD;
-	padding: 1.5% 1% 2% 1%;
 
 }
 
@@ -108,39 +107,36 @@ hr {
 }
 
 #myNavbar ul li a{
-	color:white;
+	color:#F6F7F9;
 	font-family: "Roboto", "Helvetica Neue", "Arial", "sans-serif";
-	font-weight: 400;
+	font-weight: 100;
 	text-transform:uppercase;
 	padding:6% 0 6% 0;
 }
 
 #myNavbar ul li a:hover{
-	background-color:#473f41;
+	background-color:#6D6E72;
 	opacity: 0.5;
 	color:white;
 	font-family: "Roboto", "Helvetica Neue", "Arial", "sans-serif";
-	font-weight: bold;
-	border-radius: 3px;
+	border-radius: 2px;
 }
 
 #myNavbar ul li .active{
-	background-color:#eeecec;
-	opacity:0.5;
+	background-color:#F6F7F9;
+	opacity: 0.6;
 	color:black;
 	font-family: "Roboto", "Helvetica Neue", "Arial", "sans-serif";
 	font-weight: bold;
-	border-radius: 5px;
+	border-radius: 2px;
 }
 
 .searchRoom{
 	width:40%;
-
 }
 
 .searchRoom:focus{
-	border:2px solid red;
-	outline: none;
+	outline: none !important;
 }
 
 .fa{
@@ -316,6 +312,70 @@ a.disabled {
 #userID {
    display: none;
 }
+
+#searchInput {
+    font-family: 'FontAwesome';
+    font-size: 16px;
+    color: white;
+    padding: 12px 10px 12px 15px;
+    border: 1px solid #ddd;
+    margin-bottom: 12px;
+    border-radius: 18px;
+    background: #3333FF;
+    padding: 20px; 
+    width: 180px;
+    height: 15px;  
+}
+
+#searchInput:focus, select:focus {
+    outline: none;
+}
+
+::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+  color: white;
+}
+::-moz-placeholder { /* Firefox 19+ */
+  color: white;
+}
+:-ms-input-placeholder { /* IE 10+ */
+  color: white;
+}
+:-moz-placeholder { /* Firefox 18- */
+  color: white;
+}
+
+select {
+    background: #3333FF;
+    color: white;
+    border-radius: 18px;
+    padding: 6px 10px 8px 15px;
+    border: 1px solid #ddd;
+    margin-bottom: 12px;
+    font-size: 16px;
+    width: 130px;
+}
+
+select option {
+    background: white;
+    color: black;
+}
+
+#userTableHeader {
+    background-color: #6eaafd;
+}
+
+#showUser tr:hover {
+    background-color: #99CCFF;
+}
+
+#headingUser {
+    background: #3333FF;
+    color: white;
+}
+
+#down-icon, #up-icon {
+    color: white;
+}
 /* End user.html*/
 
 
@@ -416,7 +476,8 @@ i.deleteNoticeIcon:hover {
   display: inline-block;
 }
   
-.roomCard {
+.roomCard,
+.tempRoomCard {
   cursor: pointer;
 }
 
@@ -451,7 +512,6 @@ i.deleteNoticeIcon:hover {
 }
 /* Titles */
  .highcharts-title {
-	 fill: #;
 	 text-transform: uppercase;
 	 font-size: 20px;
 }
@@ -473,7 +533,7 @@ i.deleteNoticeIcon:hover {
  .highcharts-axis-labels {
 	 fill: #3e3e40;
 	 cursor: default;
-	 font-size: 0.9em;
+	 font-size: 1.3em;
 }
  .highcharts-grid-line {
 	 fill: none;
@@ -502,7 +562,7 @@ i.deleteNoticeIcon:hover {
  .highcharts-credits {
 	 cursor: pointer;
 	 fill: #666;
-	 font-size: 0.7em;
+	 font-size: 1em;
 	 transition: fill 250ms, font-size 250ms;
 }
  .highcharts-credits:hover {
@@ -559,12 +619,12 @@ i.deleteNoticeIcon:hover {
 /* Series options */
 /* Default colors */
  .highcharts-color-0 {
-	 fill: #f45b5b ;
-	 stroke: #f45b5b;
+	 fill: #000000;
+	 stroke: #000000;
 }
  .highcharts-color-1 {
-	 fill: #90ee7e;
-	 stroke: #90ee7e;
+	 fill: #f45b5b ;
+	 stroke: #f45b5b;
 }
  .highcharts-color-2 {
 	 fill: #2b908f;
@@ -722,6 +782,8 @@ i.deleteNoticeIcon:hover {
 	 font-weight: bold;
 	 cursor: pointer;
 	 stroke-width: 0;
+	 font-size: 1.5em;
+
 }
  .highcharts-legend-item:hover text {
 	 fill: #fff;
@@ -873,6 +935,7 @@ i.deleteNoticeIcon:hover {
 }
  .highcharts-button text {
 	 fill: black;
+	 
 }
  .highcharts-button-hover {
 	 fill: #acf;
@@ -1057,10 +1120,24 @@ i.deleteNoticeIcon:hover {
   width: 0;
 }
 
+.addCard:after {    
+  background: none repeat scroll 0 0 transparent;
+  top: 0;
+  content: "";
+  display: block;
+  height: 4px;
+  left: 50%;
+  position: absolute;
+  background: linear-gradient(to right, #ee623b, #ebb160);
+  transition: width 0.3s ease 0s, left 0.3s ease 0s;
+  width: 0;
+}
+
 .roomCard:hover:after { 
   width: 100%; 
   left: 0; 
 }
+
 
 #emptyNotice {
   display: none;
@@ -1159,4 +1236,85 @@ div.skeleton-content-3 {
 
 .roomData {
   font-weight: 400;
+}
+
+#search {
+	border-radius: 25px;	
+}
+
+textarea:hover, 
+input:hover, 
+textarea:active, 
+input:active, 
+textarea:focus, 
+input:focus,
+button:focus,
+button:active,
+button:hover,
+label:focus,
+.btn:active,
+.btn.active
+{
+    outline:0px !important;
+    -webkit-appearance:none;
+    box-shadow: none !important;
+}
+
+
+#search {
+	-webkit-appearance: textfield;
+	-webkit-box-sizing: content-box;
+	font-family: inherit;
+	font-size: 100%;
+}
+
+#search::-webkit-search-decoration,
+#search::-webkit-search-cancel-button {
+	display: none; 
+}
+
+
+#search {
+	background: #fff url(https://static.tumblr.com/ftv85bp/MIXmud4tx/search-icon.png) no-repeat 9px center;
+	border: solid 1px #ccc;
+	padding: 9px 10px 9px 40px;
+	width: 150px;
+	height: 20px;
+	
+	-webkit-border-radius: 10em;
+	-moz-border-radius: 10em;
+	border-radius: 10em;
+	
+	-webkit-transition: all .3s;
+	-moz-transition: all .3s;
+	transition: all .3s;
+}
+
+#search:focus {
+	width: 220px;
+	background-color: #fff;
+	
+	-webkit-box-shadow: 0 0 5px rgba(109,207,246,.5);
+	-moz-box-shadow: 0 0 5px rgba(109,207,246,.5);
+	box-shadow: 0 0 5px rgba(109,207,246,.5);
+}
+
+#search:-moz-placeholder {
+	color: #999;
+}
+
+#search::-webkit-input-placeholder {
+	color: #999;
+}
+
+
+#addRoomInput {
+	border: 0;
+  outline: 0;
+  background: transparent;
+	border-bottom: 1px solid white;
+	color: white;
+}
+#myNavbar .nav-item .menu-li{
+	font-family: 'Montserrat', sans-serif;
 }
