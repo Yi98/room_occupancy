@@ -605,6 +605,13 @@ function showAllChart(x,y1,y2,y3){
 			xAxis: {
 					categories: x
 			},
+		
+			yAxis: {
+				title: {
+					text: 'Status'
+				}
+			},
+		
 			series: [{
 					data: y1,
 					name: 'People Count'
@@ -633,6 +640,8 @@ function showPeopleChart(x,y){
 						}
 				}
 			},
+		
+			className: "reportChart",
 
 			title: {
 					text: 'Number Of People'
@@ -640,6 +649,20 @@ function showPeopleChart(x,y){
 			xAxis: {
 					categories: x
 			},
+		
+			yAxis:{
+					text:'Counts'
+			},
+			
+			plotOptions: {
+				line: {
+					dataLabels: {
+						enabled: true
+					},
+					enableMouseTracking: false
+				}
+			},
+		
 			series: [{
 					data: y	,
 					name: 'People Count'
@@ -676,6 +699,16 @@ function showTemperatureChart(x,y){
 						color: '#808080'
 				}]
 		},
+			
+		plotOptions: {
+			line: {
+				dataLabels: {
+					enabled: true
+				},
+				enableMouseTracking: false
+			}
+		},
+		
 		tooltip: {
 				valueSuffix: '°C'
 		},
@@ -715,6 +748,16 @@ function showHumidityChart(x,y){
 						color: '#808080'
 				}]
 		},
+			
+		plotOptions: {
+			line: {
+				dataLabels: {
+					enabled: true
+				},
+				enableMouseTracking: false
+			}
+		},
+		
 		tooltip: {
 				valueSuffix: 'RH'
 		},
