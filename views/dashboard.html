@@ -33,9 +33,12 @@
 
 	<!-- Chart.js -->
 	<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+
+	<!-- Moment.js -->
+	<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.3/moment.js"></script>
 </head>
 
-<body onload="showDashboardRooms(); loadTodayTrend();">
+<body onload="onLoadDashboard()">
   <div class="container-fluid">
     <div class="row nav-wrapper align-self-center">
       <div class="col-md-2 col-sm-12 col-xs-12 left-menu-1">
@@ -44,9 +47,9 @@
       <div class="col-md-10 col-sm-12 col-xs-12 right-menu-1 mt-4 align-self-center">
 				<div class="row">
 					<div class="col-md-2 col-page-title">
-						<p class="pageTitle m-0 mt-1">Dashboard</p>
+						<p class="pageTitle m-0">Dashboard</p>
 					</div>
-					<div class="col-md-8 col-sm-8 col-xs-8 p-0">
+					<div class="col-md-8 col-sm-8 col-xs-8 p-0 pb-3">
 						<input type="text" id="search" class="form-control searchRoom m-0" placeholder="Search for rooms ..." onkeyup="searchRoom()">
 					</div>
 					<div class="col-md-2 col-sm-4 col-xs-4">
@@ -127,30 +130,37 @@
 							<div class="col-md-12">
 								<div id="insightItem" class="card mx-auto border-0 shadow-sm p-2 mb-4 bg-white rounded" style="width: 100%;">
 									<div class="card-body pt-2">
-										<h6 class="card-title mb-4" style="display: inline-block">Today's insights ( <span id="insightRoom">BYOD</span> )</h6>
+										<h6 class="card-title mb-4" style="display: inline-block">Today's insights
+											<div class="spinner dotsLoading ml-3" style="display: none;">
+												<div class="bounce1"></div>
+												<div class="bounce2"></div>
+												<div class="bounce3"></div>
+											</div>
+										 	<span class="defaultRoom" id="insightRoom">- BYOD</span>
+										</h6>
 										<div class="dropdown float-right">
 											</div>
 										<div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
 												<div class="carousel-inner">
 													<div class="carousel-item active pt-2">
 														<h5 class="text-center">Highest no. of people</h5>
-														<p class="text-center"> 2:00pm - 30 people</p>
+														<p class="text-center"><span id="hPeople">N/A</span></p>
 													</div>
 													<div class="carousel-item  pt-2">
 														<h5 class="text-center">Highest temperature</h5>
-														<p class="text-center">5:00pm - 29°C</p>
+														<p class="text-center"><span id="hTemp">N/A</span></p>
 													</div>
 													<div class="carousel-item pt-2">
 														<h5 class="text-center">Lowest temperature</h5>
-														<p  class="text-center">4:00am - 22.5°C</p>
+														<p  class="text-center"><span id="lTemp">N/A</span></p>
 													</div>
 													<div class="carousel-item pt-2">
 														<h5 class="text-center">Highest humidity</h5>
-														<p class="text-center">11:00pm - 75RH</p>
+														<p class="text-center"><span id="hHumid">N/A</span></p>
 													</div>
 													<div class="carousel-item pt-2">
 														<h5 class="text-center">Lowest humidity</h5>
-														<p class="text-center"> 1:00pm - 58RH</p>
+														<p class="text-center"><span id="lHumid">N/A</span></p>
 													</div>
 												</div>
 												<a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
@@ -198,7 +208,14 @@
 							<div class="col-md-12">
 								<div class="card border-0 shadow-sm p-2 mb-4 bg-white rounded" style="width: 100%;">
 									<div class="card-body pt-2">
-										<h6 class="card-title mb-4" style="display:inline-block;">Today's trends ( <span id="trendRoom">BYOD</span> )</h6>
+										<h6 class="card-title mb-4" style="display:inline-block;">Today's trends 
+											<div class="spinner dotsLoading ml-3" style="display: none;">
+												<div class="bounce1"></div>
+												<div class="bounce2"></div>
+												<div class="bounce3"></div>
+											</div>
+											<span class="defaultRoom" id="trendRoom">- BYOD</span>
+										</h6>
 										<div class="dropdown float-right">
 											<a id="viewRoomDetails" href="/chart/5d935b95ea295d622c1f7e7d">more details</a>	
 										</div>

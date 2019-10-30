@@ -56,7 +56,7 @@ html {
 
 #loginAlert {
     margin-top: 30px;
-    display: none;
+    display: none;							
 }
 /*End login.html */
 
@@ -515,6 +515,7 @@ i.deleteNoticeIcon:hover {
 	 text-transform: uppercase;
 	 font-size: 20px;
 }
+
  .highcharts-subtitle {
 	 fill: #3e3e40;
 	 text-transform: uppercase;
@@ -533,7 +534,7 @@ i.deleteNoticeIcon:hover {
  .highcharts-axis-labels {
 	 fill: #3e3e40;
 	 cursor: default;
-	 font-size: 1.3em;
+	 font-size: 1.2em;
 }
  .highcharts-grid-line {
 	 fill: none;
@@ -579,9 +580,10 @@ i.deleteNoticeIcon:hover {
 }
  .highcharts-tooltip text {
 	 fill: #f0f0f0;
+	 font-size: 1.3em;
 }
  .highcharts-tooltip .highcharts-header {
-	 font-size: 0.85em;
+	 font-size: 1.1em;
 }
  .highcharts-tooltip-box {
 	 stroke-width: 1px;
@@ -677,19 +679,19 @@ i.deleteNoticeIcon:hover {
 	 stroke-width: 0;
 }
  .highcharts-data-label {
-	 font-size: 0.9em;
+	 font-size: 1.3em;
 	 font-weight: bold;
 }
  .highcharts-data-label-box {
 	 fill: none;
 	 stroke-width: 0;
 }
+
  .highcharts-data-label text {
-	 font-size: 11px;
+	 font-size: 1.5em;
 	 font-weight: bold;
-	 color: #3e3e40;
-	 text-shadow: 0 0 6px #000, 0 0 3px #000;
-	 fill: #b0b0b3;
+	 color: #000000;
+	 fill: #000000;
 	 text-rendering: geometricPrecision;
 }
  .highcharts-data-label-connector {
@@ -779,8 +781,8 @@ i.deleteNoticeIcon:hover {
 }
  .highcharts-legend-item text {
 	 fill: #3e3e40;
-	 font-weight: bold;
-	 cursor: pointer;
+	 font-weight: bolder;
+	 cursor:pointer;
 	 stroke-width: 0;
 	 font-size: 1.5em;
 
@@ -1307,7 +1309,6 @@ label:focus,
 	color: #999;
 }
 
-
 #addRoomInput {
 	border: 0;
   outline: 0;
@@ -1315,6 +1316,49 @@ label:focus,
 	border-bottom: 1px solid white;
 	color: white;
 }
+
 #myNavbar .nav-item .menu-li{
 	font-family: 'Montserrat', sans-serif;
+}
+
+.spinner {
+  margin: 100px auto 0;
+  width: 70px;
+  text-align: center;
+}
+
+.spinner > div {
+  width: 6px;
+  height: 6px;
+  background-color: #333;
+
+  border-radius: 100%;
+  display: inline-block;
+  -webkit-animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+  animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+}
+
+.spinner .bounce1 {
+  -webkit-animation-delay: -0.32s;
+  animation-delay: -0.32s;
+}
+
+.spinner .bounce2 {
+  -webkit-animation-delay: -0.16s;
+  animation-delay: -0.16s;
+}
+
+@-webkit-keyframes sk-bouncedelay {
+  0%, 80%, 100% { -webkit-transform: scale(0) }
+  40% { -webkit-transform: scale(1.0) }
+}
+
+@keyframes sk-bouncedelay {
+  0%, 80%, 100% { 
+    -webkit-transform: scale(0);
+    transform: scale(0);
+  } 40% { 
+    -webkit-transform: scale(1.0);
+    transform: scale(1.0);
+  }
 }
