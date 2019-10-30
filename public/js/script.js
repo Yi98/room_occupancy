@@ -1671,6 +1671,16 @@ let timeline = ['0:00', '1:00', '2:00', '3:00', '4:00', '5:00', '6:00', '7:00', 
 const currentHour = moment().hours();
 timeline = timeline.slice(0, currentHour + 1);
 
+const peopleData = [];
+const temperatureData = [];
+const humidityData = [];
+
+for (let i=0; i<timeline.length; i++) {
+	peopleData.push(0);
+	temperatureData.push(0);
+	humidityData.push(0);
+}
+
 const trendChart = new Chart(dashTrendChart, {
     // The type of chart we want to create
     type: 'line',
@@ -1682,21 +1692,21 @@ const trendChart = new Chart(dashTrendChart, {
             label: 'Number of People',
             backgroundColor: peopleGradient,
             borderColor: peopleGradient,
-						data: [],
+						data: peopleData,
 						fill: false
 						},
 						{
 							label: 'Temperature',
 							backgroundColor: tempGradient,
 							borderColor: tempGradient,
-							data: [],
+							data: temperatureData,
 							fill: false
 						},
 						{
 							label: 'Humidity',
 							backgroundColor: humidGradient,
 							borderColor: humidGradient,
-							data: [],
+							data: humidityData,
 							fill: false
 						}
 				]
