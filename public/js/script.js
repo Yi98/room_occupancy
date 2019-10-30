@@ -33,35 +33,41 @@ function checkIsLogin() {
 };
 
 
-function searchRoom(){
+function searchRoom() {
 	var input, filter, ul, li, i, a, txtValue;
 	input = document.getElementById("search");
 	filter = input.value.toUpperCase();
-	ul = document.getElementById("roomCardContainer");
-	li = ul.getElementsByTagName("div");
 
-	let available = 0
-	for (i = 0; i < li.length; i++) {
-		a = li[i].getElementsByTagName("h4")[0];
+	const roomCards = document.getElementsByClassName('roomCard');
+	let available = 0;
+
+	for (i = 0; i < roomCards.length; i++) {
+		a = roomCards[i].getElementsByTagName("h4")[0];
 		txtValue = a.textContent || a.innerText;
 		if (txtValue.toUpperCase().indexOf(filter) > -1) {
-				li[i].style.display = "";
-				available++;
+			roomCards[i].style.display = "";
+			available++;
 		} else {
-				li[i].style.display = "none";
+			roomCards[i].style.display = "none";
 		}
 	}
 
+	if (available == 0) {
+		document.getElementById('noRoomCard').style.display = "block";
+	}
+	else {
+		document.getElementById('noRoomCard').style.display = "none";
+	}
 
-	// fix here
-	// if (available == 0) {
-	// 	document.getElementById("roomCardContainer").innerHTML = `
-	// 			<div class="roomCard card mr-4 border-0 shadow-sm py-4 mb-4 bg-white rounded"  data-toggle="modal" data-target="#addRoomModal" style="width: 24rem;"">
-	// 				<div class="card-body pt-2 text-center">
-	// 					<h4 class="card-title mb-4">Add a new room</h4>
-	// 				</div>
-	// 			</div>
-	// 		`
+	// for (i = 0; i < li.length; i++) {
+	// 	a = li[i].getElementsByTagName("h4")[0];
+	// 	txtValue = a.textContent || a.innerText;
+	// 	// console.log(txtValue)
+	// 	if (txtValue.toUpperCase().indexOf(filter) > -1) {
+	// 			li[i].style.display = "";
+	// 	} else {
+	// 			li[i].style.display = "none";
+	// 	}
 	// }
 }
 
@@ -76,8 +82,12 @@ function showChart() {
 
   $('#choosenRange').on('DOMSubtreeModified', function() {
 		document.getElementById("allChart").innerHTML = '<div class="d-flex h-100 justify-content-center"><div class="align-self-center"><div class="spinner-border text-danger" style="width:3rem; height:3rem;"><span class="sr-only">Loading...</span></div></div></div>';
-    xhrChart(roomId);
+		let charts = Highcharts.charts;
+		charts.splice(0,3);
+		console.log(charts);
+		xhrChart(roomId);
   });
+
 };
 
 function xhrChart(roomId){
@@ -98,7 +108,7 @@ function xhrChart(roomId){
 		var weeklyTime = [];
 		//var monthlyTime = ['January', 'February','March','April','May','June','July','August','September','Octorber','November','December'];
 		var monthlyTime = [];
-
+	
 	let room_name_found = false;
     var xhttp = new XMLHttpRequest();
 		xhttp.responseType = 'json';
@@ -177,6 +187,7 @@ function xhrChart(roomId){
 							for(var i=0; i<humidData.length; i++){
 								humidData[i] = Math.round((humidData[i]/humidDataCounter[i]) * 100) / 100;
 							}
+							
 							
 							showAllChart(hourTime,peopleData,tempData,humidData);
 							showPeopleChart(hourTime, peopleData); //Illustrate the chart
@@ -570,7 +581,8 @@ function xhrChart(roomId){
 }
 
 function showAllChart(x,y1,y2,y3){
-	new Highcharts.chart('allChart', {
+	
+	Highcharts.chart('allChart', {
 			credits: false,
 
 			exporting:{
@@ -593,6 +605,13 @@ function showAllChart(x,y1,y2,y3){
 			xAxis: {
 					categories: x
 			},
+		
+			yAxis: {
+				title: {
+					text: 'Status'
+				}
+			},
+		
 			series: [{
 					data: y1,
 					name: 'People Count'
@@ -610,7 +629,8 @@ function showAllChart(x,y1,y2,y3){
 }
 
 function showPeopleChart(x,y){
-	new Highcharts.chart('peopleChart', {
+	
+	Highcharts.chart('peopleChart', {
 			credits: false,
 
 			exporting:{
@@ -620,6 +640,8 @@ function showPeopleChart(x,y){
 						}
 				}
 			},
+		
+			className: "reportChart",
 
 			title: {
 					text: 'Number Of People'
@@ -627,6 +649,20 @@ function showPeopleChart(x,y){
 			xAxis: {
 					categories: x
 			},
+		
+			yAxis:{
+					text:'Counts'
+			},
+			
+			plotOptions: {
+				line: {
+					dataLabels: {
+						enabled: true
+					},
+					enableMouseTracking: false
+				}
+			},
+		
 			series: [{
 					data: y	,
 					name: 'People Count'
@@ -635,7 +671,8 @@ function showPeopleChart(x,y){
 }
 
 function showTemperatureChart(x,y){
-	new Highcharts.chart('temperatureChart', {
+	
+	Highcharts.chart('temperatureChart', {
 		credits: false,
 		
 		exporting:{
@@ -662,6 +699,16 @@ function showTemperatureChart(x,y){
 						color: '#808080'
 				}]
 		},
+			
+		plotOptions: {
+			line: {
+				dataLabels: {
+					enabled: true
+				},
+				enableMouseTracking: false
+			}
+		},
+		
 		tooltip: {
 				valueSuffix: '°C'
 		},
@@ -673,7 +720,8 @@ function showTemperatureChart(x,y){
 }
 
 function showHumidityChart(x,y){
-	new Highcharts.chart('humidityChart', {
+	
+	Highcharts.chart('humidityChart', {
 		credits: false,
 		
 		exporting:{
@@ -700,6 +748,16 @@ function showHumidityChart(x,y){
 						color: '#808080'
 				}]
 		},
+			
+		plotOptions: {
+			line: {
+				dataLabels: {
+					enabled: true
+				},
+				enableMouseTracking: false
+			}
+		},
+		
 		tooltip: {
 				valueSuffix: 'RH'
 		},
@@ -709,6 +767,8 @@ function showHumidityChart(x,y){
 		}]
 	});
 }
+
+
 
 
 // function showDashboard(){
@@ -790,7 +850,7 @@ function showDashboardRooms() {
 				notifications.push([{name: result.rooms[room].name, status: statusMsg}]);
 
 				document.getElementById("roomCardContainer").innerHTML += `
-					<div class="roomCard card mr-4 border-0 shadow-sm py-4 mb-4 bg-white rounded" style="width: 24rem;" onclick="onRoomClicked('${result.rooms[room]._id}')">
+					<div class="roomCard card mr-4 border-0 shadow-sm py-4 mb-4 bg-white rounded" style="width: 24rem; height: 13rem;" onclick="onRoomClicked('${result.rooms[room].name}', '${result.rooms[room]._id}')">
 						<div class="card-body pt-2 text-center">
 							<h4 class="card-title mb-4">${result.rooms[room].name}</h4>
 							<h6>Number of people: <span class="roomData people">N/A</span></h6>
@@ -798,8 +858,19 @@ function showDashboardRooms() {
 							<h6>Humidity: <span class="roomData humidity">N/A</span></h6>
 						</div>
 					</div>
-				`
+				`;
 			}
+
+			document.getElementById("roomCardContainer").innerHTML += `
+				<div id="noRoomCard" class="card mr-4 border-0 shadow-sm py-4 mb-4 bg-white rounded" style="width: 24rem; height: 13rem; display: none"	>
+					<div class="card-body pt-2 text-center">
+						<h4 class="card-title mb-4">No room available</h4>
+						<h6 style="color: white">empty</h6>
+						<h6 style="color: white">empty</h6>
+						<h6 style="color: white">empty</h6>
+					</div>
+				</div>
+			`;
 			
 			// document.getElementById("showRoom").innerHTML += '<div class="room-card col-md-4 col-sm-4 col-xs-6" data-toggle="modal" data-target="#addRoomModal"><a><div class="img-thumbnail"><img src="https://image.flaticon.com/icons/svg/109/109615.svg" class="add-icon" title="Lyolya"/></div></a></div>';	
 			
@@ -813,58 +884,22 @@ function showDashboardRooms() {
 	xhttp.send();
 }
 
+
 function loadTodayTrend() {
-	loadTodayTemperature();
-	loadTodayHumidity();
-	loadTodayPeople();
-}
+	// var xhttp = new XMLHttpRequest();
+	// xhttp.responseType = 'json';
 
-function loadTodayTemperature() {
-	var xhttp = new XMLHttpRequest();
-	xhttp.responseType = 'json';
+	// xhttp.onreadystatechange = function () {
+	// 	if(this.readyState == 4 && this.status == 200) {
+	// 		var result = this.response;
+	// 		console.log(result);
+	// 	}
+	// };
 
-	xhttp.onreadystatechange = function () {
-		if(this.readyState == 4 && this.status == 200) {
-			var result = this.response;
-			console.log(result);
-		}
-	};
+	// console.log(roomId);
+	// xhttp.open("GET",`http://localhost:3000/api/rooms/${roomId}`,true);
 
-	xhttp.open("GET","http://localhost:3000/api/data/5db583ed1c9d4400009a20f2/temperature?period=today",true);
-
-	xhttp.send();
-}
-
-function loadTodayHumidity() {
-	var xhttp = new XMLHttpRequest();
-	xhttp.responseType = 'json';
-
-	xhttp.onreadystatechange = function () {
-		if(this.readyState == 4 && this.status == 200) {
-			var result = this.response;
-			console.log(result);
-		}
-	};
-
-	xhttp.open("GET","http://localhost:3000/api/data/5db583ed1c9d4400009a20f2/humidity",true);
-
-	xhttp.send();
-}
-
-function loadTodayPeople() {
-	var xhttp = new XMLHttpRequest();
-	xhttp.responseType = 'json';
-
-	xhttp.onreadystatechange = function () {
-		if(this.readyState == 4 && this.status == 200) {
-			var result = this.response;
-			console.log(result);
-		}
-	};
-
-	xhttp.open("GET","http://localhost:3000/api/data/5db583ed1c9d4400009a20f2/people",true);
-
-	xhttp.send();
+	// xhttp.send();
 }
 
 
@@ -909,7 +944,7 @@ function showUserTable(){
     $("#userEditModalAlert").hide();
     
     var xhttp = new XMLHttpRequest();
-	xhttp.responseType = 'json';
+		xhttp.responseType = 'json';
 
     xhttp.onreadystatechange = function () {
         if(this.readyState == 4 && this.status == 200) {
@@ -963,7 +998,6 @@ function search() {
             } else {
                 tr[i].style.display = "none";
             }
-            
         }
     }
 };
@@ -1619,8 +1653,8 @@ function addRoom(){
 const dashTrendChart = document.getElementById('dashTrendChart').getContext('2d');
 
 const peopleGradient = dashTrendChart.createLinearGradient(500, 0, 100, 0);
-peopleGradient.addColorStop(0, "#667eea");
-peopleGradient.addColorStop(1, "#764ba2");
+peopleGradient.addColorStop(0, "#764ba2");
+peopleGradient.addColorStop(1, "#667eea");
 
 const tempGradient = dashTrendChart.createLinearGradient(500, 0, 100, 0);
 tempGradient.addColorStop(0, "#fc4a1a");
@@ -1630,32 +1664,47 @@ const humidGradient = dashTrendChart.createLinearGradient(500, 0, 100, 0);
 humidGradient.addColorStop(0, "#ff758c");
 humidGradient.addColorStop(1, "#ff7eb3");
 
+let timeline = ['0:00', '1:00', '2:00', '3:00', '4:00', '5:00', '6:00', '7:00', '8:00', '9:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00', '24:00'];
+
+const currentHour = moment().hours();
+timeline = timeline.slice(0, currentHour + 1);
+
+const peopleData = [];
+const temperatureData = [];
+const humidityData = [];
+
+for (let i=0; i<timeline.length; i++) {
+	peopleData.push(0);
+	temperatureData.push(0);
+	humidityData.push(0);
+}
+
 const trendChart = new Chart(dashTrendChart, {
     // The type of chart we want to create
     type: 'line',
 
     // The data for our dataset
     data: {
-        labels: ['9:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00'],
+        labels: timeline,
         datasets: [{
             label: 'Number of People',
             backgroundColor: peopleGradient,
             borderColor: peopleGradient,
-						data: ["19", "20", "15", "17", "10", "25", "30"],
+						data: peopleData,
 						fill: false
 						},
 						{
 							label: 'Temperature',
 							backgroundColor: tempGradient,
 							borderColor: tempGradient,
-							data: ["24", "23.5", "24.3", "24", "26", "25.1", "25.5"],
+							data: temperatureData,
 							fill: false
 						},
 						{
 							label: 'Humidity',
 							backgroundColor: humidGradient,
 							borderColor: humidGradient,
-							data: ["78", "68", "69", "59", "72", "62", "70"],
+							data: humidityData,
 							fill: false
 						}
 				]
@@ -1715,8 +1764,193 @@ $( "#clearNotice" ).click(function() {
 });
 
 
-function onRoomClicked(roomId) {
-	window.location.replace(`/chart/${roomId}`);
-	// document.getElementById('insightRoom').innerHTML = roomName;
-	// document.getElementById('trendRoom').innerHTML = roomName;
+function onRoomClicked(roomName, roomId) {
+	const dotsLoaders = document.getElementsByClassName('dotsLoading');
+	const defaultRooms = document.getElementsByClassName('defaultRoom');
+
+	for (let i=0; i<dotsLoaders.length; i++) {
+		dotsLoaders[i].style.display = "inline";
+	}
+
+	for (let i=0; i<defaultRooms.length; i++) {
+		defaultRooms[i].style.display = "none";
+	}
+
+	// Trend's variables
+	let timeline = ['0:00', '1:00', '2:00', '3:00', '4:00', '5:00', '6:00', '7:00', '8:00', '9:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00', '24:00'];
+	let newPeople = [];
+	let newTemperature = [];
+	let newHumidity = [];
+
+	// Insight's vatiables
+	let highestTemperature = {data: 0, time: null};
+	let highestHumidity = {data: 0, time: null};
+	let highestPeople = {data: 0, time: null};
+	let lowestTemperature = {data: 0, time: null};
+	let lowestHumidity = {data: 0, time: null};
+
+
+	var xhttp = new XMLHttpRequest();
+	xhttp.responseType = 'json';
+
+	xhttp.onreadystatechange = function () {
+		if(this.readyState == 4 && this.status == 200) {
+			var result = this.response;
+
+			const currentHour = moment().hours();
+
+			timeline = timeline.slice(0, currentHour + 1);
+
+			for (let i=0; i<timeline.length; i++) {
+				newPeople.push(0);
+				newTemperature.push(0);
+				newHumidity.push(0);
+			}
+			
+			
+			for (let i=0; i<result.room.people.length; i++) {
+				if (moment(result.room.people[i].time).isSame(new Date(), "day")) {
+					const current = moment(result.room.people[i].time).hours();
+					if (newPeople[current] != 0) {
+						newPeople[current] = (newPeople[current] + result.room.people[i].data) / 2;
+					}
+					else {
+						newPeople[current] = result.room.people[i].data;
+					}
+
+					if (result.room.people[i].data > highestPeople.data) {
+						highestPeople.data = result.room.people[i].data;
+						highestPeople.time = result.room.people[i].time;
+					}
+				}
+			}
+
+			for (let i=0; i<result.room.temperature.length; i++) {
+				if (moment(result.room.temperature[i].time).isSame(new Date(), "day")) {
+					const current = moment(result.room.temperature[i].time).hours();
+
+					if (newTemperature[current] != 0) {
+						newTemperature[current] = (newTemperature[current] + result.room.temperature[i].data) / 2;
+					}
+					else {
+						newTemperature[current] = result.room.temperature[i].data;
+					}
+
+					if (result.room.temperature[i].data > highestTemperature.data) {
+						highestTemperature.data = result.room.temperature[i].data;
+						highestTemperature.time = result.room.temperature[i].time;
+					}
+
+					if (i == 0) {
+						lowestTemperature.data = result.room.temperature[i].data;
+					}
+					else if (result.room.temperature[i].data < lowestTemperature.data) {
+						lowestTemperature.data = result.room.temperature[i].data;
+						lowestTemperature.time = result.room.temperature[i].time;
+					}
+				}
+			}
+
+
+			for (let i=0; i<result.room.humidity.length; i++) {
+				if (moment(result.room.humidity[i].time).isSame(new Date(), "day")){
+					const current = moment(result.room.humidity[i].time).hours();
+					if (newHumidity[current] != 0) {
+						newHumidity[current] = (newHumidity[current] + result.room.humidity[i].data) / 2;
+					}
+					else {
+						newHumidity[current] = result.room.humidity[i].data;
+					}
+
+					if (result.room.humidity[i].data > highestHumidity.data) {
+						highestHumidity.data = result.room.humidity[i].data;
+						highestHumidity.time = result.room.humidity[i].time;
+					}
+
+					if (i == 0) {
+						lowestHumidity.data = result.room.humidity[i].data;
+					}
+					else if (result.room.humidity[i].data < lowestHumidity.data) {
+						lowestHumidity.data = result.room.humidity[i].data;
+						lowestHumidity.time = result.room.humidity[i].time;
+					}
+				}
+			}
+
+			dashIngishtsController(highestPeople, highestTemperature, highestHumidity, lowestTemperature, lowestHumidity);
+
+			trendChart.data.datasets[0].data = newPeople;
+			trendChart.data.datasets[1].data = newTemperature;
+			trendChart.data.datasets[2].data = newHumidity;
+
+			trendChart.data.labels = timeline;
+
+			trendChart.update();
+
+			for (let i=0; i<dotsLoaders.length; i++) {
+				dotsLoaders[i].style.display = "none";
+			}
+
+			for (let i=0; i<defaultRooms.length; i++) {
+				defaultRooms[i].style.display = "inline";
+			}
+
+			document.getElementById('insightRoom').innerHTML = " - " + roomName;
+			document.getElementById('trendRoom').innerHTML = " - " + roomName;
+			document.getElementById('viewRoomDetails').href = `/chart/${roomId}`;
+		}
+	};
+
+	function dashIngishtsController(highestPeople, highestTemperature, highestHumidity, lowestTemperature, lowestHumidity) {
+		if (highestPeople.time != null) {
+			document.getElementById('hPeople').innerHTML = `${moment(highestPeople.time).format('hh:mm a')} - ${highestPeople.data} people`;			
+		}
+
+		if (highestTemperature.time != null) {
+			document.getElementById('hTemp').innerHTML = `${moment(highestTemperature.time).format('hh:mm a')} - ${highestTemperature.data} °C`;
+		}
+
+		if (highestHumidity.time != null) {
+			document.getElementById('hHumid').innerHTML = `${moment(highestHumidity.time).format('hh:mm a')} - ${highestHumidity.data} RH`;
+		}
+
+		if (lowestTemperature.time != null) {
+			document.getElementById('lTemp').innerHTML = `${moment(lowestTemperature.time).format('hh:mm a')} - ${lowestTemperature.data} °C`;
+		}
+
+		if (lowestHumidity.time != null) {
+			document.getElementById('lHumid').innerHTML = `${moment(lowestHumidity.time).format('hh:mm a')} - ${lowestHumidity.data} RH`;
+		}
+
+	}
+
+	xhttp.open("GET",`http://localhost:3000/api/rooms/${roomId}`,true);
+
+	xhttp.send();
+
+}
+
+
+function horizontalWheelScroll() {
+	function scrollHorizontally(e) {
+			e = window.event || e;
+			var delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)));
+			document.getElementById('scrolling-wrapper').scrollLeft -= (delta * 30); // Multiplied by 40
+			e.preventDefault();
+	}
+	if (document.getElementById('scrolling-wrapper').addEventListener) {
+			// IE9, Chrome, Safari, Opera
+			document.getElementById('scrolling-wrapper').addEventListener("mousewheel", scrollHorizontally, false);
+			// Firefox
+			document.getElementById('scrolling-wrapper').addEventListener("DOMMouseScroll", scrollHorizontally, false);
+	} else {
+			// IE 6/7/8
+			document.getElementById('scrolling-wrapper').attachEvent("onmousewheel", scrollHorizontally);
+	}
+}
+
+function onLoadDashboard() {
+	showDashboardRooms();
+	loadTodayTrend();
+	horizontalWheelScroll();
 }
