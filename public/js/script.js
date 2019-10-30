@@ -1082,10 +1082,8 @@ function clear() {
     document.getElementById("uname").value = '';  
     document.getElementById("upsd").value = '';  
     document.getElementById("cupsd").value = '';  
-    document.getElementById("uemail").value = '';  
-    var r = document.getElementById("role");
-    var role = r.options[r.selectedIndex].value = 'Pick a Role';
-    document.getElementById("role").value = role;
+    document.getElementById("uemail").value = ''; 
+    document.getElementById("role").selectedIndex = "0"
 };
 
 
