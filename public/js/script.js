@@ -78,11 +78,15 @@ function showChart() {
   var pathname = url.pathname;
   var split = pathname.split("/");
 	var roomId = split[2];
+
+
+
 	xhrChart(roomId);
 
   $('#choosenRange').on('DOMSubtreeModified', function() {
+
 		document.getElementById("allChart").innerHTML = '<div class="d-flex h-100 justify-content-center"><div class="align-self-center"><div class="spinner-border text-danger" style="width:3rem; height:3rem;"><span class="sr-only">Loading...</span></div></div></div>';
-    xhrChart(roomId);
+    	xhrChart(roomId);
   });
 };
 
@@ -105,6 +109,7 @@ function xhrChart(roomId){
 		//var monthlyTime = ['January', 'February','March','April','May','June','July','August','September','Octorber','November','December'];
 		var monthlyTime = [];
 
+
 	let room_name_found = false;
     var xhttp = new XMLHttpRequest();
 		xhttp.responseType = 'json';
@@ -112,6 +117,8 @@ function xhrChart(roomId){
     xhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {
         var result = this.response;
+
+
 
         for (var room in result.rooms) {
           if (result.rooms[room]._id == roomId) {
@@ -891,8 +898,18 @@ function directToPdf() {
 	let peopleChart, temperatureChart, humidityChart;
 	let charts = Highcharts.charts; // Obtain all the Highcharts objects
 
+	// The top need to destroy the charts
+
+	if (charts.length > 4) {
+		charts = charts.slice(4,);
+	}
+
+	console.log(charts.length);
+	console.log(charts);
 	// Loop through the Highcharts object array and make assignment according to the their respective renderTo.id
 	for (let i = 0; i < charts.length; i++) {
+		console.log(charts[i].renderTo.id);
+		
 		if (charts[i].renderTo.id == "peopleChart") {
 			peopleChart = charts[i].getSVG();
 		}
@@ -902,7 +919,9 @@ function directToPdf() {
 		if (charts[i].renderTo.id == "humidityChart") {
 			humidityChart = charts[i].getSVG();
 		}
+		
 	}
+	
 	
 	// Open the new window that show the PDF file
 	let report_window = window.open("/report");
