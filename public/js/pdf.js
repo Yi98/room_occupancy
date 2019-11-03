@@ -163,6 +163,8 @@ window.generateReport = function (data, peopleChart, temperatureChart, humidityC
     });	
 }
 
+
+//check whether page is refresh
 if (performance.navigation.type == 1) {
     
     var room = sessionStorage.getItem("passRoom");
