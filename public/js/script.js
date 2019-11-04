@@ -4,9 +4,11 @@ var socket = io();
 socket.on("sensor", function(msg) {
 	console.log(msg.temperature);
 	// for loop assign to all room their respective sensor data
-	let roomCards = document.getElementsByClassName("room-card");
+	//let roomCards = document.getElementsByClassName("room-card");
+    let roomCards = document.getElementsByClassName("roomCard");
 	for (let i = 0; i < roomCards.length; i++) {
-		let roomId = roomCards[i].getElementsByClassName("room-id");
+        //let roomId = roomCards[i].getElementsByClassName("room-id");
+		let roomId = roomCards[i].getElementsByClassName("roomId");
 		// change 0 to i later
 		if (roomId[0].innerHTML == msg.roomId) {
 			document.getElementsByClassName("temperature")[i].innerHTML = msg.temperature;
@@ -864,6 +866,7 @@ function showDashboardRooms() {
 							<h6>Number of people: <span class="roomData people">N/A</span></h6>
 							<h6>Temperature: <span class="roomData temperature">N/A</span></h6>
 							<h6>Humidity: <span class="roomData humidity">N/A</span></h6>
+                            <span class="roomId" style="display:none">${result.rooms[room]._id}</span>
 						</div>
 					</div>
 				`;
