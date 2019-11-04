@@ -59,7 +59,7 @@ window.generateReport = function (data, peopleChart, temperatureChart, humidityC
     
     // Insights points
     //Date with most number of people
-    doc.rect(50, 220, 240, 100).fillAndStroke('#3333FF', '#000000').fillColor('white');
+    doc.rect(50, 220, 240, 100).fillAndStroke('#fff', '#000000').fillColor('black');
     doc.fontSize(12).text("Date with most number of people:", 80, 240);
     doc.moveDown();
     doc.fontSize(12).text("10 Jan 2019 4:00AM - 5:00AM", 90, doc.y);
@@ -68,7 +68,7 @@ window.generateReport = function (data, peopleChart, temperatureChart, humidityC
     doc.moveDown();
     
     //Date with lowest number of people
-    doc.rect(320, 220, 240, 100).fillAndStroke('#3333FF', '#000000').fillColor('white');
+    doc.rect(320, 220, 240, 100).fillAndStroke('#fff', '#000000').fillColor('black');
     doc.fontSize(12).text("Date with lowest number of people:" , 350, 240);
     doc.moveDown();
     doc.fontSize(12).text("1 Jan 2019 4:00AM - 5:00AM" , 360, doc.y);
@@ -77,8 +77,8 @@ window.generateReport = function (data, peopleChart, temperatureChart, humidityC
     doc.moveDown();
     
     //Date with highest temperature
-    doc.rect(50, 360, 240, 100).fillAndStroke('#FF9933', '#000000').fillColor('white');
-    doc.fontSize(12).text("Date with highest temperature:", 80, 380);
+    doc.rect(50, 360, 240, 100).fillAndStroke('#fff', '#000000').fillColor('black');
+    doc.fontSize(12).text("Date with highest temperature:", 93, 380);
     doc.moveDown();
     doc.fontSize(12).text("10 Jan 2019 2:00PM - 3:00PM", 90, doc.y);
     doc.moveDown();
@@ -86,8 +86,8 @@ window.generateReport = function (data, peopleChart, temperatureChart, humidityC
     doc.moveDown();
     
     //Date with lowest temperature
-    doc.rect(320, 360, 240, 100).fillAndStroke('#FF9933', '#000000').fillColor('white');
-    doc.fontSize(12).text("Date with lowest temperature:", 350, 380);
+    doc.rect(320, 360, 240, 100).fillAndStroke('#fff', '#000000').fillColor('black');
+    doc.fontSize(12).text("Date with lowest temperature:", 365, 380);
     doc.moveDown();
     doc.fontSize(12).text("15 Jan 2019 12:00AM - 1:00AM", 360, doc.y);
     doc.moveDown();
@@ -95,21 +95,21 @@ window.generateReport = function (data, peopleChart, temperatureChart, humidityC
     doc.moveDown();
     
     //Date with highest humidity
-    doc.rect(50, 500, 240, 100).fillAndStroke('#FF3399', '#000000').fillColor('white');
-    doc.fontSize(12).text("Date with highest humidity:", 80, 520);
+    doc.rect(50, 500, 240, 100).fillAndStroke('#fff', '#000000').fillColor('black');
+    doc.fontSize(12).text("Date with highest humidity:", 97, 520);
     doc.moveDown();
     doc.fontSize(12).text("15 Jan 2019 4:00AM - 5:00AM", 90, doc.y);
     doc.moveDown();
-    doc.fontSize(12).text("80 %", 140, doc.y);
+    doc.fontSize(12).text("80 %", 150, doc.y);
     doc.moveDown();
     
     //Date with lowest humidity
-    doc.rect(320, 500, 240, 100).fillAndStroke('#FF3399', '#000000').fillColor('white');
-    doc.fontSize(12).text("Date with lowest humidity:", 350, 520);
+    doc.rect(320, 500, 240, 100).fillAndStroke('#fff', '#000000').fillColor('black');
+    doc.fontSize(12).text("Date with lowest humidity:", 367, 520);
     doc.moveDown();
     doc.fontSize(12).text("19 Jan 2019 8:00PM - 9:00PM", 360, doc.y);
     doc.moveDown();
-    doc.fontSize(12).text("33 %", 410, doc.y);
+    doc.fontSize(12).text("33 %", 420, doc.y);
     doc.moveDown();
 
     doc.font("Helvetica");
@@ -134,16 +134,16 @@ window.generateReport = function (data, peopleChart, temperatureChart, humidityC
     doc.moveDown();
 
     // Number of People's chart on specific time range
-    doc.fillColor('#3333FF');
-    doc.fontSize(15).text("Number of People from " + data.date_range, 140, doc.y);
+//    doc.fillColor('#3333FF');
+//    doc.fontSize(15).text("Number of People from " + data.date_range, 140, doc.y);
     let peopleChartFinal = new Buffer(peopleChart64, "base64");
     doc.image(peopleChartFinal, 70, doc.y, {height:300});
     
     doc.moveDown();
 
     // Temperature's chart on specific time range
-    doc.fillColor('#FF9933');
-    doc.fontSize(15).text("Temperature from " + data.date_range, 140, doc.y);
+//    doc.fillColor('#FF9933');
+//    doc.fontSize(15).text("Temperature from " + data.date_range, 140, doc.y);
     let temperatureChartFinal = new Buffer(temperatureChart64, "base64");
     doc.image(temperatureChartFinal, 70, doc.y, {height:300});
 
@@ -151,7 +151,7 @@ window.generateReport = function (data, peopleChart, temperatureChart, humidityC
     doc.moveDown(doc.page.height);
 
     // Humidity's chart on specific time range
-    doc.fillColor('#FF3399');
+    doc.fillColor('#00FFFFFF');
     doc.fontSize(15).text("Humidity for " + data.date_range, 140, doc.y);
     let humidityChartFinal = new Buffer(humidityChart64, "base64");
     doc.image(humidityChartFinal, 70, doc.y, {height:300});
@@ -204,58 +204,58 @@ if (performance.navigation.type == 1) {
 
         // Insights points
         //Date with most number of people
-        doc.rect(50, 220, 240, 100).fillAndStroke('#3333FF', '#000000').fillColor('white');
-        doc.fontSize(12).text("Date with most number of people:", 80, 240);
-        doc.moveDown();
-        doc.fontSize(12).text("10 Jan 2019 4:00AM - 5:00AM", 90, doc.y);
-        doc.moveDown();
-        doc.fontSize(12).text("100 People", 140, doc.y);
-        doc.moveDown();
+       doc.rect(50, 220, 240, 100).fillAndStroke('#fff', '#000000').fillColor('black');
+			doc.fontSize(12).text("Date with most number of people:", 80, 240);
+			doc.moveDown();
+			doc.fontSize(12).text("10 Jan 2019 4:00AM - 5:00AM", 90, doc.y);
+			doc.moveDown();
+			doc.fontSize(12).text("100 People", 140, doc.y);
+			doc.moveDown();
 
-        //Date with lowest number of people
-        doc.rect(320, 220, 240, 100).fillAndStroke('#3333FF', '#000000').fillColor('white');
-        doc.fontSize(12).text("Date with lowest number of people:" , 350, 240);
-        doc.moveDown();
-        doc.fontSize(12).text("1 Jan 2019 4:00AM - 5:00AM" , 360, doc.y);
-        doc.moveDown();
-        doc.fontSize(12).text("6 People" , 410, doc.y);
-        doc.moveDown();
+			//Date with lowest number of people
+			doc.rect(320, 220, 240, 100).fillAndStroke('#fff', '#000000').fillColor('black');
+			doc.fontSize(12).text("Date with lowest number of people:" , 350, 240);
+			doc.moveDown();
+			doc.fontSize(12).text("1 Jan 2019 4:00AM - 5:00AM" , 360, doc.y);
+			doc.moveDown();
+			doc.fontSize(12).text("6 People" , 410, doc.y);
+			doc.moveDown();
 
-        //Date with highest temperature
-        doc.rect(50, 360, 240, 100).fillAndStroke('#FF9933', '#000000').fillColor('white');
-        doc.fontSize(12).text("Date with highest temperature:", 80, 380);
-        doc.moveDown();
-        doc.fontSize(12).text("10 Jan 2019 2:00PM - 3:00PM", 90, doc.y);
-        doc.moveDown();
-        doc.fontSize(12).text("35 Celsius", 140, doc.y);
-        doc.moveDown();
+			//Date with highest temperature
+			doc.rect(50, 360, 240, 100).fillAndStroke('#fff', '#000000').fillColor('black');
+			doc.fontSize(12).text("Date with highest temperature:", 93, 380);
+			doc.moveDown();
+			doc.fontSize(12).text("10 Jan 2019 2:00PM - 3:00PM", 90, doc.y);
+			doc.moveDown();
+			doc.fontSize(12).text("35 Celsius", 140, doc.y);
+			doc.moveDown();
 
-        //Date with lowest temperature
-        doc.rect(320, 360, 240, 100).fillAndStroke('#FF9933', '#000000').fillColor('white');
-        doc.fontSize(12).text("Date with lowest temperature:", 350, 380);
-        doc.moveDown();
-        doc.fontSize(12).text("15 Jan 2019 12:00AM - 1:00AM", 360, doc.y);
-        doc.moveDown();
-        doc.fontSize(12).text("23 Celsius", 410, doc.y);
-        doc.moveDown();
+			//Date with lowest temperature
+			doc.rect(320, 360, 240, 100).fillAndStroke('#fff', '#000000').fillColor('black');
+			doc.fontSize(12).text("Date with lowest temperature:", 365, 380);
+			doc.moveDown();
+			doc.fontSize(12).text("15 Jan 2019 12:00AM - 1:00AM", 360, doc.y);
+			doc.moveDown();
+			doc.fontSize(12).text("23 Celsius", 410, doc.y);
+			doc.moveDown();
 
-        //Date with highest humidity
-        doc.rect(50, 500, 240, 100).fillAndStroke('#FF3399', '#000000').fillColor('white');
-        doc.fontSize(12).text("Date with highest humidity:", 80, 520);
-        doc.moveDown();
-        doc.fontSize(12).text("15 Jan 2019 4:00AM - 5:00AM", 90, doc.y);
-        doc.moveDown();
-        doc.fontSize(12).text("80 %", 140, doc.y);
-        doc.moveDown();
+			//Date with highest humidity
+			doc.rect(50, 500, 240, 100).fillAndStroke('#fff', '#000000').fillColor('black');
+			doc.fontSize(12).text("Date with highest humidity:", 97, 520);
+			doc.moveDown();
+			doc.fontSize(12).text("15 Jan 2019 4:00AM - 5:00AM", 90, doc.y);
+			doc.moveDown();
+			doc.fontSize(12).text("80 %", 150, doc.y);
+			doc.moveDown();
 
-        //Date with lowest humidity
-        doc.rect(320, 500, 240, 100).fillAndStroke('#FF3399', '#000000').fillColor('white');
-        doc.fontSize(12).text("Date with lowest humidity:", 350, 520);
-        doc.moveDown();
-        doc.fontSize(12).text("19 Jan 2019 8:00PM - 9:00PM", 360, doc.y);
-        doc.moveDown();
-        doc.fontSize(12).text("33 %", 410, doc.y);
-        doc.moveDown();
+			//Date with lowest humidity
+			doc.rect(320, 500, 240, 100).fillAndStroke('#fff', '#000000').fillColor('black');
+			doc.fontSize(12).text("Date with lowest humidity:", 367, 520);
+			doc.moveDown();
+			doc.fontSize(12).text("19 Jan 2019 8:00PM - 9:00PM", 360, doc.y);
+			doc.moveDown();
+			doc.fontSize(12).text("33 %", 420, doc.y);
+			doc.moveDown();
 
         doc.font("Helvetica");
         doc.moveTo(doc.x, doc.y)
@@ -279,16 +279,16 @@ if (performance.navigation.type == 1) {
         doc.moveDown();
 
         // Number of People's chart on specific time range
-        doc.fillColor('#3333FF');
-        doc.fontSize(15).text("Number of People from " + date, 140, doc.y);
+//        doc.fillColor('#3333FF');
+//        doc.fontSize(15).text("Number of People from " + date, 140, doc.y);
         let peopleChartFinal = new Buffer(ppl, "base64");
         doc.image(peopleChartFinal, 70, doc.y, {height:300});
 
         doc.moveDown();
 
         // Temperature's chart on specific time range
-        doc.fillColor('#FF9933');
-        doc.fontSize(15).text("Temperature from " + date, 140, doc.y);
+//        doc.fillColor('#FF9933');
+//        doc.fontSize(15).text("Temperature from " + date, 140, doc.y);
         let temperatureChartFinal = new Buffer(temp, "base64");
         doc.image(temperatureChartFinal, 70, doc.y, {height:300});
 
@@ -296,7 +296,7 @@ if (performance.navigation.type == 1) {
         doc.moveDown(doc.page.height);
 
         // Humidity's chart on specific time range
-        doc.fillColor('#FF3399');
+        doc.fillColor('#00FFFFFF');
         doc.fontSize(15).text("Humidity for " + date, 140, doc.y);
         let humidityChartFinal = new Buffer(hmd, "base64");
         doc.image(humidityChartFinal, 70, doc.y, {height:300});
