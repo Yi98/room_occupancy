@@ -917,18 +917,8 @@ function directToPdf() {
 	let peopleChart, temperatureChart, humidityChart;
 	let charts = Highcharts.charts; // Obtain all the Highcharts objects
 
-	// The top need to destroy the charts
-
-	if (charts.length > 4) {
-		charts = charts.slice(4,);
-	}
-
-	console.log(charts.length);
-	console.log(charts);
 	// Loop through the Highcharts object array and make assignment according to the their respective renderTo.id
 	for (let i = 0; i < charts.length; i++) {
-		console.log(charts[i].renderTo.id);
-		
 		if (charts[i].renderTo.id == "peopleChart") {
 			peopleChart = charts[i].getSVG();
 		}
@@ -938,9 +928,7 @@ function directToPdf() {
 		if (charts[i].renderTo.id == "humidityChart") {
 			humidityChart = charts[i].getSVG();
 		}
-		
 	}
-	
 	
 	// Open the new window that show the PDF file
 	let report_window = window.open("/report");
