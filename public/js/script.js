@@ -884,25 +884,6 @@ function showDashboardRooms() {
 	xhttp.send();
 }
 
-
-function loadTodayTrend() {
-	// var xhttp = new XMLHttpRequest();
-	// xhttp.responseType = 'json';
-
-	// xhttp.onreadystatechange = function () {
-	// 	if(this.readyState == 4 && this.status == 200) {
-	// 		var result = this.response;
-	// 		console.log(result);
-	// 	}
-	// };
-
-	// console.log(roomId);
-	// xhttp.open("GET",`http://localhost:3000/api/rooms/${roomId}`,true);
-
-	// xhttp.send();
-}
-
-
 // Issue:
 // 1. the generate report only work after the chart has been generated on the web page
 function directToPdf() {
@@ -1824,6 +1805,7 @@ function onRoomClicked(roomName, roomId) {
 			}
 
 			for (let i=0; i<result.room.temperature.length; i++) {
+				console.log(result.room.temperature[i]);
 				if (moment(result.room.temperature[i].time).isSame(new Date(), "day")) {
 					const current = moment(result.room.temperature[i].time).hours();
 
@@ -1949,6 +1931,5 @@ function horizontalWheelScroll() {
 
 function onLoadDashboard() {
 	showDashboardRooms();
-	loadTodayTrend();
 	horizontalWheelScroll();
 }
