@@ -371,6 +371,7 @@ select option {
 #headingUser {
     background: #3333FF;
     color: white;
+    width: 942px;
 }
 
 #down-icon, #up-icon {
