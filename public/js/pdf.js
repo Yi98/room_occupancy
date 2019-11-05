@@ -100,7 +100,7 @@ window.generateReport = function (data, peopleChart, temperatureChart, humidityC
     doc.moveDown();
     doc.fontSize(12).text("15 Jan 2019 4:00AM - 5:00AM", 90, doc.y);
     doc.moveDown();
-    doc.fontSize(12).text("80 %", 150, doc.y);
+    doc.fontSize(12).text("80%", 160, doc.y);
     doc.moveDown();
     
     //Date with lowest humidity
@@ -109,7 +109,7 @@ window.generateReport = function (data, peopleChart, temperatureChart, humidityC
     doc.moveDown();
     doc.fontSize(12).text("19 Jan 2019 8:00PM - 9:00PM", 360, doc.y);
     doc.moveDown();
-    doc.fontSize(12).text("33 %", 420, doc.y);
+    doc.fontSize(12).text("33%", 430, doc.y);
     doc.moveDown();
 
     doc.font("Helvetica");
@@ -245,7 +245,7 @@ if (performance.navigation.type == 1) {
 				doc.moveDown();
 				doc.fontSize(12).text("15 Jan 2019 4:00AM - 5:00AM", 90, doc.y);
 				doc.moveDown();
-				doc.fontSize(12).text("80 %", 150, doc.y);
+				doc.fontSize(12).text("80%", 160, doc.y);
 				doc.moveDown();
 
 				//Date with lowest humidity
@@ -254,7 +254,7 @@ if (performance.navigation.type == 1) {
 				doc.moveDown();
 				doc.fontSize(12).text("19 Jan 2019 8:00PM - 9:00PM", 360, doc.y);
 				doc.moveDown();
-				doc.fontSize(12).text("33 %", 420, doc.y);
+				doc.fontSize(12).text("33%", 430, doc.y);
 				doc.moveDown();
 
         doc.font("Helvetica");

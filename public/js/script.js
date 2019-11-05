@@ -957,7 +957,7 @@ function showUserTable(){
                 '<td>' + result.users[user].username + '</td>' +
                 '<td>' + result.users[user].email + '</td>' +
 				// '<td>' + result.users[user].role + '</td>' +
-				'<td>' + '<input class="roleChangeButtons" onchange="updateUser(this, &#39;' + result.users[user]._id + '&#39;)" type="checkbox" data-toggle="toggle" data-on="Manager" data-off="Staff" data-onstyle="success" data-offstyle="outline-dark" data-size="xs">' + '</td>' +
+				'<td class="roleButtons">' + '<input class="roleChangeButtons" onchange="updateUser(this, &#39;' + result.users[user]._id + '&#39;)" type="checkbox" data-toggle="toggle" data-on="Manager" data-off="Staff" data-onstyle="success" data-offstyle="outline-dark" data-size="xs">' + '</td>' +
 				'<td>' + '<button class = "btn btn-danger" id = "deletebtn" onclick = "deleteUser(&#39;'+ result.users[user]._id + '&#39;)"><span class="fa fa-trash" style = "color: white"></span></button>' + '</td>' + '</tr>' + '</tbody>';
 			};
 
@@ -1000,7 +1000,7 @@ function search() {
             }
         }
     }
-};
+}
 
 function addUser() {
     
@@ -1009,41 +1009,40 @@ function addUser() {
         var element = document.getElementById("userAlert");
         element.classList.add("alert-danger");
         
-        document.getElementById("userAlert").innerHTML = '<strong>Please pick a role!!</strong> <button type="button" class="close" onclick="closeUserAlert()"><span>&times;</span></button>';
+        document.getElementById("userAlert").innerHTML = '<strong>Please pick a role!</strong> <button type="button" class="close" onclick="closeUserAlert()"><span>&times;</span></button>';
         $("#userAlert").show();
     }
 
     if(document.getElementById("uemail").value === "")
     {
-        document.getElementById("userAlert").innerHTML = '<strong>Please fill in your email!!</strong> <button type="button" class="close" onclick="closeUserAlert()"><span>&times;</span></button>';
+        document.getElementById("userAlert").innerHTML = '<strong>Please fill in your email!</strong> <button type="button" class="close" onclick="closeUserAlert()"><span>&times;</span></button>';
         $("#userAlert").show();
     }
     
     if(document.getElementById("cupsd").value === "")
     {
-        document.getElementById("userAlert").innerHTML = '<strong>Please fill in your confirm password!!</strong> <button type="button" class="close" onclick="closeUserAlert()"><span>&times;</span></button>';
+        document.getElementById("userAlert").innerHTML = '<strong>Please fill in your confirm password!</strong> <button type="button" class="close" onclick="closeUserAlert()"><span>&times;</span></button>';
         $("#userAlert").show();
     }
     
      if(document.getElementById("upsd").value === "")
     {
-        document.getElementById("userAlert").innerHTML = '<strong>Please fill in your password!!</strong> <button type="button" class="close" onclick="closeUserAlert()"><span>&times;</span></button>';
+        document.getElementById("userAlert").innerHTML = '<strong>Please fill in your password!</strong> <button type="button" class="close" onclick="closeUserAlert()"><span>&times;</span></button>';
         $("#userAlert").show();
     }
     
     if(document.getElementById("uname").value === "")
     {
-        document.getElementById("userAlert").innerHTML = '<strong>Please fill in your name!!</strong> <button type="button" class="close" onclick="closeUserAlert()"><span>&times;</span></button>';
+        document.getElementById("userAlert").innerHTML = '<strong>Please fill in your name!</strong> <button type="button" class="close" onclick="closeUserAlert()"><span>&times;</span></button>';
         $("#userAlert").show();
     } 
     
     if(document.getElementById("upsd").value !== document.getElementById("cupsd").value )
     {
-        document.getElementById("userAlert").innerHTML = '<strong>Your Password and Confirm Password is not the same. Please fill in again!!</strong> <button type="button" class="close" onclick="closeUserAlert()"><span>&times;</span></button>';
+        document.getElementById("userAlert").innerHTML = '<strong>Your Password and Confirm Password is not the same. Please fill in again!</strong> <button type="button" class="close" onclick="closeUserAlert()"><span>&times;</span></button>';
         $("#userAlert").show();
     }
     
-    console.log
     
     if(document.getElementById("uname").value !== "" 
        && document.getElementById("upsd").value !== "" 
