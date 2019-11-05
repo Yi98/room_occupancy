@@ -1,7 +1,7 @@
 var socket = io();
 
-const domain = `https://roomoccupancy.herokuapp.com`;
-// https://roomoccupancy.herokuapp.com`;
+const domain = 'https://roomoccupancy.herokuapp.com';
+console.log(domain);
 
 socket.on("sensor", function(msg) {
 	console.log(msg.temperature);
