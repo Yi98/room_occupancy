@@ -1,4 +1,3 @@
-
 var socket = io();
 
 socket.on("sensor", function(msg) {
@@ -1316,7 +1315,8 @@ function login(){
         $("#spinner_login").show(); 
         var xhttp = new XMLHttpRequest();
         xhttp.responseType = 'json';
-        var url = 'http://localhost:3000/api/users/login';
+				// var url = 'http://localhost:3000/api/users/login';
+				var url = 'https://roomoccupancy.herokuapp.com/api/users/login';
         var params = 'email=' + document.getElementById("loginEmail").value + '&password=' + document.getElementById("loginPassword").value;
 
                 
