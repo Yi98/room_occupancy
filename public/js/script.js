@@ -1,7 +1,7 @@
-var socket = io();
-
+// const domain = 'http://localhost:3000';
 const domain = 'https://roomoccupancy.herokuapp.com';
-console.log(domain);
+
+var socket = io();
 
 socket.on("sensor", function(msg) {
 	console.log(msg.temperature);
@@ -23,7 +23,7 @@ socket.on("sensor", function(msg) {
 function checkIsLogin() {			
 	var http = new XMLHttpRequest();
 
-	http.open('GET', 'http://localhost:3000/', true);
+	http.open('GET', `${domain}/`, true);
 
 	http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 
@@ -587,7 +587,7 @@ function xhrChart(roomId){
 				}
 			}
 		};
-		xhttp.open("GET", "http://localhost:3000/api/rooms", true);
+		xhttp.open("GET", `${domain}/api/rooms`, true);
 
     xhttp.send();
 }
@@ -781,57 +781,6 @@ function showHumidityChart(x,y){
 }
 
 
-
-
-// function showDashboard(){
-// var xhttp = new XMLHttpRequest();
-// xhttp.responseType = 'json';
-
-// xhttp.onreadystatechange = function () {
-// 	if(this.readyState == 4 && this.status == 200) {
-// 		var result = this.response;
-
-// 		const notifications = [];
-
-// 		for(var room in result.rooms){
-// 			var status = result.rooms[room].people.length;
-// 			if(status < 25){
-// 				var statusMsg = "Low";
-// 			}
-			
-// 			if(status > 25){
-// 				var statusMsg = "Moderate";
-// 			}
-			
-// 			if(status > 50){
-// 				var statusMsg = "Full";
-// 			}
-
-// 			notifications.push([{name: result.rooms[room].name, status: statusMsg}]);
-
-// 			document.getElementById("showRoom").innerHTML += '<div class="room-card col-md-4 col-sm-4 col-xs-6" ><a onclick="window.open(\'/chart/' + result.rooms[room]._id + '\')"><div class="img-thumbnail">' +
-// 									'<h4>' + result.rooms[room].name + '</h4>' +
-// 									'<p>' + 'Number of People: ' + result.rooms[room].people.length + '</p>' +
-// 									'<p>' + 'Temperature: ' + "<span class='temperature'>0</span>" + '&#x2103;</p>' +
-// 									'<p>' + 'Humidity: ' + "<span class='humidity'>0</span>" + '</p>' + 
-// 				  '<p>' + 'Status: <span class="roomStatus">' + statusMsg + '</span></p>'+
-// 				  '<span style="display:none" class="room-id">'+ result.rooms[room]._id +'</span>' +
-// 				  '</div></a></div>';
-// 		}
-		
-// 		document.getElementById("showRoom").innerHTML += '<div class="room-card col-md-4 col-sm-4 col-xs-6" data-toggle="modal" data-target="#addRoomModal"><a><div class="img-thumbnail"><img src="https://image.flaticon.com/icons/svg/109/109615.svg" class="add-icon" title="Lyolya"/></div></a></div>';	
-		
-// 		localStorage.setItem('notifications', JSON.stringify(notifications));
-// 		console.log(JSON.parse(localStorage.getItem('notifications')));
-// 	}
-// };
-
-// 	xhttp.open("GET","http://localhost:3000/api/rooms",true);
-
-// 	xhttp.send();
-
-// };
-
 function showDashboardRooms() {
 	var xhttp = new XMLHttpRequest();
 	xhttp.responseType = 'json';
@@ -892,7 +841,7 @@ function showDashboardRooms() {
 		}
 	};
 
-	xhttp.open("GET","http://localhost:3000/api/rooms",true);
+	xhttp.open("GET",`${domain}/api/rooms`,true);
 
 	xhttp.send();
 }
@@ -971,7 +920,7 @@ function showUserTable(){
 
     };
 
-	xhttp.open("GET","http://localhost:3000/api/users",true);	
+	xhttp.open("GET", `${domain}/api/users`, true);	
     xhttp.send();
 	
 };
@@ -1048,7 +997,7 @@ function addUser() {
         $("#spinner_adduser").show();
         var xhttp = new XMLHttpRequest();
         xhttp.responseType = 'json';
-        var url = 'http://localhost:3000/api/users';
+        var url = `${domain}/api/users`;
         var params = 'role=' + document.getElementById("role").value 
                     + '&username=' + document.getElementById("uname").value 
                     + '&email=' + document.getElementById('uemail').value
@@ -1159,7 +1108,7 @@ function showModal(){
         var xhttp = new XMLHttpRequest();
 				xhttp.responseType = 'json';
         
-				var url = 'http://localhost:3000/api/users/' + cells[0].innerHTML;
+				var url = `${domain}/api/users/` + cells[0].innerHTML;
         
         document.getElementById("id").value = cells[0].innerHTML;
         document.getElementById("previousRole").value = cells[3].innerHTML;
@@ -1194,7 +1143,7 @@ function updateUser(checkboxValue, id) {
 
 	var xhttp = new XMLHttpRequest();
 	xhttp.responseType = 'json';
-	var url = 'http://localhost:3000/api/users/' + id;
+	var url = `${domain}/api/users/` + id;
 	var params = 'role=' + role;
 
 	xhttp.open('PUT',url,true);
@@ -1247,7 +1196,7 @@ function deleteUser(userIdDelete){
         var xhttp = new XMLHttpRequest();
         xhttp.responseType = 'json';
 
-        var url = 'http://localhost:3000/api/users/' + userIdDelete;
+        var url = `${domain}/api/users/` + userIdDelete;
 
         xhttp.open("DELETE",url,true);
 
@@ -1318,7 +1267,7 @@ function login(){
         $("#spinner_login").show(); 
         var xhttp = new XMLHttpRequest();
         xhttp.responseType = 'json';
-				var url = domain + '/login';
+				var url = `${domain}/api/users/login`;
         var params = 'email=' + document.getElementById("loginEmail").value + '&password=' + document.getElementById("loginPassword").value;
                 
         xhttp.open('POST',url,true);
@@ -1410,7 +1359,7 @@ function checkEmail(){
     {
         var xhttp = new XMLHttpRequest();
         xhttp.responseType = 'json';
-        var url = 'http://localhost:3000/api/users/forgotPassword';
+        var url = `${domain}/api/users/forgotPassword`;
         var params = 'email=' + document.getElementById("forgetEmail").value;
 
         xhttp.open('POST',url,true);
@@ -1492,7 +1441,7 @@ function onResetPassword() {
         var xhttp = new XMLHttpRequest();
         xhttp.responseType = 'json';
 
-        var url = 'http://localhost:3000/api/users/resetPassword';
+        var url = `${domain}/api/users/resetPassword`;
 
         const token = window.location.pathname.split('/')[2];
         const password = document.getElementById("password").value;
@@ -1619,7 +1568,7 @@ function addRoom(){
 	} else {
 		var xhttp = new XMLHttpRequest();
 		xhttp.responseType = 'json';
-		var url = 'http://localhost:3000/api/rooms';
+		var url = `${domain}/api/rooms`;
 		var params = 'name=' + document.getElementById("room-name").value;
 
 		xhttp.open('POST',url,true);
@@ -1915,7 +1864,7 @@ function onRoomClicked(roomName, roomId) {
 
 	}
 
-	xhttp.open("GET",`http://localhost:3000/api/rooms/${roomId}`,true);
+	xhttp.open("GET", `${domain}/api/rooms/${roomId}`, true);
 
 	xhttp.send();
 
