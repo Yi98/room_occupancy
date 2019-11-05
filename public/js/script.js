@@ -1,10 +1,9 @@
-// const domain = 'http://localhost:3000';
-const domain = 'https://roomoccupancy.herokuapp.com';
+const domain = 'http://localhost:3000';
+// const domain = 'https://roomoccupancy.herokuapp.com';
 
 var socket = io();
 
 socket.on("sensor", function(msg) {
-	console.log(msg.temperature);
 	// for loop assign to all room their respective sensor data
 	//let roomCards = document.getElementsByClassName("room-card");
     let roomCards = document.getElementsByClassName("roomCard");
@@ -18,23 +17,6 @@ socket.on("sensor", function(msg) {
 		}
 	}
 });
-
-
-function checkIsLogin() {			
-	var http = new XMLHttpRequest();
-
-	http.open('GET', `${domain}/`, true);
-
-	http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-
-	http.onreadystatechange = function() {
-			if(http.readyState == 4 && http.status == 200) {
-					console.log(http.response);
-			}
-	}
-
-	http.send();
-};
 
 
 function searchRoom() {
@@ -62,17 +44,6 @@ function searchRoom() {
 	else {
 		document.getElementById('noRoomCard').style.display = "none";
 	}
-
-	// for (i = 0; i < li.length; i++) {
-	// 	a = li[i].getElementsByTagName("h4")[0];
-	// 	txtValue = a.textContent || a.innerText;
-	// 	// console.log(txtValue)
-	// 	if (txtValue.toUpperCase().indexOf(filter) > -1) {
-	// 			li[i].style.display = "";
-	// 	} else {
-	// 			li[i].style.display = "none";
-	// 	}
-	// }
 }
 
 
@@ -92,7 +63,6 @@ function showChart() {
 		document.getElementById("allChart").innerHTML = '<div class="d-flex h-100 justify-content-center"><div class="align-self-center"><div class="spinner-border text-danger" style="width:3rem; height:3rem;"><span class="sr-only">Loading...</span></div></div></div>';
 		let charts = Highcharts.charts;
 		charts.splice(0,3);
-		console.log(charts);
 		xhrChart(roomId);
   });
 
@@ -833,11 +803,6 @@ function showDashboardRooms() {
 					</div>
 				</div>
 			`;
-			
-			// document.getElementById("showRoom").innerHTML += '<div class="room-card col-md-4 col-sm-4 col-xs-6" data-toggle="modal" data-target="#addRoomModal"><a><div class="img-thumbnail"><img src="https://image.flaticon.com/icons/svg/109/109615.svg" class="add-icon" title="Lyolya"/></div></a></div>';	
-			
-			// localStorage.setItem('notifications', JSON.stringify(notifications));
-			// console.log(JSON.parse(localStorage.getItem('notifications')));
 		}
 	};
 
@@ -1384,7 +1349,6 @@ function checkEmail(){
             {
                 $("#spinner_forget").hide(); 
                 
-                console.log(xhttp.response.message);
                 var element = document.getElementById("forgetAlert");
                 element.classList.add("alert-danger");
                 
@@ -1765,7 +1729,6 @@ function onRoomClicked(roomName, roomId) {
 			}
 
 			for (let i=0; i<result.room.temperature.length; i++) {
-				console.log(result.room.temperature[i]);
 				if (moment(result.room.temperature[i].time).isSame(new Date(), "day")) {
 					const current = moment(result.room.temperature[i].time).hours();
 
