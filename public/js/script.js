@@ -4,9 +4,11 @@ var socket = io();
 socket.on("sensor", function(msg) {
 	console.log(msg.temperature);
 	// for loop assign to all room their respective sensor data
-	let roomCards = document.getElementsByClassName("room-card");
+	//let roomCards = document.getElementsByClassName("room-card");
+    let roomCards = document.getElementsByClassName("roomCard");
 	for (let i = 0; i < roomCards.length; i++) {
-		let roomId = roomCards[i].getElementsByClassName("room-id");
+        //let roomId = roomCards[i].getElementsByClassName("room-id");
+		let roomId = roomCards[i].getElementsByClassName("roomId");
 		// change 0 to i later
 		if (roomId[0].innerHTML == msg.roomId) {
 			document.getElementsByClassName("temperature")[i].innerHTML = msg.temperature;
@@ -78,9 +80,13 @@ function showChart() {
   var pathname = url.pathname;
   var split = pathname.split("/");
 	var roomId = split[2];
+
+
+
 	xhrChart(roomId);
 
   $('#choosenRange').on('DOMSubtreeModified', function() {
+
 		document.getElementById("allChart").innerHTML = '<div class="d-flex h-100 justify-content-center"><div class="align-self-center"><div class="spinner-border text-danger" style="width:3rem; height:3rem;"><span class="sr-only">Loading...</span></div></div></div>';
 		let charts = Highcharts.charts;
 		charts.splice(0,3);
@@ -108,6 +114,8 @@ function xhrChart(roomId){
 		var weeklyTime = [];
 		//var monthlyTime = ['January', 'February','March','April','May','June','July','August','September','Octorber','November','December'];
 		var monthlyTime = [];
+
+
 	
 	let room_name_found = false;
     var xhttp = new XMLHttpRequest();
@@ -116,6 +124,8 @@ function xhrChart(roomId){
     xhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {
         var result = this.response;
+
+
 
         for (var room in result.rooms) {
           if (result.rooms[room]._id == roomId) {
@@ -856,6 +866,7 @@ function showDashboardRooms() {
 							<h6>Number of people: <span class="roomData people">N/A</span></h6>
 							<h6>Temperature: <span class="roomData temperature">N/A</span></h6>
 							<h6>Humidity: <span class="roomData humidity">N/A</span></h6>
+                            <span class="roomId" style="display:none">${result.rooms[room]._id}</span>
 						</div>
 					</div>
 				`;
@@ -883,25 +894,6 @@ function showDashboardRooms() {
 
 	xhttp.send();
 }
-
-
-function loadTodayTrend() {
-	// var xhttp = new XMLHttpRequest();
-	// xhttp.responseType = 'json';
-
-	// xhttp.onreadystatechange = function () {
-	// 	if(this.readyState == 4 && this.status == 200) {
-	// 		var result = this.response;
-	// 		console.log(result);
-	// 	}
-	// };
-
-	// console.log(roomId);
-	// xhttp.open("GET",`http://localhost:3000/api/rooms/${roomId}`,true);
-
-	// xhttp.send();
-}
-
 
 // Issue:
 // 1. the generate report only work after the chart has been generated on the web page
@@ -1823,6 +1815,7 @@ function onRoomClicked(roomName, roomId) {
 			}
 
 			for (let i=0; i<result.room.temperature.length; i++) {
+				console.log(result.room.temperature[i]);
 				if (moment(result.room.temperature[i].time).isSame(new Date(), "day")) {
 					const current = moment(result.room.temperature[i].time).hours();
 
@@ -1948,6 +1941,5 @@ function horizontalWheelScroll() {
 
 function onLoadDashboard() {
 	showDashboardRooms();
-	loadTodayTrend();
 	horizontalWheelScroll();
 }
