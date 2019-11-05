@@ -17,10 +17,10 @@ const port = 3000;
 
 require('dotenv').config();
 
-mongoose.connect(process.env.DB_CRIDENTIALS, {
+mongoose.connect('mongodb+srv://user1:pass1word@roomoccupancy-qayg2.mongodb.net/test?retryWrites=true&w=majority', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
-  dbName: process.env.DB_NAME
+  dbName: 'RoomOccupancy'
 });
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
