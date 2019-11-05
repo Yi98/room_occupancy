@@ -1318,7 +1318,7 @@ function login(){
         $("#spinner_login").show(); 
         var xhttp = new XMLHttpRequest();
         xhttp.responseType = 'json';
-				var url = `${domain}/login`;
+				var url = domain + '/login';
         var params = 'email=' + document.getElementById("loginEmail").value + '&password=' + document.getElementById("loginPassword").value;
                 
         xhttp.open('POST',url,true);
