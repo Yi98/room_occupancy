@@ -1,5 +1,8 @@
 var socket = io();
 
+const domain = `https://roomoccupancy.herokuapp.com`;
+// https://roomoccupancy.herokuapp.com`;
+
 socket.on("sensor", function(msg) {
 	console.log(msg.temperature);
 	// for loop assign to all room their respective sensor data
@@ -1315,10 +1318,8 @@ function login(){
         $("#spinner_login").show(); 
         var xhttp = new XMLHttpRequest();
         xhttp.responseType = 'json';
-				var url = 'http://localhost:3000/api/users/login';
-				// var url = 'https://roomoccupancy.herokuapp.com/api/users/login';
+				var url = `${domain}/login`;
         var params = 'email=' + document.getElementById("loginEmail").value + '&password=' + document.getElementById("loginPassword").value;
-
                 
         xhttp.open('POST',url,true);
 
