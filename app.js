@@ -15,10 +15,12 @@ const dataApi = require('./server/api/data');
 const dataController = require("./server/controller/data");
 const port = 3000;
 
-mongoose.connect('mongodb+srv://user1:pass1word@roomoccupancy-qayg2.mongodb.net/test?retryWrites=true&w=majority', {
+require('dotenv').config();
+
+mongoose.connect(process.env.DB_CRIDENTIALS, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
-  dbName: 'RoomOccupancy'
+  dbName: process.env.DB_NAME
 });
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
