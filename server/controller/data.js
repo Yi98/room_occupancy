@@ -103,6 +103,11 @@ exports.postSensorData = (req, res) => {
   let fetchedRoom;
   // need store parameter
   socket.emit("sensor", {temperature: req.body.tempData, humidity: req.body.humidData, roomId: req.params.roomId});
+
+  if (req.body.store != true) {
+    return res.status(200).json({message: 'Successfully push sensor data to client'});
+  }
+
   Room.findById(req.params.roomId)
     .then(room => {
       if (!room) {
@@ -149,6 +154,10 @@ exports.postSensorData = (req, res) => {
 // post number of people of a room ->  /api/data/:roomId/people (POST)
 exports.postPeople = (req, res) => {
   let fetchedRoom;
+
+  if (req.body.store != true) {
+    return res.status(200).json({message: 'Successfully push people data to client'});
+  }
 
   Room.findById(req.params.roomId)
     .then(room => {
