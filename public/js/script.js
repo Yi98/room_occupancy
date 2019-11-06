@@ -781,13 +781,14 @@ function showDashboardRooms() {
 				notifications.push([{name: result.rooms[room].name, status: statusMsg}]);
 
 				document.getElementById("roomCardContainer").innerHTML += `
-					<div class="roomCard card mr-4 border-0 shadow-sm py-4 mb-4 bg-white rounded" style="width: 24rem; height: 13rem;" onclick="onRoomClicked('${result.rooms[room].name}', '${result.rooms[room]._id}')">
+					<div class="roomCard card mr-4 border-0 shadow-sm pt-3 pb-4 mb-4 bg-white rounded" style="width: 24rem; height: 14rem;" onclick="onRoomClicked('${result.rooms[room].name}', '${result.rooms[room]._id}')">
 						<div class="card-body pt-2 text-center">
 							<h4 class="card-title mb-4">${result.rooms[room].name}</h4>
 							<h6>Number of people: <span class="roomData people">N/A</span></h6>
 							<h6>Temperature: <span class="roomData temperature">N/A</span></h6>
 							<h6>Humidity: <span class="roomData humidity">N/A</span></h6>
-                            <span class="roomId" style="display:none">${result.rooms[room]._id}</span>
+							<p class="lastUpdated mt-4">Last updated: 11:25:15</p>
+              <span class="roomId" style="display:none">${result.rooms[room]._id}</span>
 						</div>
 					</div>
 				`;
