@@ -28,7 +28,8 @@
   "scripts": {
     "start": "node app.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "bundle": "browserify public/js/pdf.js -o public/js/bundle.js"
+    "bundle": "browserify public/js/pdf.js -o public/js/bundle.js",
+    "build" : "browserify public/js/pdf.js -o public/js/bundle.js"
   },
   "repository": {
     "type": "git",
