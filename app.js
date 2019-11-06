@@ -4,6 +4,7 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const session = require('express-session');
 const bodyParser = require('body-parser');
+const dotenv = require('dotenv');
 const app = express();
 const server = require("http").createServer(app);
 const io = require("socket.io")(server);
@@ -15,7 +16,7 @@ const dataApi = require('./server/api/data');
 const dataController = require("./server/controller/data");
 const port = 3000;
 
-require('dotenv').config();
+dotenv.config();
 
 mongoose.connect(process.env.DB_CRIDENTIALS, {
   useNewUrlParser: true,
