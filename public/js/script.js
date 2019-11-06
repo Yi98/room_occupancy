@@ -1211,7 +1211,7 @@ function loginPage() {
     $("#forgetAlert").hide();
 };
 
-function login(){
+async function login(){
 
 		$("#loginAlert").hide();
     
@@ -1243,27 +1243,32 @@ function login(){
 
             if(xhttp.readyState == 4 && xhttp.status == 200) 
             {
-                if(xhttp.response.status == "success")
-                {
-										$("#spinner_login").hide(); 
-										document.cookie = "token=" + xhttp.response.token;
-                    window.location.replace("/dashboard");
-                }
+							if(xhttp.response.status == "success")
+							{
+									$("#spinner_login").hide(); 
+
+									
+									document.cookie = "token=" + xhttp.response.token;
+
+									setTimeout(_ => {
+										window.location.replace("/dashboard");
+									}, 500);
+
+							}
             }
             
             if((xhttp.readyState == 4 && xhttp.status == 401) || (xhttp.readyState == 4 && xhttp.status == 404)) 
             {
-                $("#spinner_login").hide(); 
-                document.getElementById("loginAlert").innerHTML = '<strong>Login credentials invalid!!</strong> <button type="button" class="close" onclick="closeLoginAlert()"><span>&times;</span></button>';
-                $("#loginAlert").show();
-                
+							$("#spinner_login").hide(); 
+							document.getElementById("loginAlert").innerHTML = '<strong>Login credentials invalid!!</strong> <button type="button" class="close" onclick="closeLoginAlert()"><span>&times;</span></button>';
+							$("#loginAlert").show();
             }
             
             if(xhttp.readyState == 4 && xhttp.status == 500) 
             {
-                $("#spinner_login").hide();
-                document.getElementById("loginAlert").innerHTML = '<strong>' + xhttp.response.message + ' maybe something is wrong with the server</strong> <button type="button" class="close" onclick="closeLoginAlert()"><span>&times;</span></button>';
-                $("#loginAlert").show();
+							$("#spinner_login").hide();
+							document.getElementById("loginAlert").innerHTML = '<strong>' + xhttp.response.message + ' maybe something is wrong with the server</strong> <button type="button" class="close" onclick="closeLoginAlert()"><span>&times;</span></button>';
+							$("#loginAlert").show();
                 
             }
         }
