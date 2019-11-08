@@ -1008,6 +1008,9 @@ function addUser() {
             if(xhttp.readyState == 4 && xhttp.status == 500) {
                 $("#spinner_adduser").hide();
                 
+                var element = document.getElementById("userAlert");
+                element.classList.add("alert-danger");
+                
                 document.getElementById("userAlert").innerHTML = '<strong>' + xhttp.response.message + '</strong> <button type="button" class="close" onclick="closeUserAlert()"><span>&times;</span></button>';
                 
                 $("#userAlert").show();
