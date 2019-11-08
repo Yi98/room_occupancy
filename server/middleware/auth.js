@@ -18,16 +18,20 @@ module.exports = (req, res, next) => {
           }
         }
       }
-    } 
+    }
+    else {
+      isToken = false;
+    }
+    
 
     if (isToken) {
       const decoded = jwt.verify(token, 'fyp_room');
       req.userData = { userId: decoded.userId, role: decoded.role };
+      next();
     }
-    
-    next();
-    // const decoded = jwt.verify(token, process.env.JWT_KEY);
-    
+    else {
+      throw new Error();
+    }
   }
   catch(err) {
     res.status(401).json({
