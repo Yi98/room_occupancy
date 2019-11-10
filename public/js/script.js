@@ -787,7 +787,7 @@ function showDashboardRooms() {
 							<h6>Number of people: <span class="roomData people">N/A</span></h6>
 							<h6>Temperature: <span class="roomData temperature">N/A</span></h6>
 							<h6>Humidity: <span class="roomData humidity">N/A</span></h6>
-							<p class="lastUpdated mt-4">Last updated: 11:25:15</p>
+							<p class="lastUpdated mt-4">Last updated: Nov 11, 00:30 AM</p>
               <span class="roomId" style="display:none">${result.rooms[room]._id}</span>
 						</div>
 					</div>
