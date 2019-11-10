@@ -860,6 +860,7 @@ function showUserTable(){
             $("#spinner").hide();
             var result = this.response;
             for(var user in result.users){
+                
                 document.getElementById("showUser").innerHTML += 
                 '<tbody>' + '<tr>' +
                 '<td style="display: none;">' + result.users[user]._id + '</td>' +
@@ -869,6 +870,8 @@ function showUserTable(){
 				'<td class="roleButtons">' + '<input class="roleChangeButtons" onchange="updateUser(this, &#39;' + result.users[user]._id + '&#39;)" type="checkbox" data-toggle="toggle" data-on="Manager" data-off="Staff" data-onstyle="success" data-offstyle="outline-dark" data-size="xs">' + '</td>' +
 				'<td>' + '<button class = "btn btn-danger" id = "deletebtn" onclick = "deleteUser(&#39;'+ result.users[user]._id + '&#39;)"><span class="fa fa-trash" style = "color: white"></span></button>' + '</td>' + '</tr>' + '</tbody>';
 			};
+            
+            hideLoginUser();
 
 			// Set the checkbox checked value to either staff or manager according to the user roles
 			let roleChangeButtons = document.getElementsByClassName("roleChangeButtons");
@@ -892,23 +895,69 @@ function showUserTable(){
 };
 
 function search() {
-    var input, filter, table, tr, td, i, textValue;
+    var input, filter, table, tr, td, i, textValue, userID;
     input = document.getElementById("searchInput");
+    userID = sessionStorage.getItem("passLoginUserID");
     filter = input.value.toUpperCase();
     table = document.getElementById("userTable");
     tr = table.getElementsByTagName("tr");
     
     for (i = 0; i < tr.length; i++) {
         td = tr[i].getElementsByTagName("td")[1];
+        td_id = tr[i].getElementsByTagName("td")[0];
         if (td) {
             textValue = td.textContent || td.innerText;
+            textUserID = td_id.textContent || td_id.innerText;
             if (textValue.toUpperCase().indexOf(filter) > -1) {
+            
                 tr[i].style.display = "";
+                
+                if(textUserID == userID)
+                {
+                   tr[i].style.display = "none"; 
+                }
+                
             } else {
+                
                 tr[i].style.display = "none";
+                
             }
         }
     }
+}
+
+function hideLoginUser() {
+    var input, filter, table, tr, td, i, textValue;
+    input = sessionStorage.getItem("passLoginUserID");
+    table = document.getElementById("userTable");
+    tr = table.getElementsByTagName("tr");
+    
+    for (i = 0; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td")[0];
+        if (td) {
+            textValue = td.textContent || td.innerText;
+            if (textValue === input) {
+                tr[i].style.display = "none";
+            } else {
+                tr[i].style.display = "";
+            }
+        }
+    }
+}
+
+function toggle() {
+    function toggleOpen(e) 
+    {
+        $(e.target).prev('.card-header').find(".expand-icon").text("remove_circle");
+    }
+
+    function toggleClose(e) 
+    {
+        $(e.target).prev('.card-header').find(".expand-icon").text("add_circle");
+    }
+    
+    $('.panel-group').on('hidden.bs.collapse', toggleClose);
+    $('.panel-group').on('shown.bs.collapse', toggleOpen);
 }
 
 function addUser() {
@@ -921,12 +970,14 @@ function addUser() {
         document.getElementById("userAlert").innerHTML = '<strong>Please pick a role!</strong> <button type="button" class="close" onclick="closeUserAlert()"><span>&times;</span></button>';
         $("#userAlert").show();
     }
-
-    if(document.getElementById("uemail").value === "")
+        
+    if(document.getElementById("upsd").value !== document.getElementById("cupsd").value )
     {
-        document.getElementById("userAlert").innerHTML = '<strong>Please fill in your email!</strong> <button type="button" class="close" onclick="closeUserAlert()"><span>&times;</span></button>';
+        document.getElementById("userAlert").innerHTML = '<strong>Your Password and Confirm Password is not the same. Please fill in again!</strong> <button type="button" class="close" onclick="closeUserAlert()"><span>&times;</span></button>';
         $("#userAlert").show();
     }
+
+    CheckPassword(document.getElementById("cupsd"));
     
     if(document.getElementById("cupsd").value === "")
     {
@@ -934,9 +985,17 @@ function addUser() {
         $("#userAlert").show();
     }
     
-     if(document.getElementById("upsd").value === "")
+    CheckPassword(document.getElementById("upsd"));
+    
+    if(document.getElementById("upsd").value === "")
     {
         document.getElementById("userAlert").innerHTML = '<strong>Please fill in your password!</strong> <button type="button" class="close" onclick="closeUserAlert()"><span>&times;</span></button>';
+        $("#userAlert").show();
+    }
+    
+    if(document.getElementById("uemail").value === "")
+    {
+        document.getElementById("userAlert").innerHTML = '<strong>Please fill in your email!</strong> <button type="button" class="close" onclick="closeUserAlert()"><span>&times;</span></button>';
         $("#userAlert").show();
     }
     
@@ -946,11 +1005,10 @@ function addUser() {
         $("#userAlert").show();
     } 
     
-    if(document.getElementById("upsd").value !== document.getElementById("cupsd").value )
-    {
-        document.getElementById("userAlert").innerHTML = '<strong>Your Password and Confirm Password is not the same. Please fill in again!</strong> <button type="button" class="close" onclick="closeUserAlert()"><span>&times;</span></button>';
-        $("#userAlert").show();
-    }
+//    if(document.getElementById("upsd").value !== "")
+//    {
+//        CheckPassword(document.getElementById("upsd"));
+//    }
     
     
     if(document.getElementById("uname").value !== "" 
@@ -958,7 +1016,9 @@ function addUser() {
        && document.getElementById("cupsd").value !== "" 
        && document.getElementById("uemail").value !== "" 
        && document.getElementById("role").value !== "Pick a Role" 
-       && (document.getElementById("upsd").value === document.getElementById("cupsd").value))
+       && (document.getElementById("upsd").value === document.getElementById("cupsd").value)
+       && CheckPassword(document.getElementById("upsd")) === true
+       && CheckPassword(document.getElementById("cupsd")) === true)
     {
         $("#spinner_adduser").show();
         var xhttp = new XMLHttpRequest();
@@ -1019,6 +1079,55 @@ function addUser() {
         }
 
         xhttp.send(params); 
+
+    }
+};
+
+function CheckPassword(input)
+{
+    var validPassword = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,12}$/;
+
+    if(input.value.match(validPassword))
+    {
+//        var element = document.getElementById("userAlert");
+//        element.classList.remove("alert-danger")
+//        element.classList.add("alert-success");
+//        
+//        document.getElementById("userAlert").innerHTML = '<strong>Your Password is valid!</strong> <button type="button" class="close" onclick="closeUserAlert()"><span>&times;</span></button>';
+//        $("#userAlert").show();
+        
+        return true;
+    }
+    else
+    {
+        var element = document.getElementById("userAlert");
+        element.classList.add("alert-danger");
+        
+        document.getElementById("userAlert").innerHTML = '<strong>Your Password or Confirm Password is invalid. Please enter a password which contain 8 to 12 character, at least one numeric digit, one uppercase and one lowercase letter!</strong> <button type="button" class="close" onclick="closeUserAlert()"><span>&times;</span></button>';
+        $("#userAlert").show();
+        
+        return false;
+
+    }
+};
+
+function CheckResetPassword(input)
+{
+    var validPassword = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,12}$/;
+
+    if(input.value.match(validPassword))
+    {   
+        return true;
+    }
+    else
+    {
+        var element = document.getElementById("resetAlert");
+        element.classList.add("alert-danger");
+        
+        document.getElementById("resetAlert").innerHTML = '<strong>Your New Password or Confirm Password is invalid. Please enter a password which contain 8 to 12 character, at least one numeric digit, one uppercase and one lowercase letter!</strong> <button type="button" class="close" onclick="closeResetAlert()"><span>&times;</span></button>';
+        $("#userAlert").show();
+        
+        return false;
 
     }
 };
@@ -1091,7 +1200,7 @@ function showModal(){
             }
         };
         
-				xhttp.open("GET",url,true);
+        xhttp.open("GET",url,true);
 
         xhttp.send();
         
@@ -1216,8 +1325,8 @@ function loginPage() {
 };
 
 async function login(){
-
-		$("#loginAlert").hide();
+    
+    $("#loginAlert").hide();
     
     if(document.getElementById("loginPassword").value === "")
     {
@@ -1247,32 +1356,34 @@ async function login(){
 
             if(xhttp.readyState == 4 && xhttp.status == 200) 
             {
-							if(xhttp.response.status == "success")
-							{
-									$("#spinner_login").hide(); 
+                
+                if(xhttp.response.status == "success")
+                {
+                    sessionStorage.setItem("passLoginUserID", xhttp.response.userId);
+                    
+                    $("#spinner_login").hide(); 
 
-									
-									document.cookie = "token=" + xhttp.response.token;
+                    document.cookie = "token=" + xhttp.response.token;
 
-									setTimeout(_ => {
-										window.location.replace("/dashboard");
-									}, 500);
+                    setTimeout(_ => {
+                        window.location.replace("/dashboard");
+                    }, 500);
 
-							}
+                }
             }
             
             if((xhttp.readyState == 4 && xhttp.status == 401) || (xhttp.readyState == 4 && xhttp.status == 404)) 
             {
-							$("#spinner_login").hide(); 
-							document.getElementById("loginAlert").innerHTML = '<strong>Login credentials invalid!!</strong> <button type="button" class="close" onclick="closeLoginAlert()"><span>&times;</span></button>';
-							$("#loginAlert").show();
+                $("#spinner_login").hide(); 
+                document.getElementById("loginAlert").innerHTML = '<strong>Login credentials invalid!!</strong> <button type="button" class="close" onclick="closeLoginAlert()"><span>&times;</span></button>';
+                $("#loginAlert").show();
             }
             
             if(xhttp.readyState == 4 && xhttp.status == 500) 
             {
-							$("#spinner_login").hide();
-							document.getElementById("loginAlert").innerHTML = '<strong>' + xhttp.response.message + ' maybe something is wrong with the server</strong> <button type="button" class="close" onclick="closeLoginAlert()"><span>&times;</span></button>';
-							$("#loginAlert").show();
+                $("#spinner_login").hide();
+                document.getElementById("loginAlert").innerHTML = '<strong>' + xhttp.response.message + ' maybe something is wrong with the server</strong> <button type="button" class="close" onclick="closeLoginAlert()"><span>&times;</span></button>';
+                $("#loginAlert").show();
                 
             }
         }
@@ -1381,6 +1492,15 @@ function onResetPassword() {
     
     $("#spinner_reset").show(); 
     
+    if(document.getElementById("password").value !== document.getElementById("confirm_password").value)
+    {
+        $("#spinner_reset").hide(); 
+        
+        document.getElementById("resetAlert").innerHTML = '<strong>Your new password and confirm password is not the same.\nPlease enter again!!</strong> <button type="button" class="close" onclick="closeResetAlert()"><span>&times;</span></button>';
+        $("#resetAlert").show();
+    }
+    
+    CheckResetPassword(document.getElementById("confirm_password"));
     
     if(document.getElementById("confirm_password").value === "") 
     {
@@ -1390,6 +1510,8 @@ function onResetPassword() {
         $("#resetAlert").show();
     }
     
+    CheckResetPassword(document.getElementById("password"));
+    
     if(document.getElementById("password").value === "")
     {
         $("#spinner_reset").hide(); 
@@ -1398,18 +1520,11 @@ function onResetPassword() {
         $("#resetAlert").show();
     }
 
-    if(document.getElementById("password").value !== document.getElementById("confirm_password").value)
-    {
-        $("#spinner_reset").hide(); 
-        
-        document.getElementById("resetAlert").innerHTML = '<strong>Your new password and confirm password is not the same.\nPlease enter again!!</strong> <button type="button" class="close" onclick="closeResetAlert()"><span>&times;</span></button>';
-        $("#resetAlert").show();
-        
-    }
-
     if(document.getElementById("password").value !== "" 
        && document.getElementById("confirm_password").value !== "" 
-       && document.getElementById("password").value === document.getElementById("confirm_password").value)
+       && document.getElementById("password").value === document.getElementById("confirm_password").value
+       && CheckResetPassword(document.getElementById("password")) === true
+       && CheckResetPassword(document.getElementById("confirm_password")) === true)
     {
         var xhttp = new XMLHttpRequest();
         xhttp.responseType = 'json';

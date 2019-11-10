@@ -182,6 +182,7 @@ exports.login = (req, res) => {
         status: 'success',
         token,
 		    username: fetchedUser.username,
+            userId: fetchedUser._id,
         role: fetchedUser.role
       })
     })

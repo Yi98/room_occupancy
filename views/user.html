@@ -65,7 +65,7 @@
         <div class="container-fluid m-2">
           <div class="panel-group" id="accordion2">
             <div class="card mt-3" id="userCard">
-              <div class="card-header" id="subheadingOne">
+              <div class="card-header" id="subheadingOne" data-toggle="collapse" data-target="#subcollapseOne">
                 <h5 class="mb-0">
                   <script>
                     $(function() {
@@ -80,7 +80,7 @@
                       $('.panel-group').on('shown.bs.collapse', toggleOpen);
                     });
                   </script>
-                  <button class="btn btn-link" data-toggle="collapse" data-target="#subcollapseOne" aria-expanded="true" aria-controls="collapseOne" id="userCardAddButton">
+                  <button class="btn btn-link pa-0" data-toggle="collapse" data-target="#subcollapseOne" aria-expanded="true" aria-controls="collapseOne" id="userCardAddButton">
                     <i class="expand-icon material-icons">add_circle</i>Add new user </button>
                 </h5>
               </div>
