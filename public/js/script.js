@@ -53,21 +53,55 @@ function showChart() {
   var pathname = url.pathname;
   var split = pathname.split("/");
   var roomId = split[2];
-	xhrChart(roomId);
+
+	var content = null,
+	$element = $("#choosenRange");
+
+	setInterval(function() {
+			var currentText = $element.text();
+
+			if (currentText != content) {
+					// A change has happened
+					content = currentText;
+					let charts = Highcharts.charts;
+					charts.splice(0,charts.length);
+					document.getElementById("allChart").innerHTML = '<div class="d-flex h-100 justify-content-center"><div class="align-self-center"><div class="spinner-border text-danger" style="width:3rem; height:3rem;"><span class="sr-only">Loading...</span></div></div></div>';
+					
+					xhrChart(roomId);
+					charts.splice(0,charts.length);
+					console.log(charts);
+			}
+	}, 500 /* check every 30 seconds */);
+
+	var content2 = null,
+	$element2 = $("#choosenTimeRange");
+
+	setInterval(function() {
+			var currentText2 = $element2.text();
+
+			if (currentText2 != content2) {
+					// A change has happened
+					content2 = currentText2;
+					let charts = Highcharts.charts;
+					charts.splice(0,charts.length);
+					document.getElementById("allChart").innerHTML = '<div class="d-flex h-100 justify-content-center"><div class="align-self-center"><div class="spinner-border text-danger" style="width:3rem; height:3rem;"><span class="sr-only">Loading...</span></div></div></div>';
+					
+					xhrChart(roomId);
+					charts.splice(0,charts.length);
+					console.log(charts);
+			}
+	}, 500 /* check every 30 seconds */);
+
 	
-	$('#choosenTimeRange').on('DOMSubtreeModified', function() {
-		document.getElementById("allChart").innerHTML = '<div class="d-flex h-100 justify-content-center"><div class="align-self-center"><div class="spinner-border text-danger" style="width:3rem; height:3rem;"><span class="sr-only">Loading...</span></div></div></div>';
-		let charts = Highcharts.charts;
-		charts.splice(0,charts.length);
-		xhrChart(roomId);
-	});
-	
-  $('#choosenRange').on('DOMSubtreeModified', function() {
-		document.getElementById("allChart").innerHTML = '<div class="d-flex h-100 justify-content-center"><div class="align-self-center"><div class="spinner-border text-danger" style="width:3rem; height:3rem;"><span class="sr-only">Loading...</span></div></div></div>';
-		let charts = Highcharts.charts;
-		charts.splice(0,charts.length);
-		xhrChart(roomId);
-	});
+  // $('.choosenRange').val().change(function() {
+	// 	let charts = Highcharts.charts;
+	// 	charts.splice(0,charts.length);
+	// 	document.getElementById("allChart").innerHTML = '<div class="d-flex h-100 justify-content-center"><div class="align-self-center"><div class="spinner-border text-danger" style="width:3rem; height:3rem;"><span class="sr-only">Loading...</span></div></div></div>';
+		
+	// 	xhrChart(roomId);
+	// 	charts.splice(0,charts.length);
+	// 	console.log(charts);
+	// });
 };
 
 function xhrChart(roomId){
