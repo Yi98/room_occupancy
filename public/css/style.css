@@ -7,6 +7,10 @@ html, body{
 }
 
 /*Start login.html*/
+#userLoginPage {
+    overflow: hidden;
+}
+
 #loginForm {
     margin-top: 120px;
 }
@@ -438,6 +442,10 @@ a.disabled {
 
 #down-icon, #up-icon {
     color: white;
+}
+
+#showPasswordHint, #showConfirmPasswordHint, #showNewPasswordHint, #showNewConfirmPasswordHint {
+    color: red;
 }
 /* End user.html*/
 
@@ -1208,11 +1216,6 @@ i.deleteNoticeIcon:hover {
   left: 0; 
 }
 
-
-#emptyNotice {
-  display: none;
-}
-
 .skeleton-wrapper {
   background: #fff;
   border: 1px solid;
@@ -1568,4 +1571,8 @@ label:focus,
 .lastUpdated {
 	font-size: 0.8rem;
 	opacity: 0.6;
+}
+
+#noticeNum {
+	display: none;
 }
