@@ -206,7 +206,7 @@ function xhrChart(roomId){
 							}
 							
 							for(var i=0; i<tempData.length; i++){
-								tempData[i] = Math.round((tempData[i]/tempDataCounter[i]) * 100) / 100;
+								tempData[i] = Math.round((tempData[i]/tempDataCounter[i]) * 10) / 10;
 							}
 							
 							for(var i=0; i<humidData.length; i++){
@@ -290,11 +290,11 @@ function xhrChart(roomId){
 							}
 							
 							for(var i=0; i<tempData.length; i++){
-								tempData[i] = Math.round((tempData[i]/tempDataCounter[i]) * 100) / 100;
+								tempData[i] = Math.round((tempData[i]/tempDataCounter[i]) * 10) / 10;
 							}
 							
 							for(var i=0; i<humidData.length; i++){
-								humidData[i] = Math.round((humidData[i]/humidDataCounter[i]) * 100) / 100;
+								humidData[i] = Math.round((humidData[i]/humidDataCounter[i]) | 0);
 							}
 							
 							//Convert the day to string day
@@ -470,11 +470,11 @@ function xhrChart(roomId){
 							}
 							
 							for(var i=0; i<tempData.length; i++){
-								tempData[i] = Math.round((tempData[i]/tempDataCounter[i]) * 100) / 100;
+								tempData[i] = Math.round((tempData[i]/tempDataCounter[i]) * 10) / 10;
 							}
 							
 							for(var i=0; i<humidData.length; i++){
-								humidData[i] = Math.round((humidData[i]/humidDataCounter[i]) * 100) / 100;
+								humidData[i] = Math.round((humidData[i]/humidDataCounter[i]) | 0);
 							}
 							
 							showAllChart(weeklyTime,peopleData,tempData,humidData);
@@ -599,11 +599,11 @@ function xhrChart(roomId){
 							}
 							
 							for(var i=0; i<tempData.length; i++){
-								tempData[i] = Math.round((tempData[i]/tempDataCounter[i]) * 100) / 100;
+								tempData[i] = Math.round((tempData[i]/tempDataCounter[i]) * 10) / 10;
 							}
 							
 							for(var i=0; i<humidData.length; i++){
-								humidData[i] = Math.round((humidData[i]/humidDataCounter[i]) * 100) / 100;
+								humidData[i] = Math.round((humidData[i]/humidDataCounter[i]) | 0);
 							}
 							
 							showAllChart(monthlyTime,peopleData,tempData,humidData);
