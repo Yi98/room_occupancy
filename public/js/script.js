@@ -52,42 +52,87 @@ function showChart() {
   var url = new URL(url_string);
   var pathname = url.pathname;
   var split = pathname.split("/");
-	var roomId = split[2];
+  var roomId = split[2];
 
+	var content = null,
+	$element = $("#choosenRange");
 
+	setInterval(function() {
+			var currentText = $element.text();
 
-	xhrChart(roomId);
+			if (currentText != content) {
+					// A change has happened
+					content = currentText;
+					let charts = Highcharts.charts;
+					charts.splice(0,charts.length);
+					document.getElementById("allChart").innerHTML = '<div class="d-flex h-100 justify-content-center"><div class="align-self-center"><div class="spinner-border text-danger" style="width:3rem; height:3rem;"><span class="sr-only">Loading...</span></div></div></div>';
+					
+					xhrChart(roomId);
+					charts.splice(0,charts.length);
+					console.log(charts);
+			}
+	}, 500 /* check every 30 seconds */);
 
-  $('#choosenRange').on('DOMSubtreeModified', function() {
+	var content2 = null,
+	$element2 = $("#choosenTimeRange");
 
-		document.getElementById("allChart").innerHTML = '<div class="d-flex h-100 justify-content-center"><div class="align-self-center"><div class="spinner-border text-danger" style="width:3rem; height:3rem;"><span class="sr-only">Loading...</span></div></div></div>';
-		let charts = Highcharts.charts;
-		charts.splice(0,3);
-		xhrChart(roomId);
-  });
+	setInterval(function() {
+			var currentText2 = $element2.text();
 
+			if (currentText2 != content2) {
+					// A change has happened
+					content2 = currentText2;
+					let charts = Highcharts.charts;
+					charts.splice(0,charts.length);
+					document.getElementById("allChart").innerHTML = '<div class="d-flex h-100 justify-content-center"><div class="align-self-center"><div class="spinner-border text-danger" style="width:3rem; height:3rem;"><span class="sr-only">Loading...</span></div></div></div>';
+					
+					xhrChart(roomId);
+					charts.splice(0,charts.length);
+					console.log(charts);
+			}
+	}, 500 /* check every 30 seconds */);
+
+	
+  // $('.choosenRange').val().change(function() {
+	// 	let charts = Highcharts.charts;
+	// 	charts.splice(0,charts.length);
+	// 	document.getElementById("allChart").innerHTML = '<div class="d-flex h-100 justify-content-center"><div class="align-self-center"><div class="spinner-border text-danger" style="width:3rem; height:3rem;"><span class="sr-only">Loading...</span></div></div></div>';
+		
+	// 	xhrChart(roomId);
+	// 	charts.splice(0,charts.length);
+	// 	console.log(charts);
+	// });
 };
 
 function xhrChart(roomId){
 	var dateRange = document.getElementById("choosenRange").innerHTML.toString();
-    var startDate = new Date(dateRange.substring(0, 10));
-    var endDate = new Date(dateRange.substring(13, 23));
-    var diff_in_days = (endDate.getTime() - startDate.getTime()) / (1000 * 3600 * 24);
-    var peopleData = []; // people data
-		var peopleDataCounter = []; // people data counter
-    var tempData = []; // temp data
-    var tempDataCounter = []; // temp data counter
-    var humidData = []; // humidity data
-    var humidDataCounter = []; // humidity data counter
-		var hourTime = ['0:00','1:00','2:00','3:00','4:00','5:00','6:00','7:00','8:00','9:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00','18:00','19:00','20:00','21:00','22:00','23:00'];
+	var timeRange = document.getElementById("choosenTimeRange").innerHTML.toString();
+	var startDate = new Date(dateRange.substring(0, 10));
+	var endDate = new Date(dateRange.substring(13, 23));
+	var diff_in_days = (endDate.getTime() - startDate.getTime()) / (1000 * 3600 * 24);
+	var startTime = timeRange.substring(0,5);
+	var endTime = timeRange.substring(8, 13);
+	var diff_in_time = parseInt(endTime.substring(0,2)) - parseInt(startTime.substring(0,2));
+
+	var peopleData = []; // people data
+	var peopleDataCounter = []; // people data counter
+	var tempData = []; // temp data
+	var tempDataCounter = []; // temp data counter
+	var humidData = []; // humidity data
+	var humidDataCounter = []; // humidity data counter
+	var hourTime = [];
+
+	for (var i=0; i<=diff_in_time;i++){
+		var timeCounter = parseInt(startTime.substring(0,2)) + i;
+		hourTime.push(timeCounter.toString().concat(':00'));
+	}
+		
 //  	var dailyTime = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-		var dailyTime = [];
-		//var weeklyTime = ['Week 1', 'Week 2','Week 3', 'Week 4'];
-		var weeklyTime = [];
-		//var monthlyTime = ['January', 'February','March','April','May','June','July','August','September','Octorber','November','December'];
-		var monthlyTime = [];
-
-
+	var dailyTime = [];
+	//var weeklyTime = ['Week 1', 'Week 2','Week 3', 'Week 4'];
+	var weeklyTime = [];
+	//var monthlyTime = ['January', 'February','March','April','May','June','July','August','September','Octorber','November','December'];
+	var monthlyTime = [];
 	
 	let room_name_found = false;
     var xhttp = new XMLHttpRequest();
@@ -96,8 +141,6 @@ function xhrChart(roomId){
     xhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {
         var result = this.response;
-
-
 
         for (var room in result.rooms) {
           if (result.rooms[room]._id == roomId) {
@@ -119,42 +162,42 @@ function xhrChart(roomId){
 							}
 							
 							//People Chart
-							for(var index in result.rooms[room].people) {
+							for(var index in result.rooms[room].people){
 								var dataDate = new Date(result.rooms[room].people[index].time);
-									if((dataDate.getUTCDate() == startDate.getDate())){
-										for(var i=0; i<hourTime.length;i++){
-											if(dataDate.getUTCHours().toString().concat(':00') == hourTime[i]){
-												peopleData[i] = peopleData[i] + result.rooms[room].people[index].data;
-												peopleDataCounter[i] ++;
-											}
+								if((dataDate.getUTCDate() == startDate.getDate())){
+									for(var i=0; i<hourTime.length;i++){
+										if(dataDate.getUTCHours().toString().concat(':00') == hourTime[i]){
+											peopleData[i] = peopleData[i] + result.rooms[room].people[index].data;
+											peopleDataCounter[i] ++;
 										}
 									}
+								}
 							}
 							
 							//Temperature Chart
 							for(var index in result.rooms[room].temperature) {
 								var dataDate = new Date(result.rooms[room].temperature[index].time);
-									if((dataDate.getUTCDate() == startDate.getDate())){
-										for(var i=0; i<hourTime.length;i++){
-											if(dataDate.getUTCHours().toString().concat(':00') == hourTime[i]){
-												tempData[i] = tempData[i] + result.rooms[room].temperature[index].data;
-												tempDataCounter[i] ++;
-											}
+								if((dataDate.getUTCDate() == startDate.getDate())){
+									for(var i=0; i<hourTime.length;i++){
+										if(dataDate.getUTCHours().toString().concat(':00') == hourTime[i]){
+											tempData[i] = tempData[i] + result.rooms[room].temperature[index].data;
+											tempDataCounter[i] ++;
 										}
 									}
+								}
 							}
 							
 							//Humidity Chart
 							for(var index in result.rooms[room].humidity) {
 								var dataDate = new Date(result.rooms[room].humidity[index].time);
-									if((dataDate.getUTCDate() == startDate.getDate())){
-										for(var i=0; i<hourTime.length; i++){
-											if(dataDate.getUTCHours().toString().concat(':00') == hourTime[i]){
-												humidData[i] = humidData[i] + result.rooms[room].humidity[index].data;
-												humidDataCounter[i] ++;
-											}
+								if((dataDate.getUTCDate() == startDate.getDate())){
+									for(var i=0; i<hourTime.length; i++){
+										if(dataDate.getUTCHours().toString().concat(':00') == hourTime[i]){
+											humidData[i] = humidData[i] + result.rooms[room].humidity[index].data;
+											humidDataCounter[i] ++;
 										}
 									}
+								}
 							}
 							
 							//Get the average for each data in the time
@@ -169,7 +212,6 @@ function xhrChart(roomId){
 							for(var i=0; i<humidData.length; i++){
 								humidData[i] = Math.round((humidData[i]/humidDataCounter[i]) * 100) / 100;
 							}
-							
 							
 							showAllChart(hourTime,peopleData,tempData,humidData);
 							showPeopleChart(hourTime, peopleData); //Illustrate the chart
@@ -187,7 +229,6 @@ function xhrChart(roomId){
 								start ++;
 							}
 							
-							
 							//Initialise the data array
 							for(var i=0; i<dailyTime.length; i++){
 								peopleData[i] = 0;
@@ -202,10 +243,12 @@ function xhrChart(roomId){
 							for(var index in result.rooms[room].people) {
 								var dataDate = new Date(result.rooms[room].people[index].time);
 								if(dataDate >= startDate && dataDate <= endDate){
-									for(var i=0; i<dailyTime.length;i++){
-										if(dataDate.getUTCDate() == dailyTime[i]){
-											peopleData[i] = peopleData[i] + result.rooms[room].people[index].data;
-											peopleDataCounter[i] ++;
+									if(dataDate.getUTCHours() >= parseInt(startTime.substring(0,2)) && dataDate.getUTCHours() <= parseInt(endTime.substring(0,2))){
+										for(var i=0; i<dailyTime.length;i++){
+											if(dataDate.getUTCDate() == dailyTime[i]){
+												peopleData[i] = peopleData[i] + result.rooms[room].people[index].data;
+												peopleDataCounter[i] ++;
+											}
 										}
 									}
 								}
@@ -215,10 +258,12 @@ function xhrChart(roomId){
 							for(var index in result.rooms[room].temperature) {
 								var dataDate = new Date(result.rooms[room].temperature[index].time);
 								if(dataDate >= startDate && dataDate <= endDate){
-									for(var i=0; i<dailyTime.length;i++){
-										if(dataDate.getUTCDate() == dailyTime[i]){
-											tempData[i] = tempData[i] + result.rooms[room].temperature[index].data;
-											tempDataCounter[i] ++;
+									if(dataDate.getUTCHours() >= parseInt(startTime.substring(0,2)) && dataDate.getUTCHours() <= parseInt(endTime.substring(0,2))){
+										for(var i=0; i<dailyTime.length;i++){
+											if(dataDate.getUTCDate() == dailyTime[i]){
+												tempData[i] = tempData[i] + result.rooms[room].temperature[index].data;
+												tempDataCounter[i] ++;
+											}
 										}
 									}
 								}
@@ -228,10 +273,12 @@ function xhrChart(roomId){
 							for(var index in result.rooms[room].humidity) {
 								var dataDate = new Date(result.rooms[room].humidity[index].time);
 								if(dataDate >= startDate && dataDate <= endDate){
-									for(var i=0; i<dailyTime.length; i++){
-										if(dataDate.getUTCDay() == dailyTime[i]){
-											humidData[i] = humidData[i] + result.rooms[room].humidity[index].data;
-											humidDataCounter[i] ++;
+									if(dataDate.getUTCHours() >= parseInt(startTime.substring(0,2)) && dataDate.getUTCHours() <= parseInt(endTime.substring(0,2))){
+										for(var i=0; i<dailyTime.length; i++){
+											if(dataDate.getUTCDay() == dailyTime[i]){
+												humidData[i] = humidData[i] + result.rooms[room].humidity[index].data;
+												humidDataCounter[i] ++;
+											}
 										}
 									}
 								}
@@ -326,26 +373,28 @@ function xhrChart(roomId){
 							for(var index in result.rooms[room].people) {
 								var dataDate = new Date(result.rooms[room].people[index].time);
 								if(dataDate >= startDate && dataDate <= endDate){
-									for(var i=0; i<weeklyTime.length;i++){
-										if(dataDate.getUTCDate() >= 1 && dataDate.getUTCDate() <= 7 && weeklyTime[i] == 'Week 1'){
-											peopleData[i] = peopleData[i] + result.rooms[room].people[index].data;
-											peopleDataCounter[i] ++;
-										}
-										if(dataDate.getUTCDate() >= 8 && dataDate.getUTCDate() <= 14 && weeklyTime[i] == 'Week 2'){
-											peopleData[i] = peopleData[i] + result.rooms[room].people[index].data;
-											peopleDataCounter[i] ++;
-										}
-										if(dataDate.getUTCDate() >= 15 && dataDate.getUTCDate() <= 21 && weeklyTime[i] == 'Week 3'){
-											peopleData[i] = peopleData[i] + result.rooms[room].people[index].data;
-											peopleDataCounter[i] ++;
-										}
-										if(dataDate.getUTCDate() >= 22  && dataDate.getUTCDate() <= 28 && weeklyTime[i] == 'Week 4'){
-											peopleData[i] = peopleData[i] + result.rooms[room].people[index].data;
-											peopleDataCounter[i] ++;
-										}
-										if(dataDate.getUTCDate() >= 29  && dataDate.getUTCDate() <= 31 && weeklyTime[i] == 'Week 5'){
-											peopleData[i] = peopleData[i] + result.rooms[room].people[index].data;
-											peopleDataCounter[i] ++;
+									if(dataDate.getUTCHours() >= parseInt(startTime.substring(0,2)) && dataDate.getUTCHours() <= parseInt(endTime.substring(0,2))){
+										for(var i=0; i<weeklyTime.length;i++){
+											if(dataDate.getUTCDate() >= 1 && dataDate.getUTCDate() <= 7 && weeklyTime[i] == 'Week 1'){
+												peopleData[i] = peopleData[i] + result.rooms[room].people[index].data;
+												peopleDataCounter[i] ++;
+											}
+											if(dataDate.getUTCDate() >= 8 && dataDate.getUTCDate() <= 14 && weeklyTime[i] == 'Week 2'){
+												peopleData[i] = peopleData[i] + result.rooms[room].people[index].data;
+												peopleDataCounter[i] ++;
+											}
+											if(dataDate.getUTCDate() >= 15 && dataDate.getUTCDate() <= 21 && weeklyTime[i] == 'Week 3'){
+												peopleData[i] = peopleData[i] + result.rooms[room].people[index].data;
+												peopleDataCounter[i] ++;
+											}
+											if(dataDate.getUTCDate() >= 22  && dataDate.getUTCDate() <= 28 && weeklyTime[i] == 'Week 4'){
+												peopleData[i] = peopleData[i] + result.rooms[room].people[index].data;
+												peopleDataCounter[i] ++;
+											}
+											if(dataDate.getUTCDate() >= 29  && dataDate.getUTCDate() <= 31 && weeklyTime[i] == 'Week 5'){
+												peopleData[i] = peopleData[i] + result.rooms[room].people[index].data;
+												peopleDataCounter[i] ++;
+											}
 										}
 									}
 								}
@@ -355,26 +404,28 @@ function xhrChart(roomId){
 							for(var index in result.rooms[room].temperature) {
 								var dataDate = new Date(result.rooms[room].temperature[index].time);
 									if(dataDate >= startDate && dataDate <= endDate){
-										for(var i=0; i<weeklyTime.length;i++){
-											if(dataDate.getUTCDate() >= 1 && dataDate.getUTCDate() <= 7 && weeklyTime[i] == 'Week 1'){
-												tempData[i] = tempData[i] + result.rooms[room].temperature[index].data;
-												tempDataCounter[i] ++;
-											}
-											if(dataDate.getUTCDate() >= 8 && dataDate.getUTCDate() <= 14 && weeklyTime[i] == 'Week 2'){
-												tempData[i] = tempData[i] + result.rooms[room].temperature[index].data;
-												tempDataCounter[i] ++;
-											}
-											if(dataDate.getUTCDate() >= 15 && dataDate.getUTCDate() <= 21 && weeklyTime[i] == 'Week 3'){
-												tempData[i] = tempData[i] + result.rooms[room].temperature[index].data;
-												tempDataCounter[i] ++;
-											}
-											if(dataDate.getUTCDate() >= 22  && dataDate.getUTCDate() <= 28 && weeklyTime[i] == 'Week 4'){
-												tempData[i] = tempData[i] + result.rooms[room].temperature[index].data;
-												tempDataCounter[i] ++;
-											}
-											if(dataDate.getUTCDate() >= 29  && dataDate.getUTCDate() <= 31 && weeklyTime[i] == 'Week 5'){
-												tempData[i] = tempData[i] + result.rooms[room].temperature[index].data;
-												tempDataCounter[i] ++;
+										if(dataDate.getUTCHours() >= parseInt(startTime.substring(0,2)) && dataDate.getUTCHours() <= parseInt(endTime.substring(0,2))){
+											for(var i=0; i<weeklyTime.length;i++){
+												if(dataDate.getUTCDate() >= 1 && dataDate.getUTCDate() <= 7 && weeklyTime[i] == 'Week 1'){
+													tempData[i] = tempData[i] + result.rooms[room].temperature[index].data;
+													tempDataCounter[i] ++;
+												}
+												if(dataDate.getUTCDate() >= 8 && dataDate.getUTCDate() <= 14 && weeklyTime[i] == 'Week 2'){
+													tempData[i] = tempData[i] + result.rooms[room].temperature[index].data;
+													tempDataCounter[i] ++;
+												}
+												if(dataDate.getUTCDate() >= 15 && dataDate.getUTCDate() <= 21 && weeklyTime[i] == 'Week 3'){
+													tempData[i] = tempData[i] + result.rooms[room].temperature[index].data;
+													tempDataCounter[i] ++;
+												}
+												if(dataDate.getUTCDate() >= 22  && dataDate.getUTCDate() <= 28 && weeklyTime[i] == 'Week 4'){
+													tempData[i] = tempData[i] + result.rooms[room].temperature[index].data;
+													tempDataCounter[i] ++;
+												}
+												if(dataDate.getUTCDate() >= 29  && dataDate.getUTCDate() <= 31 && weeklyTime[i] == 'Week 5'){
+													tempData[i] = tempData[i] + result.rooms[room].temperature[index].data;
+													tempDataCounter[i] ++;
+												}
 											}
 										}
 									}
@@ -384,27 +435,29 @@ function xhrChart(roomId){
 							for(var index in result.rooms[room].humidity) {
 								var dataDate = new Date(result.rooms[room].humidity[index].time);
 									if(dataDate >= startDate && dataDate <= endDate){
-										for(var i=0; i<weeklyTime.length; i++){
-											for(var i=0; i<weeklyTime.length;i++){
-												if(dataDate.getUTCDate() >= 1 && dataDate.getUTCDate() <= 7 && weeklyTime[i] == 'Week 1'){
-													humidData[i] = humidData[i] + result.rooms[room].humidity[index].data;
-													humidDataCounter[i] ++;
-												}
-												if(dataDate.getUTCDate() >= 8 && dataDate.getUTCDate() <= 14 && weeklyTime[i] == 'Week 2'){
-													humidData[i] = humidData[i] + result.rooms[room].humidity[index].data;
-													humidDataCounter[i] ++;
-												}
-												if(dataDate.getUTCDate() >= 15 && dataDate.getUTCDate() <= 21 && weeklyTime[i] == 'Week 3'){
-													humidData[i] = humidData[i] + result.rooms[room].humidity[index].data;
-													humidDataCounter[i] ++;
-												}
-												if(dataDate.getUTCDate() >= 22  && dataDate.getUTCDate() <= 28 && weeklyTime[i] == 'Week 4'){
-													humidData[i] = humidData[i] + result.rooms[room].humidity[index].data;
-													humidDataCounter[i] ++;
-												}
-												if(dataDate.getUTCDate() >= 29  && dataDate.getUTCDate() <= 31 && weeklyTime[i] == 'Week 5'){
-													humidData[i] = humidData[i] + result.rooms[room].humidity[index].data;
-													humidDataCounter[i] ++;
+										if(dataDate.getUTCHours() >= parseInt(startTime.substring(0,2)) && dataDate.getUTCHours() <= parseInt(endTime.substring(0,2))){
+											for(var i=0; i<weeklyTime.length; i++){
+												for(var i=0; i<weeklyTime.length;i++){
+													if(dataDate.getUTCDate() >= 1 && dataDate.getUTCDate() <= 7 && weeklyTime[i] == 'Week 1'){
+														humidData[i] = humidData[i] + result.rooms[room].humidity[index].data;
+														humidDataCounter[i] ++;
+													}
+													if(dataDate.getUTCDate() >= 8 && dataDate.getUTCDate() <= 14 && weeklyTime[i] == 'Week 2'){
+														humidData[i] = humidData[i] + result.rooms[room].humidity[index].data;
+														humidDataCounter[i] ++;
+													}
+													if(dataDate.getUTCDate() >= 15 && dataDate.getUTCDate() <= 21 && weeklyTime[i] == 'Week 3'){
+														humidData[i] = humidData[i] + result.rooms[room].humidity[index].data;
+														humidDataCounter[i] ++;
+													}
+													if(dataDate.getUTCDate() >= 22  && dataDate.getUTCDate() <= 28 && weeklyTime[i] == 'Week 4'){
+														humidData[i] = humidData[i] + result.rooms[room].humidity[index].data;
+														humidDataCounter[i] ++;
+													}
+													if(dataDate.getUTCDate() >= 29  && dataDate.getUTCDate() <= 31 && weeklyTime[i] == 'Week 5'){
+														humidData[i] = humidData[i] + result.rooms[room].humidity[index].data;
+														humidDataCounter[i] ++;
+													}
 												}
 											}
 										}
@@ -460,10 +513,12 @@ function xhrChart(roomId){
 							for(var index in result.rooms[room].people) {
 								var dataDate = new Date(result.rooms[room].people[index].time);
 									if(dataDate >= startDate && dataDate <= endDate){
-										for(var i=0; i<monthlyTime.length;i++){
-											if(dataDate.getUTCMonth() == monthlyTime[i]){
-												peopleData[i] = peopleData[i] + result.rooms[room].people[index].data;
-												peopleDataCounter[i] ++;
+										if(dataDate.getUTCHours() >= parseInt(startTime.substring(0,2)) && dataDate.getUTCHours() <= parseInt(endTime.substring(0,2))){
+											for(var i=0; i<monthlyTime.length;i++){
+												if(dataDate.getUTCMonth() == monthlyTime[i]){
+													peopleData[i] = peopleData[i] + result.rooms[room].people[index].data;
+													peopleDataCounter[i] ++;
+												}
 											}
 										}
 									}
@@ -473,10 +528,12 @@ function xhrChart(roomId){
 							for(var index in result.rooms[room].temperature) {
 								var dataDate = new Date(result.rooms[room].temperature[index].time);
 									if(dataDate >= startDate && dataDate <= endDate){
-										for(var i=0; i<monthlyTime.length;i++){
-											if(dataDate.getUTCMonth() == monthlyTime[i]){
-												tempData[i] = tempData[i] + result.rooms[room].temperature[index].data;
-												tempDataCounter[i] ++;
+										if(dataDate.getUTCHours() >= parseInt(startTime.substring(0,2)) && dataDate.getUTCHours() <= parseInt(endTime.substring(0,2))){
+											for(var i=0; i<monthlyTime.length;i++){
+												if(dataDate.getUTCMonth() == monthlyTime[i]){
+													tempData[i] = tempData[i] + result.rooms[room].temperature[index].data;
+													tempDataCounter[i] ++;
+												}
 											}
 										}
 									}
@@ -486,10 +543,12 @@ function xhrChart(roomId){
 							for(var index in result.rooms[room].humidity) {
 								var dataDate = new Date(result.rooms[room].humidity[index].time);
 									if(dataDate >= startDate && dataDate <= endDate){
-										for(var i=0; i<monthlyTime.length; i++){
-											if(dataDate.getUTCMonth() == monthlyTime[i]){
-												humidData[i] = humidData[i] + result.rooms[room].humidity[index].data;
-												humidDataCounter[i] ++;
+										if(dataDate.getUTCHours() >= parseInt(startTime.substring(0,2)) && dataDate.getUTCHours() <= parseInt(endTime.substring(0,2))){
+											for(var i=0; i<monthlyTime.length; i++){
+												if(dataDate.getUTCMonth() == monthlyTime[i]){
+													humidData[i] = humidData[i] + result.rooms[room].humidity[index].data;
+													humidDataCounter[i] ++;
+												}
 											}
 										}
 									}
@@ -551,7 +610,6 @@ function xhrChart(roomId){
 							showPeopleChart(monthlyTime, peopleData); //Illustrate the chart
 							showTemperatureChart(monthlyTime, tempData); //Illustrate the chart
 							showHumidityChart(monthlyTime, humidData); //Illustrate the chart
-
 						}
 					}
 				}
@@ -781,13 +839,14 @@ function showDashboardRooms() {
 				notifications.push([{name: result.rooms[room].name, status: statusMsg}]);
 
 				document.getElementById("roomCardContainer").innerHTML += `
-					<div class="roomCard card mr-4 border-0 shadow-sm py-4 mb-4 bg-white rounded" style="width: 24rem; height: 13rem;" onclick="onRoomClicked('${result.rooms[room].name}', '${result.rooms[room]._id}')">
+					<div class="roomCard card mr-4 border-0 shadow-sm pt-3 pb-4 mb-4 bg-white rounded" style="width: 24rem; height: 14rem;" onclick="onRoomClicked('${result.rooms[room].name}', '${result.rooms[room]._id}')">
 						<div class="card-body pt-2 text-center">
 							<h4 class="card-title mb-4">${result.rooms[room].name}</h4>
 							<h6>Number of people: <span class="roomData people">N/A</span></h6>
 							<h6>Temperature: <span class="roomData temperature">N/A</span></h6>
 							<h6>Humidity: <span class="roomData humidity">N/A</span></h6>
-                            <span class="roomId" style="display:none">${result.rooms[room]._id}</span>
+							<p class="lastUpdated mt-4">Last updated: Nov 11, 00:30 AM</p>
+              <span class="roomId" style="display:none">${result.rooms[room]._id}</span>
 						</div>
 					</div>
 				`;
@@ -859,6 +918,7 @@ function showUserTable(){
             $("#spinner").hide();
             var result = this.response;
             for(var user in result.users){
+                
                 document.getElementById("showUser").innerHTML += 
                 '<tbody>' + '<tr>' +
                 '<td style="display: none;">' + result.users[user]._id + '</td>' +
@@ -868,6 +928,8 @@ function showUserTable(){
 				'<td class="roleButtons">' + '<input class="roleChangeButtons" onchange="updateUser(this, &#39;' + result.users[user]._id + '&#39;)" type="checkbox" data-toggle="toggle" data-on="Manager" data-off="Staff" data-onstyle="success" data-offstyle="outline-dark" data-size="xs">' + '</td>' +
 				'<td>' + '<button class = "btn btn-danger" id = "deletebtn" onclick = "deleteUser(&#39;'+ result.users[user]._id + '&#39;)"><span class="fa fa-trash" style = "color: white"></span></button>' + '</td>' + '</tr>' + '</tbody>';
 			};
+            
+            hideLoginUser();
 
 			// Set the checkbox checked value to either staff or manager according to the user roles
 			let roleChangeButtons = document.getElementsByClassName("roleChangeButtons");
@@ -891,23 +953,69 @@ function showUserTable(){
 };
 
 function search() {
-    var input, filter, table, tr, td, i, textValue;
+    var input, filter, table, tr, td, i, textValue, userID;
     input = document.getElementById("searchInput");
+    userID = sessionStorage.getItem("passLoginUserID");
     filter = input.value.toUpperCase();
     table = document.getElementById("userTable");
     tr = table.getElementsByTagName("tr");
     
     for (i = 0; i < tr.length; i++) {
         td = tr[i].getElementsByTagName("td")[1];
+        td_id = tr[i].getElementsByTagName("td")[0];
         if (td) {
             textValue = td.textContent || td.innerText;
+            textUserID = td_id.textContent || td_id.innerText;
             if (textValue.toUpperCase().indexOf(filter) > -1) {
+            
                 tr[i].style.display = "";
+                
+                if(textUserID == userID)
+                {
+                   tr[i].style.display = "none"; 
+                }
+                
             } else {
+                
                 tr[i].style.display = "none";
+                
             }
         }
     }
+}
+
+function hideLoginUser() {
+    var input, filter, table, tr, td, i, textValue;
+    input = sessionStorage.getItem("passLoginUserID");
+    table = document.getElementById("userTable");
+    tr = table.getElementsByTagName("tr");
+    
+    for (i = 0; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td")[0];
+        if (td) {
+            textValue = td.textContent || td.innerText;
+            if (textValue === input) {
+                tr[i].style.display = "none";
+            } else {
+                tr[i].style.display = "";
+            }
+        }
+    }
+}
+
+function toggle() {
+    function toggleOpen(e) 
+    {
+        $(e.target).prev('.card-header').find(".expand-icon").text("remove_circle");
+    }
+
+    function toggleClose(e) 
+    {
+        $(e.target).prev('.card-header').find(".expand-icon").text("add_circle");
+    }
+    
+    $('.panel-group').on('hidden.bs.collapse', toggleClose);
+    $('.panel-group').on('shown.bs.collapse', toggleOpen);
 }
 
 function addUser() {
@@ -920,12 +1028,14 @@ function addUser() {
         document.getElementById("userAlert").innerHTML = '<strong>Please pick a role!</strong> <button type="button" class="close" onclick="closeUserAlert()"><span>&times;</span></button>';
         $("#userAlert").show();
     }
-
-    if(document.getElementById("uemail").value === "")
+        
+    if(document.getElementById("upsd").value !== document.getElementById("cupsd").value )
     {
-        document.getElementById("userAlert").innerHTML = '<strong>Please fill in your email!</strong> <button type="button" class="close" onclick="closeUserAlert()"><span>&times;</span></button>';
+        document.getElementById("userAlert").innerHTML = '<strong>Your Password and Confirm Password is not the same. Please fill in again!</strong> <button type="button" class="close" onclick="closeUserAlert()"><span>&times;</span></button>';
         $("#userAlert").show();
     }
+
+    CheckPassword(document.getElementById("cupsd"));
     
     if(document.getElementById("cupsd").value === "")
     {
@@ -933,9 +1043,17 @@ function addUser() {
         $("#userAlert").show();
     }
     
-     if(document.getElementById("upsd").value === "")
+    CheckPassword(document.getElementById("upsd"));
+    
+    if(document.getElementById("upsd").value === "")
     {
         document.getElementById("userAlert").innerHTML = '<strong>Please fill in your password!</strong> <button type="button" class="close" onclick="closeUserAlert()"><span>&times;</span></button>';
+        $("#userAlert").show();
+    }
+    
+    if(document.getElementById("uemail").value === "")
+    {
+        document.getElementById("userAlert").innerHTML = '<strong>Please fill in your email!</strong> <button type="button" class="close" onclick="closeUserAlert()"><span>&times;</span></button>';
         $("#userAlert").show();
     }
     
@@ -945,11 +1063,10 @@ function addUser() {
         $("#userAlert").show();
     } 
     
-    if(document.getElementById("upsd").value !== document.getElementById("cupsd").value )
-    {
-        document.getElementById("userAlert").innerHTML = '<strong>Your Password and Confirm Password is not the same. Please fill in again!</strong> <button type="button" class="close" onclick="closeUserAlert()"><span>&times;</span></button>';
-        $("#userAlert").show();
-    }
+//    if(document.getElementById("upsd").value !== "")
+//    {
+//        CheckPassword(document.getElementById("upsd"));
+//    }
     
     
     if(document.getElementById("uname").value !== "" 
@@ -957,7 +1074,9 @@ function addUser() {
        && document.getElementById("cupsd").value !== "" 
        && document.getElementById("uemail").value !== "" 
        && document.getElementById("role").value !== "Pick a Role" 
-       && (document.getElementById("upsd").value === document.getElementById("cupsd").value))
+       && (document.getElementById("upsd").value === document.getElementById("cupsd").value)
+       && CheckPassword(document.getElementById("upsd")) === true
+       && CheckPassword(document.getElementById("cupsd")) === true)
     {
         $("#spinner_adduser").show();
         var xhttp = new XMLHttpRequest();
@@ -1008,6 +1127,9 @@ function addUser() {
             if(xhttp.readyState == 4 && xhttp.status == 500) {
                 $("#spinner_adduser").hide();
                 
+                var element = document.getElementById("userAlert");
+                element.classList.add("alert-danger");
+                
                 document.getElementById("userAlert").innerHTML = '<strong>' + xhttp.response.message + '</strong> <button type="button" class="close" onclick="closeUserAlert()"><span>&times;</span></button>';
                 
                 $("#userAlert").show();
@@ -1015,6 +1137,55 @@ function addUser() {
         }
 
         xhttp.send(params); 
+
+    }
+};
+
+function CheckPassword(input)
+{
+    var validPassword = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,12}$/;
+
+    if(input.value.match(validPassword))
+    {
+//        var element = document.getElementById("userAlert");
+//        element.classList.remove("alert-danger")
+//        element.classList.add("alert-success");
+//        
+//        document.getElementById("userAlert").innerHTML = '<strong>Your Password is valid!</strong> <button type="button" class="close" onclick="closeUserAlert()"><span>&times;</span></button>';
+//        $("#userAlert").show();
+        
+        return true;
+    }
+    else
+    {
+        var element = document.getElementById("userAlert");
+        element.classList.add("alert-danger");
+        
+        document.getElementById("userAlert").innerHTML = '<strong>Your Password or Confirm Password is invalid. Please enter a password which contain 8 to 12 character, at least one numeric digit, one uppercase and one lowercase letter!</strong> <button type="button" class="close" onclick="closeUserAlert()"><span>&times;</span></button>';
+        $("#userAlert").show();
+        
+        return false;
+
+    }
+};
+
+function CheckResetPassword(input)
+{
+    var validPassword = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,12}$/;
+
+    if(input.value.match(validPassword))
+    {   
+        return true;
+    }
+    else
+    {
+        var element = document.getElementById("resetAlert");
+        element.classList.add("alert-danger");
+        
+        document.getElementById("resetAlert").innerHTML = '<strong>Your New Password or Confirm Password is invalid. Please enter a password which contain 8 to 12 character, at least one numeric digit, one uppercase and one lowercase letter!</strong> <button type="button" class="close" onclick="closeResetAlert()"><span>&times;</span></button>';
+        $("#userAlert").show();
+        
+        return false;
 
     }
 };
@@ -1087,7 +1258,7 @@ function showModal(){
             }
         };
         
-				xhttp.open("GET",url,true);
+        xhttp.open("GET",url,true);
 
         xhttp.send();
         
@@ -1211,9 +1382,9 @@ function loginPage() {
     $("#forgetAlert").hide();
 };
 
-function login(){
-
-		$("#loginAlert").hide();
+async function login(){
+    
+    $("#loginAlert").hide();
     
     if(document.getElementById("loginPassword").value === "")
     {
@@ -1243,11 +1414,19 @@ function login(){
 
             if(xhttp.readyState == 4 && xhttp.status == 200) 
             {
+                
                 if(xhttp.response.status == "success")
                 {
-										$("#spinner_login").hide(); 
-										document.cookie = "token=" + xhttp.response.token;
-                    window.location.replace("/dashboard");
+                    sessionStorage.setItem("passLoginUserID", xhttp.response.userId);
+                    
+                    $("#spinner_login").hide(); 
+
+                    document.cookie = "token=" + xhttp.response.token;
+
+                    setTimeout(_ => {
+                        window.location.replace("/dashboard");
+                    }, 500);
+
                 }
             }
             
@@ -1256,7 +1435,6 @@ function login(){
                 $("#spinner_login").hide(); 
                 document.getElementById("loginAlert").innerHTML = '<strong>Login credentials invalid!!</strong> <button type="button" class="close" onclick="closeLoginAlert()"><span>&times;</span></button>';
                 $("#loginAlert").show();
-                
             }
             
             if(xhttp.readyState == 4 && xhttp.status == 500) 
@@ -1372,6 +1550,15 @@ function onResetPassword() {
     
     $("#spinner_reset").show(); 
     
+    if(document.getElementById("password").value !== document.getElementById("confirm_password").value)
+    {
+        $("#spinner_reset").hide(); 
+        
+        document.getElementById("resetAlert").innerHTML = '<strong>Your new password and confirm password is not the same.\nPlease enter again!!</strong> <button type="button" class="close" onclick="closeResetAlert()"><span>&times;</span></button>';
+        $("#resetAlert").show();
+    }
+    
+    CheckResetPassword(document.getElementById("confirm_password"));
     
     if(document.getElementById("confirm_password").value === "") 
     {
@@ -1381,6 +1568,8 @@ function onResetPassword() {
         $("#resetAlert").show();
     }
     
+    CheckResetPassword(document.getElementById("password"));
+    
     if(document.getElementById("password").value === "")
     {
         $("#spinner_reset").hide(); 
@@ -1389,18 +1578,11 @@ function onResetPassword() {
         $("#resetAlert").show();
     }
 
-    if(document.getElementById("password").value !== document.getElementById("confirm_password").value)
-    {
-        $("#spinner_reset").hide(); 
-        
-        document.getElementById("resetAlert").innerHTML = '<strong>Your new password and confirm password is not the same.\nPlease enter again!!</strong> <button type="button" class="close" onclick="closeResetAlert()"><span>&times;</span></button>';
-        $("#resetAlert").show();
-        
-    }
-
     if(document.getElementById("password").value !== "" 
        && document.getElementById("confirm_password").value !== "" 
-       && document.getElementById("password").value === document.getElementById("confirm_password").value)
+       && document.getElementById("password").value === document.getElementById("confirm_password").value
+       && CheckResetPassword(document.getElementById("password")) === true
+       && CheckResetPassword(document.getElementById("confirm_password")) === true)
     {
         var xhttp = new XMLHttpRequest();
         xhttp.responseType = 'json';

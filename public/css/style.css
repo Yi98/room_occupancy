@@ -248,6 +248,7 @@ a.disabled {
   /* background-color: rgb(0,0,0); Fallback color */
   /* background-color: rgba(0,0,0,0.4); Black w/ opacity */
 /* } */
+/* .ranges li:last-child { display: none; } */
 
 #reportrange{
 	background: #fff; 
@@ -255,6 +256,14 @@ a.disabled {
 	padding: 5px 10px; 
 	border: 1px solid #ccc; 
 	width: 100%;
+}
+
+#timerange{
+	background: #fff;
+	cursor: pointer;
+	padding: 5px 10px;
+	border: 1px solid #ccc;
+	font-family: "Roboto", sans-serif;
 }
 
 #overlay {
@@ -1250,8 +1259,8 @@ i.deleteNoticeIcon:hover {
 }
 
 div.skeleton-author {
-  top: 10px;
-  height: 40px;
+  top: 5px;
+  height: 30px;
   left: 90px;
   width: 200px;
 }
@@ -1261,20 +1270,33 @@ div.skeleton-content-2,
 div.skeleton-content-3 {
   height: 15px;
 }
+
+div.skeleton-content-4 {
+	height: 10px;
+}
+
 div.skeleton-content-1 {
   left: 100px;
   right: 100px;
-  top: 70px;
+  top: 60px;
 }
+
 div.skeleton-content-2 {
   left: 120px;
   right: 120px;
-  top: 95px;
+  top: 85px;
 }
+
 div.skeleton-content-3 {
   left: 140px;
   right: 140px;
-  top: 120px;
+  top: 110px;
+}
+
+div.skeleton-content-4 {
+  left: 100px;
+  right: 100px;
+  top: 155px;
 }
 
 @-webkit-keyframes placeholderSkeleton {
@@ -1442,6 +1464,7 @@ label:focus,
 
 #userCard{
 	background-color:rgb(243, 243, 243);
+    cursor: pointer;
 }
 
 .myform input{
@@ -1542,4 +1565,7 @@ label:focus,
   }
 }
 
-
+.lastUpdated {
+	font-size: 0.8rem;
+	opacity: 0.6;
+}
