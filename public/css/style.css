@@ -7,6 +7,10 @@ html, body{
 }
 
 /*Start login.html*/
+#userLoginPage {
+    overflow: hidden;
+}
+
 #loginForm {
     margin-top: 120px;
 }
@@ -438,6 +442,10 @@ a.disabled {
 
 #down-icon, #up-icon {
     color: white;
+}
+
+#showPasswordHint, #showConfirmPasswordHint, #showNewPasswordHint, #showNewConfirmPasswordHint {
+    color: red;
 }
 /* End user.html*/
 
