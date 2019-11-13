@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 
 module.exports = (req, res, next) => {
-  // try {
+  try {
   //   let token;
   //   let isToken = false;
 
@@ -32,10 +32,13 @@ module.exports = (req, res, next) => {
   //   else {
   //     throw new Error();
   //   }
-  // }
-  // catch(err) {
-  //   res.status(401).json({
-  //     message: 'Please log in to continue'
-  //   });
-  // }
+
+    next();
+
+  }
+  catch(err) {
+    res.status(401).json({
+      message: 'Please log in to continue'
+    });
+  }
 };

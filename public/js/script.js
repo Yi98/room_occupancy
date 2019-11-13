@@ -1,12 +1,12 @@
-//const domain = 'http://localhost:3000';
-const domain = 'https://roomoccupancy.herokuapp.com';
+const domain = 'http://localhost:3000';
+//const domain = 'https://roomoccupancy.herokuapp.com';
 
 var socket = io();
 
 socket.on("sensor", function(msg) {
 	// for loop assign to all room their respective sensor data
 	//let roomCards = document.getElementsByClassName("room-card");
-    let roomCards = document.getElementsByClassName("roomCard");
+  let roomCards = document.getElementsByClassName("roomCard");
 	for (let i = 0; i < roomCards.length; i++) {
         //let roomId = roomCards[i].getElementsByClassName("room-id");
 		let roomId = roomCards[i].getElementsByClassName("roomId");
