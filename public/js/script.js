@@ -3,19 +3,117 @@ const domain = 'http://localhost:3000';
 
 var socket = io();
 
+function onTestPeople() {
+	setInterval(function() {
+	let roomCards = document.getElementsByClassName("roomCard");
+	let data = 120;
+	let noticeMain = document.getElementById('noticeMain');
+	let notify = false;
+	let roomName;
+	let roomStatus;
+	let notifications;
+	
+	for (let i = 0; i < roomCards.length; i++) {
+		
+		let roomId = roomCards[i].getElementsByClassName("roomId");
+
+		// change 0 to i later
+		if (roomId[0].innerHTML == '5d935b95ea295d622c1f7e7d') {
+			document.getElementsByClassName("people")[i].innerHTML = 100;
+			roomName = document.getElementsByClassName("roomName")[i].innerHTML;
+		}
+	}
+
+	// Push notifications
+	if (!localStorage.getItem('notifications')) {
+		localStorage.setItem("notifications", JSON.stringify([]));
+	}
+
+	if (data > 100) {
+		notify = true;
+		roomStatus = 'full';
+	}
+	else if (data > 50) {
+		notify = true;
+		roomStatus = 'moderate';
+	}
+
+	if (notify) {
+		document.getElementById('emptyNotice').style.display = "none";
+
+		const noticeNum = document.getElementById('noticeNum');
+		noticeNum.innerHTML = Number(noticeNum.innerHTML) + 1;
+		noticeNum.style.display = "inline";
+
+		notifications = JSON.parse(localStorage.getItem('notifications'));
+		notifications.push({roomName, roomStatus});
+		localStorage.setItem('notifications', JSON.stringify(notifications));
+
+		noticeMain.innerHTML += `<p>${roomName} has reached <strong>${roomStatus}</strong> capacity.
+			<button type="button" class="close closeBtn mr-3" aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			</button>
+		</p>`;
+	}
+
+	}, 10000);
+
+	
+}
+
 socket.on("people", function(msg) {
 	// for loop assign to all room their respective sensor data
-	//let roomCards = document.getElementsByClassName("room-card");
-    let roomCards = document.getElementsByClassName("roomCard");
+	let roomCards = document.getElementsByClassName("roomCard");
+	let noticeMain = document.getElementById('noticeMain');
+	let notify = false;
+	let data;
+	let roomName;
+	let roomStatus;
+	let notifications;
+	
 	for (let i = 0; i < roomCards.length; i++) {
-        //let roomId = roomCards[i].getElementsByClassName("room-id");
 		let roomId = roomCards[i].getElementsByClassName("roomId");
+
 		// change 0 to i later
 		if (roomId[0].innerHTML == msg.roomId) {
 			document.getElementsByClassName("people")[i].innerHTML = msg.people;
+			data = msg.people;
+			roomName = document.getElementsByClassName("roomName")[i].innerHTML;
 		}
 	}
-});
+
+	// Push notifications
+	if (!localStorage.getItem('notifications')) {
+		localStorage.setItem("notifications", JSON.stringify([]));
+	}
+
+	if (data > 100) {
+		notify = true;
+		roomStatus = 'full';
+	}
+	else if (data > 50) {
+		notify = true;
+		roomStatus = 'moderate';
+	}
+
+	if (notify) {
+		document.getElementById('emptyNotice').style.display = "none";
+
+		const noticeNum = document.getElementById('noticeNum');
+		noticeNum.innerHTML = Number(noticeNum.innerHTML) + 1;
+		noticeNum.style.display = "inline";
+
+		notifications = JSON.parse(localStorage.getItem('notifications'));
+		notifications.push({roomName, roomStatus});
+		localStorage.setItem('notifications', JSON.stringify(notifications));
+
+		noticeMain.innerHTML += `<p>${roomName} has reached <strong>${roomStatus}</strong> capacity.
+			<button type="button" class="close closeBtn mr-3" aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			</button>
+		</p>`;
+		}
+	});
 
 socket.on("sensor", function(msg) {
 	// for loop assign to all room their respective sensor data
@@ -831,31 +929,38 @@ function showDashboardRooms() {
 		if(this.readyState == 4 && this.status == 200) {
 			var result = this.response;
 
-			const notifications = [];
+			let parseNotices = JSON.parse(localStorage.getItem('notifications'));
 
+			if (parseNotices) {
+				if (parseNotices.length > 0) {
+					document.getElementById('noticeNum').innerHTML = parseNotices.length;
+					document.getElementById('noticeNum').style.display = 'inline';
+
+					document.getElementById('emptyNotice').style.display = "none";
+					for (let i=0; i<parseNotices.length; i++) {
+						noticeMain.innerHTML += `<p>${parseNotices[i].roomName} has reached <strong>${parseNotices[i].roomStatus}</strong> capacity.
+							<button type="button" class="close closeBtn mr-3" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</p>`;
+					}
+				}
+				else {
+					document.getElementById('noticeNum').innerHTML = 0;
+					document.getElementById('noticeNum').stylee.display = 'none';
+				}
+			}
+			
 			const placeholderRooms = document.getElementById('placeholderRooms');
 			placeholderRooms.parentNode.removeChild(placeholderRooms);
 
 			for(var room in result.rooms){
 				var status = result.rooms[room].people.length;
-				if(status < 25){
-					var statusMsg = "Low";
-				}
-				
-				if(status > 25){
-					var statusMsg = "Moderate";
-				}
-				
-				if(status > 50){
-					var statusMsg = "Full";
-				}
-
-				notifications.push([{name: result.rooms[room].name, status: statusMsg}]);
 
 				document.getElementById("roomCardContainer").innerHTML += `
 					<div class="roomCard card mr-4 border-0 shadow-sm pt-3 pb-4 mb-4 bg-white rounded" style="width: 24rem; height: 14rem;" onclick="onRoomClicked('${result.rooms[room].name}', '${result.rooms[room]._id}')">
 						<div class="card-body pt-2 text-center">
-							<h4 class="card-title mb-4">${result.rooms[room].name}</h4>
+							<h4 class="roomName card-title mb-4">${result.rooms[room].name}</h4>
 							<h6>Number of people: <span class="roomData people">N/A</span></h6>
 							<h6>Temperature: <span class="roomData temperature">N/A</span></h6>
 							<h6>Humidity: <span class="roomData humidity">N/A</span></h6>
@@ -1772,10 +1877,11 @@ function tablePagination() {
 function onLogout() {
 	window.location.replace('/login');
 
-	var cookies = document.cookie.split(";");
-	
-	document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-	document.cookie = "io=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+	// var cookies = document.cookie.split(";");
+	// document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+	// document.cookie = "io=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+
+	deleteAllCookies();
 }
 
 function pagenotfoundRedirect() {
@@ -1927,11 +2033,14 @@ $( ".closeBtn" ).click(function() {
 
 
 $( "#clearNotice" ).click(function() {
-	const allNotice = this.parentNode.parentNode.getElementsByTagName('p');
+	localStorage.clear();
+
+	const content = document.getElementById('noticeMain').getElementsByTagName('p');
 	const emptyNotice = document.getElementById('emptyNotice');
 
-  $(allNotice).fadeOut(300 , function() {
+  $(content).fadeOut(300 , function() {
 		const noticeNum = document.getElementById('noticeNum');
+		noticeNum.innerHTML = 0;
 		noticeNum.style.display = "none";
 	});
 
@@ -2129,4 +2238,15 @@ function horizontalWheelScroll() {
 function onLoadDashboard() {
 	showDashboardRooms();
 	horizontalWheelScroll();
+}
+
+function deleteAllCookies() {
+	let cookies = document.cookie.split(";");
+
+	for (let i = 0; i < cookies.length; i++) {
+			let cookie = cookies[i];
+			let eqPos = cookie.indexOf("=");
+			let name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+			document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
+	}
 }
