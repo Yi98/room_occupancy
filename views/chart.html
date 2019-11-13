@@ -79,12 +79,12 @@
 						<div class="row container">
 							<div class="col-md-3 col-xs-6 col-sm-6" id="timerange">
 								<i class="fa fa-clock-o"></i>&nbsp;
-								<span id="choosenTimeRange"></span>
+								<span id="choosenTimeRange" class="choosenRange"></span>
 								<i class="fa fa-caret-down"></i>
 							</div>
 							<div class="col-md-3 col-xs-6 col-sm-6 ml-2" id="reportrange">
 								<i class="fa fa-calendar"></i>&nbsp;
-								<span id="choosenRange"></span>
+								<span id="choosenRange" class="choosenRange"></span>
 								<i class="fa fa-caret-down"></i>
 							</div>
 							<div class="col-md-3 col-xs-12 col-sm-12">
@@ -109,7 +109,7 @@
 									}
 
 									$('#timerange').daterangepicker({
-										timePicker:true,
+										timePicker: true,
 										timePicker24Hour: true,
 										startDate: start,
 										endDate: end,

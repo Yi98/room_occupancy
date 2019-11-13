@@ -89,9 +89,9 @@
                   <div class="alert alert-danger alert-dismissible fade show" role="alert" id="userAlert"></div>
                   <div class="col-md-12 mx-auto">
                     <div class="myform form">
-											<div class="spinner-border align-items-center align-self-center" role="status" id="spinner_adduser">
-										<span class="sr-only">Loading...</span>
-									</div>
+                        <div class="spinner-border align-items-center align-self-center" role="status" id="spinner_adduser">
+                            <span class="sr-only">Loading...</span>
+                        </div>
                       <div class="row">
                         <div class="form-group col-md-6">
                           <input type="text" name="name" class="form-control my-input" id="uname" placeholder="Name">
@@ -102,10 +102,12 @@
                       </div>
                       <div class="row">
                         <div class="form-group col-md-6">
-                          <input type="password" name="password" class="form-control my-input" placeholder="Password" id="upsd">
+                          <input type="password" name="password" class="form-control my-input" placeholder="Password" id="upsd" onfocus = "showHint()">
+                          <p id ="showPasswordHint"></p>
                         </div>
                         <div class="form-group col-md-6">
-                          <input type="password" name="confirm_password" class="form-control my-input" placeholder="Confirm Password" id="cupsd">
+                          <input type="password" name="confirm_password" class="form-control my-input" placeholder="Confirm Password" id="cupsd" onfocus = "showcpsdHint()">
+                          <p id ="showConfirmPasswordHint"></p>
                         </div>
                       </div>
                       <div class="row">

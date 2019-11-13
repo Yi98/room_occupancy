@@ -53,21 +53,55 @@ function showChart() {
   var pathname = url.pathname;
   var split = pathname.split("/");
   var roomId = split[2];
-	xhrChart(roomId);
+
+	var content = null,
+	$element = $("#choosenRange");
+
+	setInterval(function() {
+			var currentText = $element.text();
+
+			if (currentText != content) {
+					// A change has happened
+					content = currentText;
+					let charts = Highcharts.charts;
+					charts.splice(0,charts.length);
+					document.getElementById("allChart").innerHTML = '<div class="d-flex h-100 justify-content-center"><div class="align-self-center"><div class="spinner-border text-danger" style="width:3rem; height:3rem;"><span class="sr-only">Loading...</span></div></div></div>';
+					
+					xhrChart(roomId);
+					charts.splice(0,charts.length);
+					console.log(charts);
+			}
+	}, 500 /* check every 30 seconds */);
+
+	var content2 = null,
+	$element2 = $("#choosenTimeRange");
+
+	setInterval(function() {
+			var currentText2 = $element2.text();
+
+			if (currentText2 != content2) {
+					// A change has happened
+					content2 = currentText2;
+					let charts = Highcharts.charts;
+					charts.splice(0,charts.length);
+					document.getElementById("allChart").innerHTML = '<div class="d-flex h-100 justify-content-center"><div class="align-self-center"><div class="spinner-border text-danger" style="width:3rem; height:3rem;"><span class="sr-only">Loading...</span></div></div></div>';
+					
+					xhrChart(roomId);
+					charts.splice(0,charts.length);
+					console.log(charts);
+			}
+	}, 500 /* check every 30 seconds */);
+
 	
-	$('#choosenTimeRange').on('DOMSubtreeModified', function() {
-		document.getElementById("allChart").innerHTML = '<div class="d-flex h-100 justify-content-center"><div class="align-self-center"><div class="spinner-border text-danger" style="width:3rem; height:3rem;"><span class="sr-only">Loading...</span></div></div></div>';
-		let charts = Highcharts.charts;
-		charts.splice(0,charts.length);
-		xhrChart(roomId);
-	});
-	
-  $('#choosenRange').on('DOMSubtreeModified', function() {
-		document.getElementById("allChart").innerHTML = '<div class="d-flex h-100 justify-content-center"><div class="align-self-center"><div class="spinner-border text-danger" style="width:3rem; height:3rem;"><span class="sr-only">Loading...</span></div></div></div>';
-		let charts = Highcharts.charts;
-		charts.splice(0,charts.length);
-		xhrChart(roomId);
-	});
+  // $('.choosenRange').val().change(function() {
+	// 	let charts = Highcharts.charts;
+	// 	charts.splice(0,charts.length);
+	// 	document.getElementById("allChart").innerHTML = '<div class="d-flex h-100 justify-content-center"><div class="align-self-center"><div class="spinner-border text-danger" style="width:3rem; height:3rem;"><span class="sr-only">Loading...</span></div></div></div>';
+		
+	// 	xhrChart(roomId);
+	// 	charts.splice(0,charts.length);
+	// 	console.log(charts);
+	// });
 };
 
 function xhrChart(roomId){
@@ -883,6 +917,9 @@ function showUserTable(){
         if(this.readyState == 4 && this.status == 200) {
             $("#spinner").hide();
             var result = this.response;
+            var c = 0;
+            var a = 0;
+            
             for(var user in result.users){
                 
                 document.getElementById("showUser").innerHTML += 
@@ -891,14 +928,18 @@ function showUserTable(){
                 '<td>' + result.users[user].username + '</td>' +
                 '<td>' + result.users[user].email + '</td>' +
 				// '<td>' + result.users[user].role + '</td>' +
-				'<td class="roleButtons">' + '<input class="roleChangeButtons" onchange="updateUser(this, &#39;' + result.users[user]._id + '&#39;)" type="checkbox" data-toggle="toggle" data-on="Manager" data-off="Staff" data-onstyle="success" data-offstyle="outline-dark" data-size="xs">' + '</td>' +
+				'<td class="roleButtons">' + '<input class="roleChangeButtons" id = "rolebtn" onchange="updateUser(this, &#39;' + result.users[user]._id + '&#39;)" type="checkbox" data-toggle="toggle" data-on="Manager" data-off="Staff" data-onstyle="success" data-offstyle="outline-dark" data-size="xs">' + '</td>' +
 				'<td>' + '<button class = "btn btn-danger" id = "deletebtn" onclick = "deleteUser(&#39;'+ result.users[user]._id + '&#39;)"><span class="fa fa-trash" style = "color: white"></span></button>' + '</td>' + '</tr>' + '</tbody>';
+                
 			};
             
             hideLoginUser();
+            
 
 			// Set the checkbox checked value to either staff or manager according to the user roles
 			let roleChangeButtons = document.getElementsByClassName("roleChangeButtons");
+            
+            
 			for(var user in result.users) { 
 				if (result.users[user].role == "staff") {
 					roleChangeButtons[user].checked = false;
@@ -909,6 +950,12 @@ function showUserTable(){
 
 			// Initialize the checkbox to be applied by bootstrap toggle css
 			$("[data-toggle='toggle']").bootstrapToggle();
+          
+            if((sessionStorage.getItem("passLoginUserRole")) == "staff")
+            {
+                $("[data-toggle='toggle']").prop('disabled', true);
+                $("[data-toggle='collapse']").prop('disabled', true);
+            }
 		}
 
     };
@@ -967,6 +1014,35 @@ function hideLoginUser() {
             }
         }
     }
+}
+
+function showHint() {
+    if(document.getElementById("upsd").value === '')
+    {
+        document.getElementById("showPasswordHint").innerHTML = '8-12 character, at lease one uppercase, one lowercase and one numeric digit';
+    }
+
+}
+
+function showcpsdHint() {
+    if(document.getElementById("cupsd").value === '')
+    {
+        document.getElementById("showConfirmPasswordHint").innerHTML = '8-12 character, at lease one uppercase, one lowercase and one numeric digit';
+    } 
+}
+
+function showNewpsdHint() {
+    if(document.getElementById("password").value === '')
+    {
+        document.getElementById("showNewPasswordHint").innerHTML = '8-12 character, one uppercase, one lowercase and one numeric digit';
+    } 
+}
+
+function showNewconfirmpsdHint() {
+    if(document.getElementById("confirm_password").value === '')
+    {
+        document.getElementById("showNewConfirmPasswordHint").innerHTML = '8-12 character, one uppercase, one lowercase and one numeric digit';
+    } 
 }
 
 function toggle() {
@@ -1029,12 +1105,6 @@ function addUser() {
         $("#userAlert").show();
     } 
     
-//    if(document.getElementById("upsd").value !== "")
-//    {
-//        CheckPassword(document.getElementById("upsd"));
-//    }
-    
-    
     if(document.getElementById("uname").value !== "" 
        && document.getElementById("upsd").value !== "" 
        && document.getElementById("cupsd").value !== "" 
@@ -1062,6 +1132,8 @@ function addUser() {
                 $("#spinner_adduser").hide();
                 
                 clear();
+                document.getElementById("showPasswordHint").innerHTML = '';
+                document.getElementById("showConfirmPasswordHint").innerHTML = '';
                 
                 document.getElementById("showUser").innerHTML = "";
                 var table = document.getElementById("showUser").innerHTML;
@@ -1340,7 +1412,6 @@ function deleteUser(userIdDelete){
     }
 };
 
-
 function loginPage() {
     $("#spinner_login").hide(); 
     $("#spinner_forget").hide(); 
@@ -1384,6 +1455,7 @@ async function login(){
                 if(xhttp.response.status == "success")
                 {
                     sessionStorage.setItem("passLoginUserID", xhttp.response.userId);
+                    sessionStorage.setItem("passLoginUserRole", xhttp.response.role);
                     
                     $("#spinner_login").hide(); 
 
@@ -1569,6 +1641,9 @@ function onResetPassword() {
                 if (xhttp.response.message == 'success') {
                     $("#spinner_reset").hide(); 
                     
+                    document.getElementById("showNewPasswordHint").innerHTML = '';
+                    document.getElementById("showNewConfirmPasswordHint").innerHTML = '';
+                    
                     var element = document.getElementById("resetAlert");
                     element.classList.remove("alert-danger")
                     element.classList.add("alert-success");
@@ -1605,6 +1680,7 @@ function onResetPassword() {
 
 function tablePagination() {
     var table = '#userTable'
+    var userID = sessionStorage.getItem("passLoginUserID");
     $('#maxRows').on('change', function(){
         $('.pagination').html('')
         var trnum = 0
@@ -1613,10 +1689,28 @@ function tablePagination() {
         $(table+' tr:gt(0)').each(function(){
             trnum++
             if(trnum > maxRows){
-                $(this).hide()
+                $(this).hide();
+                for(var i = 0 ; i < $(this).length; i++)
+                {
+                    var td = $(this)[i].cells[i];
+                    textValue = td.textContent || td.innerText;
+                    if(textValue === userID)
+                    {
+                        $(this).hide()
+                    }
+                }
             }
             if(trnum <= maxRows){
-                $(this).show()
+                $(this).show();
+                for(var i = 0 ; i < $(this).length; i++)
+                {
+                    var td = $(this)[i].cells[i];
+                    textValue = td.textContent || td.innerText;
+                    if(textValue === userID)
+                    {
+                        $(this).hide()
+                    }
+                }
             }
         })
         if(totalRows > maxRows){
@@ -1634,9 +1728,27 @@ function tablePagination() {
             $(table+' tr:gt(0)').each(function(){
                 trIndex++
                 if(trIndex > (maxRows*pageNum) || trIndex <= ((maxRows*pageNum)-maxRows)){
-                    $(this).hide()
+                    $(this).hide();
+                    for(var i = 0 ; i < $(this).length; i++)
+                    {
+                        var td = $(this)[i].cells[i];
+                        textValue = td.textContent || td.innerText;
+                        if(textValue === userID)
+                        {
+                            $(this).hide()
+                        }
+                    }
                 } else{
-                    $(this).show()
+                    $(this).show();
+                    for(var i = 0 ; i < $(this).length; i++)
+                    {
+                        var td = $(this)[i].cells[i];
+                        textValue = td.textContent || td.innerText;
+                        if(textValue === userID)
+                        {
+                            $(this).hide()
+                        }
+                    }
                 }
             })
         })
