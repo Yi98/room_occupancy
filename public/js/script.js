@@ -3,6 +3,20 @@ const domain = 'http://localhost:3000';
 
 var socket = io();
 
+socket.on("people", function(msg) {
+	// for loop assign to all room their respective sensor data
+	//let roomCards = document.getElementsByClassName("room-card");
+    let roomCards = document.getElementsByClassName("roomCard");
+	for (let i = 0; i < roomCards.length; i++) {
+        //let roomId = roomCards[i].getElementsByClassName("room-id");
+		let roomId = roomCards[i].getElementsByClassName("roomId");
+		// change 0 to i later
+		if (roomId[0].innerHTML == msg.roomId) {
+			document.getElementsByClassName("people")[i].innerHTML = msg.people;
+		}
+	}
+});
+
 socket.on("sensor", function(msg) {
 	// for loop assign to all room their respective sensor data
 	//let roomCards = document.getElementsByClassName("room-card");

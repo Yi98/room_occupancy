@@ -207,54 +207,66 @@ if (performance.navigation.type == 1) {
        	doc.rect(50, 220, 240, 100).fillAndStroke('#fff', '#000000').fillColor('black');
 				doc.fontSize(12).text("Date with most number of people:", 80, 240);
 				doc.moveDown();
-				doc.fontSize(12).text("10 Jan 2019 4:00AM - 5:00AM", 90, doc.y);
+                //doc.fontSize(12).text("10 Jan 2019 4:00AM - 5:00AM", 90, doc.y);
+                doc.fontSize(12).text("N/A", 90, doc.y);
 				doc.moveDown();
-				doc.fontSize(12).text("100 People", 140, doc.y);
+                //doc.fontSize(12).text("100 People", 140, doc.y);
+                doc.fontSize(12).text("N/A", 140, doc.y);
 				doc.moveDown();
 
 				//Date with lowest number of people
 				doc.rect(320, 220, 240, 100).fillAndStroke('#fff', '#000000').fillColor('black');
 				doc.fontSize(12).text("Date with lowest number of people:" , 350, 240);
 				doc.moveDown();
-				doc.fontSize(12).text("1 Jan 2019 4:00AM - 5:00AM" , 360, doc.y);
+                //doc.fontSize(12).text("1 Jan 2019 4:00AM - 5:00AM" , 360, doc.y);
+                doc.fontSize(12).text("N/A" , 360, doc.y);
 				doc.moveDown();
-				doc.fontSize(12).text("6 People" , 410, doc.y);
+                //doc.fontSize(12).text("6 People" , 410, doc.y);
+                doc.fontSize(12).text("N/A" , 410, doc.y);
 				doc.moveDown();
 
 				//Date with highest temperature
 				doc.rect(50, 360, 240, 100).fillAndStroke('#fff', '#000000').fillColor('black');
 				doc.fontSize(12).text("Date with highest temperature:", 93, 380);
 				doc.moveDown();
-				doc.fontSize(12).text("10 Jan 2019 2:00PM - 3:00PM", 90, doc.y);
+                //doc.fontSize(12).text("10 Jan 2019 2:00PM - 3:00PM", 90, doc.y);
+                doc.fontSize(12).text("N/A", 90, doc.y);
 				doc.moveDown();
-				doc.fontSize(12).text("35 Celsius", 140, doc.y);
+                //doc.fontSize(12).text("35 Celsius", 140, doc.y);
+                doc.fontSize(12).text("N/A", 140, doc.y);
 				doc.moveDown();
 
 				//Date with lowest temperature
 				doc.rect(320, 360, 240, 100).fillAndStroke('#fff', '#000000').fillColor('black');
 				doc.fontSize(12).text("Date with lowest temperature:", 365, 380);
 				doc.moveDown();
-				doc.fontSize(12).text("15 Jan 2019 12:00AM - 1:00AM", 360, doc.y);
+                //doc.fontSize(12).text("15 Jan 2019 12:00AM - 1:00AM", 360, doc.y);
+                doc.fontSize(12).text("N/A", 360, doc.y);
 				doc.moveDown();
-				doc.fontSize(12).text("23 Celsius", 410, doc.y);
+                //doc.fontSize(12).text("23 Celsius", 410, doc.y);
+                doc.fontSize(12).text("N/A", 410, doc.y);
 				doc.moveDown();
 
 				//Date with highest humidity
 				doc.rect(50, 500, 240, 100).fillAndStroke('#fff', '#000000').fillColor('black');
 				doc.fontSize(12).text("Date with highest humidity:", 97, 520);
 				doc.moveDown();
-				doc.fontSize(12).text("15 Jan 2019 4:00AM - 5:00AM", 90, doc.y);
+                //doc.fontSize(12).text("15 Jan 2019 4:00AM - 5:00AM", 90, doc.y);
+                doc.fontSize(12).text("N/A", 90, doc.y);
 				doc.moveDown();
-				doc.fontSize(12).text("80%", 160, doc.y);
+                //doc.fontSize(12).text("80%", 160, doc.y);
+                doc.fontSize(12).text("N/A", 160, doc.y);
 				doc.moveDown();
 
 				//Date with lowest humidity
 				doc.rect(320, 500, 240, 100).fillAndStroke('#fff', '#000000').fillColor('black');
 				doc.fontSize(12).text("Date with lowest humidity:", 367, 520);
 				doc.moveDown();
-				doc.fontSize(12).text("19 Jan 2019 8:00PM - 9:00PM", 360, doc.y);
+                //doc.fontSize(12).text("19 Jan 2019 8:00PM - 9:00PM", 360, doc.y);
+                doc.fontSize(12).text("N/A", 360, doc.y);
 				doc.moveDown();
-				doc.fontSize(12).text("33%", 430, doc.y);
+                //doc.fontSize(12).text("33%", 430, doc.y);
+                doc.fontSize(12).text("N/A", 430, doc.y);
 				doc.moveDown();
 
         doc.font("Helvetica");
