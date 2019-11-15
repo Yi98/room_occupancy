@@ -4,16 +4,16 @@ const router = express.Router();
 const UserController = require('../controller/user');
 const auth = require('../middleware/auth');
 
-router.get('/', auth, UserController.getUsers);
+router.get('/', UserController.getUsers);
 
 // this will match every /string. Be careful with it.
-router.get('/:id', auth, UserController.getUser);
+router.get('/:id', UserController.getUser);
 
-router.put('/:id', auth, UserController.editUser);
+router.put('/:id', UserController.editUser);
 
-router.delete('/:id', auth, UserController.deleteUser);
+router.delete('/:id', UserController.deleteUser);
 
-router.post('/', auth, UserController.addUser);
+router.post('/', UserController.addUser);
 
 router.post('/login', UserController.login);
 
