@@ -1576,3 +1576,8 @@ label:focus,
 #noticeNum {
 	display: none;
 }
+
+.noticeTime {
+	opacity: 0.9;
+	font-size:0.8rem;
+}

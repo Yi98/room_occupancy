@@ -5,68 +5,78 @@ var socket = io();
 
 function onTestPeople() {
 	setInterval(function() {
-	let roomCards = document.getElementsByClassName("roomCard");
-	let data = 120;
-	let noticeMain = document.getElementById('noticeMain');
-	let notify = false;
-	let roomName;
-	let roomStatus;
-	let notifications;
-	
-	for (let i = 0; i < roomCards.length; i++) {
+		let roomCards = document.getElementsByClassName("roomCard");
+		let noticeMain = document.getElementById('noticeMain');
+		let noticeTime = moment().format('MMM DD, h:mm A');
+		let data = 120;
+		let notify = false;
+		let roomName;
+		let roomStatus;
+		let notifications;
 		
-		let roomId = roomCards[i].getElementsByClassName("roomId");
+		for (let i = 0; i < roomCards.length; i++) {
+			
+			let roomId = roomCards[i].getElementsByClassName("roomId");
 
-		// change 0 to i later
-		if (roomId[0].innerHTML == '5d935b95ea295d622c1f7e7d') {
-			document.getElementsByClassName("people")[i].innerHTML = 100;
-			roomName = document.getElementsByClassName("roomName")[i].innerHTML;
+			// change 0 to i later
+			if (roomId[0].innerHTML == '5d935b95ea295d622c1f7e7d') {
+				document.getElementsByClassName("people")[i].innerHTML = 100;
+				document.getElementsByClassName('lastUpdatedTime')[i].innerHTML = noticeTime;
+				roomName = document.getElementsByClassName("roomName")[i].innerHTML;
+			}
 		}
-	}
 
-	// Push notifications
-	if (!localStorage.getItem('notifications')) {
-		localStorage.setItem("notifications", JSON.stringify([]));
-	}
+		// Push notifications
+		if (!localStorage.getItem('notifications')) {
+			localStorage.setItem("notifications", JSON.stringify([]));
+		}
 
-	if (data > 100) {
-		notify = true;
-		roomStatus = 'full';
-	}
-	else if (data > 50) {
-		notify = true;
-		roomStatus = 'moderate';
-	}
+		if (data > 100) {
+			notify = true;
+			roomStatus = 'full';
+		}
+		else if (data > 50) {
+			notify = true;
+			roomStatus = 'moderate';
+		}
 
-	if (notify) {
-		document.getElementById('emptyNotice').style.display = "none";
+		if (notify) {
+			document.getElementById('emptyNotice').style.display = "none";
 
-		const noticeNum = document.getElementById('noticeNum');
-		noticeNum.innerHTML = Number(noticeNum.innerHTML) + 1;
-		noticeNum.style.display = "inline";
+			const noticeNum = document.getElementById('noticeNum');
+			noticeNum.innerHTML = Number(noticeNum.innerHTML) + 1;
+			noticeNum.style.display = "inline";
 
-		notifications = JSON.parse(localStorage.getItem('notifications'));
-		notifications.push({roomName, roomStatus});
-		localStorage.setItem('notifications', JSON.stringify(notifications));
+			notifications = JSON.parse(localStorage.getItem('notifications'));
 
-		noticeMain.innerHTML += `<p>${roomName} has reached <strong>${roomStatus}</strong> capacity.
-			<button type="button" class="close closeBtn mr-3" aria-label="Close">
-				<span aria-hidden="true">&times;</span>
-			</button>
-		</p>`;
-	}
+			if (notifications.length > 0) {
+				for (let j=0; j<notifications.length; j++) {
+					if (roomName == notifications[j].roomName && roomStatus == notifications[j].roomStatus) {
+						break;
+					}
+				}
+			}
+			else {
+				notifications.push({noticeTime, roomName, roomStatus});
 
+				noticeMain.innerHTML += `<div class="noticeContainer"><p class="m-0 noticeTime">${noticeTime}</p><p style="font-size:0.9rem;">${roomName} has reached <strong>${roomStatus}</strong> capacity.
+					<button onclick="closeNoticeRow(this)" type="button" class="close closeBtn mr-3" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</p></div>`;
+			}
+
+			localStorage.setItem('notifications', JSON.stringify(notifications));
+		}
 	}, 10000);
-
-	
 }
 
 socket.on("people", function(msg) {
 	// for loop assign to all room their respective sensor data
 	let roomCards = document.getElementsByClassName("roomCard");
 	let noticeMain = document.getElementById('noticeMain');
+	let noticeTime = moment().format('MMM DD, h:mm A');
 	let notify = false;
-	let data;
 	let roomName;
 	let roomStatus;
 	let notifications;
@@ -77,7 +87,7 @@ socket.on("people", function(msg) {
 		// change 0 to i later
 		if (roomId[0].innerHTML == msg.roomId) {
 			document.getElementsByClassName("people")[i].innerHTML = msg.people;
-			data = msg.people;
+			document.getElementsByClassName('lastUpdatedTime')[i].innerHTML = noticeTime;
 			roomName = document.getElementsByClassName("roomName")[i].innerHTML;
 		}
 	}
@@ -87,33 +97,45 @@ socket.on("people", function(msg) {
 		localStorage.setItem("notifications", JSON.stringify([]));
 	}
 
-	if (data > 100) {
+	if (msg.people > 50) {
 		notify = true;
 		roomStatus = 'full';
 	}
-	else if (data > 50) {
+	else if (msg.people > 20) {
 		notify = true;
 		roomStatus = 'moderate';
 	}
 
 	if (notify) {
-		document.getElementById('emptyNotice').style.display = "none";
+			document.getElementById('emptyNotice').style.display = "none";
 
-		const noticeNum = document.getElementById('noticeNum');
-		noticeNum.innerHTML = Number(noticeNum.innerHTML) + 1;
-		noticeNum.style.display = "inline";
+			const noticeNum = document.getElementById('noticeNum');
+			noticeNum.innerHTML = Number(noticeNum.innerHTML) + 1;
+			noticeNum.style.display = "inline";
 
-		notifications = JSON.parse(localStorage.getItem('notifications'));
-		notifications.push({roomName, roomStatus});
-		localStorage.setItem('notifications', JSON.stringify(notifications));
+			notifications = JSON.parse(localStorage.getItem('notifications'));
 
-		noticeMain.innerHTML += `<p>${roomName} has reached <strong>${roomStatus}</strong> capacity.
-			<button type="button" class="close closeBtn mr-3" aria-label="Close">
-				<span aria-hidden="true">&times;</span>
-			</button>
-		</p>`;
+			if (notifications.length > 0) {
+				for (let j=0; j<notifications.length; j++) {
+					if (roomName == notifications[j].roomName && roomStatus == notifications[j].roomStatus) {
+						break;
+					}
+				}
+			}
+			else {
+				notifications.push({noticeTime, roomName, roomStatus});
+
+				noticeMain.innerHTML += `<div class="noticeContainer"><p class="m-0 noticeTime">${noticeTime}</p><p style="font-size:0.9rem;">${roomName} has reached <strong>${roomStatus}</strong> capacity.
+					<button onclick="closeNoticeRow(this)" type="button" class="close closeBtn mr-3" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</p></div>`;
+			}
+			
+			localStorage.setItem('notifications', JSON.stringify(notifications));
 		}
 	});
+
 
 socket.on("sensor", function(msg) {
 	// for loop assign to all room their respective sensor data
@@ -126,6 +148,7 @@ socket.on("sensor", function(msg) {
 		if (roomId[0].innerHTML == msg.roomId) {
 			document.getElementsByClassName("temperature")[i].innerHTML = msg.temperature;
 			document.getElementsByClassName("humidity")[i].innerHTML = msg.humidity;
+			document.getElementsByClassName('lastUpdatedTime')[i].innerHTML = moment().format('MMM DD, h:mm A');
 		}
 	}
 });
@@ -938,11 +961,11 @@ function showDashboardRooms() {
 
 					document.getElementById('emptyNotice').style.display = "none";
 					for (let i=0; i<parseNotices.length; i++) {
-						noticeMain.innerHTML += `<p>${parseNotices[i].roomName} has reached <strong>${parseNotices[i].roomStatus}</strong> capacity.
-							<button type="button" class="close closeBtn mr-3" aria-label="Close">
+						noticeMain.innerHTML += `<div class="noticeContainer"><p class="m-0 noticeTime">${parseNotices[i].noticeTime}</p><p style="font-size:0.9rem;">${parseNotices[i].roomName} has reached <strong>${parseNotices[i].roomStatus}</strong> capacity.
+							<button onclick="closeNoticeRow(this)" type="button" class="close closeBtn mr-3" aria-label="Close">
 								<span aria-hidden="true">&times;</span>
 							</button>
-						</p>`;
+						</p></div>`;
 					}
 				}
 				else {
@@ -964,7 +987,7 @@ function showDashboardRooms() {
 							<h6>Number of people: <span class="roomData people">N/A</span></h6>
 							<h6>Temperature: <span class="roomData temperature">N/A</span></h6>
 							<h6>Humidity: <span class="roomData humidity">N/A</span></h6>
-							<p class="lastUpdated mt-4">Last updated: Nov 11, 00:30 AM</p>
+							<p class="lastUpdated mt-4">Last updated: <span class="lastUpdatedTime">N/A<span></p>
               <span class="roomId" style="display:none">${result.rooms[room]._id}</span>
 						</div>
 					</div>
@@ -2013,23 +2036,42 @@ const trendChart = new Chart(dashTrendChart, {
 });
 
 
-$( ".closeBtn" ).click(function() {
-  $(this.parentNode).fadeOut(500 , function() {
-		const noticeNum = document.getElementById('noticeNum');
-		noticeNum.innerHTML -= 1;
+function closeNoticeRow(element) {
+	const totalChildCount = document.getElementById('noticeMain').childElementCount;
 
-		if (noticeNum.innerHTML == 0) {
-			const emptyNotice = document.getElementById('emptyNotice');
+	const time = element.parentNode.parentNode.getElementsByClassName('noticeTime')[0].innerHTML;
 
-			const noticeNum = document.getElementById('noticeNum');
-			noticeNum.style.display = "none";
+	if (!localStorage.getItem('notifications')) {
+		localStorage.setItem("notifications", JSON.stringify([]));
+	}
 
-			$(emptyNotice).fadeIn(1500 , function() {
-				emptyNotice.style.display = "block";
-			});
+	const notifications = JSON.parse(localStorage.getItem('notifications'));
+
+	for (let i=0; i<notifications.length; i++) {
+		if (notifications[i].noticeTime == time) {
+			notifications.splice(i, 1);
+			break;
 		}
-	});
-});
+	}
+
+	localStorage.setItem('notifications', JSON.stringify(notifications));
+
+	element.parentNode.parentNode.remove();	
+
+	const noticeNum = document.getElementById('noticeNum');
+	noticeNum.innerHTML -= 1;
+
+	if (noticeNum.innerHTML == 0) {
+		const emptyNotice = document.getElementById('emptyNotice');
+
+		const noticeNum = document.getElementById('noticeNum');
+		noticeNum.style.display = "none";
+
+		$(emptyNotice).fadeIn(1500 , function() {
+			emptyNotice.style.display = "block";
+		});
+	}
+}
 
 
 $( "#clearNotice" ).click(function() {
