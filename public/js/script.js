@@ -41,12 +41,6 @@ function onTestPeople() {
 		}
 
 		if (notify) {
-			document.getElementById('emptyNotice').style.display = "none";
-
-			const noticeNum = document.getElementById('noticeNum');
-			noticeNum.innerHTML = Number(noticeNum.innerHTML) + 1;
-			noticeNum.style.display = "inline";
-
 			notifications = JSON.parse(localStorage.getItem('notifications'));
 
 			if (notifications.length > 0) {
@@ -64,6 +58,12 @@ function onTestPeople() {
 						<span aria-hidden="true">&times;</span>
 					</button>
 				</p></div>`;
+
+				document.getElementById('emptyNotice').style.display = "none";
+
+				const noticeNum = document.getElementById('noticeNum');
+				noticeNum.innerHTML = Number(noticeNum.innerHTML) + 1;
+				noticeNum.style.display = "inline";
 			}
 
 			localStorage.setItem('notifications', JSON.stringify(notifications));
@@ -107,12 +107,6 @@ socket.on("people", function(msg) {
 	}
 
 	if (notify) {
-			document.getElementById('emptyNotice').style.display = "none";
-
-			const noticeNum = document.getElementById('noticeNum');
-			noticeNum.innerHTML = Number(noticeNum.innerHTML) + 1;
-			noticeNum.style.display = "inline";
-
 			notifications = JSON.parse(localStorage.getItem('notifications'));
 
 			if (notifications.length > 0) {
@@ -130,6 +124,12 @@ socket.on("people", function(msg) {
 						<span aria-hidden="true">&times;</span>
 					</button>
 				</p></div>`;
+
+				document.getElementById('emptyNotice').style.display = "none";
+
+				const noticeNum = document.getElementById('noticeNum');
+				noticeNum.innerHTML = Number(noticeNum.innerHTML) + 1;
+				noticeNum.style.display = "inline";
 			}
 			
 			localStorage.setItem('notifications', JSON.stringify(notifications));
