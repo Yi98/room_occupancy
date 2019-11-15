@@ -97,11 +97,11 @@ socket.on("people", function(msg) {
 		localStorage.setItem("notifications", JSON.stringify([]));
 	}
 
-	if (msg.people > 50) {
+	if (msg.people > 5) {
 		notify = true;
 		roomStatus = 'full';
 	}
-	else if (msg.people > 20) {
+	else if (msg.people > 10) {
 		notify = true;
 		roomStatus = 'moderate';
 	}
