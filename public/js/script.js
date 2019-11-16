@@ -2112,13 +2112,13 @@ $( "#clearNotice" ).click(function() {
 	const content = document.getElementById('noticeMain').getElementsByTagName('p');
 	const emptyNotice = document.getElementById('emptyNotice');
 
-  $(content).fadeOut(300 , function() {
+  jQuery(content).fadeOut(300 , function() {
 		const noticeNum = document.getElementById('noticeNum');
 		noticeNum.innerHTML = 0;
 		noticeNum.style.display = "none";
 	});
 
-	$(emptyNotice).fadeIn(1500 , function() {
+	jQuery(emptyNotice).fadeIn(1500 , function() {
 		emptyNotice.style.display = "block";
 	});
 });
