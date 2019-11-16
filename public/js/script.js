@@ -1,7 +1,13 @@
 const domain = 'http://localhost:3000';
 //const domain = 'https://roomoccupancy.herokuapp.com';
 
-var socket = io();
+// var socket = io();
+// // var socket = io.connect(domain, {reconnection: false, forceNew: true})
+// socket.on("disconnect", function() {
+// 	socket.disconnect();
+// 	socket.close();
+// })
+
 
 function onTestPeople() {
 	setInterval(function() {
@@ -2291,4 +2297,6 @@ function deleteAllCookies() {
 			let name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
 			document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
 	}
+
+	sessionStorage.clear();
 }

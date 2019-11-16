@@ -28,7 +28,6 @@ const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 mongoose.Promise = global.Promise;
 
-// Pass the socket to data controller file
 dataController.sensorSocket(io);
 
 app.use(cors());

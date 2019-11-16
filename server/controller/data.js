@@ -3,7 +3,8 @@ const Temperature = require('../models/Temperature');
 const Humidity = require('../models/Humidity');
 const People = require('../models/People');
 const Room = require('../models/Room');
-const fs = require("fs")
+const fs = require("fs");
+const socketioJwt = require("socketio-jwt");
 
 const path = "people.txt"
 
@@ -11,9 +12,16 @@ let socket;
 
 exports.sensorSocket = (io) => {
   socket = io;
-  socket.on("connection", function(socket) {
+  
+  io.on("connection", function(socket) {
     console.log("sensor socket connected");
-  })
+    // socket.on("disconnect", function() {
+    //   console.log(socket.disconnect())
+    //   socket.emit("disconnectclient")
+    //   console.log("User disconnected")
+    //   socket.close();
+    // })
+  })  
 }
 
 // get all temperature data of a room ->  /api/data/:roomId/temperature (GET)

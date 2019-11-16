@@ -4,12 +4,12 @@ const auth = require('../middleware/auth');
 
 const RoomController = require('../controller/room');
 
-router.get('/:roomId', auth, RoomController.getRoom);
+router.get('/:roomId', RoomController.getRoom);
 
-router.get('/', auth, RoomController.getRooms);
+router.get('/', RoomController.getRooms);
 
 router.post('/', RoomController.addRoom);
 
-router.delete('/:roomId', auth, RoomController.deleteRoom);
+router.delete('/:roomId', RoomController.deleteRoom);
 
 module.exports = router;
