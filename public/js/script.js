@@ -999,7 +999,7 @@ function showDashboardRooms() {
 				}
 				else {
 					document.getElementById('noticeNum').innerHTML = 0;
-					document.getElementById('noticeNum').stylee.display = 'none';
+					document.getElementById('noticeNum').style.display = 'none';
 				}
 			}
 			
