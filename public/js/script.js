@@ -225,15 +225,14 @@ function showChart() {
 			var currentText = $element.text();
 
 			if (currentText != content) {
+					document.getElementById("pdfButton").disabled = true;
 					// A change has happened
 					content = currentText;
 					let charts = Highcharts.charts;
 					charts.splice(0,charts.length);
 					document.getElementById("allChart").innerHTML = '<div class="d-flex h-100 justify-content-center"><div class="align-self-center"><div class="spinner-border text-danger" style="width:3rem; height:3rem;"><span class="sr-only">Loading...</span></div></div></div>';
-					
 					xhrChart(roomId);
 					charts.splice(0,charts.length);
-					console.log(charts);
 			}
 	}, 500 /* check every 30 seconds */);
 
@@ -244,12 +243,12 @@ function showChart() {
 			var currentText2 = $element2.text();
 
 			if (currentText2 != content2) {
+					document.getElementById("pdfButton").disabled = true;
 					// A change has happened
 					content2 = currentText2;
 					let charts = Highcharts.charts;
 					charts.splice(0,charts.length);
 					document.getElementById("allChart").innerHTML = '<div class="d-flex h-100 justify-content-center"><div class="align-self-center"><div class="spinner-border text-danger" style="width:3rem; height:3rem;"><span class="sr-only">Loading...</span></div></div></div>';
-					
 					xhrChart(roomId);
 					charts.splice(0,charts.length);
 					console.log(charts);
@@ -381,6 +380,8 @@ function xhrChart(roomId){
 							showPeopleChart(hourTime, peopleData); //Illustrate the chart
 							showTemperatureChart(hourTime, tempData); //Illustrate the chart
 							showHumidityChart(hourTime, humidData); //Illustrate the chart
+							document.getElementById("pdfButton").disabled = false;
+
 						}
 						
 						//Daily Chart
@@ -493,6 +494,8 @@ function xhrChart(roomId){
 							showPeopleChart(dailyTime, peopleData); //Illustrate the chart
 							showTemperatureChart(dailyTime, tempData); //Illustrate the chart
 							showHumidityChart(dailyTime, humidData); //Illustrate the chart
+							document.getElementById("pdfButton").disabled = false;
+
 						}
 							
 						//Weekly Chart
@@ -645,6 +648,8 @@ function xhrChart(roomId){
 							showPeopleChart(weeklyTime, peopleData); //Illustrate the chart
 							showTemperatureChart(weeklyTime, tempData); //Illustrate the chart
 							showHumidityChart(weeklyTime, humidData); //Illustrate the chart
+							document.getElementById("pdfButton").disabled = false;
+
 						}
 						
 						//Monthly Chart
@@ -774,6 +779,8 @@ function xhrChart(roomId){
 							showPeopleChart(monthlyTime, peopleData); //Illustrate the chart
 							showTemperatureChart(monthlyTime, tempData); //Illustrate the chart
 							showHumidityChart(monthlyTime, humidData); //Illustrate the chart
+							document.getElementById("pdfButton").disabled = false;
+
 						}
 					}
 				}
