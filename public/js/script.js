@@ -16,8 +16,9 @@ function onTestPeople() {
 		let roomCards = document.getElementsByClassName("roomCard");
 		let noticeMain = document.getElementById('noticeMain');
 		let noticeTime = moment().format('MMM DD, h:mm A');
-		let data = 120;
+		let data = 13;
 		let notify = false;
+		let addToNotifications = true;
 		let outerRoomId;
 		let roomName;
 		let roomStatus;
@@ -30,7 +31,7 @@ function onTestPeople() {
 			// change 0 to i later
 			if (roomId[0].innerHTML == '5d935b95ea295d622c1f7e7d') {
 				outerRoomId = '5d935b95ea295d622c1f7e7d';
-				document.getElementsByClassName("people")[i].innerHTML = 100;
+				document.getElementsByClassName("people")[i].innerHTML = 13;
 				document.getElementsByClassName('lastUpdatedTime')[i].innerHTML = noticeTime;
 				roomName = document.getElementsByClassName("roomName")[i].innerHTML;
 			}
@@ -56,11 +57,12 @@ function onTestPeople() {
 			if (notifications.length > 0) {
 				for (let j=0; j<notifications.length; j++) {
 					if (roomName == notifications[j].roomName && roomStatus == notifications[j].roomStatus) {
-						break;
+						addToNotifications = false;
 					}
 				}
 			}
-			else {
+			
+			if (addToNotifications) {
 				notifications.push({noticeTime, roomName, roomStatus});
 
 				noticeMain.innerHTML += `<div class="noticeContainer"><p class="m-0 noticeTime">${noticeTime}</p><p style="font-size:0.9rem;">${roomName} has reached <strong>${roomStatus}</strong> capacity.
@@ -92,6 +94,7 @@ socket.on("people", function(msg) {
 	let noticeMain = document.getElementById('noticeMain');
 	let noticeTime = moment().format('MMM DD, h:mm A');
 	let notify = false;
+	let addToNotifications = true;
 	let outerRoomId;
 	let roomName;
 	let roomStatus;
@@ -130,11 +133,12 @@ socket.on("people", function(msg) {
 			if (notifications.length > 0) {
 				for (let j=0; j<notifications.length; j++) {
 					if (roomName == notifications[j].roomName && roomStatus == notifications[j].roomStatus) {
-						break;
+						addToNotifications = false;
 					}
 				}
 			}
-			else {
+			
+			if (addToNotifications) {
 				notifications.push({noticeTime, roomName, roomStatus});
 
 				noticeMain.innerHTML += `<div class="noticeContainer"><p class="m-0 noticeTime">${noticeTime}</p><p style="font-size:0.9rem;">${roomName} has reached <strong>${roomStatus}</strong> capacity.
@@ -148,7 +152,7 @@ socket.on("people", function(msg) {
 				const noticeNum = document.getElementById('noticeNum');
 				noticeNum.innerHTML = Number(noticeNum.innerHTML) + 1;
 				noticeNum.style.display = "inline";
-			}
+			}	
 			
 			localStorage.setItem('notifications', JSON.stringify(notifications));
 		}
@@ -233,7 +237,6 @@ function showChart() {
 					
 					xhrChart(roomId);
 					charts.splice(0,charts.length);
-					console.log(charts);
 			}
 	}, 500 /* check every 30 seconds */);
 
