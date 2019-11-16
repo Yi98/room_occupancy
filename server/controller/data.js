@@ -222,7 +222,7 @@ exports.postPeople = (req, res) => {
     fs.appendFileSync("people.txt", req.params.roomId + ":" + req.body.data + "\n");
   }
 
-  if (req.body.store != true) {
+  if (req.body.store != 1) {
     return res.status(200).json({message: 'Successfully push people data to client'});
   }
 
