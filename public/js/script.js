@@ -3,14 +3,6 @@ const domain = 'https://roomoccupancy.herokuapp.com';
 
 var socket = io();
 
-function addData(chart, label, data) {
-	chart.data.labels.push(label);
-	chart.data.datasets.forEach((dataset) => {
-			dataset.data.push(data);
-	});
-	chart.update();
-}
-
 function onTestPeople() {
 	setInterval(function() {
 		let roomCards = document.getElementsByClassName("roomCard");
@@ -2174,7 +2166,9 @@ function onRoomClicked(roomName, roomId, updateView) {
 				if (moment(result.room.people[i].time).isSame(new Date(), "day")) {
 					const current = moment(result.room.people[i].time).hours();
 					if (newPeople[current] != 0) {
-						newPeople[current] = (newPeople[current] + result.room.people[i].data) / 2;
+						// newPeople[current] = (newPeople[current] + result.room.people[i].data) / 2;
+						newPeople[current] = result.room.people[i].data;
+
 					}
 					else {
 						newPeople[current] = result.room.people[i].data;
