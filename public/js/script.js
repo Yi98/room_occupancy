@@ -2114,6 +2114,12 @@ function onRoomClicked(roomName, roomId, updateView) {
 	const dotsLoaders = document.getElementsByClassName('dotsLoading');
 	const defaultRooms = document.getElementsByClassName('defaultRoom');
 
+	document.getElementById('hPeople').innerHTML = "N/A";
+	document.getElementById('hTemp').innerHTML = "N/A";
+	document.getElementById('hHumid').innerHTML = "N/A";
+	document.getElementById('lTemp').innerHTML = "N/A";
+	document.getElementById('lHumid').innerHTML = "N/A";
+
 	if (updateView) {
 		for (let i=0; i<dotsLoaders.length; i++) {
 			dotsLoaders[i].style.display = "inline";
