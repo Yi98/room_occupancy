@@ -73,9 +73,7 @@ function onTestPeople() {
 			localStorage.setItem('notifications', JSON.stringify(notifications));	
 		}
 
-		if (true) {
-			onRoomClicked('empty', outerRoomId, false);
-		}
+		onRoomClicked('empty', outerRoomId, false);
 
 	}, 10000);
 }
@@ -149,9 +147,7 @@ socket.on("people", function(msg) {
 			localStorage.setItem('notifications', JSON.stringify(notifications));
 		}
 
-		if (msg.store) {
-			onRoomClicked('empty', outerRoomId, false);
-		}
+		onRoomClicked('empty', outerRoomId, false);
 	});
 
 
@@ -174,9 +170,7 @@ socket.on("sensor", function(msg) {
 		}
 	}
 
-	if (msg.store) {
-		onRoomClicked('empty', outerRoomId, false);
-	}
+	onRoomClicked('empty', outerRoomId, false);
 });
 
 function searchRoom() {
