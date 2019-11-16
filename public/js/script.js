@@ -2112,7 +2112,7 @@ $( "#clearNotice" ).click(function() {
 
 function onRoomClicked(roomName, roomId, updateView) {
 	var resetCanvas = function () {
-		$('#dashTrendChart').destroy(); // this is my <canvas> element
+		$('#dashTrendChart').remove(); // this is my <canvas> element
 		$('#graph-container').append('<canvas id="dashTrendChart"><canvas>');
 		canvas = document.querySelector('#dashTrendChart'); // why use jQuery?
 		ctx = canvas.getContext('2d');
