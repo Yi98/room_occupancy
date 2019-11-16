@@ -32,7 +32,7 @@ router.get('/resetPassword/:token', (req, res) => {
 })
 
 //  Page not found
-router.get('*', auth, (req, res) => {
+router.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../../views/page_not_found.html'));
 })
 

@@ -1,13 +1,15 @@
 const domain = 'http://localhost:3000';
 //const domain = 'https://roomoccupancy.herokuapp.com';
 
-// var socket = io();
-// // var socket = io.connect(domain, {reconnection: false, forceNew: true})
-// socket.on("disconnect", function() {
-// 	socket.disconnect();
-// 	socket.close();
-// })
+var socket = io();
 
+function addData(chart, label, data) {
+	chart.data.labels.push(label);
+	chart.data.datasets.forEach((dataset) => {
+			dataset.data.push(data);
+	});
+	chart.update();
+}
 
 function onTestPeople() {
 	setInterval(function() {
@@ -16,6 +18,7 @@ function onTestPeople() {
 		let noticeTime = moment().format('MMM DD, h:mm A');
 		let data = 120;
 		let notify = false;
+		let outerRoomId;
 		let roomName;
 		let roomStatus;
 		let notifications;
@@ -26,6 +29,7 @@ function onTestPeople() {
 
 			// change 0 to i later
 			if (roomId[0].innerHTML == '5d935b95ea295d622c1f7e7d') {
+				outerRoomId = '5d935b95ea295d622c1f7e7d';
 				document.getElementsByClassName("people")[i].innerHTML = 100;
 				document.getElementsByClassName('lastUpdatedTime')[i].innerHTML = noticeTime;
 				roomName = document.getElementsByClassName("roomName")[i].innerHTML;
@@ -37,11 +41,11 @@ function onTestPeople() {
 			localStorage.setItem("notifications", JSON.stringify([]));
 		}
 
-		if (data > 100) {
+		if (data > 10) {
 			notify = true;
 			roomStatus = 'full';
 		}
-		else if (data > 50) {
+		else if (data > 5) {
 			notify = true;
 			roomStatus = 'moderate';
 		}
@@ -72,8 +76,13 @@ function onTestPeople() {
 				noticeNum.style.display = "inline";
 			}
 
-			localStorage.setItem('notifications', JSON.stringify(notifications));
+			localStorage.setItem('notifications', JSON.stringify(notifications));	
 		}
+
+		if (true) {
+			onRoomClicked('empty', outerRoomId, false);
+		}
+
 	}, 10000);
 }
 
@@ -83,6 +92,7 @@ socket.on("people", function(msg) {
 	let noticeMain = document.getElementById('noticeMain');
 	let noticeTime = moment().format('MMM DD, h:mm A');
 	let notify = false;
+	let outerRoomId;
 	let roomName;
 	let roomStatus;
 	let notifications;
@@ -92,6 +102,8 @@ socket.on("people", function(msg) {
 
 		// change 0 to i later
 		if (roomId[0].innerHTML == msg.roomId) {
+			outerRoomId = msg.roomId;
+
 			document.getElementsByClassName("people")[i].innerHTML = msg.people;
 			document.getElementsByClassName('lastUpdatedTime')[i].innerHTML = noticeTime;
 			roomName = document.getElementsByClassName("roomName")[i].innerHTML;
@@ -103,11 +115,11 @@ socket.on("people", function(msg) {
 		localStorage.setItem("notifications", JSON.stringify([]));
 	}
 
-	if (msg.people > 50) {
+	if (msg.people > 10) {
 		notify = true;
 		roomStatus = 'full';
 	}
-	else if (msg.people > 20) {
+	else if (msg.people > 5) {
 		notify = true;
 		roomStatus = 'moderate';
 	}
@@ -140,25 +152,36 @@ socket.on("people", function(msg) {
 			
 			localStorage.setItem('notifications', JSON.stringify(notifications));
 		}
+
+		if (msg.store) {
+			onRoomClicked('empty', outerRoomId, false);
+		}
 	});
 
 
 socket.on("sensor", function(msg) {
 	// for loop assign to all room their respective sensor data
 	//let roomCards = document.getElementsByClassName("room-card");
-  let roomCards = document.getElementsByClassName("roomCard");
+	let roomCards = document.getElementsByClassName("roomCard");
+	let noticeTime = moment().format('MMM DD, h:mm A');
+	let outerRoomId;
+
 	for (let i = 0; i < roomCards.length; i++) {
         //let roomId = roomCards[i].getElementsByClassName("room-id");
 		let roomId = roomCards[i].getElementsByClassName("roomId");
 		// change 0 to i later
 		if (roomId[0].innerHTML == msg.roomId) {
+			outerRoomId = msg.roomId;
 			document.getElementsByClassName("temperature")[i].innerHTML = msg.temperature;
 			document.getElementsByClassName("humidity")[i].innerHTML = msg.humidity;
-			document.getElementsByClassName('lastUpdatedTime')[i].innerHTML = moment().format('MMM DD, h:mm A');
+			document.getElementsByClassName('lastUpdatedTime')[i].innerHTML = noticeTime;
 		}
 	}
-});
 
+	if (msg.store) {
+		onRoomClicked('empty', outerRoomId, false);
+	}
+});
 
 function searchRoom() {
 	var input, filter, ul, li, i, a, txtValue;
@@ -976,7 +999,7 @@ function showDashboardRooms() {
 				}
 				else {
 					document.getElementById('noticeNum').innerHTML = 0;
-					document.getElementById('noticeNum').stylee.display = 'none';
+					document.getElementById('noticeNum').style.display = 'none';
 				}
 			}
 			
@@ -987,7 +1010,7 @@ function showDashboardRooms() {
 				var status = result.rooms[room].people.length;
 
 				document.getElementById("roomCardContainer").innerHTML += `
-					<div class="roomCard card mr-4 border-0 shadow-sm pt-3 pb-4 mb-4 bg-white rounded" style="width: 24rem; height: 14rem;" onclick="onRoomClicked('${result.rooms[room].name}', '${result.rooms[room]._id}')">
+					<div class="roomCard card mr-4 border-0 shadow-sm pt-3 pb-4 mb-4 bg-white rounded" style="width: 24rem; height: 14rem;" onclick="onRoomClicked('${result.rooms[room].name}', '${result.rooms[room]._id}', true)">
 						<div class="card-body pt-2 text-center">
 							<h4 class="roomName card-title mb-4">${result.rooms[room].name}</h4>
 							<h6>Number of people: <span class="roomData people">N/A</span></h6>
@@ -1607,10 +1630,16 @@ async function login(){
                     
                     $("#spinner_login").hide(); 
 
-                    document.cookie = "token=" + xhttp.response.token;
+					document.cookie = "token=" + xhttp.response.token;
+					
+					
+					//socket.on("disconnect", function() {
+					//	socket.disconnect();
+					//})
 
                     setTimeout(_ => {
-                        window.location.replace("/dashboard");
+						window.location.replace("/dashboard");
+						
                     }, 500);
 
                 }
@@ -2098,18 +2127,20 @@ $( "#clearNotice" ).click(function() {
 });
 
 
-function onRoomClicked(roomName, roomId) {
+function onRoomClicked(roomName, roomId, updateView) {
 	const dotsLoaders = document.getElementsByClassName('dotsLoading');
 	const defaultRooms = document.getElementsByClassName('defaultRoom');
 
-	for (let i=0; i<dotsLoaders.length; i++) {
-		dotsLoaders[i].style.display = "inline";
+	if (updateView) {
+		for (let i=0; i<dotsLoaders.length; i++) {
+			dotsLoaders[i].style.display = "inline";
+		}
+	
+		for (let i=0; i<defaultRooms.length; i++) {
+			defaultRooms[i].style.display = "none";
+		}
 	}
-
-	for (let i=0; i<defaultRooms.length; i++) {
-		defaultRooms[i].style.display = "none";
-	}
-
+	
 	// Trend's variables
 	let timeline = ['0:00', '1:00', '2:00', '3:00', '4:00', '5:00', '6:00', '7:00', '8:00', '9:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00', '24:00'];
 	let newPeople = [];
@@ -2221,39 +2252,42 @@ function onRoomClicked(roomName, roomId) {
 
 			trendChart.update();
 
-			for (let i=0; i<dotsLoaders.length; i++) {
-				dotsLoaders[i].style.display = "none";
-			}
+			if (updateView) {
+				for (let i=0; i<dotsLoaders.length; i++) {
+					dotsLoaders[i].style.display = "none";
+				}
+	
+				for (let i=0; i<defaultRooms.length; i++) {
+					defaultRooms[i].style.display = "inline";
+				}
 
-			for (let i=0; i<defaultRooms.length; i++) {
-				defaultRooms[i].style.display = "inline";
+				document.getElementById('insightRoom').innerHTML = " - " + roomName;
+				document.getElementById('trendRoom').innerHTML = " - " + roomName;
+				document.getElementById('viewRoomDetails').href = `/chart/${roomId}`;
 			}
-
-			document.getElementById('insightRoom').innerHTML = " - " + roomName;
-			document.getElementById('trendRoom').innerHTML = " - " + roomName;
-			document.getElementById('viewRoomDetails').href = `/chart/${roomId}`;
+			
 		}
 	};
 
 	function dashIngishtsController(highestPeople, highestTemperature, highestHumidity, lowestTemperature, lowestHumidity) {
 		if (highestPeople.time != null) {
-			document.getElementById('hPeople').innerHTML = `${moment(highestPeople.time).format('hh:mm a')} - ${highestPeople.data} people`;			
+			document.getElementById('hPeople').innerHTML = `${moment(highestPeople.time).format('hh:mm A')} - ${highestPeople.data} people`;			
 		}
 
 		if (highestTemperature.time != null) {
-			document.getElementById('hTemp').innerHTML = `${moment(highestTemperature.time).format('hh:mm a')} - ${highestTemperature.data} °C`;
+			document.getElementById('hTemp').innerHTML = `${moment(highestTemperature.time).format('hh:mm A')} - ${highestTemperature.data} °C`;
 		}
 
 		if (highestHumidity.time != null) {
-			document.getElementById('hHumid').innerHTML = `${moment(highestHumidity.time).format('hh:mm a')} - ${highestHumidity.data} RH`;
+			document.getElementById('hHumid').innerHTML = `${moment(highestHumidity.time).format('hh:mm A')} - ${highestHumidity.data} RH`;
 		}
 
 		if (lowestTemperature.time != null) {
-			document.getElementById('lTemp').innerHTML = `${moment(lowestTemperature.time).format('hh:mm a')} - ${lowestTemperature.data} °C`;
+			document.getElementById('lTemp').innerHTML = `${moment(lowestTemperature.time).format('hh:mm A')} - ${lowestTemperature.data} °C`;
 		}
 
 		if (lowestHumidity.time != null) {
-			document.getElementById('lHumid').innerHTML = `${moment(lowestHumidity.time).format('hh:mm a')} - ${lowestHumidity.data} RH`;
+			document.getElementById('lHumid').innerHTML = `${moment(lowestHumidity.time).format('hh:mm A')} - ${lowestHumidity.data} RH`;
 		}
 
 	}
@@ -2284,6 +2318,7 @@ function horizontalWheelScroll() {
 }
 
 function onLoadDashboard() {
+
 	showDashboardRooms();
 	horizontalWheelScroll();
 }
@@ -2297,6 +2332,5 @@ function deleteAllCookies() {
 			let name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
 			document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
 	}
-
 	sessionStorage.clear();
 }
