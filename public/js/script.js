@@ -2116,17 +2116,10 @@ function onRoomClicked(roomName, roomId, updateView) {
 		$('#graph-container').append('<canvas id="dashTrendChart"><canvas>');
 		canvas = document.querySelector('#dashTrendChart'); // why use jQuery?
 		ctx = canvas.getContext('2d');
-		// ctx.canvas.width = $('#graph').width(); // resize to parent width
-		// ctx.canvas.height = $('#graph').height(); // resize to parent height
-	
-		// var x = canvas.width/2;
-		// var y = canvas.height/2;
-		// ctx.font = '10pt Verdana';
-		// ctx.textAlign = 'center';
-		// ctx.fillText('This text is centered on the canvas', x, y);
-		dashTrendChart = resetCanvas;
 	};
 
+
+	resetCanvas();
 
 	const dotsLoaders = document.getElementsByClassName('dotsLoading');
 	const defaultRooms = document.getElementsByClassName('defaultRoom');
