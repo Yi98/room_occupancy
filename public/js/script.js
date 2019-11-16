@@ -1029,6 +1029,8 @@ function showDashboardRooms() {
 				</div>
 			`;
 		}
+
+		onRoomClicked('BYOD', '5d935b95ea295d622c1f7e7d', false);
 	};
 
 	xhttp.open("GET",`${domain}/api/rooms`,true);
