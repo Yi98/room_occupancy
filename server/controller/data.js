@@ -233,12 +233,12 @@ exports.postPeople = (req, res) => {
       }
 
       fetchedRoom = room;
-      const currentPeople = new People({data: 0+req.body.data});
+      const currentPeople = new People({data: socketPeopleCount});
       return currentPeople.save();
     })
     .then(people => {
       if (!people) {
-        return res.status(501).json({message: 'Failed to create people object'});
+        return res.status(500).json({message: 'Failed to create people object'});
       }
 
       fetchedRoom.people.push(people);
