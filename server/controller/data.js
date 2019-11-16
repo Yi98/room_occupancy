@@ -106,12 +106,15 @@ exports.postSensorData = (req, res) => {
   let fetchedRoom;
   let store;
 
-  if (req.body.store != true) {
-    socket.emit("sensor", {temperature: req.body.tempData, humidity: req.body.humidData, roomId: req.params.roomId, store:false});
-    return res.status(200).json({message: 'Successfully push sensor data to client'});
-  } else {
-    socket.emit("sensor", {temperature: req.body.tempData, humidity: req.body.humidData, roomId: req.params.roomId, store:true});
-  }
+  // if (req.body.store != true) {
+  //   socket.emit("sensor", {temperature: req.body.tempData, humidity: req.body.humidData, roomId: req.params.roomId, store:false});
+  //   return res.status(200).json({message: 'Successfully push sensor data to client'});
+  // } else {
+  //   socket.emit("sensor", {temperature: req.body.tempData, humidity: req.body.humidData, roomId: req.params.roomId, store:true});
+  // }
+
+  socket.emit("sensor", {temperature: req.body.tempData, humidity: req.body.humidData, roomId: req.params.roomId, store:true});
+
 
   Room.findById(req.params.roomId)
     .then(room => {
