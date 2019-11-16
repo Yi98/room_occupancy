@@ -1,7 +1,15 @@
-//const domain = 'http://localhost:3000';
-const domain = 'https://roomoccupancy.herokuapp.com';
+const domain = 'http://localhost:3000';
+//const domain = 'https://roomoccupancy.herokuapp.com';
 
 var socket = io();
+
+function addData(chart, label, data) {
+	chart.data.labels.push(label);
+	chart.data.datasets.forEach((dataset) => {
+			dataset.data.push(data);
+	});
+	chart.update();
+}
 
 function onTestPeople() {
 	setInterval(function() {
@@ -31,11 +39,11 @@ function onTestPeople() {
 			localStorage.setItem("notifications", JSON.stringify([]));
 		}
 
-		if (data > 100) {
+		if (data > 10) {
 			notify = true;
 			roomStatus = 'full';
 		}
-		else if (data > 50) {
+		else if (data > 5) {
 			notify = true;
 			roomStatus = 'moderate';
 		}
@@ -67,6 +75,9 @@ function onTestPeople() {
 			}
 
 			localStorage.setItem('notifications', JSON.stringify(notifications));
+
+			addData(dashTrendChart, timeline, 40);
+			
 		}
 	}, 10000);
 }
@@ -97,11 +108,11 @@ socket.on("people", function(msg) {
 		localStorage.setItem("notifications", JSON.stringify([]));
 	}
 
-	if (msg.people > 5) {
+	if (msg.people > 10) {
 		notify = true;
 		roomStatus = 'full';
 	}
-	else if (msg.people > 10) {
+	else if (msg.people > 5) {
 		notify = true;
 		roomStatus = 'moderate';
 	}
@@ -152,7 +163,6 @@ socket.on("sensor", function(msg) {
 		}
 	}
 });
-
 
 function searchRoom() {
 	var input, filter, ul, li, i, a, txtValue;
