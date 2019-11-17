@@ -2714,7 +2714,7 @@ function onRoomClicked(roomName, roomId, updateView) {
 					const current = moment(result.room.temperature[i].time).hours();
 
 					if (newTemperature[current] != 0) {
-						newTemperature[current] = Math.round((newTemperature[current] + result.room.temperature[i].data) / 2);
+						newTemperature[current] = (newTemperature[current] + result.room.temperature[i].data) / 2;
 					}
 					else {
 						newTemperature[current] = result.room.temperature[i].data;
@@ -2741,7 +2741,7 @@ function onRoomClicked(roomName, roomId, updateView) {
 				if (moment(result.room.humidity[i].time).isSame(new Date(), "day")){
 					const current = moment(result.room.humidity[i].time).hours();
 					if (newHumidity[current] != 0) {
-						newHumidity[current] = Math.round((newHumidity[current] + result.room.humidity[i].data) / 2);
+						newHumidity[current] = (newHumidity[current] + result.room.humidity[i].data) / 2;
 						console.log(newHumidity[current]);
 					}
 					else {
