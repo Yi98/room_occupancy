@@ -2390,11 +2390,6 @@ let trendChart = new Chart(dashTrendChart, {
 
 
 function onUpdateTrend(roomId, roomName) {
-	// rerenderChart();
-
-	const dotsLoaders = document.getElementsByClassName('dotsLoading');
-	const defaultRooms = document.getElementsByClassName('defaultRoom');
-	
 	// Trend's variables
 	timeline = ['0:00', '1:00', '2:00', '3:00', '4:00', '5:00', '6:00', '7:00', '8:00', '9:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00', '24:00'];
 	let newPeople = [];
@@ -2521,6 +2516,7 @@ function onUpdateTrend(roomId, roomName) {
 	xhttp.send();
 }
 
+
 function dashIngishtsController(highestPeople, highestTemperature, highestHumidity, lowestTemperature, lowestHumidity) {
 	if (highestPeople.time != null) {
 		document.getElementById('hPeople').innerHTML = `${moment(highestPeople.time).format('hh:mm A')} - ${highestPeople.data} people`;			
@@ -2543,7 +2539,6 @@ function dashIngishtsController(highestPeople, highestTemperature, highestHumidi
 	}
 
 }
-
 
 
 function onRoomClicked(roomName, roomId, updateView) {
