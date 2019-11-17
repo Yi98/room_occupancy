@@ -1488,8 +1488,6 @@ function showUserTable(){
                 
 			};
             
-            hideLoginUser();
-            
 
 			// Set the checkbox checked value to either staff or manager according to the user roles
 			let roleChangeButtons = document.getElementsByClassName("roleChangeButtons");
@@ -1502,6 +1500,17 @@ function showUserTable(){
 					roleChangeButtons[user].checked = true;
 				}
 			}
+            
+            
+            var userID = sessionStorage.getItem("passLoginUserID");
+            var userIndex;
+            
+            for(var user in result.users) { 
+				if (result.users[user]._id === userID) {
+					roleChangeButtons[user].disabled = true;
+                    userIndex = user;
+				} 
+			}
 
 			// Initialize the checkbox to be applied by bootstrap toggle css
 			$("[data-toggle='toggle']").bootstrapToggle();
@@ -1513,6 +1522,8 @@ function showUserTable(){
                 for(var i = 0; i < deletebtns.length; i++)
                 {
                     deletebtns[i].disabled = false;
+                    deletebtns[userIndex].disabled = true;
+                    
                 }
 
             }
@@ -1533,51 +1544,24 @@ function showUserTable(){
 };
 
 function search() {
-    var input, filter, table, tr, td, i, textValue, userID;
+    var input, filter, table, tr, td, i, textValue;
     input = document.getElementById("searchInput");
-    userID = sessionStorage.getItem("passLoginUserID");
     filter = input.value.toUpperCase();
     table = document.getElementById("userTable");
     tr = table.getElementsByTagName("tr");
     
     for (i = 0; i < tr.length; i++) {
         td = tr[i].getElementsByTagName("td")[1];
-        td_id = tr[i].getElementsByTagName("td")[0];
         if (td) {
             textValue = td.textContent || td.innerText;
-            textUserID = td_id.textContent || td_id.innerText;
             if (textValue.toUpperCase().indexOf(filter) > -1) {
             
                 tr[i].style.display = "";
-                
-                if(textUserID == userID)
-                {
-                   tr[i].style.display = "none"; 
-                }
-                
+           
             } else {
                 
                 tr[i].style.display = "none";
                 
-            }
-        }
-    }
-}
-
-function hideLoginUser() {
-    var input, filter, table, tr, td, i, textValue;
-    input = sessionStorage.getItem("passLoginUserID");
-    table = document.getElementById("userTable");
-    tr = table.getElementsByTagName("tr");
-    
-    for (i = 0; i < tr.length; i++) {
-        td = tr[i].getElementsByTagName("td")[0];
-        if (td) {
-            textValue = td.textContent || td.innerText;
-            if (textValue === input) {
-                tr[i].style.display = "none";
-            } else {
-                tr[i].style.display = "";
             }
         }
     }
@@ -1706,6 +1690,9 @@ function addUser() {
                 var table = document.getElementById("showUser").innerHTML;
                 table = showUserTable();
                 
+                document.getElementById("maxRows").selectedIndex = "0";
+                $('.pagination').html('');
+                
                 var element = document.getElementById("userAlert");
                 element.classList.remove("alert-danger")
                 element.classList.add("alert-success");
@@ -1800,7 +1787,7 @@ function clear() {
     document.getElementById("upsd").value = '';  
     document.getElementById("cupsd").value = '';  
     document.getElementById("uemail").value = ''; 
-    document.getElementById("role").selectedIndex = "0"
+    document.getElementById("role").selectedIndex = "0";
 };
 
 
@@ -1819,7 +1806,9 @@ function cancel() {
             document.getElementById("upsd").value = '';  
             document.getElementById("cupsd").value = '';  
             document.getElementById("uemail").value = '';   
-            document.getElementById("role").selectedIndex = "0"
+            document.getElementById("role").selectedIndex = "0";
+            document.getElementById("showPasswordHint").innerHTML = '';
+            document.getElementById("showConfirmPasswordHint").innerHTML = '';
         } 
     }
   
@@ -1948,7 +1937,10 @@ function deleteUser(userIdDelete){
                 document.getElementById("showUser").innerHTML = "";
                 var table = document.getElementById("showUser").innerHTML;
                 table = showUserTable();
-
+                
+                document.getElementById("maxRows").selectedIndex = "0";
+                $('.pagination').html('');
+                
                 var element = document.getElementById("userEditAlert");
                 element.classList.add("alert-success");
 
@@ -2252,8 +2244,7 @@ function onResetPassword() {
 };
 
 function tablePagination() {
-    var table = '#userTable'
-    var userID = sessionStorage.getItem("passLoginUserID");
+    var table = '#userTable';
     $('#maxRows').on('change', function(){
         $('.pagination').html('')
         var trnum = 0
@@ -2266,11 +2257,6 @@ function tablePagination() {
                 for(var i = 0 ; i < $(this).length; i++)
                 {
                     var td = $(this)[i].cells[i];
-                    textValue = td.textContent || td.innerText;
-                    if(textValue === userID)
-                    {
-                        $(this).hide()
-                    }
                 }
             }
             if(trnum <= maxRows){
@@ -2278,11 +2264,6 @@ function tablePagination() {
                 for(var i = 0 ; i < $(this).length; i++)
                 {
                     var td = $(this)[i].cells[i];
-                    textValue = td.textContent || td.innerText;
-                    if(textValue === userID)
-                    {
-                        $(this).hide()
-                    }
                 }
             }
         })
@@ -2305,22 +2286,12 @@ function tablePagination() {
                     for(var i = 0 ; i < $(this).length; i++)
                     {
                         var td = $(this)[i].cells[i];
-                        textValue = td.textContent || td.innerText;
-                        if(textValue === userID)
-                        {
-                            $(this).hide()
-                        }
                     }
                 } else{
                     $(this).show();
                     for(var i = 0 ; i < $(this).length; i++)
                     {
                         var td = $(this)[i].cells[i];
-                        textValue = td.textContent || td.innerText;
-                        if(textValue === userID)
-                        {
-                            $(this).hide()
-                        }
                     }
                 }
             })

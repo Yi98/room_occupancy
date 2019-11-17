@@ -245,14 +245,12 @@ window.generateReport = function (data, peopleChart, temperatureChart, humidityC
     doc.moveDown();
 
     // Number of People's chart on specific time range
-    doc.fontSize(15).text("Number of People from " + data.date_range, 140, doc.y);
     let peopleChartFinal = new Buffer(peopleChart64, "base64");
     doc.image(peopleChartFinal, 70, doc.y, {height:300});
     
     doc.moveDown();
 
     // Temperature's chart on specific time range
-    doc.fontSize(15).text("Temperature from " + data.date_range, 140, doc.y);
     let temperatureChartFinal = new Buffer(temperatureChart64, "base64");
     doc.image(temperatureChartFinal, 70, doc.y, {height:300});
 
@@ -260,7 +258,7 @@ window.generateReport = function (data, peopleChart, temperatureChart, humidityC
     doc.moveDown(doc.page.height);
 
     // Humidity's chart on specific time range
-    doc.fontSize(15).text("Humidity for " + data.date_range, 140, doc.y);
+    doc.fontSize(15).text("", 140, doc.y);
     let humidityChartFinal = new Buffer(humidityChart64, "base64");
     doc.image(humidityChartFinal, 70, doc.y, {height:300});
     
@@ -431,14 +429,12 @@ if (performance.navigation.type == 1) {
         doc.moveDown();
 
         // Number of People's chart on specific time range
-        doc.fontSize(15).text("Number of People from " + date, 140, doc.y);
         let peopleChartFinal = new Buffer(ppl, "base64");
         doc.image(peopleChartFinal, 70, doc.y, {height:300});
 
         doc.moveDown();
 
         // Temperature's chart on specific time range
-        doc.fontSize(15).text("Temperature from " + date, 140, doc.y);
         let temperatureChartFinal = new Buffer(temp, "base64");
         doc.image(temperatureChartFinal, 70, doc.y, {height:300});
 
@@ -446,7 +442,7 @@ if (performance.navigation.type == 1) {
         doc.moveDown(doc.page.height);
 
         // Humidity's chart on specific time range
-        doc.fontSize(15).text("Humidity for " + date, 140, doc.y);
+        doc.fontSize(15).text("", 140, doc.y);
         let humidityChartFinal = new Buffer(hmd, "base64");
         doc.image(humidityChartFinal, 70, doc.y, {height:300});
 
