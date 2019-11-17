@@ -2828,6 +2828,7 @@ function onRoomClicked(roomName, roomId, updateView) {
 
 			dashIngishtsController(highestPeople, highestTemperature, highestHumidity, lowestTemperature, lowestHumidity);
 
+			console.log(newTemperature);
 			trendChart.data.datasets[0].data = newPeople;
 			trendChart.data.datasets[1].data = newTemperature;
 			trendChart.data.datasets[2].data = newHumidity;
