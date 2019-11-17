@@ -74,6 +74,7 @@ function onTestPeople() {
 		}
 
 		onRoomClicked('empty', outerRoomId, false);
+		onUpdateTrend();
 
 	}, 10000);
 }
@@ -2541,9 +2542,14 @@ function rerenderChart() {
 	});
 }
 
+// function onUpdateTrend() {
+
+// }
+
+
 
 function onRoomClicked(roomName, roomId, updateView) {
-	rerenderChart();
+	// rerenderChart();
 
 	const dotsLoaders = document.getElementsByClassName('dotsLoading');
 	const defaultRooms = document.getElementsByClassName('defaultRoom');
