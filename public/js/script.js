@@ -74,9 +74,7 @@ socket.on("people", function(msg) {
 			localStorage.setItem('notifications', JSON.stringify(notifications));
 		}
 
-		// onRoomClicked('empty', outerRoomId, false);
 		if (currentRoom == roomName) {
-			console.log('same name');
 			onUpdateTrend(outerRoomId, roomName);
 		}
 	});
@@ -103,9 +101,7 @@ socket.on("sensor", function(msg) {
 		}
 	}
 
-	// onRoomClicked('empty', outerRoomId, false);
 	if (currentRoom == roomName) {
-		console.log('same name');
 		onUpdateTrend(outerRoomId, roomName);
 	}
 
@@ -2364,98 +2360,7 @@ let trendChart = new Chart(dashTrendChart, {
 });
 
 
-function rerenderChart() {
-	$('#dashTrendChart').remove(); // this is my <canvas> element
-	$('#graph-container').append('<canvas id="dashTrendChart"><canvas>');
-	canvas = document.querySelector('#dashTrendChart'); // why use jQuery?
-	ctx = canvas.getContext('2d');
-
-	dashTrendChart = document.getElementById('dashTrendChart').getContext('2d');
-
-	peopleGradient = dashTrendChart.createLinearGradient(500, 0, 100, 0);
-	peopleGradient.addColorStop(0, "#764ba2");
-	peopleGradient.addColorStop(1, "#667eea");
-
-	tempGradient = dashTrendChart.createLinearGradient(500, 0, 100, 0);
-	tempGradient.addColorStop(0, "#fc4a1a");
-	tempGradient.addColorStop(1, "#f7b733");
-
-	humidGradient = dashTrendChart.createLinearGradient(500, 0, 100, 0);
-	humidGradient.addColorStop(0, "#ff758c");
-	humidGradient.addColorStop(1, "#ff7eb3");
-
-	timeline = ['0:00', '1:00', '2:00', '3:00', '4:00', '5:00', '6:00', '7:00', '8:00', '9:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00', '24:00'];
-
-	currentHour = moment().hours();
-	timeline = timeline.slice(0, currentHour + 1);
-
-	peopleData = [];
-	temperatureData = [];
-	humidityData = [];
-
-	for (let i=0; i<timeline.length; i++) {
-		peopleData.push(0);
-		temperatureData.push(0);
-		humidityData.push(0);
-	}
-
-	trendChart = new Chart(dashTrendChart, {
-			// The type of chart we want to create
-			type: 'line',
-
-			// The data for our dataset
-			data: {
-					labels: timeline,
-					datasets: [{
-							label: 'Number of People',
-							backgroundColor: peopleGradient,
-							borderColor: peopleGradient,
-							data: peopleData,
-							fill: false
-							},
-							{
-								label: 'Temperature',
-								backgroundColor: tempGradient,
-								borderColor: tempGradient,
-								data: temperatureData,
-								fill: false
-							},
-							{
-								label: 'Humidity',
-								backgroundColor: humidGradient,
-								borderColor: humidGradient,
-								data: humidityData,
-								fill: false
-							}
-					]
-			},
-
-			// Configuration options go here
-			options: {
-				scales: {
-					xAxes: [{
-						barPercentage: 0.4
-					}],
-					yAxes: [{
-						scaleLabel: {
-							display: true,
-							labelString: 'Status'
-						},
-						ticks: {
-							beginAtZero: true
-						}
-					}]
-				} 
-			}
-	});
-}
-
 function onUpdateTrend(roomId, roomName) {
-	// rerenderChart();
-
-	const dotsLoaders = document.getElementsByClassName('dotsLoading');
-	const defaultRooms = document.getElementsByClassName('defaultRoom');
-	
 	// Trend's variables
 	timeline = ['0:00', '1:00', '2:00', '3:00', '4:00', '5:00', '6:00', '7:00', '8:00', '9:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00', '24:00'];
 	let newPeople = [];
@@ -2582,6 +2487,7 @@ function onUpdateTrend(roomId, roomName) {
 	xhttp.send();
 }
 
+
 function dashIngishtsController(highestPeople, highestTemperature, highestHumidity, lowestTemperature, lowestHumidity) {
 	if (highestPeople.time != null) {
 		document.getElementById('hPeople').innerHTML = `${moment(highestPeople.time).format('hh:mm A')} - ${highestPeople.data} people`;			
@@ -2606,10 +2512,7 @@ function dashIngishtsController(highestPeople, highestTemperature, highestHumidi
 }
 
 
-
 function onRoomClicked(roomName, roomId, updateView) {
-	// rerenderChart();
-
 	currentRoom = roomName;
 
 	const dotsLoaders = document.getElementsByClassName('dotsLoading');
@@ -2670,7 +2573,7 @@ function onRoomClicked(roomName, roomId, updateView) {
 						newPeople[current] = Math.round((newPeople[current] + result.room.people[i].data) / 2);
 					}
 					else {
-						newPeople[current] = result.room.people[i].data;
+						newPeople[current] = Math.round(result.room.people[i].data);
 					}
 
 					if (result.room.people[i].data > highestPeople.data) {
@@ -2685,10 +2588,10 @@ function onRoomClicked(roomName, roomId, updateView) {
 					const current = moment(result.room.temperature[i].time).hours();
 
 					if (newTemperature[current] != 0) {
-						newTemperature[current] = ((newTemperature[current] + result.room.temperature[i].data) / 2).toFixed(1);
+						newTemperature[current] = ((Number(newTemperature[current]) + Number(result.room.temperature[i].data)) / 2).toFixed(1);
 					}
 					else {
-						newTemperature[current] = result.room.temperature[i].data;
+						newTemperature[current] = Number(result.room.temperature[i].data).toFixed(1);
 					}
 
 					if (result.room.temperature[i].data > highestTemperature.data) {
@@ -2712,10 +2615,10 @@ function onRoomClicked(roomName, roomId, updateView) {
 				if (moment(result.room.humidity[i].time).isSame(new Date(), "day")){
 					const current = moment(result.room.humidity[i].time).hours();
 					if (newHumidity[current] != 0) {
-						newHumidity[current] = ((newHumidity[current] + result.room.humidity[i].data) / 2).toFixed(1);
+						newHumidity[current] = ((Number(newHumidity[current]) + Number(result.room.humidity[i].data)) / 2).toFixed(1);
 					}
 					else {
-						newHumidity[current] = result.room.humidity[i].data;
+						newHumidity[current] = Number(result.room.humidity[i].data).toFixed(1);
 					}
 
 					if (result.room.humidity[i].data > highestHumidity.data) {
@@ -2735,10 +2638,6 @@ function onRoomClicked(roomName, roomId, updateView) {
 			}
 
 			dashIngishtsController(highestPeople, highestTemperature, highestHumidity, lowestTemperature, lowestHumidity);
-
-			console.log(newPeople);
-			console.log(newTemperature);
-			console.log(newHumidity);
 
 			trendChart.data.datasets[0].data = newPeople;
 			trendChart.data.datasets[1].data = newTemperature;
