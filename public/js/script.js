@@ -2699,7 +2699,7 @@ function onRoomClicked(roomName, roomId, updateView) {
 						newPeople[current] = Math.round((newPeople[current] + result.room.people[i].data) / 2);
 					}
 					else {
-						newPeople[current] = result.room.people[i].data;
+						newPeople[current] = Math.round(result.room.people[i].data);
 					}
 
 					if (result.room.people[i].data > highestPeople.data) {
@@ -2714,10 +2714,10 @@ function onRoomClicked(roomName, roomId, updateView) {
 					const current = moment(result.room.temperature[i].time).hours();
 
 					if (newTemperature[current] != 0) {
-						newTemperature[current] = (newTemperature[current] + result.room.temperature[i].data) / 2;
+						newTemperature[current] = ((Number(newTemperature[current]) + Number(result.room.temperature[i].data)) / 2).toFixed(1);
 					}
 					else {
-						newTemperature[current] = result.room.temperature[i].data;
+						newTemperature[current] = Number(result.room.temperature[i].data).toFixed(1);
 					}
 
 					if (result.room.temperature[i].data > highestTemperature.data) {
@@ -2742,10 +2742,9 @@ function onRoomClicked(roomName, roomId, updateView) {
 					const current = moment(result.room.humidity[i].time).hours();
 					if (newHumidity[current] != 0) {
 						newHumidity[current] = ((Number(newHumidity[current]) + Number(result.room.humidity[i].data)) / 2).toFixed(1);
-						console.log(newHumidity[current]);
 					}
 					else {
-						newHumidity[current] = result.room.humidity[i].data;
+						newHumidity[current] = Number(result.room.humidity[i].data).toFixed(1);
 					}
 
 					if (result.room.humidity[i].data > highestHumidity.data) {
