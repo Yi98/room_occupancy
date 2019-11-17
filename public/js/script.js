@@ -2520,6 +2520,7 @@ function onUpdateTrend(roomId, roomName) {
 			for (let i=0; i<result.room.people.length; i++) {
 				if (moment(result.room.people[i].time).isSame(new Date(), "day")) {
 					const current = moment(result.room.people[i].time).hours();
+					console.log(result.room.people[i].data);
 					if (newPeople[current] != 0) {
 						newPeople[current] = Math.round((newPeople[current] + result.room.people[i].data) / 2);
 					}
@@ -2565,6 +2566,7 @@ function onUpdateTrend(roomId, roomName) {
 			for (let i=0; i<result.room.humidity.length; i++) {
 				if (moment(result.room.humidity[i].time).isSame(new Date(), "day")){
 					const current = moment(result.room.humidity[i].time).hours();
+					console.log(result.room.humidity[i].data);
 					if (newHumidity[current] != 0) {
 						newHumidity[current] = ((newHumidity[current] + result.room.humidity[i].data) / 2).toFixed(1);
 					}
