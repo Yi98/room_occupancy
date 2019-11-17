@@ -4,9 +4,6 @@ module.exports = (req, res, next) => {
 
   let gotToken = false;
   try {
-
-    console.log("ok")
-
     if (req.headers.cookie) {
       tokens = req.headers.cookie.split(';');
       
@@ -24,7 +21,6 @@ module.exports = (req, res, next) => {
             res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
             res.header('Expires', '-1');
             res.header('Pragma', 'no-cache');
-
             
             next();
           }

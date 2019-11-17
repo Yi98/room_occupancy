@@ -1,5 +1,5 @@
-const domain = 'http://localhost:3000';
-//const domain = 'https://roomoccupancy.herokuapp.com';
+//const domain = 'http://localhost:3000';
+const domain = 'https://roomoccupancy.herokuapp.com';
 
 var socket = io();
 
@@ -241,7 +241,6 @@ function showChart() {
 					document.getElementById("allChart").innerHTML = '<div class="d-flex h-100 justify-content-center"><div class="align-self-center"><div class="spinner-border text-danger" style="width:3rem; height:3rem;"><span class="sr-only">Loading...</span></div></div></div>';
 					xhrChart(roomId);
 					charts.splice(0,charts.length);
-					console.log(charts);
 			}
 	}, 500 /* check every 30 seconds */);
 
@@ -253,7 +252,6 @@ function showChart() {
 		
 	// 	xhrChart(roomId);
 	// 	charts.splice(0,charts.length);
-	// 	console.log(charts);
 	// });
 };
 
@@ -2377,28 +2375,28 @@ function addRoom(){
 
 // Chart.js
 // Trend Chart
-const dashTrendChart = document.getElementById('dashTrendChart').getContext('2d');
+let dashTrendChart = document.getElementById('dashTrendChart').getContext('2d');
 
-const peopleGradient = dashTrendChart.createLinearGradient(500, 0, 100, 0);
+let peopleGradient = dashTrendChart.createLinearGradient(500, 0, 100, 0);
 peopleGradient.addColorStop(0, "#764ba2");
 peopleGradient.addColorStop(1, "#667eea");
 
-const tempGradient = dashTrendChart.createLinearGradient(500, 0, 100, 0);
+let tempGradient = dashTrendChart.createLinearGradient(500, 0, 100, 0);
 tempGradient.addColorStop(0, "#fc4a1a");
 tempGradient.addColorStop(1, "#f7b733");
 
-const humidGradient = dashTrendChart.createLinearGradient(500, 0, 100, 0);
+let humidGradient = dashTrendChart.createLinearGradient(500, 0, 100, 0);
 humidGradient.addColorStop(0, "#ff758c");
 humidGradient.addColorStop(1, "#ff7eb3");
 
 let timeline = ['0:00', '1:00', '2:00', '3:00', '4:00', '5:00', '6:00', '7:00', '8:00', '9:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00', '24:00'];
 
-const currentHour = moment().hours();
+let currentHour = moment().hours();
 timeline = timeline.slice(0, currentHour + 1);
 
-const peopleData = [];
-const temperatureData = [];
-const humidityData = [];
+let peopleData = [];
+let temperatureData = [];
+let humidityData = [];
 
 for (let i=0; i<timeline.length; i++) {
 	peopleData.push(0);
@@ -2406,7 +2404,7 @@ for (let i=0; i<timeline.length; i++) {
 	humidityData.push(0);
 }
 
-const trendChart = new Chart(dashTrendChart, {
+let trendChart = new Chart(dashTrendChart, {
     // The type of chart we want to create
     type: 'line',
 
@@ -2457,80 +2455,95 @@ const trendChart = new Chart(dashTrendChart, {
 });
 
 
-function closeNoticeRow(element) {
-	const totalChildCount = document.getElementById('noticeMain').childElementCount;
+function rerenderChart() {
+	$('#dashTrendChart').remove(); // this is my <canvas> element
+	$('#graph-container').append('<canvas id="dashTrendChart"><canvas>');
+	canvas = document.querySelector('#dashTrendChart'); // why use jQuery?
+	ctx = canvas.getContext('2d');
 
-	const time = element.parentNode.parentNode.getElementsByClassName('noticeTime')[0].innerHTML;
+	dashTrendChart = document.getElementById('dashTrendChart').getContext('2d');
 
-	if (!localStorage.getItem('notifications')) {
-		localStorage.setItem("notifications", JSON.stringify([]));
+	peopleGradient = dashTrendChart.createLinearGradient(500, 0, 100, 0);
+	peopleGradient.addColorStop(0, "#764ba2");
+	peopleGradient.addColorStop(1, "#667eea");
+
+	tempGradient = dashTrendChart.createLinearGradient(500, 0, 100, 0);
+	tempGradient.addColorStop(0, "#fc4a1a");
+	tempGradient.addColorStop(1, "#f7b733");
+
+	humidGradient = dashTrendChart.createLinearGradient(500, 0, 100, 0);
+	humidGradient.addColorStop(0, "#ff758c");
+	humidGradient.addColorStop(1, "#ff7eb3");
+
+	timeline = ['0:00', '1:00', '2:00', '3:00', '4:00', '5:00', '6:00', '7:00', '8:00', '9:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00', '24:00'];
+
+	currentHour = moment().hours();
+	timeline = timeline.slice(0, currentHour + 1);
+
+	peopleData = [];
+	temperatureData = [];
+	humidityData = [];
+
+	for (let i=0; i<timeline.length; i++) {
+		peopleData.push(0);
+		temperatureData.push(0);
+		humidityData.push(0);
 	}
 
-	const notifications = JSON.parse(localStorage.getItem('notifications'));
+	trendChart = new Chart(dashTrendChart, {
+			// The type of chart we want to create
+			type: 'line',
 
-	for (let i=0; i<notifications.length; i++) {
-		if (notifications[i].noticeTime == time) {
-			notifications.splice(i, 1);
-			break;
-		}
-	}
+			// The data for our dataset
+			data: {
+					labels: timeline,
+					datasets: [{
+							label: 'Number of People',
+							backgroundColor: peopleGradient,
+							borderColor: peopleGradient,
+							data: peopleData,
+							fill: false
+							},
+							{
+								label: 'Temperature',
+								backgroundColor: tempGradient,
+								borderColor: tempGradient,
+								data: temperatureData,
+								fill: false
+							},
+							{
+								label: 'Humidity',
+								backgroundColor: humidGradient,
+								borderColor: humidGradient,
+								data: humidityData,
+								fill: false
+							}
+					]
+			},
 
-	localStorage.setItem('notifications', JSON.stringify(notifications));
-
-	element.parentNode.parentNode.remove();	
-
-	const noticeNum = document.getElementById('noticeNum');
-	noticeNum.innerHTML -= 1;
-
-	if (noticeNum.innerHTML == 0) {
-		const emptyNotice = document.getElementById('emptyNotice');
-
-		const noticeNum = document.getElementById('noticeNum');
-		noticeNum.style.display = "none";
-
-		$(emptyNotice).fadeIn(1500 , function() {
-			emptyNotice.style.display = "block";
-		});
-	}
+			// Configuration options go here
+			options: {
+				scales: {
+					xAxes: [{
+						barPercentage: 0.4
+					}],
+					yAxes: [{
+						scaleLabel: {
+							display: true,
+							labelString: 'Status'
+						},
+						ticks: {
+							beginAtZero: true
+						}
+					}]
+				} 
+			}
+	});
 }
 
 
-$( "#clearNotice" ).click(function() {
-	localStorage.clear();
-
-	const content = document.getElementById('noticeMain').getElementsByTagName('p');
-	const emptyNotice = document.getElementById('emptyNotice');
-
-  jQuery(content).fadeOut(300 , function() {
-		const noticeNum = document.getElementById('noticeNum');
-		noticeNum.innerHTML = 0;
-		noticeNum.style.display = "none";
-	});
-
-	jQuery(emptyNotice).fadeIn(1500 , function() {
-		emptyNotice.style.display = "block";
-	});
-});
-
-
 function onRoomClicked(roomName, roomId, updateView) {
-	var resetCanvas = function () {
-		$('#dashTrendChart').remove(); // this is my <canvas> element
-		$('#graph-container').append('<canvas id="dashTrendChart"><canvas>');
-		canvas = document.querySelector('#dashTrendChart'); // why use jQuery?
-		ctx = canvas.getContext('2d');
-		ctx.canvas.width = $('#graph').width(); // resize to parent width
-		ctx.canvas.height = $('#graph').height(); // resize to parent height
-	
-		var x = canvas.width/2;
-		var y = canvas.height/2;
-		ctx.font = '10pt Verdana';
-		ctx.textAlign = 'center';
-		ctx.fillText('This text is centered on the canvas', x, y);
-	};
-
-
-	resetCanvas();
+	rerenderChart();
 
 	const dotsLoaders = document.getElementsByClassName('dotsLoading');
 	const defaultRooms = document.getElementsByClassName('defaultRoom');
@@ -2552,7 +2565,7 @@ function onRoomClicked(roomName, roomId, updateView) {
 	}
 	
 	// Trend's variables
-	let timeline = ['0:00', '1:00', '2:00', '3:00', '4:00', '5:00', '6:00', '7:00', '8:00', '9:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00', '24:00'];
+	timeline = ['0:00', '1:00', '2:00', '3:00', '4:00', '5:00', '6:00', '7:00', '8:00', '9:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00', '24:00'];
 	let newPeople = [];
 	let newTemperature = [];
 	let newHumidity = [];
@@ -2706,6 +2719,64 @@ function onRoomClicked(roomName, roomId, updateView) {
 
 	xhttp.send();
 
+}
+
+
+function closeNoticeRow(element) {
+	const totalChildCount = document.getElementById('noticeMain').childElementCount;
+
+	const time = element.parentNode.parentNode.getElementsByClassName('noticeTime')[0].innerHTML;
+
+	if (!localStorage.getItem('notifications')) {
+		localStorage.setItem("notifications", JSON.stringify([]));
+	}
+
+	const notifications = JSON.parse(localStorage.getItem('notifications'));
+
+	for (let i=0; i<notifications.length; i++) {
+		if (notifications[i].noticeTime == time) {
+			notifications.splice(i, 1);
+			break;
+		}
+	}
+
+	localStorage.setItem('notifications', JSON.stringify(notifications));
+
+	element.parentNode.parentNode.remove();	
+
+	const noticeNum = document.getElementById('noticeNum');
+	noticeNum.innerHTML -= 1;
+
+	if (noticeNum.innerHTML == 0) {
+		const emptyNotice = document.getElementById('emptyNotice');
+
+		const noticeNum = document.getElementById('noticeNum');
+		noticeNum.style.display = "none";
+
+		$(emptyNotice).fadeIn(1500 , function() {
+			emptyNotice.style.display = "block";
+		});
+	}
+}
+
+
+function onClearNotices() {
+	localStorage.clear();
+
+	const content = document.getElementById('noticeMain').getElementsByTagName('p');
+	const emptyNotice = document.getElementById('emptyNotice');
+
+	for (let i=0; i<content.length; i++) {
+		content[i].style.display = "none";
+	}
+
+	const noticeNum = document.getElementById('noticeNum');
+	noticeNum.innerHTML = 0;
+	noticeNum.style.display = "none";
+
+	$(emptyNotice).fadeIn(1500 , function() {
+		emptyNotice.style.display = "block";
+	});
 }
 
 
