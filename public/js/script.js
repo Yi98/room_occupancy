@@ -74,7 +74,7 @@ function onTestPeople() {
 		}
 
 		// onRoomClicked('empty', outerRoomId, false);
-		onUpdateTrend();
+		onUpdateTrend(outerRoomId, roomName);
 
 	}, 10000);
 }
@@ -149,7 +149,7 @@ socket.on("people", function(msg) {
 		}
 
 		// onRoomClicked('empty', outerRoomId, false);
-		onUpdateTrend();
+		onUpdateTrend(outerRoomId, roomName);
 	});
 
 
@@ -172,7 +172,9 @@ socket.on("sensor", function(msg) {
 		}
 	}
 
-	onRoomClicked('empty', outerRoomId, false);
+	// onRoomClicked('empty', outerRoomId, false);
+	onUpdateTrend(outerRoomId, roomName);
+
 });
 
 function searchRoom() {
@@ -2543,9 +2545,9 @@ function rerenderChart() {
 	});
 }
 
-function onUpdateTrend() {
+function onUpdateTrend(roomId, roomName) {
 	rerenderChart();
-	
+
 	const dotsLoaders = document.getElementsByClassName('dotsLoading');
 	const defaultRooms = document.getElementsByClassName('defaultRoom');
 	
