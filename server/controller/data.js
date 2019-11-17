@@ -228,6 +228,7 @@ exports.postPeople = (req, res) => {
 
   if (found == false) {
     fs.appendFileSync("people.txt", req.params.roomId + ":" + req.body.data + "\n");
+    socket.emit("people", {people: req.body.data, roomId: req.params.roomId, store: true});
   }
 
   if (req.body.store != 1) {
