@@ -159,6 +159,7 @@ socket.on("sensor", function(msg) {
 	let roomCards = document.getElementsByClassName("roomCard");
 	let noticeTime = moment().format('MMM DD, h:mm A');
 	let outerRoomId;
+	let roomName;
 
 	for (let i = 0; i < roomCards.length; i++) {
         //let roomId = roomCards[i].getElementsByClassName("room-id");
@@ -169,6 +170,7 @@ socket.on("sensor", function(msg) {
 			document.getElementsByClassName("temperature")[i].innerHTML = msg.temperature;
 			document.getElementsByClassName("humidity")[i].innerHTML = msg.humidity;
 			document.getElementsByClassName('lastUpdatedTime')[i].innerHTML = noticeTime;
+			roomName = document.getElementsByClassName("roomName")[i].innerHTML;
 		}
 	}
 
@@ -2828,7 +2830,10 @@ function onRoomClicked(roomName, roomId, updateView) {
 
 			dashIngishtsController(highestPeople, highestTemperature, highestHumidity, lowestTemperature, lowestHumidity);
 
+			console.log(newPeople);
 			console.log(newTemperature);
+			console.log(newHumidity);
+			
 			trendChart.data.datasets[0].data = newPeople;
 			trendChart.data.datasets[1].data = newTemperature;
 			trendChart.data.datasets[2].data = newHumidity;
