@@ -172,6 +172,9 @@ exports.postPeople = (req, res) => {
     });
     // Here add the room id and the number of people, separate by ':'
     fs.appendFileSync("people.txt", req.params.roomId + ":" + req.body.data + "\n");
+
+    socket.emit("people", {people: req.body.data, roomId: req.params.roomId, store: true});
+
   }
   else {
     let t1 = fs.openSync(path, "r");
