@@ -2741,7 +2741,7 @@ function onRoomClicked(roomName, roomId, updateView) {
 				if (moment(result.room.humidity[i].time).isSame(new Date(), "day")){
 					const current = moment(result.room.humidity[i].time).hours();
 					if (newHumidity[current] != 0) {
-						newHumidity[current] = (newHumidity[current] + result.room.humidity[i].data) / 2;
+						newHumidity[current] = ((newHumidity[current] + result.room.humidity[i].data) / 2).toFixed(1);
 						console.log(newHumidity[current]);
 					}
 					else {
