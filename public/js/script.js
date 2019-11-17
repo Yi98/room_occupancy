@@ -253,6 +253,8 @@ function xhrChart(roomId){
     xhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {
         var result = this.response;
+        var checkDay;
+        var high_ppl_data, low_ppl_data, high_ppl_index, low_ppl_index, high_ppl_date, low_temp_date, high_temp_data, low_temp_data, high_temp_index, low_temp_index, high_temp_date, low_temp_date, high_humid_data, low_humid_data, high_humid_index, low_humid_index, high_humid_date, low_humid_date;
 
         for (var room in result.rooms) {
           if (result.rooms[room]._id == roomId) {
@@ -325,6 +327,99 @@ function xhrChart(roomId){
 								humidData[i] = Math.round((humidData[i]/humidDataCounter[i]) * 100) / 100;
 							}
 							
+                            checkDay = 0;
+                            sessionStorage.setItem("checkDay", checkDay);
+                            
+                            high_ppl_data = Math.max.apply(Math, (peopleData.filter(v => !isNaN(v))));
+                            
+                            if(high_ppl_data == "-Infinity")
+                            {
+                                sessionStorage.setItem("todayPeopleHighestData","N/A");
+                                sessionStorage.setItem("todayPeopleHighestDate", "N/A");
+                            }
+                            else
+                            {   
+                                sessionStorage.setItem("todayPeopleHighestData",high_ppl_data);
+                                high_ppl_index = peopleData.indexOf(high_ppl_data);
+                                high_ppl_date = hourTime[high_ppl_index];
+                                sessionStorage.setItem("todayPeopleHighestDate", high_ppl_date);
+                            }
+                            
+                            low_ppl_data = Math.min.apply(Math, (peopleData.filter(v => !isNaN(v))));
+                            
+                            if(low_ppl_data == "Infinity")
+                            {
+                                sessionStorage.setItem("todayPeopleLowestData","N/A");
+                                sessionStorage.setItem("todayPeopleLowestDate", "N/A");
+                            }
+                            else
+                            {   
+                                sessionStorage.setItem("todayPeopleLowestData",low_ppl_data);
+                                low_ppl_index = peopleData.indexOf(low_ppl_data);
+                                lowppldate = hourTime[low_ppl_index];
+                                sessionStorage.setItem("todayPeopleLowestDate", lowppldate);
+                            }
+                            
+                            high_temp_data = Math.max.apply(Math, (tempData.filter(v => !isNaN(v))));
+                            
+                            if(high_temp_data == "-Infinity")
+                            {
+                                sessionStorage.setItem("todayTempHighestData","N/A");
+                                sessionStorage.setItem("todayTempHighestDate", "N/A");
+                            }
+                            else
+                            {   
+                                sessionStorage.setItem("todayTempHighestData",high_temp_data);
+                                high_temp_index = tempData.indexOf(high_temp_data);
+                                high_temp_date = hourTime[high_temp_index];
+                                sessionStorage.setItem("todayTempHighestDate", high_temp_date);
+                            }
+                            
+                            low_temp_data = Math.min.apply(Math, (tempData.filter(v => !isNaN(v))));
+                            
+                            if(low_temp_data == "Infinity")
+                            {
+                                sessionStorage.setItem("todayTempLowestData","N/A");
+                                sessionStorage.setItem("todayTempLowestDate", "N/A");
+                            }
+                            else
+                            {   
+                                sessionStorage.setItem("todayTempLowestData",low_temp_data);
+                                low_temp_index = tempData.indexOf(low_temp_data);
+                                low_temp_date = hourTime[low_temp_index];
+                                sessionStorage.setItem("todayTempLowestDate", low_temp_date);
+                            }
+                            
+                            high_humid_data = Math.max.apply(Math, (humidData.filter(v => !isNaN(v))));
+                            
+                            if(high_humid_data == "-Infinity")
+                            {
+                                sessionStorage.setItem("todayHumidHighestData","N/A");
+                                sessionStorage.setItem("todayHumidHighestDate", "N/A");
+                            }
+                            else
+                            {   
+                                sessionStorage.setItem("todayHumidHighestData",high_humid_data);
+                                high_humid_index = humidData.indexOf(high_humid_data);
+                                high_humid_date = hourTime[high_humid_index];
+                                sessionStorage.setItem("todayHumidHighestDate", high_humid_date);
+                            }
+                            
+                            low_humid_data = Math.min.apply(Math, (humidData.filter(v => !isNaN(v))));
+                            
+                            if(low_humid_data == "Infinity")
+                            {
+                                sessionStorage.setItem("todayHumidLowestData","N/A");
+                                sessionStorage.setItem("todayHumidLowestDate", "N/A");
+                            }
+                            else
+                            {   
+                                sessionStorage.setItem("todayHumidLowestData",low_humid_data);
+                                low_humid_index = humidData.indexOf(low_humid_data);
+                                low_humid_date = hourTime[low_humid_index];
+                                sessionStorage.setItem("todayHumidLowestDate", low_humid_date);
+                            }
+                            
 							showAllChart(hourTime,peopleData,tempData,humidData);
 							showPeopleChart(hourTime, peopleData); //Illustrate the chart
 							showTemperatureChart(hourTime, tempData); //Illustrate the chart
@@ -437,6 +532,99 @@ function xhrChart(roomId){
 								}
 							}
 							
+                            checkDay = 1;
+                            sessionStorage.setItem("checkDay", checkDay);
+                            
+                            high_ppl_data = Math.max.apply(Math, (peopleData.filter(v => !isNaN(v))));
+                            
+                            if(high_ppl_data == "-Infinity")
+                            {
+                                sessionStorage.setItem("dailyPeopleHighestData","N/A");
+                                sessionStorage.setItem("dailyPeopleHighestDate", "N/A");
+                            }
+                            else
+                            {   
+                                sessionStorage.setItem("dailyPeopleHighestData",high_ppl_data);
+                                high_ppl_index = peopleData.indexOf(high_ppl_data);
+                                high_ppl_date = dailyTime[high_ppl_index];
+                                sessionStorage.setItem("dailyPeopleHighestDate", high_ppl_date);
+                            }
+                            
+                            low_ppl_data = Math.min.apply(Math, (peopleData.filter(v => !isNaN(v))));
+                            
+                            if(low_ppl_data == "Infinity")
+                            {
+                                sessionStorage.setItem("dailyPeopleLowestData","N/A");
+                                sessionStorage.setItem("dailyPeopleLowestDate", "N/A");
+                            }
+                            else
+                            {   
+                                sessionStorage.setItem("dailyPeopleLowestData",low_ppl_data);
+                                low_ppl_index = peopleData.indexOf(low_ppl_data);
+                                lowppldate = dailyTime[low_ppl_index];
+                                sessionStorage.setItem("dailyPeopleLowestDate", lowppldate);
+                            }
+                            
+                            high_temp_data = Math.max.apply(Math, (tempData.filter(v => !isNaN(v))));
+                            
+                            if(high_temp_data == "-Infinity")
+                            {
+                                sessionStorage.setItem("dailyTempHighestData","N/A");
+                                sessionStorage.setItem("dailyTempHighestDate", "N/A");
+                            }
+                            else
+                            {   
+                                sessionStorage.setItem("dailyTempHighestData",high_temp_data);
+                                high_temp_index = tempData.indexOf(high_temp_data);
+                                high_temp_date = dailyTime[high_temp_index];
+                                sessionStorage.setItem("dailyTempHighestDate", high_temp_date);
+                            }
+                            
+                            low_temp_data = Math.min.apply(Math, (tempData.filter(v => !isNaN(v))));
+                            
+                            if(low_temp_data == "Infinity")
+                            {
+                                sessionStorage.setItem("dailyTempLowestData","N/A");
+                                sessionStorage.setItem("dailyTempLowestDate", "N/A");
+                            }
+                            else
+                            {   
+                                sessionStorage.setItem("dailyTempLowestData",low_temp_data);
+                                low_temp_index = tempData.indexOf(low_temp_data);
+                                low_temp_date = dailyTime[low_temp_index];
+                                sessionStorage.setItem("dailyTempLowestDate", low_temp_date);
+                            }
+                            
+                            high_humid_data = Math.max.apply(Math, (humidData.filter(v => !isNaN(v))));
+                            
+                            if(high_humid_data == "-Infinity")
+                            {
+                                sessionStorage.setItem("dailyHumidHighestData","N/A");
+                                sessionStorage.setItem("dailyHumidHighestDate", "N/A");
+                            }
+                            else
+                            {   
+                                sessionStorage.setItem("dailyHumidHighestData",high_humid_data);
+                                high_humid_index = humidData.indexOf(high_humid_data);
+                                high_humid_date = dailyTime[high_humid_index];
+                                sessionStorage.setItem("dailyHumidHighestDate", high_humid_date);
+                            }
+                            
+                            low_humid_data = Math.min.apply(Math, (humidData.filter(v => !isNaN(v))));
+                            
+                            if(low_humid_data == "Infinity")
+                            {
+                                sessionStorage.setItem("dailyHumidLowestData","N/A");
+                                sessionStorage.setItem("dailyHumidLowestDate", "N/A");
+                            }
+                            else
+                            {   
+                                sessionStorage.setItem("dailyHumidLowestData",low_humid_data);
+                                low_humid_index = humidData.indexOf(low_humid_data);
+                                low_humid_date = dailyTime[low_humid_index];
+                                sessionStorage.setItem("dailyHumidLowestDate", low_humid_date);
+                            }
+                            
 							showAllChart(dailyTime,peopleData,tempData,humidData);
 							showPeopleChart(dailyTime, peopleData); //Illustrate the chart
 							showTemperatureChart(dailyTime, tempData); //Illustrate the chart
@@ -589,6 +777,99 @@ function xhrChart(roomId){
 								humidData[i] = Math.round((humidData[i]/humidDataCounter[i]) | 0);
 							}
 							
+                            checkDay = 2;
+                            sessionStorage.setItem("checkDay", checkDay);
+                            
+                            high_ppl_data = Math.max.apply(Math, (peopleData.filter(v => !isNaN(v))));
+                            
+                            if(high_ppl_data == "-Infinity")
+                            {
+                                sessionStorage.setItem("weeklyPeopleHighestData","N/A");
+                                sessionStorage.setItem("weeklyPeopleHighestDate", "N/A");
+                            }
+                            else
+                            {   
+                                sessionStorage.setItem("weeklyPeopleHighestData",high_ppl_data);
+                                high_ppl_index = peopleData.indexOf(high_ppl_data);
+                                high_ppl_date = weeklyTime[high_ppl_index];
+                                sessionStorage.setItem("weeklyPeopleHighestDate", high_ppl_date);
+                            }
+                            
+                            low_ppl_data = Math.min.apply(Math, (peopleData.filter(v => !isNaN(v))));
+                            
+                            if(low_ppl_data == "Infinity")
+                            {
+                                sessionStorage.setItem("weeklyPeopleLowestData","N/A");
+                                sessionStorage.setItem("weeklyPeopleLowestDate", "N/A");
+                            }
+                            else
+                            {   
+                                sessionStorage.setItem("weeklyPeopleLowestData",low_ppl_data);
+                                low_ppl_index = peopleData.indexOf(low_ppl_data);
+                                lowppldate = weeklyTime[low_ppl_index];
+                                sessionStorage.setItem("weeklyPeopleLowestDate", lowppldate);
+                            }
+                            
+                            high_temp_data = Math.max.apply(Math, (tempData.filter(v => !isNaN(v))));
+                            
+                            if(high_temp_data == "-Infinity")
+                            {
+                                sessionStorage.setItem("weeklyTempHighestData","N/A");
+                                sessionStorage.setItem("weeklyTempHighestDate", "N/A");
+                            }
+                            else
+                            {   
+                                sessionStorage.setItem("weeklyTempHighestData",high_temp_data);
+                                high_temp_index = tempData.indexOf(high_temp_data);
+                                high_temp_date = weeklyTime[high_temp_index];
+                                sessionStorage.setItem("weeklyTempHighestDate", high_temp_date);
+                            }
+                            
+                            low_temp_data = Math.min.apply(Math, (tempData.filter(v => !isNaN(v))));
+                            
+                            if(low_temp_data == "Infinity")
+                            {
+                                sessionStorage.setItem("weeklyTempLowestData","N/A");
+                                sessionStorage.setItem("weeklyTempLowestDate", "N/A");
+                            }
+                            else
+                            {   
+                                sessionStorage.setItem("weeklyTempLowestData",low_temp_data);
+                                low_temp_index = tempData.indexOf(low_temp_data);
+                                low_temp_date = weeklyTime[low_temp_index];
+                                sessionStorage.setItem("weeklyTempLowestDate", low_temp_date);
+                            }
+                            
+                            high_humid_data = Math.max.apply(Math, (humidData.filter(v => !isNaN(v))));
+                            
+                            if(high_humid_data == "-Infinity")
+                            {
+                                sessionStorage.setItem("weeklyHumidHighestData","N/A");
+                                sessionStorage.setItem("weeklyHumidHighestDate", "N/A");
+                            }
+                            else
+                            {   
+                                sessionStorage.setItem("weeklyHumidHighestData",high_humid_data);
+                                high_humid_index = humidData.indexOf(high_humid_data);
+                                high_humid_date = weeklyTime[high_humid_index];
+                                sessionStorage.setItem("weeklyHumidHighestDate", high_humid_date);
+                            }
+                            
+                            low_humid_data = Math.min.apply(Math, (humidData.filter(v => !isNaN(v))));
+                            
+                            if(low_humid_data == "Infinity")
+                            {
+                                sessionStorage.setItem("weeklyHumidLowestData","N/A");
+                                sessionStorage.setItem("weeklyHumidLowestDate", "N/A");
+                            }
+                            else
+                            {   
+                                sessionStorage.setItem("weeklyHumidLowestData",low_humid_data);
+                                low_humid_index = humidData.indexOf(low_humid_data);
+                                low_humid_date = weeklyTime[low_humid_index];
+                                sessionStorage.setItem("weeklyHumidLowestDate", low_humid_date);
+                            }
+                            
 							showAllChart(weeklyTime,peopleData,tempData,humidData);
 							showPeopleChart(weeklyTime, peopleData); //Illustrate the chart
 							showTemperatureChart(weeklyTime, tempData); //Illustrate the chart
@@ -620,15 +901,17 @@ function xhrChart(roomId){
 								humidData[i] = 0;
 								humidDataCounter[i] = 0;
 							}
-							
+							var newppldata = [];
 							//People Chart
 							for(var index in result.rooms[room].people) {
 								var dataDate = new Date(result.rooms[room].people[index].time);
 									if(dataDate >= startDate && dataDate <= endDate){
 										if(dataDate.getUTCHours() >= parseInt(startTime.substring(0,2)) && dataDate.getUTCHours() <= parseInt(endTime.substring(0,2))){
+                                            
 											for(var i=0; i<monthlyTime.length;i++){
 												if(dataDate.getUTCMonth() == monthlyTime[i]){
 													peopleData[i] = peopleData[i] + result.rooms[room].people[index].data;
+                                                    newppldata.push(peopleData[i]);
 													peopleDataCounter[i] ++;
 												}
 											}
@@ -717,7 +1000,100 @@ function xhrChart(roomId){
 							for(var i=0; i<humidData.length; i++){
 								humidData[i] = Math.round((humidData[i]/humidDataCounter[i]) | 0);
 							}
-							
+                            
+                            checkDay = 3;
+                            sessionStorage.setItem("checkDay", checkDay);
+                            
+                            high_ppl_data = Math.max.apply(Math, (peopleData.filter(v => !isNaN(v))));
+                            
+                            if(high_ppl_data == "-Infinity")
+                            {
+                                sessionStorage.setItem("monthlyPeopleHighestData","N/A");
+                                sessionStorage.setItem("monthlyPeopleHighestDate", "N/A");
+                            }
+                            else
+                            {   
+                                sessionStorage.setItem("monthlyPeopleHighestData",high_ppl_data);
+                                high_ppl_index = peopleData.indexOf(high_ppl_data);
+                                high_ppl_date = monthlyTime[high_ppl_index];
+                                sessionStorage.setItem("monthlyPeopleHighestDate", high_ppl_date);
+                            }
+                            
+                            low_ppl_data = Math.min.apply(Math, (peopleData.filter(v => !isNaN(v))));
+                            
+                            if(low_ppl_data == "Infinity")
+                            {
+                                sessionStorage.setItem("monthlyPeopleLowestData","N/A");
+                                sessionStorage.setItem("monthlyPeopleLowestDate", "N/A");
+                            }
+                            else
+                            {   
+                                sessionStorage.setItem("monthlyPeopleLowestData",low_ppl_data);
+                                low_ppl_index = peopleData.indexOf(low_ppl_data);
+                                lowppldate = monthlyTime[low_ppl_index];
+                                sessionStorage.setItem("monthlyPeopleLowestDate", lowppldate);
+                            }
+                            
+                            high_temp_data = Math.max.apply(Math, (tempData.filter(v => !isNaN(v))));
+                            
+                            if(high_temp_data == "-Infinity")
+                            {
+                                sessionStorage.setItem("monthlyTempHighestData","N/A");
+                                sessionStorage.setItem("monthlyTempHighestDate", "N/A");
+                            }
+                            else
+                            {   
+                                sessionStorage.setItem("monthlyTempHighestData",high_temp_data);
+                                high_temp_index = tempData.indexOf(high_temp_data);
+                                high_temp_date = monthlyTime[high_temp_index];
+                                sessionStorage.setItem("monthlyTempHighestDate", high_temp_date);
+                            }
+                            
+                            low_temp_data = Math.min.apply(Math, (tempData.filter(v => !isNaN(v))));
+                            
+                            if(low_temp_data == "Infinity")
+                            {
+                                sessionStorage.setItem("monthlyTempLowestData","N/A");
+                                sessionStorage.setItem("monthlyTempLowestDate", "N/A");
+                            }
+                            else
+                            {   
+                                sessionStorage.setItem("monthlyTempLowestData",low_temp_data);
+                                low_temp_index = tempData.indexOf(low_temp_data);
+                                low_temp_date = monthlyTime[low_temp_index];
+                                sessionStorage.setItem("monthlyTempLowestDate", low_temp_date);
+                            }
+                            
+                            high_humid_data = Math.max.apply(Math, (humidData.filter(v => !isNaN(v))));
+                            
+                            if(high_humid_data == "-Infinity")
+                            {
+                                sessionStorage.setItem("monthlyHumidHighestData","N/A");
+                                sessionStorage.setItem("monthlyHumidHighestDate", "N/A");
+                            }
+                            else
+                            {   
+                                sessionStorage.setItem("monthlyHumidHighestData",high_humid_data);
+                                high_humid_index = humidData.indexOf(high_humid_data);
+                                high_humid_date = monthlyTime[high_humid_index];
+                                sessionStorage.setItem("monthlyHumidHighestDate", high_humid_date);
+                            }
+                            
+                            low_humid_data = Math.min.apply(Math, (humidData.filter(v => !isNaN(v))));
+                            
+                            if(low_humid_data == "Infinity")
+                            {
+                                sessionStorage.setItem("monthlyHumidLowestData","N/A");
+                                sessionStorage.setItem("monthlyHumidLowestDate", "N/A");
+                            }
+                            else
+                            {   
+                                sessionStorage.setItem("monthlyHumidLowestData",low_humid_data);
+                                low_humid_index = humidData.indexOf(low_humid_data);
+                                low_humid_date = monthlyTime[low_humid_index];
+                                sessionStorage.setItem("monthlyHumidLowestDate", low_humid_date);
+                            }
+                            
 							showAllChart(monthlyTime,peopleData,tempData,humidData);
 							showPeopleChart(monthlyTime, peopleData); //Illustrate the chart
 							showTemperatureChart(monthlyTime, tempData); //Illustrate the chart
@@ -1014,10 +1390,11 @@ function directToPdf() {
 
 	let room_name = document.getElementById("room_name").innerHTML;
 	let date_range = document.getElementById("choosenRange").innerHTML;
+    let time_range = document.getElementById("choosenTimeRange").innerHTML;
 
 	// After the window load, run the function in the new opened window with those parameters
 	report_window.addEventListener("load", function() {
-		report_window.generateReport({room_name: room_name, date_range: date_range}, peopleChart, temperatureChart, humidityChart);
+		report_window.generateReport({room_name: room_name, date_range: date_range, time_range: time_range}, peopleChart, temperatureChart, humidityChart);
 	})
 }
 
@@ -1048,7 +1425,7 @@ function showUserTable(){
                 '<td>' + result.users[user].email + '</td>' +
 				// '<td>' + result.users[user].role + '</td>' +
 				'<td class="roleButtons">' + '<input class="roleChangeButtons" id = "rolebtn" onchange="updateUser(this, &#39;' + result.users[user]._id + '&#39;)" type="checkbox" data-toggle="toggle" data-on="Manager" data-off="Staff" data-onstyle="success" data-offstyle="outline-dark" data-size="xs">' + '</td>' +
-				'<td>' + '<button class = "btn btn-danger" id = "deletebtn" onclick = "deleteUser(&#39;'+ result.users[user]._id + '&#39;)"><span class="fa fa-trash" style = "color: white"></span></button>' + '</td>' + '</tr>' + '</tbody>';
+				'<td>' + '<button class = "deleteuserbtn btn btn-danger" id = "deletebtn" disabled = "disabled" onclick = "deleteUser(&#39;'+ result.users[user]._id + '&#39;)"><span class="fa fa-trash" style = "color: white"></span></button>' + '</td>' + '</tr>' + '</tbody>';
                 
 			};
             
@@ -1070,10 +1447,22 @@ function showUserTable(){
 			// Initialize the checkbox to be applied by bootstrap toggle css
 			$("[data-toggle='toggle']").bootstrapToggle();
           
+            if((sessionStorage.getItem("passLoginUserRole")) == "manager")
+            {
+                var deletebtns = document.getElementsByClassName("deleteuserbtn");
+                
+                for(var i = 0; i < deletebtns.length; i++)
+                {
+                    deletebtns[i].disabled = false;
+                }
+
+            }
+            
             if((sessionStorage.getItem("passLoginUserRole")) == "staff")
             {
                 $("[data-toggle='toggle']").prop('disabled', true);
                 $("[data-toggle='collapse']").prop('disabled', true);
+                
             }
 		}
 
