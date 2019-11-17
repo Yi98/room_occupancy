@@ -28,7 +28,6 @@ const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 mongoose.Promise = global.Promise;
 
-// Pass the socket to data controller file
 dataController.sensorSocket(io);
 
 app.use(cors());
@@ -41,7 +40,6 @@ app.use(session({
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
-
 
 app.use('/api/rooms', roomApi);
 app.use('/api/data', dataApi);

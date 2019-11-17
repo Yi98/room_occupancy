@@ -3,7 +3,7 @@ const Temperature = require('../models/Temperature');
 const Humidity = require('../models/Humidity');
 const People = require('../models/People');
 const Room = require('../models/Room');
-const fs = require("fs")
+const fs = require("fs");
 
 const path = "people.txt"
 
@@ -11,9 +11,10 @@ let socket;
 
 exports.sensorSocket = (io) => {
   socket = io;
-  socket.on("connection", function(socket) {
+  
+  io.on("connection", function(socket) {
     console.log("sensor socket connected");
-  })
+  })  
 }
 
 // get all temperature data of a room ->  /api/data/:roomId/temperature (GET)
@@ -104,11 +105,13 @@ exports.getPeople = (req, res) => {
 // post temp and humid data of a room ->  /api/data/:roomId/sensor (POST)
 exports.postSensorData = (req, res) => {
   let fetchedRoom;
-  // need store parameter
-  socket.emit("sensor", {temperature: req.body.tempData, humidity: req.body.humidData, roomId: req.params.roomId});
+  let store;
 
   if (req.body.store != true) {
+    socket.emit("sensor", {temperature: req.body.tempData, humidity: req.body.humidData, roomId: req.params.roomId, store:false});
     return res.status(200).json({message: 'Successfully push sensor data to client'});
+  } else {
+    socket.emit("sensor", {temperature: req.body.tempData, humidity: req.body.humidData, roomId: req.params.roomId, store:true});
   }
 
   Room.findById(req.params.roomId)
@@ -196,7 +199,12 @@ exports.postPeople = (req, res) => {
           let newPeopleCount = data.replace(re, (roomId + ":" + String(parseInt(previousPeopleCount) + parseInt(req.body.data))));
           socketPeopleCount = "" + String(parseInt(previousPeopleCount) + parseInt(req.body.data));
 
-          socket.emit("people", {people: socketPeopleCount, roomId: req.params.roomId});
+          if (req.body.store != true) {
+            socket.emit("people", {people: socketPeopleCount, roomId: req.params.roomId, store: false});
+          } else {
+            socket.emit("people", {people: socketPeopleCount, roomId: req.params.roomId, store: true});
+          }
+          
           // Replace the line to new line with updated value
           fs.writeFile("people.txt", newPeopleCount, "utf-8", function(err) {
             if (err) {
