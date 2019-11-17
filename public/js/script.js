@@ -2755,9 +2755,7 @@ function closeNoticeRow(element) {
 		const noticeNum = document.getElementById('noticeNum');
 		noticeNum.style.display = "none";
 
-		$(emptyNotice).fadeIn(1500 , function() {
-			emptyNotice.style.display = "block";
-		});
+		emptyNotice.style.display = "block";
 	}
 }
 
@@ -2776,9 +2774,7 @@ function onClearNotices() {
 	noticeNum.innerHTML = 0;
 	noticeNum.style.display = "none";
 
-	$(emptyNotice).fadeIn(1500 , function() {
-		emptyNotice.style.display = "block";
-	});
+	emptyNotice.style.display = "block";
 }
 
 
