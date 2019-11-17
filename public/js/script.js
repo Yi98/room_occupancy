@@ -2544,6 +2544,8 @@ function rerenderChart() {
 }
 
 function onUpdateTrend() {
+	rerenderChart();
+	
 	const dotsLoaders = document.getElementsByClassName('dotsLoading');
 	const defaultRooms = document.getElementsByClassName('defaultRoom');
 	
