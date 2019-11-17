@@ -73,7 +73,7 @@ function onTestPeople() {
 			localStorage.setItem('notifications', JSON.stringify(notifications));	
 		}
 
-		onRoomClicked('empty', outerRoomId, false);
+		// onRoomClicked('empty', outerRoomId, false);
 		onUpdateTrend();
 
 	}, 10000);
@@ -148,7 +148,8 @@ socket.on("people", function(msg) {
 			localStorage.setItem('notifications', JSON.stringify(notifications));
 		}
 
-		onRoomClicked('empty', outerRoomId, false);
+		// onRoomClicked('empty', outerRoomId, false);
+		onUpdateTrend();
 	});
 
 
@@ -2542,9 +2543,157 @@ function rerenderChart() {
 	});
 }
 
-// function onUpdateTrend() {
+function onUpdateTrend() {
+	const dotsLoaders = document.getElementsByClassName('dotsLoading');
+	const defaultRooms = document.getElementsByClassName('defaultRoom');
+	
+	// Trend's variables
+	timeline = ['0:00', '1:00', '2:00', '3:00', '4:00', '5:00', '6:00', '7:00', '8:00', '9:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00', '24:00'];
+	let newPeople = [];
+	let newTemperature = [];
+	let newHumidity = [];
 
-// }
+	// Insight's vatiables
+	let highestTemperature = {data: 0, time: null};
+	let highestHumidity = {data: 0, time: null};
+	let highestPeople = {data: 0, time: null};
+	let lowestTemperature = {data: 0, time: null};
+	let lowestHumidity = {data: 0, time: null};
+
+
+	var xhttp = new XMLHttpRequest();
+	xhttp.responseType = 'json';
+
+	xhttp.onreadystatechange = function () {
+		if(this.readyState == 4 && this.status == 200) {
+			var result = this.response;
+
+			const currentHour = moment().hours();
+
+			timeline = timeline.slice(0, currentHour + 1);
+
+			for (let i=0; i<timeline.length; i++) {
+				newPeople.push(0);
+				newTemperature.push(0);
+				newHumidity.push(0);
+			}
+			
+			
+			for (let i=0; i<result.room.people.length; i++) {
+				if (moment(result.room.people[i].time).isSame(new Date(), "day")) {
+					const current = moment(result.room.people[i].time).hours();
+					if (newPeople[current] != 0) {
+						newPeople[current] = Math.round((newPeople[current] + result.room.people[i].data) / 2);
+					}
+					else {
+						newPeople[current] = result.room.people[i].data;
+					}
+
+					if (result.room.people[i].data > highestPeople.data) {
+						highestPeople.data = result.room.people[i].data;
+						highestPeople.time = result.room.people[i].time;
+					}
+				}
+			}
+
+			for (let i=0; i<result.room.temperature.length; i++) {
+				if (moment(result.room.temperature[i].time).isSame(new Date(), "day")) {
+					const current = moment(result.room.temperature[i].time).hours();
+
+					if (newTemperature[current] != 0) {
+						newTemperature[current] = ((newTemperature[current] + result.room.temperature[i].data) / 2).toFixed(1);
+					}
+					else {
+						newTemperature[current] = result.room.temperature[i].data;
+					}
+
+					if (result.room.temperature[i].data > highestTemperature.data) {
+						highestTemperature.data = result.room.temperature[i].data;
+						highestTemperature.time = result.room.temperature[i].time;
+					}
+
+					if (i == 0) {
+						lowestTemperature.data = result.room.temperature[i].data;
+						lowestTemperature.time = result.room.temperature[i].time;
+					}
+					else if (result.room.temperature[i].data < lowestTemperature.data) {
+						lowestTemperature.data = result.room.temperature[i].data;
+						lowestTemperature.time = result.room.temperature[i].time;
+					}
+				}
+			}
+
+
+			for (let i=0; i<result.room.humidity.length; i++) {
+				if (moment(result.room.humidity[i].time).isSame(new Date(), "day")){
+					const current = moment(result.room.humidity[i].time).hours();
+					if (newHumidity[current] != 0) {
+						newHumidity[current] = ((newHumidity[current] + result.room.humidity[i].data) / 2).toFixed(1);
+					}
+					else {
+						newHumidity[current] = result.room.humidity[i].data;
+					}
+
+					if (result.room.humidity[i].data > highestHumidity.data) {
+						highestHumidity.data = result.room.humidity[i].data;
+						highestHumidity.time = result.room.humidity[i].time;
+					}
+
+					if (i == 0) {
+						lowestHumidity.data = result.room.humidity[i].data;
+						lowestHumidity.time = result.room.humidity[i].time;
+					}
+					else if (result.room.humidity[i].data < lowestHumidity.data) {
+						lowestHumidity.data = result.room.humidity[i].data;
+						lowestHumidity.time = result.room.humidity[i].time;
+					}
+				}
+			}
+
+			dashIngishtsController(highestPeople, highestTemperature, highestHumidity, lowestTemperature, lowestHumidity);
+
+			trendChart.data.datasets[0].data = newPeople;
+			trendChart.data.datasets[1].data = newTemperature;
+			trendChart.data.datasets[2].data = newHumidity;
+
+			trendChart.data.labels = timeline;
+
+			trendChart.update();
+
+			document.getElementById('insightRoom').innerHTML = " - " + roomName;
+			document.getElementById('trendRoom').innerHTML = " - " + roomName;
+			document.getElementById('viewRoomDetails').href = `/chart/${roomId}`;
+			
+		}
+	};
+	
+	xhttp.open("GET", `${domain}/api/rooms/${roomId}`, true);
+
+	xhttp.send();
+}
+
+function dashIngishtsController(highestPeople, highestTemperature, highestHumidity, lowestTemperature, lowestHumidity) {
+	if (highestPeople.time != null) {
+		document.getElementById('hPeople').innerHTML = `${moment(highestPeople.time).format('hh:mm A')} - ${highestPeople.data} people`;			
+	}
+
+	if (highestTemperature.time != null) {
+		document.getElementById('hTemp').innerHTML = `${moment(highestTemperature.time).format('hh:mm A')} - ${highestTemperature.data} °C`;
+	}
+
+	if (highestHumidity.time != null) {
+		document.getElementById('hHumid').innerHTML = `${moment(highestHumidity.time).format('hh:mm A')} - ${highestHumidity.data} RH`;
+	}
+
+	if (lowestTemperature.time != null) {
+		document.getElementById('lTemp').innerHTML = `${moment(lowestTemperature.time).format('hh:mm A')} - ${lowestTemperature.data} °C`;
+	}
+
+	if (lowestHumidity.time != null) {
+		document.getElementById('lHumid').innerHTML = `${moment(lowestHumidity.time).format('hh:mm A')} - ${lowestHumidity.data} RH`;
+	}
+
+}
 
 
 
