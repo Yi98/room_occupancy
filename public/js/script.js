@@ -2631,6 +2631,7 @@ function onRoomClicked(roomName, roomId, updateView) {
 
 					if (i == 0) {
 						lowestTemperature.data = result.room.temperature[i].data;
+						lowestTemperature.time = result.room.temperature[i].time;
 					}
 					else if (result.room.temperature[i].data < lowestTemperature.data) {
 						lowestTemperature.data = result.room.temperature[i].data;
@@ -2657,6 +2658,7 @@ function onRoomClicked(roomName, roomId, updateView) {
 
 					if (i == 0) {
 						lowestHumidity.data = result.room.humidity[i].data;
+						lowestHumidity.time = result.room.humidity[i].time;
 					}
 					else if (result.room.humidity[i].data < lowestHumidity.data) {
 						lowestHumidity.data = result.room.humidity[i].data;
