@@ -3,6 +3,8 @@ const domain = 'https://roomoccupancy.herokuapp.com';
 
 var socket = io();
 
+let currentRoom;
+
 function onTestPeople() {
 	setInterval(function() {
 		let roomCards = document.getElementsByClassName("roomCard");
@@ -74,7 +76,9 @@ function onTestPeople() {
 		}
 
 		// onRoomClicked('empty', outerRoomId, false);
-		onUpdateTrend(outerRoomId, roomName);
+		if (currentRoom == roomName) {
+			onUpdateTrend(outerRoomId, roomName);
+		}
 
 	}, 10000);
 }
@@ -149,7 +153,9 @@ socket.on("people", function(msg) {
 		}
 
 		// onRoomClicked('empty', outerRoomId, false);
-		onUpdateTrend(outerRoomId, roomName);
+		if (currentRoom == roomName) {
+			onUpdateTrend(outerRoomId, roomName);
+		}
 	});
 
 
@@ -175,7 +181,9 @@ socket.on("sensor", function(msg) {
 	}
 
 	// onRoomClicked('empty', outerRoomId, false);
-	onUpdateTrend(outerRoomId, roomName);
+	if (currentRoom == roomName) {
+		onUpdateTrend(outerRoomId, roomName);
+	}
 
 });
 
@@ -2706,6 +2714,8 @@ function dashIngishtsController(highestPeople, highestTemperature, highestHumidi
 function onRoomClicked(roomName, roomId, updateView) {
 	// rerenderChart();
 
+	currentRoom = roomName;
+
 	const dotsLoaders = document.getElementsByClassName('dotsLoading');
 	const defaultRooms = document.getElementsByClassName('defaultRoom');
 
@@ -2833,7 +2843,7 @@ function onRoomClicked(roomName, roomId, updateView) {
 			console.log(newPeople);
 			console.log(newTemperature);
 			console.log(newHumidity);
-			
+
 			trendChart.data.datasets[0].data = newPeople;
 			trendChart.data.datasets[1].data = newTemperature;
 			trendChart.data.datasets[2].data = newHumidity;
