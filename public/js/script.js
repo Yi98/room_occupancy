@@ -2759,7 +2759,7 @@ function closeNoticeRow(element) {
 	}
 }
 
-
+ 
 function onClearNotices() {
 	localStorage.clear();
 
