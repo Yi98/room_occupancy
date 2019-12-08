@@ -30,7 +30,7 @@
   "devDependencies": {},
   "scripts": {
     "start": "node app.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha",
     "build": "browserify public/js/pdf.js -o public/js/bundle.js"
   },
   "repository": {
