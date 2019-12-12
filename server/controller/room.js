@@ -1,5 +1,4 @@
 const cacheSingleton = require('../models/Cache');
-
 const Room = require('../models/Room');
 
 // get one room with specific id ->  /api/rooms/:roomId (GET)
@@ -38,6 +37,9 @@ exports.getRooms = (req, res) => {
       }
 
       res.status(200).json({rooms});
+
+      // success = cacheSingleton.set("rooms", rooms);
+      // console.log(success);
     })
     .catch(err => {
       res.status(500).json({

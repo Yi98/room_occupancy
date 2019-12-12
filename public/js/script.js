@@ -2396,7 +2396,6 @@ function onUpdateTrend(roomId, roomName) {
 			for (let i=0; i<result.room.people.length; i++) {
 				if (moment(result.room.people[i].time).isSame(new Date(), "day")) {
 					const current = moment(result.room.people[i].time).hours();
-					console.log(result.room.people[i].data);
 					if (newPeople[current] != 0) {
 						newPeople[current] = Math.round((newPeople[current] + result.room.people[i].data) / 2);
 					}

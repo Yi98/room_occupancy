@@ -13,7 +13,7 @@ exports.sensorSocket = (io) => {
   socket = io;
   
   io.on("connection", function(socket) {
-    console.log("sensor socket connected");
+    // console.log("sensor socket connected");
   })  
 }
 

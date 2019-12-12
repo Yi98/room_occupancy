@@ -13,7 +13,7 @@ function getUsers(req, res, next) {
 
 function deleteUsers(req, res, next) {
   const value = cacheSingleton.del("users");
-  
+
   return next();
 }
 

@@ -3,7 +3,7 @@ const router = express.Router();
 
 const UserController = require('../controller/user');
 const auth = require('../middleware/auth');
-const cache = require('../middleware/cache')
+const cache = require('../middleware/cache');
 
 
 router.get('/', cache.getUsers, UserController.getUsers);
