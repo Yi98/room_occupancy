@@ -11,4 +11,10 @@ function getUsers(req, res, next) {
   return next();
 }
 
-module.exports = { getUsers };
+function deleteUsers(req, res, next) {
+  const value = cacheSingleton.del("users");
+  
+  return next();
+}
+
+module.exports = { getUsers, deleteUsers };

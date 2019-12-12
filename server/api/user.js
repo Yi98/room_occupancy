@@ -11,11 +11,11 @@ router.get('/', cache.getUsers, UserController.getUsers);
 // this will match every /string. Be careful with it.
 router.get('/:id', UserController.getUser);
 
-router.put('/:id', UserController.editUser);
+router.put('/:id', cache.deleteUsers, UserController.editUser);
 
-router.delete('/:id', UserController.deleteUser);
+router.delete('/:id', cache.deleteUsers, UserController.deleteUser);
 
-router.post('/', UserController.addUser);
+router.post('/', cache.deleteUsers, UserController.addUser);
 
 router.post('/login', UserController.login);
 
