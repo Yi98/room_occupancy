@@ -13,7 +13,7 @@ const routes = require('./server/routes/route');
 const roomApi = require('./server/api/room');
 const userApi = require('./server/api/user');
 const dataApi = require('./server/api/data');
-const dataController = require("./server/controller/data");
+const dataController = require('./server/controller/data');
 const port = 3000;
 
 dotenv.config();
