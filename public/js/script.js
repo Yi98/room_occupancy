@@ -1,5 +1,5 @@
-//const domain = 'http://localhost:3000';
-const domain = 'https://roomoccupancy.herokuapp.com';
+const domain = 'http://localhost:3000';
+//const domain = 'https://roomoccupancy.herokuapp.com';
 
 var socket = io();
 

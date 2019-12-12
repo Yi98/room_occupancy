@@ -20,7 +20,6 @@ exports.sensorSocket = (io) => {
 // get all temperature data of a room ->  /api/data/:roomId/temperature (GET)
 exports.getTemperature = (req, res) => {
 
-  // Room.findOne({name: {$regex: /BY/}})
   Room.findById(req.params.roomId)
     .populate('temperature')
     .exec()
@@ -28,28 +27,6 @@ exports.getTemperature = (req, res) => {
       if (!room) {
         return res.status(404).json({ message: `Temperature in room ${req.params.roomId} not found` })
       }
-      
-      // if (req.query.period == 'today') {
-      //   const today = new Date();
-      //   const todayDate = today.getDate();
-      //   const todayMonth = today.getMonth();
-      //   const todayYear = today.getFullYear();
-
-
-      //   for (let i=0; i<room.temperature.length; i++) {
-      //     const dataTime = room.temperature[i].time;
-      //     let dataDate = dataTime.getDate();
-      //     let dataMonth = dataTime.getMonth();
-      //     let dataYear = dataTime.getFullYear();
-
-      //     console.log(dataDate, dataMonth, dataYear);
-
-      //     // fix here
-      //     if ((5 == dataDate) && (9 == dataMonth) && (2019 == dataYear)) {
-      //       console.log(dateTime);
-      //     }
-      //   }
-      // }
 
       res.status(200).json({temperature: room.temperature});
     })

@@ -5,6 +5,7 @@ const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 
 const User = require('../models/User');
+const cacheSingleton = require('../models/Cache');
 
 // get one user with specific id ->  /api/users/:id (GET)
 exports.getUser = (req, res) => {
@@ -24,6 +25,7 @@ exports.getUser = (req, res) => {
     })
 };
 
+// get all users ->  /api/users (GET)
 exports.getUsers = (req, res) => {
   User.find({})
     .exec()
@@ -31,6 +33,9 @@ exports.getUsers = (req, res) => {
       if (!users) {
         return res.status(404).json({message: 'Users not found'})
       }
+
+      cacheSingleton.set("users", users);
+
       res.status(200).json({users});
     })
     .catch(err => {
