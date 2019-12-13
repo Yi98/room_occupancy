@@ -1338,8 +1338,6 @@ function showDashboardRooms() {
 					</div>
 				</div>
 			`;
-
-			beginWebTour();
 		}
 	};
 
@@ -2785,12 +2783,50 @@ function deleteAllCookies() {
 }
 
 function beginWebTour() {
+	jQuery.noConflict();
+
 	introJs()
 		.setOptions({
 			'hidePrev': true,
 			'hideNext': true,
 			'showBullets': false,
 			'showProgress': true,
-			'exitOnOverlayClick': false})
+			'exitOnOverlayClick': false,
+			'showStepNumbers': false,
+			'overlayOpacity': 0.7
+		})
+		.oncomplete(function() {
+			$('#completeTourModal').modal('show');
+
+			document.getElementById('pulse-fab-container').classList.add('pulse-container');
+			document.getElementById('pulse-fab').classList.add('pulse');
+
+			$('#completeTourModal').on('hidden.bs.modal', function () {
+				document.getElementById('pulse-fab-container').classList.remove('pulse-container');
+				document.getElementById('pulse-fab').classList.remove('pulse');
+			});
+		})
 		.start();
+}
+
+
+function onDismissTour() {
+	jQuery.noConflict();
+
+	$('#vaModal-deny').modal('show');
+
+	document.getElementById('pulse-fab-container').classList.add('pulse-container');
+	document.getElementById('pulse-fab').classList.add('pulse');
+
+	$('#vaModal-deny').on('hidden.bs.modal', function () {
+		document.getElementById('pulse-fab-container').classList.remove('pulse-container');
+		document.getElementById('pulse-fab').classList.remove('pulse');
+	});
+}
+
+function onDismissVa() {
+	document.getElementById('va-intro-container').style.display = "block";
+	document.getElementById('va-conclude-container').style.display = "none";
+	document.getElementById('va-primary-footer').style.display = "block";
+	document.getElementById('va-secondary-footer').style.display = "none";
 }

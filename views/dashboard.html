@@ -8,18 +8,25 @@
 	<!-- jQuery library -->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
+	<!-- Floating action button -->
+	<link href="css/jquery-fab-button.css" rel="stylesheet">
+	<script src="js/jquery-fab-button.js"></script>
+
 	<!-- Latest compiled and minified CSS -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
+	<!-- font awesome -->
 	<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">	<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
 	<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	<meta name="HandheldFriendly" content="true">
 	<link rel="stylesheet" href="/css/style.css" type="text/css"/>
- 
+
+	
+ 	<!-- socket.io -->
 	<script src="/socket.io/socket.io.js"></script>
 
 	<!-- embed font -->
@@ -39,6 +46,8 @@
 
 	<!-- Moment.js -->
 	<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.3/moment.js"></script>
+
+	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 </head>
 
 <body onload="onLoadDashboard();">
@@ -71,7 +80,7 @@
             <li class="nav-item"><a class="nav-link active disabled">Dashboard</a></li>
 						<li class="nav-item"><a href="/users" class="nav-link">Users</a></li>
 						<li class="nav-item mt-3" style="cursor: pointer;" data-toggle="modal" data-target="#addRoomModal"><a class="nav-link">Add new room <i class="fa fa-plus text-white ml-1"></i></a></li>
-          </ul>
+					</ul>
         </nav>
 	  	</div>
 			<div class="col-md-10 col-sm-12 col-xs-12 c right-menu-2">
@@ -185,7 +194,7 @@
 						</div>
 						<div class="row">
 							<div class="col-md-12">
-								<div data-intro="When room exceeds its capcity, the notifications will be shown here." data-position="right" data-step="4" id="noticeItem" class="card mx-auto border-0 shadow-sm p-2 mb-4 bg-white rounded" style="width: 100%; height: 267px;">
+								<div data-intro="When a room exceeds its capcity, the notifications will be shown here." data-position="right" data-step="4" id="noticeItem" class="card mx-auto border-0 shadow-sm p-2 mb-4 bg-white rounded" style="width: 100%; height: 267px;">
 									<div id="noticeRow" class="card-body pt-2">
 										<h6 class="card-title mb-4 border-bottom pb-3"><i class="fa fa-bell mr-1"></i>Notification<span class="badge badge-pill badge-danger ml-2" id="noticeNum">0</span><p onclick="onClearNotices()" id="clearNotice" class="float-right">Clear all</p></h6>
 										<h6 id="emptyNotice">There is no notification right now :)</h6>
@@ -199,7 +208,7 @@
 					<div class="col-lg-8 col-md-12">
 						<div class="row">
 							<div class="col-md-12">
-								<div data-intro="This are the trends of the room that you have selected." data-position="left" data-step="3" class="card border-0 shadow-sm p-2 mb-4 bg-white rounded" style="width: 100%;">
+								<div data-intro="Here are the trends of the room that you have selected." data-position="left" data-step="3" class="card border-0 shadow-sm p-2 mb-4 bg-white rounded" style="width: 100%;">
 									<div class="card-body pt-2">
 										<h6 class="card-title mb-4" style="display:inline-block;">Today's trends 
 											<div class="spinner dotsLoading ml-3" style="display: none;">
@@ -221,33 +230,82 @@
 						</div>
 					</div>
 				</div>				
-
-				<!-- <div class="container content-wrapper">
-					<div class="row" id="showRoom"></div>
-				</div> -->
     	</div>
+		</div>
+
+		<div id="pulse-fab-container" class="fixed-action-btn horizontal" style="bottom: 20px; left: 10px;">
+			<a id="pulse-fab" title="Virtual Assistance" class="btn-floating btn-large red">
+				<i data-toggle="modal" data-target="#vaModal" class="large material-icons">headset_mic</i>
+			</a>
 		</div>
 	</div>
 
-	<!-- Modal -->
-		<div class="modal fade" id="addRoomModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-			<div class="modal-dialog modal-dialog-centered" role="document">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h5 class="modal-title mx-auto" id="exampleModalLongTitle">Add Room</h5>
-					</div>
-					<div class="modal-body">
-						<div class="form-group shakeInput">
-							<label for="room-name">Room name:</label>
-							<input type="text" class="form-control" id="room-name" name="room-name" required="">
-						</div>
-						<div id="alertText"></div>
-					</div>
-					<div class="modal-footer mx-right">
-						<button class="btn btn-primary" type="button" onclick="addRoom()">Submit</button>
-						<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-					</div>
+	<!-- Add room modal -->
+	<div class="modal fade" id="addRoomModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title mx-auto" id="exampleModalLongTitle">Add Room</h5>
 				</div>
+				<div class="modal-body">
+					<div class="form-group shakeInput">
+						<label for="room-name">Room name:</label>
+						<input type="text" class="form-control" id="room-name" name="room-name" required="">
+					</div>
+					<div id="alertText"></div>
+				</div>
+				<div class="modal-footer mx-right">
+					<button class="btn btn-primary" type="button" onclick="addRoom()">Submit</button>
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Virtual assistance modal -->
+	<div class="modal fade" id="vaModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+		<div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+				<img id="va-image" src="images/va.png" alt="Virtual assistance">
+				<div class="modal-content">
+						<div id="va-intro-container" class="modal-body py-4 px-4">
+							<h5 class="text-justify va-intro">Hi! I am your virtual assistance, Jane. Do you want me to give you a website tour?</h5>
+						</div>
+						<div id="va-primary-footer" class="modal-footer">
+							<button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="onDismissTour()">No, thanks</button>
+							<button type="button" class="btn btn-primary" data-dismiss="modal" onclick="beginWebTour()">Yes, sure</button>
+						</div>
+					</div>
+		</div>
+	</div>
+
+
+	<!-- Virtual assistance deny modal -->
+	<div class="modal fade" id="vaModal-deny" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+			<div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+					<img id="va-image" src="images/va.png" alt="Virtual assistance">
+					<div class="modal-content">
+						<div id="va-conclude-container" class="modal-body py-4 px-4">
+							<h5 class="text-justify va-intro">Alright! You can always find me down here anytime if you need help. See you :)</h5>
+						</div>
+						<div id="va-secondary-footer" class="modal-footer">
+							<button type="button" class="btn btn-primary pull-right" data-dismiss="modal">Okay</button>
+						</div>
+					</div>
+			</div>
+		</div>
+
+	<!-- Complete tour modal -->
+	<div class="modal fade" id="completeTourModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+			<div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+					<img id="va-image" src="images/va.png" alt="Virtual assistance">
+					<div class="modal-content">
+							<div id="va-intro-container" class="modal-body py-4 px-4">
+								<h5 class="text-justify va-intro">That's it! You can always find me down here anytime if you need help. See you :)</h5>
+							</div>
+							<div id="va-secondary-footer" class="modal-footer">
+								<button type="button" class="btn btn-primary pull-right" data-dismiss="modal">Okay</button>
+							</div>
+						</div>
 			</div>
 		</div>
 
