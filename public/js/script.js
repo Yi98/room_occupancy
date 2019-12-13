@@ -1315,8 +1315,8 @@ function showDashboardRooms() {
 				var status = result.rooms[room].people.length;
 
 				document.getElementById("roomCardContainer").innerHTML += `
-					<div class="roomCard card mr-4 border-0 shadow-sm pt-3 pb-4 mb-4 bg-white rounded" style="width: 24rem; height: 14rem;" onclick="onRoomClicked('${result.rooms[room].name}', '${result.rooms[room]._id}', true)">
-						<div class="card-body pt-2 text-center">
+					<div class="roomCard card mr-4 border-0 shadow-sm pt-2 pb-4 mt-2 mb-4 bg-white rounded" style="width: 24rem; height: 14rem;" onclick="onRoomClicked('${result.rooms[room].name}', '${result.rooms[room]._id}', true)">
+						<div class="card-body text-center">
 							<h4 class="roomName card-title mb-4">${result.rooms[room].name}</h4>
 							<h6>Number of people: <span class="roomData people">N/A</span></h6>
 							<h6>Temperature: <span class="roomData temperature">N/A</span></h6>
@@ -1338,6 +1338,8 @@ function showDashboardRooms() {
 					</div>
 				</div>
 			`;
+
+			beginWebTour();
 		}
 	};
 
@@ -2766,7 +2768,6 @@ function horizontalWheelScroll() {
 }
 
 function onLoadDashboard() {
-
 	showDashboardRooms();
 	horizontalWheelScroll();
 }
@@ -2781,4 +2782,15 @@ function deleteAllCookies() {
 			document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
 	}
 	sessionStorage.clear();
+}
+
+function beginWebTour() {
+	introJs()
+		.setOptions({
+			'hidePrev': true,
+			'hideNext': true,
+			'showBullets': false,
+			'showProgress': true,
+			'exitOnOverlayClick': false})
+		.start();
 }
