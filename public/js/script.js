@@ -1341,7 +1341,7 @@ function showDashboardRooms() {
 		}
 	};
 
-	xhttp.open("GET",`${domain}/api/rooms`,true);
+	xhttp.open("GET",`${domain}/api/rooms/details`, true);
 
 	xhttp.send();
 }

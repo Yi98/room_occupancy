@@ -49,6 +49,27 @@ exports.getRooms = (req, res) => {
     })
 }
 
+// get all rooms' details -> /api/rooms/details (GET)
+exports.getRoomsDetails = (req, res) => {
+  Room.find({})
+    .then(rooms => {
+      if (!rooms) {
+        return res.status(404).json({message: 'No rooms found'});
+      }
+
+      res.status(200).json({rooms});
+
+      success = cacheSingleton.set("roomsDetails", rooms);
+      // console.log(success);
+    })
+    .catch(err => {
+      res.status(500).json({
+        message: 'Failed to get rooms\'s details',
+        err
+      });
+    })
+};
+
 
 // add a new room ->  /api/rooms (POST)
 exports.addRoom = (req, res) => {

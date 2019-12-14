@@ -17,4 +17,15 @@ function deleteUsers(req, res, next) {
   return next();
 }
 
-module.exports = { getUsers, deleteUsers };
+function getRoomsDetails(req, res, next) {
+  const rooms = cacheSingleton.get("roomsDetails");
+
+  if (rooms) {
+    // console.log("rooms found in cache");
+    return res.status(200).json({rooms});
+  }
+
+  return next();
+}
+
+module.exports = { getUsers, deleteUsers, getRoomsDetails };
