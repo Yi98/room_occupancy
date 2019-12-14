@@ -1,5 +1,5 @@
-// const domain = 'http://localhost:3000';
-const domain = 'https://roomoccupancy.herokuapp.com';
+const domain = 'http://localhost:3000';
+// const domain = 'https://roomoccupancy.herokuapp.com';
 
 var socket = io();
 
@@ -2662,35 +2662,34 @@ function onRoomClicked(roomName, roomId, updateView) {
 		}
 	};
 
-	function dashIngishtsController(highestPeople, highestTemperature, highestHumidity, lowestTemperature, lowestHumidity) {
-		if (highestPeople.time != null) {
-			document.getElementById('hPeople').innerHTML = `${moment(highestPeople.time).format('hh:mm A')} - ${highestPeople.data} people`;			
-		}
-
-		if (highestTemperature.time != null) {
-			document.getElementById('hTemp').innerHTML = `${moment(highestTemperature.time).format('hh:mm A')} - ${highestTemperature.data} °C`;
-		}
-
-		if (highestHumidity.time != null) {
-			document.getElementById('hHumid').innerHTML = `${moment(highestHumidity.time).format('hh:mm A')} - ${highestHumidity.data} RH`;
-		}
-
-		if (lowestTemperature.time != null) {
-			document.getElementById('lTemp').innerHTML = `${moment(lowestTemperature.time).format('hh:mm A')} - ${lowestTemperature.data} °C`;
-		}
-
-		if (lowestHumidity.time != null) {
-			document.getElementById('lHumid').innerHTML = `${moment(lowestHumidity.time).format('hh:mm A')} - ${lowestHumidity.data} RH`;
-		}
-
-	}
-
 	xhttp.open("GET", `${domain}/api/rooms/${roomId}`, true);
 
 	xhttp.send();
 
 }
 
+
+function dashIngishtsController(highestPeople, highestTemperature, highestHumidity, lowestTemperature, lowestHumidity) {
+	if (highestPeople.time != null) {
+		document.getElementById('hPeople').innerHTML = `${moment(highestPeople.time).format('hh:mm A')} - ${highestPeople.data} people`;			
+	}
+
+	if (highestTemperature.time != null) {
+		document.getElementById('hTemp').innerHTML = `${moment(highestTemperature.time).format('hh:mm A')} - ${highestTemperature.data} °C`;
+	}
+
+	if (highestHumidity.time != null) {
+		document.getElementById('hHumid').innerHTML = `${moment(highestHumidity.time).format('hh:mm A')} - ${highestHumidity.data} RH`;
+	}
+
+	if (lowestTemperature.time != null) {
+		document.getElementById('lTemp').innerHTML = `${moment(lowestTemperature.time).format('hh:mm A')} - ${lowestTemperature.data} °C`;
+	}
+
+	if (lowestHumidity.time != null) {
+		document.getElementById('lHumid').innerHTML = `${moment(lowestHumidity.time).format('hh:mm A')} - ${lowestHumidity.data} RH`;
+	}
+}
 
 function closeNoticeRow(element) {
 	const totalChildCount = document.getElementById('noticeMain').childElementCount;
