@@ -2825,14 +2825,6 @@ function beginWebTour() {
 		})
 		.oncomplete(function() {
 			$('#completeTourModal').modal('show');
-
-			document.getElementById('pulse-fab-container').classList.add('pulse-container');
-			document.getElementById('pulse-fab').classList.add('pulse');
-
-			$('#completeTourModal').on('hidden.bs.modal', function () {
-				document.getElementById('pulse-fab-container').classList.remove('pulse-container');
-				document.getElementById('pulse-fab').classList.remove('pulse');
-			});
 		})
 		.start();
 
@@ -2843,15 +2835,11 @@ function beginWebTour() {
 function onDismissTour() {
 	jQuery.noConflict();
 
-	$('#vaModal-deny').modal('show');
-
-	document.getElementById('pulse-fab-container').classList.add('pulse-container');
-	document.getElementById('pulse-fab').classList.add('pulse');
+	$('#vaModal-deny').modal({
+		show: true
+	});
 
 	$('#vaModal-deny').on('hidden.bs.modal', function () {
-		document.getElementById('pulse-fab-container').classList.remove('pulse-container');
-		document.getElementById('pulse-fab').classList.remove('pulse');
-
 		sessionStorage.setItem('firstLogin', 'false');
 	});
 }
