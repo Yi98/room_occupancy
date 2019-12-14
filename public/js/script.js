@@ -1,5 +1,5 @@
-// const domain = 'http://localhost:3000';
-const domain = 'https://roomoccupancy.herokuapp.com';
+const domain = 'http://localhost:3000';
+// const domain = 'https://roomoccupancy.herokuapp.com';
 
 var socket = io();
 
@@ -1936,7 +1936,8 @@ async function login(){
                 if(xhttp.response.status == "success")
                 {
                     sessionStorage.setItem("passLoginUserID", xhttp.response.userId);
-                    sessionStorage.setItem("passLoginUserRole", xhttp.response.role);
+										sessionStorage.setItem("passLoginUserRole", xhttp.response.role);
+										sessionStorage.setItem("firstLogin", xhttp.response.firstLogin.toString());
                     
                     $("#spinner_login").hide(); 
 
@@ -2768,6 +2769,33 @@ function horizontalWheelScroll() {
 function onLoadDashboard() {
 	showDashboardRooms();
 	horizontalWheelScroll();
+
+	if (sessionStorage.getItem('firstLogin') != 'false') {
+		jQuery.noConflict();
+
+		$('#vaModal').modal('show');
+
+		$('#vaModal').on('hidden.bs.modal', function () {
+			sessionStorage.setItem('firstLogin', 'false');
+		});
+
+		const userId = sessionStorage.getItem('passLoginUserID');
+
+		var xhttp = new XMLHttpRequest();
+		xhttp.responseType = 'json';
+		var url = `${domain}/api/users/${userId}?mode=firstLogin`;
+		// var params = 'mode=firstLogin';
+
+		xhttp.open('PUT',url,true);
+
+		xhttp.setRequestHeader('Content-type','application/x-www-form-urlencoded');
+
+		xhttp.onreadystatechange = function() {
+			if(xhttp.readyState == 4 && xhttp.status == 200) {}
+		}
+
+		xhttp.send();
+	}
 }
 
 function deleteAllCookies() {
@@ -2807,6 +2835,8 @@ function beginWebTour() {
 			});
 		})
 		.start();
+
+		sessionStorage.setItem('firstLogin', 'false');
 }
 
 
@@ -2821,8 +2851,11 @@ function onDismissTour() {
 	$('#vaModal-deny').on('hidden.bs.modal', function () {
 		document.getElementById('pulse-fab-container').classList.remove('pulse-container');
 		document.getElementById('pulse-fab').classList.remove('pulse');
+
+		sessionStorage.setItem('firstLogin', 'false');
 	});
 }
+
 
 function onDismissVa() {
 	document.getElementById('va-intro-container').style.display = "block";
