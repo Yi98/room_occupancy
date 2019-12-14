@@ -11,7 +11,7 @@ router.get('/:roomId', RoomController.getRoom);
 
 router.get('/', RoomController.getRooms);
 
-router.post('/', RoomController.addRoom);
+router.post('/', cache.deleteRoomsDetails, RoomController.addRoom);
 
 router.delete('/:roomId', RoomController.deleteRoom);
 

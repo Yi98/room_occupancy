@@ -28,4 +28,10 @@ function getRoomsDetails(req, res, next) {
   return next();
 }
 
-module.exports = { getUsers, deleteUsers, getRoomsDetails };
+function deleteRoomsDetails(req, res, next) {
+  const value = cacheSingleton.del("roomsDetails");
+
+  return next();
+}
+
+module.exports = { getUsers, deleteUsers, getRoomsDetails, deleteRoomsDetails };

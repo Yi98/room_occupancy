@@ -1312,8 +1312,6 @@ function showDashboardRooms() {
 			placeholderRooms.parentNode.removeChild(placeholderRooms);
 
 			for(var room in result.rooms){
-				var status = result.rooms[room].people.length;
-
 				document.getElementById("roomCardContainer").innerHTML += `
 					<div class="roomCard card mr-4 border-0 shadow-sm pt-2 pb-4 mt-2 mb-4 bg-white rounded" style="width: 24rem; height: 14rem;" onclick="onRoomClicked('${result.rooms[room].name}', '${result.rooms[room]._id}', true)">
 						<div class="card-body text-center">
