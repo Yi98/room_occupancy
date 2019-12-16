@@ -1316,7 +1316,7 @@ function showDashboardRooms() {
 			for(var room in result.rooms){
 				if (firstElement) {
 					document.getElementById("roomCardContainer").innerHTML += `
-					<div class="roomCard card mr-4 border-0 shadow-sm pt-2 pb-4 mt-2 mb-4 bg-white rounded" style="width: 24rem; height: 14rem;" onclick="onRoomClicked('${result.rooms[room].name}', '${result.rooms[room]._id}', true)">
+					<div class="roomCard card mr-4 border-0 pt-2 pb-4 mt-2 mb-4 bg-white rounded" style="width: 24rem; height: 14rem;" onclick="onRoomClicked('${result.rooms[room].name}', '${result.rooms[room]._id}', true)">
 						<div class="card-body text-center">
 							<div data-intro="This bar indicates the capacity of the room. When the whole bar is filled, it means that the room has reached its maximum capacity." data-step="2" data-position="right" class="status-indicator-inner"></div>
 							<div class="status-indicator-outer"></div>
@@ -1334,7 +1334,7 @@ function showDashboardRooms() {
 				}
 				else {
 					document.getElementById("roomCardContainer").innerHTML += `
-					<div class="roomCard card mr-4 border-0 shadow-sm pt-2 pb-4 mt-2 mb-4 bg-white rounded" style="width: 24rem; height: 14rem;" onclick="onRoomClicked('${result.rooms[room].name}', '${result.rooms[room]._id}', true)">
+					<div class="roomCard card mr-4 border-0 pt-2 pb-4 mt-2 mb-4 bg-white rounded" style="width: 24rem; height: 14rem;" onclick="onRoomClicked('${result.rooms[room].name}', '${result.rooms[room]._id}', true)">
 						<div class="card-body text-center">
 							<div class="status-indicator-inner"></div>
 							<div class="status-indicator-outer"></div>
