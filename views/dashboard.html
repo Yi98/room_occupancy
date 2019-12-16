@@ -3,7 +3,7 @@
 
 <head>
   <title>Dashboard</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
 	<!-- jQuery library -->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
@@ -13,6 +13,12 @@
 	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+	<!-- tooltipster -->
+	<link rel="stylesheet" type="text/css" href="tooltipster-master/dist/css/tooltipster.bundle.min.css" />
+	<script type="text/javascript" src="https://code.jquery.com/jquery-1.10.0.min.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.js"></script>
+	<script type="text/javascript" src="tooltipster-master/dist/js/tooltipster.bundle.min.js"></script>
 
 	<!-- font awesome -->
 	<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">	<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
@@ -30,12 +36,6 @@
 
 	<!-- intro.js -->
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intro.js/2.9.3/introjs.min.css">
-
-	<!-- tooltipster -->
-	<link rel="stylesheet" type="text/css" href="tooltipster-master/dist/css/tooltipster.bundle.min.css" />
-	<script type="text/javascript" src="https://code.jquery.com/jquery-1.10.0.min.js"></script>
-	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.js"></script>
-	<script type="text/javascript" src="tooltipster-master/dist/js/tooltipster.bundle.min.js"></script>
 
 	<!-- Chart.js -->
 	<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
@@ -58,7 +58,7 @@
 						<p class="pageTitle pt-1">Dashboard</p>
 					</div>
 					<div class="col-md-8 col-sm-8 col-xs-8 p-0 pb-3">
-						<input data-intro="You can also search for rooms here." data-position="right" data-step="5" type="text" id="search" class="form-control searchRoom m-0" placeholder="Search for rooms ..." onkeyup="searchRoom()">
+						<input data-intro="You can also search for rooms here." data-position="right" data-step="6" type="text" id="search" class="form-control searchRoom m-0" placeholder="Search for rooms ..." onkeyup="searchRoom()">
 					</div>
 					<div class="col-md-2 col-sm-4 col-xs-4">
 						<p class="right-menu-icons float-right mr-4">
@@ -85,7 +85,7 @@
 			<div class="col-md-10 col-sm-12 col-xs-12 c right-menu-2">
 				<div class="row mt-3 mb-4">
 					<div id="scrolling-wrapper">
-						<div data-intro="Select a room that you want to view" data-step="1" id="roomCardContainer" class="col-md-12">
+						<div data-intro="These are the room cards showing the current state of the room." data-step="1" id="roomCardContainer" class="col-md-12">
 							<div id="placeholderRooms">
 								<div class="tempRoomCard card mr-4 border-0 shadow-sm py-4 mt-2 mb-3 bg-white rounded" style="width: 24rem; height: 14rem;" onclick="onRoomClicked('${result.rooms[room].name}')">
 										<div class="skeleton-wrapper-inner">
@@ -143,7 +143,7 @@
 					<div class="col-lg-4 col-md-12">
 						<div class="row">
 							<div class="col-md-12">
-								<div data-intro="Here are the insights of the room that you have selected." data-position="right" data-step="2" id="insightItem" class="card mx-auto border-0 shadow-sm p-2 mb-4 bg-white rounded" style="width: 100%;">
+								<div data-intro="Here are the insights of the room that you have selected." data-position="right" data-step="3" id="insightItem" class="card mx-auto border-0 shadow-sm p-2 mb-4 bg-white rounded" style="width: 100%;">
 									<div class="card-body pt-2">
 										<h6 class="card-title mb-4" style="display: inline-block">Today's insights
 											<div class="spinner dotsLoading ml-3" style="display: none;">
@@ -193,10 +193,10 @@
 						</div>
 						<div class="row">
 							<div class="col-md-12">
-								<div data-intro="When a room exceeds its capcity, the notifications will be shown here." data-position="right" data-step="4" id="noticeItem" class="card mx-auto border-0 shadow-sm p-2 mb-1 bg-white rounded" style="width: 100%; height: 267px;">
+								<div data-intro="When a room exceeds its capcity, the notifications will be shown here." data-position="right" data-step="5" id="noticeItem" class="card mx-auto border-0 shadow-sm p-2 mb-1 bg-white rounded" style="width: 100%; height: 267px;">
 									<div id="noticeRow" class="card-body pt-2">
-										<h6 class="card-title border-bottom"><i class="fa fa-bell mr-1"></i>Notification<span class="badge badge-pill badge-danger ml-2" id="noticeNum">0</span><p onclick="onClearNotices()" id="clearNotice" class="float-right">Clear all</p></h6>
-										<h6 id="emptyNotice">There is no notification right now :)</h6>
+										<h6 class="card-title border-bottom pb-3"><i class="fa fa-bell mr-1"></i>Notification<span class="badge badge-pill badge-danger ml-2" id="noticeNum">0</span><p onclick="onClearNotices()" id="clearNotice" class="float-right">Clear all</p></h6>
+										<p class="text-center pt-4" id="emptyNotice">No notification right now !</p>
 										<div id="noticeMain" style="height: 150px; overflow:auto;"></div>
 									</div>
 								</div>
@@ -207,7 +207,7 @@
 					<div class="col-lg-8 col-md-12">
 						<div class="row">
 							<div class="col-md-12">
-								<div data-intro="Here are the trends of the room that you have selected." data-position="left" data-step="3" class="card border-0 shadow-sm p-2 bg-white rounded w-100">
+								<div data-intro="Here are the trends of the room that you have selected." data-position="left" data-step="4" class="card border-0 shadow-sm p-2 bg-white rounded w-100">
 									<div class="card-body pt-2">
 										<h6 class="card-title mb-4" style="display:inline-block;">Today's trends 
 											<div class="spinner dotsLoading ml-3" style="display: none;">
@@ -267,7 +267,7 @@
 				<img id="va-image" src="images/va.png" alt="Virtual assistance">
 				<div class="modal-content">
 						<div id="va-intro-container" class="modal-body py-4 px-4">
-							<h5 class="text-justify va-intro">Hi! I am your virtual assistance, Jane. Do you want me to give you a website tour?</h5>
+							<h5 class="text-justify va-intro">Hi! I am your virtual assistance, Jahni. Do you want me to give you a website tour?</h5>
 						</div>
 						<div id="va-primary-footer" class="modal-footer">
 							<button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="onDismissTour()">No, thanks</button>

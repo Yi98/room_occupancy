@@ -1311,10 +1311,15 @@ function showDashboardRooms() {
 			const placeholderRooms = document.getElementById('placeholderRooms');
 			placeholderRooms.parentNode.removeChild(placeholderRooms);
 
+			let firstElement = true;
+
 			for(var room in result.rooms){
-				document.getElementById("roomCardContainer").innerHTML += `
+				if (firstElement) {
+					document.getElementById("roomCardContainer").innerHTML += `
 					<div class="roomCard card mr-4 border-0 shadow-sm pt-2 pb-4 mt-2 mb-4 bg-white rounded" style="width: 24rem; height: 14rem;" onclick="onRoomClicked('${result.rooms[room].name}', '${result.rooms[room]._id}', true)">
 						<div class="card-body text-center">
+							<div data-intro="This bar indicates the capacity of the room. When the whole bar is filled, it means that the room has reached its maximum capacity." data-step="2" data-position="right" class="status-indicator-inner"></div>
+							<div class="status-indicator-outer"></div>
 							<h4 class="roomName card-title mb-4">${result.rooms[room].name}</h4>
 							<h6>Number of people: <span class="roomData people">N/A</span></h6>
 							<h6>Temperature: <span class="roomData temperature">N/A</span></h6>
@@ -1324,6 +1329,26 @@ function showDashboardRooms() {
 						</div>
 					</div>
 				`;
+
+				firstElement = false;
+				}
+				else {
+					document.getElementById("roomCardContainer").innerHTML += `
+					<div class="roomCard card mr-4 border-0 shadow-sm pt-2 pb-4 mt-2 mb-4 bg-white rounded" style="width: 24rem; height: 14rem;" onclick="onRoomClicked('${result.rooms[room].name}', '${result.rooms[room]._id}', true)">
+						<div class="card-body text-center">
+							<div class="status-indicator-inner"></div>
+							<div class="status-indicator-outer"></div>
+							<h4 class="roomName card-title mb-4">${result.rooms[room].name}</h4>
+							<h6>Number of people: <span class="roomData people">N/A</span></h6>
+							<h6>Temperature: <span class="roomData temperature">N/A</span></h6>
+							<h6>Humidity: <span class="roomData humidity">N/A</span></h6>
+							<p class="lastUpdated mt-4">Last updated: <span class="lastUpdatedTime">N/A<span></p>
+							<div class="status-indicator"></div>
+              <span class="roomId" style="display:none">${result.rooms[room]._id}</span>
+						</div>
+					</div>
+				`;
+				}	
 			}
 
 			document.getElementById("roomCardContainer").innerHTML += `
@@ -1794,7 +1819,7 @@ function updateUser(checkboxValue, id) {
 	var xhttp = new XMLHttpRequest();
 	xhttp.responseType = 'json';
 	var url = `${domain}/api/users/` + id;
-	var params = 'role=' + role;
+	var params = 'role=' + role + '&mode=role';
 
 	xhttp.open('PUT',url,true);
 	xhttp.setRequestHeader('Content-type','application/x-www-form-urlencoded');
@@ -2780,8 +2805,8 @@ function onLoadDashboard() {
 
 		var xhttp = new XMLHttpRequest();
 		xhttp.responseType = 'json';
-		var url = `${domain}/api/users/${userId}?mode=firstLogin`;
-		// var params = 'mode=firstLogin';
+		var url = `${domain}/api/users/${userId}`;
+		var params = 'mode=firstLogin';
 
 		xhttp.open('PUT',url,true);
 
@@ -2791,7 +2816,7 @@ function onLoadDashboard() {
 			if(xhttp.readyState == 4 && xhttp.status == 200) {}
 		}
 
-		xhttp.send();
+		xhttp.send(params);
 	}
 }
 
@@ -2818,6 +2843,7 @@ function beginWebTour() {
 			'showProgress': true,
 			'exitOnOverlayClick': false,
 			'showStepNumbers': false,
+			'tooltipClass': 'intro-tooltip',
 			'overlayOpacity': 0.7
 		})
 		.oncomplete(function() {
@@ -2840,7 +2866,6 @@ function onDismissTour() {
 		sessionStorage.setItem('firstLogin', 'false');
 	});
 }
-
 
 function onDismissVa() {
 	document.getElementById('va-intro-container').style.display = "block";

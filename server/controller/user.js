@@ -95,43 +95,22 @@ exports.editUser = (req, res) => {
   //   return res.status(401).json({message: 'Only manager can edit user'});
   // }
 
-  if (req.query.mode == 'firstLogin') {
-    User.findById(req.params.id)
-      .then(user => {
-        if (!user) {
-          return res.status(404).json({message: `User ${req.params.id} not found`});
-        }
-  
-        user.firstLogin = false;
-  
-        return user.save();
-      })
-      .then(updatedUser => {
-        res.status(200).json({
-          message: "User's firstLogin has been changed",
-          updatedUser
-        });
-      })
-      .catch(err => {
-        res.status(500).json({
-          message: "Failed to change user's role",
-          err
-        })
-      })
-  }
-  else {
-    User.findById(req.params.id)
+  User.findById(req.params.id)
     .then(user => {
-
       if (!user) {
         return res.status(404).json({message: `User ${req.params.id} not found`});
       }
 
-      if (user.role == 'staff') {
-        user.role = 'manager';
+      if (req.body.mode == 'firstLogin') {
+        user.firstLogin = false;
       }
-      else if (user.role == 'manager') {
-        user.role = 'staff';
+      else if (req.body.mode == 'role') {
+        if (user.role == 'staff') {
+          user.role = 'manager';
+        }
+        else if (user.role == 'manager') {
+          user.role = 'staff';
+        }
       }
 
       return user.save();
@@ -144,11 +123,10 @@ exports.editUser = (req, res) => {
     })
     .catch(err => {
       res.status(500).json({
-        message: "Failed to change user's role",
+        message: "Failed to edit user",
         err
       })
     })
-  }
 };
 
 
