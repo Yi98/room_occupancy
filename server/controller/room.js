@@ -13,7 +13,10 @@ exports.getRoom = (req, res) => {
         return res.status(404).json({message: `Room ${req.params.roomId} not found`});
       }
 
-      // TODO: 
+      // TODO:
+      const time = req.query.time;
+      console.log(time);
+
 
       res.status(200).json({room});
     })

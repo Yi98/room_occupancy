@@ -2873,3 +2873,7 @@ function onDismissVa() {
 	document.getElementById('va-primary-footer').style.display = "block";
 	document.getElementById('va-secondary-footer').style.display = "none";
 }
+
+function testGetRoomData() {
+
+}
