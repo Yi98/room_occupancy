@@ -1,22 +1,69 @@
-const cacheSingleton = require('../models/Cache');
+const cacheSingleton = require('../class/Cache');
 const Room = require('../models/Room');
 
+const PeriodController = require('../controller/period');
+
 // get one room with specific id ->  /api/rooms/:roomId (GET)
-exports.getRoom = (req, res) => {
+exports.getRoom = (req, res) => { 
+  const period = req.query.period;
+  let time, startingDate, endingDate;
+
+  if (period == 'today') {
+    time = PeriodController.getToday();
+  }
+  else if (period == 'yesterday') {
+    time = PeriodController.getYesterday();
+  }
+  else if (period == 'weekly') {
+    time = PeriodController.getLastWeek();
+  }
+  else if (period == 'monthly') {
+    time = PeriodController.getLastMonth();
+  }
+  else if (period == 'yearly') {
+    time = PeriodController.getLastYear();
+  }
+  else if (period == 'custom') {
+    const startingDate = req.query.start;
+    const endingDate = req.query.end;
+
+    time = PeriodController.getCustomDate(startingDate, endingDate);
+  }
+
+  console.log(time);
+  startingDate = time.start;
+  endingDate = time.end;
+
   Room.findById(req.params.roomId)  
-    .populate('temperature')
-    .populate('humidity')
-    .populate('people')
+    .populate({
+      path: 'temperature',
+      match: {$and: [
+        {time: {$gte: new Date(startingDate)}},
+        {time: {$lt: new Date(endingDate)}},
+      ]},
+      select: '-_id -__v'
+    })
+    .populate({
+      path: 'humidity',
+      match: {$and: [
+        {time: {$gte: new Date(startingDate)}},
+        {time: {$lt: new Date(endingDate)}},
+      ]},
+      select: '-_id -__v'
+    })
+    .populate({
+      path: 'people',
+      match: {$and: [
+        {time: {$gte: new Date(startingDate)}},
+        {time: {$lt: new Date(endingDate)}},
+      ]},
+      select: '-_id -__v'
+    })
     .exec()
     .then(room => {
       if (!room) {
         return res.status(404).json({message: `Room ${req.params.roomId} not found`});
       }
-
-      // TODO:
-      const time = req.query.time;
-      console.log(time);
-
 
       res.status(200).json({room});
     })

@@ -1964,18 +1964,9 @@ async function login(){
                     
                     $("#spinner_login").hide(); 
 
-					document.cookie = "token=" + xhttp.response.token;
-					
-					
-					//socket.on("disconnect", function() {
-					//	socket.disconnect();
-					//})
-
-                    setTimeout(_ => {
-						window.location.replace("/dashboard");
-						
-                    }, 500);
-
+										document.cookie = "token=" + xhttp.response.token;										
+									
+										window.location.replace("/dashboard");
                 }
             }
             
@@ -2874,6 +2865,18 @@ function onDismissVa() {
 	document.getElementById('va-secondary-footer').style.display = "none";
 }
 
-function testGetRoomData() {
+function testGetRoomData(period) {
+	var xhttp = new XMLHttpRequest();
+	xhttp.responseType = 'json';
 
+	xhttp.onreadystatechange = function () {
+		if(this.readyState == 4 && this.status == 200) {
+			var result = this.response;
+			console.log(result);
+		}
+	};
+
+	xhttp.open("GET",`${domain}/api/rooms/5db583ed1c9d4400009a20f2?period=${period}&start=2019-11-14&end=2019-11-15`, true);
+
+	xhttp.send();
 }

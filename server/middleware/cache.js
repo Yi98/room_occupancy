@@ -1,4 +1,4 @@
-const cacheSingleton = require('../models/Cache');
+const cacheSingleton = require('../class/Cache');
 
 function getUsers(req, res, next) {
   const users = cacheSingleton.get("users");

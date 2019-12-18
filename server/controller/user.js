@@ -1,11 +1,10 @@
 const bcrypt = require('bcrypt');
 const nodemailer = require('nodemailer');
 const jwt = require('jsonwebtoken');
-
 const crypto = require('crypto');
 
 const User = require('../models/User');
-const cacheSingleton = require('../models/Cache');
+const cacheSingleton = require('../class/Cache');
 
 // get one user with specific id ->  /api/users/:id (GET)
 exports.getUser = (req, res) => {
