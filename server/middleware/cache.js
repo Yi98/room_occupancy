@@ -50,8 +50,6 @@ function getTodayData(req, res, next) {
 function deleteTodayData(req, res, next) {
   const key = req.params.roomId + '-today';
 
-  console.log(key + 'deleted');
-
   cacheSingleton.del(key);
 
   return next();
