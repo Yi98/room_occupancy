@@ -2496,13 +2496,19 @@ function onUpdateTrend(roomId, roomName) {
 		}
 	};
 	
-	xhttp.open("GET", `${domain}/api/rooms/${roomId}`, true);
+	xhttp.open("GET", `${domain}/api/rooms/${roomId}?period=today`, true);
 
 	xhttp.send();
 }
 
 
 function dashIngishtsController(highestPeople, highestTemperature, highestHumidity, lowestTemperature, lowestHumidity) {
+	document.getElementById('hPeople').innerHTML = "N/A";
+	document.getElementById('hTemp').innerHTML = "N/A";
+	document.getElementById('hHumid').innerHTML = "N/A";
+	document.getElementById('lTemp').innerHTML = "N/A";
+	document.getElementById('lHumid').innerHTML = "N/A";
+	
 	if (highestPeople.time != null) {
 		document.getElementById('hPeople').innerHTML = `${moment(highestPeople.time).format('hh:mm A')} - ${highestPeople.data} people`;			
 	}
@@ -2531,12 +2537,6 @@ function onRoomClicked(roomName, roomId, updateView) {
 
 	const dotsLoaders = document.getElementsByClassName('dotsLoading');
 	const defaultRooms = document.getElementsByClassName('defaultRoom');
-
-	document.getElementById('hPeople').innerHTML = "N/A";
-	document.getElementById('hTemp').innerHTML = "N/A";
-	document.getElementById('hHumid').innerHTML = "N/A";
-	document.getElementById('lTemp').innerHTML = "N/A";
-	document.getElementById('lHumid').innerHTML = "N/A";
 
 	if (updateView) {
 		for (let i=0; i<dotsLoaders.length; i++) {
@@ -2674,37 +2674,13 @@ function onRoomClicked(roomName, roomId, updateView) {
 				document.getElementById('trendRoom').innerHTML = " - " + roomName;
 				document.getElementById('viewRoomDetails').href = `/chart/${roomId}`;
 			}
-			
 		}
 	};
 
-	xhttp.open("GET", `${domain}/api/rooms/${roomId}`, true);
+	xhttp.open("GET", `${domain}/api/rooms/${roomId}?period=today`, true);
 
 	xhttp.send();
 
-}
-
-
-function dashIngishtsController(highestPeople, highestTemperature, highestHumidity, lowestTemperature, lowestHumidity) {
-	if (highestPeople.time != null) {
-		document.getElementById('hPeople').innerHTML = `${moment(highestPeople.time).format('hh:mm A')} - ${highestPeople.data} people`;			
-	}
-
-	if (highestTemperature.time != null) {
-		document.getElementById('hTemp').innerHTML = `${moment(highestTemperature.time).format('hh:mm A')} - ${highestTemperature.data} °C`;
-	}
-
-	if (highestHumidity.time != null) {
-		document.getElementById('hHumid').innerHTML = `${moment(highestHumidity.time).format('hh:mm A')} - ${highestHumidity.data} RH`;
-	}
-
-	if (lowestTemperature.time != null) {
-		document.getElementById('lTemp').innerHTML = `${moment(lowestTemperature.time).format('hh:mm A')} - ${lowestTemperature.data} °C`;
-	}
-
-	if (lowestHumidity.time != null) {
-		document.getElementById('lHumid').innerHTML = `${moment(lowestHumidity.time).format('hh:mm A')} - ${lowestHumidity.data} RH`;
-	}
 }
 
 function closeNoticeRow(element) {
@@ -2865,6 +2841,22 @@ function onDismissVa() {
 	document.getElementById('va-secondary-footer').style.display = "none";
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Everything goes above here */
+// ---------------------------------------------------------------------------------------------------------
+// Testing purpose
 function testGetRoomData(period) {
 	var xhttp = new XMLHttpRequest();
 	xhttp.responseType = 'json';

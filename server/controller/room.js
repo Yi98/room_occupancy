@@ -30,7 +30,7 @@ exports.getRoom = (req, res) => {
     time = PeriodController.getCustomDate(startingDate, endingDate);
   }
 
-  console.log(time);
+  // console.log(time);
   startingDate = time.start;
   endingDate = time.end;
 
