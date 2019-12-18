@@ -1,5 +1,5 @@
-// const domain = 'http://localhost:3000';
-const domain = 'https://roomoccupancy.herokuapp.com';
+const domain = 'http://localhost:3000';
+// const domain = 'https://roomoccupancy.herokuapp.com';
 
 var socket = io();
 
@@ -2396,8 +2396,6 @@ function onUpdateTrend(roomId, roomName) {
 	xhttp.onreadystatechange = function () {
 		if(this.readyState == 4 && this.status == 200) {
 			let result = this.response;
-
-			console.log(result);
 
 			const currentHour = moment().hours();
 
