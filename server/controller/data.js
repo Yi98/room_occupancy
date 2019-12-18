@@ -199,6 +199,7 @@ exports.postPeople = (req, res) => {
           })
         } 
       }
+
       leftOver = leftOver.substring(idxStart);
     }
   }

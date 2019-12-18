@@ -2395,7 +2395,9 @@ function onUpdateTrend(roomId, roomName) {
 
 	xhttp.onreadystatechange = function () {
 		if(this.readyState == 4 && this.status == 200) {
-			var result = this.response;
+			let result = this.response;
+
+			console.log(result);
 
 			const currentHour = moment().hours();
 
@@ -2578,6 +2580,8 @@ function onRoomClicked(roomName, roomId, updateView) {
 				newTemperature.push(0);
 				newHumidity.push(0);
 			}
+
+			console.log(result);
 			
 			
 			for (let i=0; i<result.room.people.length; i++) {

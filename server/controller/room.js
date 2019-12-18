@@ -65,6 +65,10 @@ exports.getRoom = (req, res) => {
         return res.status(404).json({message: `Room ${req.params.roomId} not found`});
       }
 
+      const key = req.params.roomId + '-' + req.query.period;
+
+      success = cacheSingleton.set(key, room);
+
       res.status(200).json({room});
     })
     .catch(err => {

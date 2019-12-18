@@ -7,7 +7,7 @@ const RoomController = require('../controller/room');
 
 router.get('/details', cache.getRoomsDetails, RoomController.getRoomsDetails);
 
-router.get('/:roomId', RoomController.getRoom);
+router.get('/:roomId', cache.getTodayData, RoomController.getRoom);
 
 router.get('/', RoomController.getRooms);
 
