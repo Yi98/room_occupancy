@@ -146,47 +146,38 @@ function showChart() {
 	$element = $("#choosenRange");
 
 	setInterval(function() {
-			var currentText = $element.text();
+		var currentText = $element.text();
 
-			if (currentText != content) {
-					document.getElementById("pdfButton").disabled = true;
-					// A change has happened
-					content = currentText;
-					let charts = Highcharts.charts;
-					charts.splice(0,charts.length);
-					document.getElementById("allChart").innerHTML = '<div class="d-flex h-100 justify-content-center"><div class="align-self-center"><div class="spinner-border text-danger" style="width:3rem; height:3rem;"><span class="sr-only">Loading...</span></div></div></div>';
-					xhrChart(roomId);
-					charts.splice(0,charts.length);
-			}
+		if (currentText != content) {
+				document.getElementById("pdfButton").disabled = true;
+				// A change has happened
+				content = currentText;
+				let charts = Highcharts.charts;
+				charts.splice(0,charts.length);
+				document.getElementById("allChart").innerHTML = '<div class="d-flex h-100 justify-content-center"><div class="align-self-center"><div class="spinner-border text-danger" style="width:3rem; height:3rem;"><span class="sr-only">Loading...</span></div></div></div>';
+				xhrChart(roomId);
+				charts.splice(0,charts.length);
+		}
 	}, 500 /* check every 30 seconds */);
 
 	var content2 = null,
 	$element2 = $("#choosenTimeRange");
 
 	setInterval(function() {
-			var currentText2 = $element2.text();
+		var currentText2 = $element2.text();
 
-			if (currentText2 != content2) {
-					document.getElementById("pdfButton").disabled = true;
-					// A change has happened
-					content2 = currentText2;
-					let charts = Highcharts.charts;
-					charts.splice(0,charts.length);
-					document.getElementById("allChart").innerHTML = '<div class="d-flex h-100 justify-content-center"><div class="align-self-center"><div class="spinner-border text-danger" style="width:3rem; height:3rem;"><span class="sr-only">Loading...</span></div></div></div>';
-					xhrChart(roomId);
-					charts.splice(0,charts.length);
-			}
+		if (currentText2 != content2) {
+				document.getElementById("pdfButton").disabled = true;
+				// A change has happened
+				content2 = currentText2;
+				let charts = Highcharts.charts;
+				charts.splice(0,charts.length);
+				document.getElementById("allChart").innerHTML = '<div class="d-flex h-100 justify-content-center"><div class="align-self-center"><div class="spinner-border text-danger" style="width:3rem; height:3rem;"><span class="sr-only">Loading...</span></div></div></div>';
+				xhrChart(roomId);
+				charts.splice(0,charts.length);
+		}
 	}, 500 /* check every 30 seconds */);
 
-	
-  // $('.choosenRange').val().change(function() {
-	// 	let charts = Highcharts.charts;
-	// 	charts.splice(0,charts.length);
-	// 	document.getElementById("allChart").innerHTML = '<div class="d-flex h-100 justify-content-center"><div class="align-self-center"><div class="spinner-border text-danger" style="width:3rem; height:3rem;"><span class="sr-only">Loading...</span></div></div></div>';
-		
-	// 	xhrChart(roomId);
-	// 	charts.splice(0,charts.length);
-	// });
 };
 
 function xhrChart(roomId){
@@ -229,12 +220,16 @@ function xhrChart(roomId){
         var checkDay;
         var high_ppl_data, low_ppl_data, high_ppl_index, low_ppl_index, high_ppl_date, low_temp_date, high_temp_data, low_temp_data, high_temp_index, low_temp_index, high_temp_date, low_temp_date, high_humid_data, low_humid_data, high_humid_index, low_humid_index, high_humid_date, low_humid_date;
 
+				console.log(result);
+
         for (var room in result.rooms) {
           if (result.rooms[room]._id == roomId) {
 			  			if (room_name_found == false) {
 							document.getElementById("room_name").innerHTML = result.rooms[room].name;
 							room_name_found = true;
 						}
+
+						console.log(diff_in_days);
 						  
 						//Today Chart
 						if(diff_in_days == 0){
@@ -1084,6 +1079,7 @@ function xhrChart(roomId){
 				}
 			}
 		};
+
 		xhttp.open("GET", `${domain}/api/rooms`, true);
 
     xhttp.send();
@@ -1352,9 +1348,9 @@ function showDashboardRooms() {
 			}
 
 			document.getElementById("roomCardContainer").innerHTML += `
-				<div id="noRoomCard" class="card mr-4 border-0 shadow-sm py-4 mb-4 bg-white rounded" style="width: 24rem; height: 13rem; display: none"	>
+				<div id="noRoomCard" class="card mr-4 border-0 shadow-sm py-4 mt-2 mb-4 bg-white rounded" style="width: 24rem; height: 14rem; display: none"	>
 					<div class="card-body pt-2 text-center">
-						<h4 class="card-title mb-4">No room available</h4>
+						<h4 class="card-title mb-4">Room not found :(</h4>
 						<h6 style="color: white">empty</h6>
 						<h6 style="color: white">empty</h6>
 						<h6 style="color: white">empty</h6>
@@ -2306,8 +2302,8 @@ tempGradient.addColorStop(0, "#fc4a1a");
 tempGradient.addColorStop(1, "#f7b733");
 
 let humidGradient = dashTrendChart.createLinearGradient(500, 0, 100, 0);
-humidGradient.addColorStop(0, "#ff758c");
-humidGradient.addColorStop(1, "#ff7eb3");
+humidGradient.addColorStop(0, "#56ab2f");
+humidGradient.addColorStop(1, "#a8e063");
 
 let timeline = ['0:00', '1:00', '2:00', '3:00', '4:00', '5:00', '6:00', '7:00', '8:00', '9:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00', '24:00'];
 
@@ -2332,7 +2328,7 @@ let trendChart = new Chart(dashTrendChart, {
     data: {
         labels: timeline,
         datasets: [{
-            label: 'Number of People',
+            label: 'No. of People',
             backgroundColor: peopleGradient,
             borderColor: peopleGradient,
 						data: peopleData,
@@ -2577,10 +2573,7 @@ function onRoomClicked(roomName, roomId, updateView) {
 				newPeople.push(0);
 				newTemperature.push(0);
 				newHumidity.push(0);
-			}
-
-			console.log(result);
-			
+			}			
 			
 			for (let i=0; i<result.room.people.length; i++) {
 				if (moment(result.room.people[i].time).isSame(new Date(), "day")) {
@@ -2841,36 +2834,4 @@ function onDismissVa() {
 	document.getElementById('va-conclude-container').style.display = "none";
 	document.getElementById('va-primary-footer').style.display = "block";
 	document.getElementById('va-secondary-footer').style.display = "none";
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* Everything goes above here */
-// ---------------------------------------------------------------------------------------------------------
-// Testing purpose
-function testGetRoomData(period) {
-	var xhttp = new XMLHttpRequest();
-	xhttp.responseType = 'json';
-
-	xhttp.onreadystatechange = function () {
-		if(this.readyState == 4 && this.status == 200) {
-			var result = this.response;
-			console.log(result);
-		}
-	};
-
-	xhttp.open("GET",`${domain}/api/rooms/5db583ed1c9d4400009a20f2?period=${period}&start=2019-11-14&end=2019-11-15`, true);
-
-	xhttp.send();
 }

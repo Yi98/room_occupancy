@@ -538,8 +538,8 @@ i.deleteNoticeIcon:hover {
 }
 
 #scrolling-wrapper {
-  overflow-x: auto;
-  overflow-y: hidden;
+  overflow-x: scroll;
+	overflow-y: hidden;
   white-space: nowrap;
 }
 
