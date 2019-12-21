@@ -35,41 +35,31 @@ socket.on("people", function(msg) {
 		localStorage.setItem("notifications", JSON.stringify([]));
 	}
 
-	if (msg.people > 10) {
+	if (msg.previous <=10 && msg.people > 10) {
 		notify = true;
 		roomStatus = 'full';
 	}
-	else if (msg.people > 5) {
+	else if (msg.previous <= 5 && msg.people > 5) {
 		notify = true;
 		roomStatus = 'moderate';
 	}
 
 	if (notify) {
 			notifications = JSON.parse(localStorage.getItem('notifications'));
-
-			if (notifications.length > 0) {
-				for (let j=0; j<notifications.length; j++) {
-					if (roomName == notifications[j].roomName && roomStatus == notifications[j].roomStatus) {
-						addToNotifications = false;
-					}
-				}
-			}
 			
-			if (addToNotifications) {
-				notifications.push({noticeTime, roomName, roomStatus});
+			notifications.push({noticeTime, roomName, roomStatus});
 
-				noticeMain.innerHTML += `<div class="noticeContainer"><p class="m-0 noticeTime">${noticeTime}</p><p style="font-size:0.9rem;">${roomName} has reached <strong>${roomStatus}</strong> capacity.
-					<button onclick="closeNoticeRow(this)" type="button" class="close closeBtn mr-3" aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-				</p></div>`;
+			noticeMain.innerHTML += `<div class="noticeContainer"><p class="m-0 noticeTime">${noticeTime}</p><p style="font-size:0.9rem;">${roomName} has reached <strong>${roomStatus}</strong> capacity.
+				<button onclick="closeNoticeRow(this)" type="button" class="close closeBtn mr-3" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</p></div>`;
 
-				document.getElementById('emptyNotice').style.display = "none";
+			document.getElementById('emptyNotice').style.display = "none";
 
-				const noticeNum = document.getElementById('noticeNum');
-				noticeNum.innerHTML = Number(noticeNum.innerHTML) + 1;
-				noticeNum.style.display = "inline";
-			}	
+			const noticeNum = document.getElementById('noticeNum');
+			noticeNum.innerHTML = Number(noticeNum.innerHTML) + 1;
+			noticeNum.style.display = "inline";
 			
 			localStorage.setItem('notifications', JSON.stringify(notifications));
 		}
