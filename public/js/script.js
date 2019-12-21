@@ -8,7 +8,6 @@ let currentRoom;
 socket.on("people", function(msg) {
 	// for loop assign to all room their respective sensor data
 	let roomCards = document.getElementsByClassName("roomCard");
-	let noticeMain = document.getElementById('noticeMain');
 	let noticeTime = moment().format('MMM DD, h:mm A');
 	let notify = false;
 	let addToNotifications = true;
@@ -49,11 +48,11 @@ socket.on("people", function(msg) {
 			
 			notifications.push({noticeTime, roomName, roomStatus});
 
-			noticeMain.innerHTML += `<div class="noticeContainer"><p class="m-0 noticeTime">${noticeTime}</p><p style="font-size:0.9rem;">${roomName} has reached <strong>${roomStatus}</strong> capacity.
+			$('#noticeMain').prepend(`<div class="noticeContainer"><p class="m-0 noticeTime">${noticeTime}</p><p style="font-size:0.9rem;">${roomName} has reached <strong>${roomStatus}</strong> capacity.
 				<button onclick="closeNoticeRow(this)" type="button" class="close closeBtn mr-3" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
 				</button>
-			</p></div>`;
+			</p></div>`);
 
 			document.getElementById('emptyNotice').style.display = "none";
 
