@@ -107,7 +107,7 @@ exports.getRooms = (req, res) => {
 
 // get all rooms' details -> /api/rooms/details (GET)
 exports.getRoomsDetails = (req, res) => {
-  Room.find({}, {name: 1})
+  Room.find({}, {name: 1, maxCapacity: 1})
     .then(rooms => {
       if (!rooms) {
         return res.status(404).json({message: 'No rooms found'});

@@ -18,6 +18,8 @@ socket.on("people", function(msg) {
 	
 	for (let i = 0; i < roomCards.length; i++) {
 		let roomId = roomCards[i].getElementsByClassName("roomId");
+		let maxCapacity = document.getElementsByClassName('maxCapacity');
+		let division = Math.round(msg.people / maxCapacity[i]) * 10;
 
 		// change 0 to i later
 		if (roomId[0].innerHTML == msg.roomId) {
@@ -26,8 +28,11 @@ socket.on("people", function(msg) {
 			document.getElementsByClassName("people")[i].innerHTML = msg.people;
 			document.getElementsByClassName('lastUpdatedTime')[i].innerHTML = noticeTime;
 			roomName = document.getElementsByClassName("roomName")[i].innerHTML;
+
+			document.getElementsByClassName('status-indicator-outer')[0].style.width = (maxCapacity[i] - division) + '%';
 		}
 	}
+
 
 	// Push notifications
 	if (!localStorage.getItem('notifications')) {
@@ -1310,7 +1315,8 @@ function showDashboardRooms() {
 							<h6>Temperature: <span class="roomData temperature">N/A</span></h6>
 							<h6>Humidity: <span class="roomData humidity">N/A</span></h6>
 							<p class="lastUpdated mt-4">Last updated: <span class="lastUpdatedTime">N/A<span></p>
-              <span class="roomId" style="display:none">${result.rooms[room]._id}</span>
+							<span class="roomId" style="display:none">${result.rooms[room]._id}</span>
+							<span class="maxCapacity" style="display:none">${result.rooms[room].maxCapacity}</span>
 						</div>
 					</div>
 				`;
@@ -1329,7 +1335,8 @@ function showDashboardRooms() {
 							<h6>Humidity: <span class="roomData humidity">N/A</span></h6>
 							<p class="lastUpdated mt-4">Last updated: <span class="lastUpdatedTime">N/A<span></p>
 							<div class="status-indicator"></div>
-              <span class="roomId" style="display:none">${result.rooms[room]._id}</span>
+							<span class="roomId" style="display:none">${result.rooms[room]._id}</span>
+							<span class="maxCapacity" style="display:none">${result.rooms[room].maxCapacity}</span>
 						</div>
 					</div>
 				`;

@@ -150,10 +150,10 @@ exports.postPeople = (req, res) => {
     // Here add the room id and the number of people, separate by ':'
     fs.appendFileSync("people.txt", req.params.roomId + ":" + req.body.data + "\n");
 
-    socket.emit("people", {people: req.body.data, roomId: req.params.roomId, store: true});
+    // socket.emit("people", {people: req.body.data, roomId: req.params.roomId, store: true});
 
   }
-  else {
+  // else {
     let t1 = fs.openSync(path, "r");
     let bufferSize = 1024;
     let buffer = new Buffer.alloc(bufferSize);
@@ -202,7 +202,7 @@ exports.postPeople = (req, res) => {
 
       leftOver = leftOver.substring(idxStart);
     }
-  }
+  // }
 
   if (found == false) {
     fs.appendFileSync("people.txt", req.params.roomId + ":" + req.body.data + "\n");
