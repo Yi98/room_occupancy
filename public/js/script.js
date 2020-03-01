@@ -1374,18 +1374,60 @@ function showDashboardRooms() {
 function directToPdf() {
 	let peopleChart, temperatureChart, humidityChart;
 	let charts = Highcharts.charts; // Obtain all the Highcharts objects
+    let count = 0;
+    
+    console.log("this is the highchart");
+    console.log(Highcharts);
+//    console.log("this is charts");
+//    console.log(charts);
+    
+//    for(let x = 0; x < Highcharts.charts.length; x++)
+//    {
+//        console.log("this is the highchart loop");
+//        console.log(Highcharts.charts[x].renderTo.id);
+//        
+//    }
 
+    console.log("this is charts");
+    console.log(charts);
 	// Loop through the Highcharts object array and make assignment according to the their respective renderTo.id
 	for (let i = 0; i < charts.length; i++) {
+        console.log("count of how many undefined");
+//        if(typeof charts[i].renderTo.id === undefined)
+//        {
+//            console.log("this is the charts i");
+//            console.log(charts[i]);
+//            count++;
+//        }
+//        console.log("this is count number");
+//        console.log(count);
+//        console.log("this is chart console");
+//        console.log(charts[i].renderTo);
+//        console.log(charts[i].renderTo.id);
 		if (charts[i].renderTo.id == "peopleChart") {
 			peopleChart = charts[i].getSVG();
-		}
+		} else if(typeof(charts[i].renderTo) == 'undefined'){
+            console.log("oh no");
+        }
+        
 		if (charts[i].renderTo.id == "temperatureChart") {
 			temperatureChart = charts[i].getSVG();
-		}
+		}else if(typeof(charts[i].renderTo) == 'undefined'){
+            console.log("oh no");
+        }
+        
 		if (charts[i].renderTo.id == "humidityChart") {
 			humidityChart = charts[i].getSVG();
-		}
+		}else if(typeof(charts[i].renderTo) == 'undefined'){
+            console.log("oh no");
+        }
+        
+        console.log("this is people chart");
+        console.log(peopleChart);
+        console.log("this is temperature chart");
+        console.log(temperatureChart);
+        console.log("this is humidity chart");
+        console.log(humidityChart);
 	}
 	
 	// Open the new window that show the PDF file
@@ -1395,14 +1437,82 @@ function directToPdf() {
 	let room_name = document.getElementById("room_name").innerHTML;
 	let date_range = document.getElementById("choosenRange").innerHTML;
     let time_range = document.getElementById("choosenTimeRange").innerHTML;
-
+     
 	// After the window load, run the function in the new opened window with those parameters
 	report_window.addEventListener("load", function() {
 		report_window.generateReport({room_name: room_name, date_range: date_range, time_range: time_range}, peopleChart, temperatureChart, humidityChart);
 	})
 }
 
+function showRoomTable()
+{
+    var xhttp = new XMLHttpRequest();
+		xhttp.responseType = 'json';
 
+    xhttp.onreadystatechange = function () {
+        if(this.readyState == 4 && this.status == 200) {
+            $("#spinner").hide();
+            var result = this.response;
+            console.log("this is the room result");
+            console.log(result);
+            
+            for(room in result.rooms)
+            {
+                console.log("this is inside the loop");
+                console.log(result.rooms[room]);
+                console.log("this is the room id");
+                console.log(result.rooms[room]._id);
+                console.log("this is the room name");
+                console.log(result.rooms[room].name);
+                console.log("this is the room capacity");
+                console.log(result.rooms[room].maxCapacity);
+                
+                document.getElementById("showRoom").innerHTML += 
+                '<tbody>' + '<tr>' +
+                '<td style="display: none;">' + result.rooms[room]._id + '</td>' +
+                '<td>' + result.rooms[room].name + '</td>' +
+                '<td>' + result.rooms[room].maxCapacity + '</td>' +
+				// '<td>' + result.users[user].role + '</td>' +
+				//'<td class="roleButtons">' + '<input class="roleChangeButtons" id = "rolebtn" onchange="updateUser(this, &#39;' + result.users[user]._id + '&#39;)" type="checkbox" data-toggle="toggle" data-on="Manager" data-off="Staff" data-onstyle="success" data-offstyle="outline-dark" data-size="xs">' + '</td>' +
+                '<td>' + '<button class = "editRoomNamebtn btn btn-success" id = "editRoomNamebtn" data-toggle="modal" data-target="#roomNameModal" onclick="updateRoomName(&#39;' + result.rooms[room]._id + '&#39;)"> <span class="fa fa-edit" style="color: white;"></span></button>' + '</td>' +
+				'<td>' + '<button class = "btn btn-success" id = "editRoomCapacitybtn"> <span class="fa fa-edit" style="color: white;"></span></button>' + '</td>' + '</tr>' + '</tbody>';
+            }
+        }
+    }
+    
+    xhttp.open("GET", `${domain}/api/rooms`, true);	
+    xhttp.send();
+            
+}
+
+function passData(id){
+    //document.getElementById("roomName").innerHTML = 
+    console.log("this is the pass id");
+    console.log(id);
+}
+
+function updateRoomName(id){
+    var xhttp = new XMLHttpRequest();
+    xhttp.responseType = 'json';
+
+    xhttp.onreadystatechange = function () {
+        if(this.readyState == 4 && this.status == 200) {
+            var result = this.response;
+            console.log("this is get specify room");
+            console.log(result);
+        }
+    }
+            
+    xhttp.open("GET",`${domain}/api/rooms/` + id, true);	
+    xhttp.send();
+    
+}
+//$(function () {
+//    $(".editRoomNamebtn").click(function () {
+//        var my_id_value = $(this).data('id');
+//        console.log(my_id_value);
+//    })
+//});
 
 function showUserTable(){
     $("#spinner_adduser").hide();
@@ -1417,6 +1527,8 @@ function showUserTable(){
         if(this.readyState == 4 && this.status == 200) {
             $("#spinner").hide();
             var result = this.response;
+            console.log("this is user data");
+            console.log(result);
             var c = 0;
             var a = 0;
             
@@ -1493,6 +1605,30 @@ function search() {
     input = document.getElementById("searchInput");
     filter = input.value.toUpperCase();
     table = document.getElementById("userTable");
+    tr = table.getElementsByTagName("tr");
+    
+    for (i = 0; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td")[1];
+        if (td) {
+            textValue = td.textContent || td.innerText;
+            if (textValue.toUpperCase().indexOf(filter) > -1) {
+            
+                tr[i].style.display = "";
+           
+            } else {
+                
+                tr[i].style.display = "none";
+                
+            }
+        }
+    }
+}
+
+function searchRoomName() {
+    var input, filter, table, tr, td, i, textValue;
+    input = document.getElementById("searchInput");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("roomTable");
     tr = table.getElementsByTagName("tr");
     
     for (i = 0; i < tr.length; i++) {
@@ -1989,6 +2125,44 @@ async function login(){
         xhttp.send(params);    
     }
 };
+//
+//console.log("adlsandlksnlf");
+//
+//$("#loginPassword").keyup(function(event) { 
+//    if (event.keyCode === 13) { 
+//        $("#loginSubmitbtn").click(); 
+//        console.log("yes");
+//    } 
+//}); 
+
+//$('#loginPassword').keypress(function(event){
+//    var keycode = (event.keyCode ? event.keyCode : event.which);
+//    if(keycode == '13'){
+//        alert('You pressed a "enter" key in textbox');  
+//    }
+//});
+//
+//$(document).ready(function() {
+//    console.log( "ready!" );
+//});
+
+
+// enter key will trigger login button
+function triggerLogin(event)
+{
+    if(event.keyCode === 13)
+    {
+        document.getElementById("loginSubmitbtn").click();
+    }
+}
+
+function triggerSubmitEmail(event)
+{
+    if(event.key === 13)
+    {
+        console.log("ready");
+    }
+}
 
 function closeLoginAlert() {
     $("#loginAlert").hide();
@@ -2182,6 +2356,62 @@ function onResetPassword() {
 
 function tablePagination() {
     var table = '#userTable';
+    $('#maxRows').on('change', function(){
+        $('.pagination').html('')
+        var trnum = 0
+        var maxRows = parseInt($(this).val())
+        var totalRows = $(table+' tbody tr').length
+        $(table+' tr:gt(0)').each(function(){
+            trnum++
+            if(trnum > maxRows){
+                $(this).hide();
+                for(var i = 0 ; i < $(this).length; i++)
+                {
+                    var td = $(this)[i].cells[i];
+                }
+            }
+            if(trnum <= maxRows){
+                $(this).show();
+                for(var i = 0 ; i < $(this).length; i++)
+                {
+                    var td = $(this)[i].cells[i];
+                }
+            }
+        })
+        if(totalRows > maxRows){
+            var pagenum = Math.ceil(totalRows/maxRows)
+            for(var i=1;i<=pagenum;){
+                $('.pagination').append('<li class = "active" data-page="'+i+'">\<span><a class="page-link">'+ i++ + '<span class="sr-only">(current)</span></span></a>\</li>').show()
+            }
+        }
+        $('.pagination li:first-child').addClass('active')
+        $('.pagination li').on('click',function(){
+            var pageNum = $(this).attr('data-page')
+            var trIndex = 0;
+            $('.pagination li').removeClass('active')
+            $(this).addClass('active')
+            $(table+' tr:gt(0)').each(function(){
+                trIndex++
+                if(trIndex > (maxRows*pageNum) || trIndex <= ((maxRows*pageNum)-maxRows)){
+                    $(this).hide();
+                    for(var i = 0 ; i < $(this).length; i++)
+                    {
+                        var td = $(this)[i].cells[i];
+                    }
+                } else{
+                    $(this).show();
+                    for(var i = 0 ; i < $(this).length; i++)
+                    {
+                        var td = $(this)[i].cells[i];
+                    }
+                }
+            })
+        })
+    })
+}
+
+function tablePagination() {
+    var table = '#RoomTable';
     $('#maxRows').on('change', function(){
         $('.pagination').html('')
         var trnum = 0

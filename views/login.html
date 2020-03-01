@@ -55,13 +55,13 @@
                         <div class = "form-group" id = "userEmail">
                             <span class = "fa fa-user"></span>
                             <label for = "loginEmail">Email address</label>
-                            <input type = "email" class="form-control" id = "loginEmail" name="email" placeholder = "Enter email address">
+                            <input type = "email" class="form-control" id = "loginEmail" name="email" placeholder = "Enter email address" onkeypress = "triggerLogin(event)">
                         </div>
                         
                         <div class = "form-group">
                             <span class = "fa fa-key"></span>
                             <label for = "loginPassword">Password</label>
-                            <input type = "password" class = "form-control" id = "loginPassword" name="password" placeholder = "Password">
+                            <input type = "password" class = "form-control" id = "loginPassword" name="password" placeholder = "Password" onkeypress = "triggerLogin(event)">
                         </div>
                         
                         <!-- Link trigger modal -->
@@ -80,7 +80,7 @@
 
                                     <div class="modal-body text-center">
                                         <div class="alert alert-dismissible fade show" role="alert" id="forgetAlert"></div>
-                                        <p class="my-2">Please fill in your email: <input type = "email" id = "forgetEmail" placeholder = "example@gmail.com" class="ml-4"/></p>
+                                        <p class="my-2">Please fill in your email: <input type = "email" id = "forgetEmail" placeholder = "example@gmail.com" class="ml-4" onkeypress= "triggerSubmitEmail(event)"/></p>
                                     </div>
                                     
                                     <div class="modal-footer">
