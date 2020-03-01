@@ -404,17 +404,29 @@ a.disabled {
   color: white;
 }
 
-#searchInput {
+#searchRoomInput {
+    font-family: 'Roboto', sans-serif;
+    font-size: 16px;
+    padding: 12px 10px 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    padding: 20px; 
+    width: 180px;
+    height: 15px;  
+}
+
+#searchRoomInput {
 	-webkit-appearance: textfield;
 	-webkit-box-sizing: content-box;
 	font-family: inherit;
 	font-size: 100%;
 }
 
-#searchInput::-webkit-search-decoration,
-#searchInput::-webkit-search-cancel-button {
+#searchRoomInput::-webkit-search-decoration,
+#searchRoomInput::-webkit-search-cancel-button {
 	display: none; 
 }
+
 
 #searchRoomInput {
 	background: #fff url(https://static.tumblr.com/ftv85bp/MIXmud4tx/search-icon.png) no-repeat 9px center;
@@ -445,7 +457,7 @@ a.disabled {
 	color: #999;
 }
 
-#searchInput::-webkit-input-placeholder {
+#searchRoomInput::-webkit-input-placeholder {
 	color: #999;
 }
 

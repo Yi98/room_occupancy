@@ -1446,66 +1446,109 @@ function showRoomTable()
         if(this.readyState == 4 && this.status == 200) {
             $("#spinner").hide();
             var result = this.response;
-            console.log("this is the room result");
-            console.log(result);
-            
+//            console.log("this is the room result");
+//            console.log(result);
+//            
             for(room in result.rooms)
             {
-                console.log("this is inside the loop");
-                console.log(result.rooms[room]);
-                console.log("this is the room id");
-                console.log(result.rooms[room]._id);
-                console.log("this is the room name");
-                console.log(result.rooms[room].name);
-                console.log("this is the room capacity");
-                console.log(result.rooms[room].maxCapacity);
-                
+//                console.log("this is inside the loop");
+//                console.log(result.rooms[room]);
+//                console.log("this is the room id");
+//                console.log(result.rooms[room]._id);
+//                console.log("this is the room name");
+//                console.log(result.rooms[room].name);
+//                console.log("this is the room capacity");
+//                console.log(result.rooms[room].maxCapacity);
+//                
                 document.getElementById("showRoom").innerHTML += 
                 '<tbody>' + '<tr>' +
                 '<td style="display: none;">' + result.rooms[room]._id + '</td>' +
                 '<td>' + result.rooms[room].name + '</td>' +
                 '<td>' + result.rooms[room].maxCapacity + '</td>' +
-				// '<td>' + result.users[user].role + '</td>' +
-				//'<td class="roleButtons">' + '<input class="roleChangeButtons" id = "rolebtn" onchange="updateUser(this, &#39;' + result.users[user]._id + '&#39;)" type="checkbox" data-toggle="toggle" data-on="Manager" data-off="Staff" data-onstyle="success" data-offstyle="outline-dark" data-size="xs">' + '</td>' +
-                '<td>' + '<button class = "editRoomNamebtn btn btn-success" id = "editRoomNamebtn" data-toggle="modal" data-target="#roomNameModal" onclick="updateRoomName(&#39;' + result.rooms[room]._id + '&#39;)"> <span class="fa fa-edit" style="color: white;"></span></button>' + '</td>' +
-				'<td>' + '<button class = "btn btn-success" id = "editRoomCapacitybtn"> <span class="fa fa-edit" style="color: white;"></span></button>' + '</td>' + '</tr>' + '</tbody>';
+                '<td>' + '<button class = "editRoomNamebtn btn btn-success" id = "editRoomNamebtn" data-toggle="modal" data-target="#roomNameModal" onclick="passRoomNameData(&#39;' + result.rooms[room]._id + '&#39;)"> <span class="fa fa-edit" style="color: white;"></span></button>' + '</td>' +
+				'<td>' + '<button class = "btn btn-success" id = "editRoomCapacitybtn" data-toggle="modal" data-target="#roomMaxCapacityModal" onclick="passRoomMaxCapacityData(&#39;' + result.rooms[room]._id + '&#39;)"> <span class="fa fa-edit" style="color: white;"></span></button>' + '</td>' + '</tr>' + '</tbody>';
             }
         }
     }
     
-    xhttp.open("GET", `${domain}/api/rooms`, true);	
+    xhttp.open("GET", `${domain}/api/rooms/details`, true);	
     xhttp.send();
             
 }
 
-function passData(id){
-    //document.getElementById("roomName").innerHTML = 
-    console.log("this is the pass id");
-    console.log(id);
-}
-
-function updateRoomName(id){
+function passRoomNameData(roomId){
+    
     var xhttp = new XMLHttpRequest();
     xhttp.responseType = 'json';
 
     xhttp.onreadystatechange = function () {
         if(this.readyState == 4 && this.status == 200) {
             var result = this.response;
-            console.log("this is get specify room");
-            console.log(result);
+            
+            for(room in result.rooms)
+            {
+                if(result.rooms[room]._id === roomId)
+                {
+                    document.getElementById("roomName").value = result.rooms[room].name;
+                }
+            }
+            
         }
     }
             
-    xhttp.open("GET",`${domain}/api/rooms/` + id, true);	
+    xhttp.open("GET",`${domain}/api/rooms/details`, true);	
     xhttp.send();
+}
+
+function passRoomMaxCapacityData(roomId){
+    
+    var xhttp = new XMLHttpRequest();
+    xhttp.responseType = 'json';
+
+    xhttp.onreadystatechange = function () {
+        if(this.readyState == 4 && this.status == 200) {
+            var result = this.response;
+            
+            for(room in result.rooms)
+            {
+                if(result.rooms[room]._id === roomId)
+                {
+                    document.getElementById("roomMaxCapacity").value = result.rooms[room].maxCapacity;
+                }
+            }
+            
+        }
+    }
+            
+    xhttp.open("GET",`${domain}/api/rooms/details`, true);	
+    xhttp.send();
+}
+
+function updateRoomName(roomId){
+//    var xhttp = new XMLHttpRequest();
+//    xhttp.responseType = 'json';
+//
+//    xhttp.onreadystatechange = function () {
+//        if(this.readyState == 4 && this.status == 200) {
+//            var result = this.response;
+//            
+//            for(room in result.rooms)
+//            {
+//                if(result.rooms[room]._id === roomId)
+//                {
+//                    console.log("this is get specify room");
+//                    console.log(result.rooms[room].name);
+//                    console.log(result.rooms[room].maxCapacity);
+//                }
+//            }
+//            
+//        }
+//    }
+//            
+//    xhttp.open("GET",`${domain}/api/rooms/details`, true);	
+//    xhttp.send();
     
 }
-//$(function () {
-//    $(".editRoomNamebtn").click(function () {
-//        var my_id_value = $(this).data('id');
-//        console.log(my_id_value);
-//    })
-//});
 
 function showUserTable(){
     $("#spinner_adduser").hide();
@@ -1619,7 +1662,7 @@ function search() {
 
 function searchRoomName() {
     var input, filter, table, tr, td, i, textValue;
-    input = document.getElementById("searchInput");
+    input = document.getElementById("searchRoomInput");
     filter = input.value.toUpperCase();
     table = document.getElementById("roomTable");
     tr = table.getElementsByTagName("tr");
@@ -2403,8 +2446,8 @@ function tablePagination() {
     })
 }
 
-function tablePagination() {
-    var table = '#RoomTable';
+function tableRoomPagination() {
+    var table = '#roomTable';
     $('#maxRows').on('change', function(){
         $('.pagination').html('')
         var trnum = 0
