@@ -20,17 +20,17 @@ socket.on("people", function(msg) {
 	for (let i = 0; i < roomCards.length; i++) {
 		let roomId = roomCards[i].getElementsByClassName("roomId");
 		let maxCapacity = document.getElementsByClassName('maxCapacity');
-		let division = Math.round(msg.people / parseFloat(maxCapacity[i].innerHTML)) * 10;
+		let division = Math.round(msg.people / parseFloat(maxCapacity[i].innerHTML)) * 100;
 
 		// change 0 to i later
-		if (roomId[0].innerHTML == msg.roomId) {
+		if (roomId[i].innerHTML == msg.roomId) {
 			outerRoomId = msg.roomId;
 
 			document.getElementsByClassName("people")[i].innerHTML = msg.people;
 			document.getElementsByClassName('lastUpdatedTime')[i].innerHTML = noticeTime;
 			roomName = document.getElementsByClassName("roomName")[i].innerHTML;
 
-			console.log('maxCapacity[i].innerHTML: ' + parseFloat(maxCapacity[i].innerHTML));
+			console.log('maxCapacity[i].innerHTML: ' + parseFloat(maxCapacity[i].innerHTML) * 100);
 			console.log('division: ' + division);
 			console.log('Msg.people: ' + msg.people);
 
