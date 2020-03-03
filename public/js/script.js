@@ -30,7 +30,8 @@ socket.on("people", function(msg) {
 			document.getElementsByClassName('lastUpdatedTime')[i].innerHTML = noticeTime;
 			roomName = document.getElementsByClassName("roomName")[i].innerHTML;
 
-			console.log(maxCapacity[i] - division);
+			console.log(maxCapacity[i]);
+			console.log(division);
 
 			document.getElementsByClassName('status-indicator-outer')[0].style.width = (maxCapacity[i] - division) + '%';
 		}
