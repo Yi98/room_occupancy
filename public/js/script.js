@@ -31,7 +31,7 @@ socket.on("people", function(msg) {
 
 			console.log((parseFloat(maxCapacity[i].innerHTML) - division));
 
-			document.getElementsByClassName('status-indicator-outer')[i].style.width = ((parseFloat(maxCapacity[i].innerHTML) - division) / (parseFloat(maxCapacity[i].innerHTML) * 100) + '%';
+			document.getElementsByClassName('status-indicator-outer')[i].style.width = ((parseFloat(maxCapacity[i].innerHTML) - division) / (parseFloat(maxCapacity[i].innerHTML)) * 100) + '%';
 		}
 	}
 
