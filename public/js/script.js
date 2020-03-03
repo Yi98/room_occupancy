@@ -20,7 +20,7 @@ socket.on("people", function(msg) {
 	for (let i = 0; i < roomCards.length; i++) {
 		let roomId = roomCards[i].getElementsByClassName("roomId");
 		let maxCapacity = document.getElementsByClassName('maxCapacity');
-		let division = Math.round(msg.people / parseFloat(maxCapacity[i].innerHTML)) * 100;
+		let division = (msg.people / parseFloat(maxCapacity[i].innerHTML)) * 100;
 
 		// change 0 to i later
 		if (roomId[0].innerHTML == msg.roomId) {
@@ -30,11 +30,11 @@ socket.on("people", function(msg) {
 			document.getElementsByClassName('lastUpdatedTime')[i].innerHTML = noticeTime;
 			roomName = document.getElementsByClassName("roomName")[i].innerHTML;
 
-			console.log('maxCapacity[i].innerHTML: ' + parseFloat(maxCapacity[i].innerHTML) * 100);
+			console.log('msg.people: ' + msg.people);
+			console.log('maxCapacity[i].innerHTML: ' + parseFloat(maxCapacity[i].innerHTML));
 			console.log('division: ' + division);
-			console.log('Msg.people: ' + msg.people);
 
-			document.getElementsByClassName('status-indicator-outer')[0].style.width = (parseFloat(maxCapacity[i].innerHTML) - division) + '%';
+			document.getElementsByClassName('status-indicator-outer')[i].style.width = (parseFloat(maxCapacity[i].innerHTML) - division) + '%';
 		}
 	}
 
