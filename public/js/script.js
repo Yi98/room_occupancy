@@ -23,7 +23,7 @@ socket.on("people", function(msg) {
 		let division = Math.round(msg.people / parseFloat(maxCapacity[i].innerHTML)) * 100;
 
 		// change 0 to i later
-		if (roomId[i].innerHTML == msg.roomId) {
+		if (roomId[0].innerHTML == msg.roomId) {
 			outerRoomId = msg.roomId;
 
 			document.getElementsByClassName("people")[i].innerHTML = msg.people;
