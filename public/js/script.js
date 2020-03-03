@@ -23,14 +23,16 @@ socket.on("people", function(msg) {
 		let division = Math.round(msg.people / maxCapacity[i]) * 10;
 
 		// change 0 to i later
-		if (roomId[0].innerHTML == msg.roomId) {
+		if (roomId[i].innerHTML == msg.roomId) {
 			outerRoomId = msg.roomId;
 
 			document.getElementsByClassName("people")[i].innerHTML = msg.people;
 			document.getElementsByClassName('lastUpdatedTime')[i].innerHTML = noticeTime;
 			roomName = document.getElementsByClassName("roomName")[i].innerHTML;
 
-			document.getElementsByClassName('status-indicator-outer')[0].style.width = (maxCapacity[i] - division) + '%';
+			consoler.log(maxCapacity[i] - division);
+
+			document.getElementsByClassName('status-indicator-outer')[i].style.width = (maxCapacity[i] - division) + '%';
 		}
 	}
 
