@@ -34,32 +34,9 @@ function deleteRoomsDetails(req, res, next) {
   return next();
 }
 
-function getTodayData(req, res, next) {
-  const key = req.params.roomId + '-' + req.query.period;
-
-  const room = cacheSingleton.get(key);
-
-  if (room) {
-    // console.log("today data found in cache");
-    return res.status(200).json({room});
-  }
-
-  return next();
-}
-
-function deleteTodayData(req, res, next) {
-  const key = req.params.roomId + '-today';
-
-  cacheSingleton.del(key);
-
-  return next();
-}
-
 module.exports = {
   getUsers,
   deleteUsers,
   getRoomsDetails,
-  deleteRoomsDetails,
-  getTodayData,
-  deleteTodayData
+  deleteRoomsDetails
 };
