@@ -1386,17 +1386,25 @@ function directToPdf() {
 	// Loop through the Highcharts object array and make assignment according to the their respective renderTo.id
 	for (let i = 0; i < charts.length; i++) {
         console.log("count of how many undefined");
-//        if(typeof charts[i].renderTo.id === undefined)
-//        {
-//            console.log("this is the charts i");
-//            console.log(charts[i]);
-//            count++;
-//        }
+        console.log("this is outside the loop place");
+        console.log(count);
+        console.log("this is the charts i outside the loop");
+        console.log(charts[i]);
+        
+        if(typeof charts[i].renderTo.id == 'undefined')
+        {
+            console.log("this is the charts i");
+            console.log(charts[i]);
+            count++;
+            console.log("this is count number");
+            console.log(count);
+        }
+        
 //        console.log("this is count number");
 //        console.log(count);
-//        console.log("this is chart console");
-//        console.log(charts[i].renderTo);
-//        console.log(charts[i].renderTo.id);
+        console.log("this is chart console");
+        console.log(charts[i].renderTo);
+        console.log(charts[i].renderTo.id);
 		if (charts[i].renderTo.id == "peopleChart") {
 			peopleChart = charts[i].getSVG();
 		} else if(typeof(charts[i].renderTo) == 'undefined'){
@@ -1414,6 +1422,7 @@ function directToPdf() {
 		}else if(typeof(charts[i].renderTo) == 'undefined'){
             console.log("oh no");
         }
+        
         
         console.log("this is people chart");
         console.log(peopleChart);
@@ -2197,6 +2206,14 @@ function triggerSubmitEmail(event)
     if(event.key === 13)
     {
         console.log("ready");
+    }
+}
+
+function triggerResetPassword(event)
+{
+    if(event.keyCode === 13)
+    {
+        document.getElementById("resetSubmitbtn").click();
     }
 }
 
@@ -3104,4 +3121,109 @@ function onDismissVa() {
 	document.getElementById('va-conclude-container').style.display = "none";
 	document.getElementById('va-primary-footer').style.display = "block";
 	document.getElementById('va-secondary-footer').style.display = "none";
+}
+
+function beginUserWebTour() {
+	jQuery.noConflict();
+
+	introJs()
+		.setOptions({
+			'hidePrev': true,
+			'hideNext': true,
+			'showBullets': false,
+			'showProgress': true,
+			'exitOnOverlayClick': false,
+			'showStepNumbers': false,
+			'tooltipClass': 'intro-tooltip',
+			'overlayOpacity': 0.7
+		})
+		.oncomplete(function() {
+			$('#completeUserTourModal').modal('show');
+		})
+		.start();
+
+		sessionStorage.setItem('firstLogin', 'false');
+}
+
+
+function onDismissUserTour() {
+	jQuery.noConflict();
+
+	$('#vaUserModal-deny').modal({
+		show: true
+	});
+
+	$('#vaUserModal-deny').on('hidden.bs.modal', function () {
+		sessionStorage.setItem('firstLogin', 'false');
+	});
+}
+
+function beginRoomWebTour() {
+	jQuery.noConflict();
+
+	introJs()
+		.setOptions({
+			'hidePrev': true,
+			'hideNext': true,
+			'showBullets': false,
+			'showProgress': true,
+			'exitOnOverlayClick': false,
+			'showStepNumbers': false,
+			'tooltipClass': 'intro-tooltip',
+			'overlayOpacity': 0.7
+		})
+		.oncomplete(function() {
+			$('#completeRoomTourModal').modal('show');
+		})
+		.start();
+
+		sessionStorage.setItem('firstLogin', 'false');
+}
+
+
+function onDismissRoomTour() {
+	jQuery.noConflict();
+
+	$('#vaRoomModal-deny').modal({
+		show: true
+	});
+
+	$('#vaRoomModal-deny').on('hidden.bs.modal', function () {
+		sessionStorage.setItem('firstLogin', 'false');
+	});
+}
+
+function beginChartWebTour() {
+	jQuery.noConflict();
+
+	introJs()
+		.setOptions({
+			'hidePrev': true,
+			'hideNext': true,
+			'showBullets': false,
+			'showProgress': true,
+			'exitOnOverlayClick': false,
+			'showStepNumbers': false,
+			'tooltipClass': 'intro-tooltip',
+			'overlayOpacity': 0.7
+		})
+		.oncomplete(function() {
+			$('#completeChartTourModal').modal('show');
+		})
+		.start();
+
+		sessionStorage.setItem('firstLogin', 'false');
+}
+
+
+function onDismissChartTour() {
+	jQuery.noConflict();
+
+	$('#vaChartModal-deny').modal({
+		show: true
+	});
+
+	$('#vaChartModal-deny').on('hidden.bs.modal', function () {
+		sessionStorage.setItem('firstLogin', 'false');
+	});
 }
