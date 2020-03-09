@@ -6,11 +6,10 @@ const createCsvWriter = require('csv-writer').createObjectCsvWriter;
 let tempTrain = [];
 
 const getAllRoomData = () => {
-
   var options = {
     host: 'localhost',
     port: 3000,
-    path: '/api/rooms/5db583ed1c9d4400009a20f2/?period=yearly',
+    path: '/api/rooms/5db043344a270c2b48ee776a/?period=yearly',
     method: 'GET'
   };
 
@@ -36,8 +35,6 @@ const getAllRoomData = () => {
       console.log(tempTrain);
 
       tempTrain.sort(function (a, b) {
-        // Turn your strings into dates, and then subtract them
-        // to get a value that is either negative, positive, or zero.
         return new Date(a.date) - new Date(b.date);
       });
 
@@ -60,7 +57,8 @@ const writeToCsv = (data) => {
 
   csvWriter.writeRecords(data)
     .then(() => {
-      console.log('...Done');
+      console.log('Done writing data to csv');
+      trainAndPredict();
     });
 };
 
@@ -70,7 +68,7 @@ const trainAndPredict = () => {
 
   var spawn = require("child_process").spawn;
 
-  var process = spawn('python', ["arima.py"]);
+  var process = spawn('python', ["arima.py", 'test.csv']);
 
   process.stdout.on('data', function (data) {
     results += data;
@@ -82,6 +80,5 @@ const trainAndPredict = () => {
 };
 
 
-// getAllRoomData();
-// writeToCsv();
-trainAndPredict();
+getAllRoomData();
+writeToCsv();

@@ -3,19 +3,20 @@ from pandas import read_csv
 from matplotlib import pyplot
 from statsmodels.tsa.arima_model import ARIMA
 import numpy
+import sys
 
 # load dataset
-series = read_csv('daily-minimum-temperatures.csv', header=0, index_col=0)
+series = read_csv(sys.argv[1], header=0, index_col=0)
 # series = read_csv('shampoo-sales.csv', header=0, index_col=0)
 
 # display first few rows
 print(series.head(20))
 # line plot of dataset
 series.plot()
-pyplot.show()
+# pyplot.show()
 
 
-series = read_csv('daily-minimum-temperatures.csv', header=0, index_col=0)
+series = read_csv(sys.argv[1], header=0, index_col=0)
 # series = read_csv('shampoo-sales.csv', header=0, index_col=0)
 
 split_point = len(series) - 7
@@ -24,7 +25,8 @@ print('Dataset %d, Validation %d' % (len(dataset), len(validation)))
 dataset.to_csv('dataset.csv', index=False, header=False)
 validation.to_csv('validation.csv', index=False, header=False)
 
-# One step forecast
+"""
+### One step forecast
 # create a differenced series
 def difference(dataset, interval=1):
 	diff = list()
@@ -41,20 +43,23 @@ def inverse_difference(history, yhat, interval=1):
 series = read_csv('dataset.csv', header=None)
 # seasonal difference
 X = series.values
+
+################ inssuficient problem then change this
 days_in_year = 365
+
 differenced = difference(X, days_in_year)
 # fit model
-model = ARIMA(differenced, order=(6,1,1))
+model = ARIMA(differenced, order=(10,0,0))
 model_fit = model.fit(disp=0)
 # one-step out-of sample forecast
 forecast = model_fit.forecast()[0]
 # invert the differenced forecast to something usable
 forecast = inverse_difference(X, forecast, days_in_year)
 print('Forecast: %f' % forecast)
-
-
-#Multistep forecast
 """
+
+
+### Multistep forecast
 # create a differenced series
 def difference(dataset, interval=1):
     diff = list()
@@ -71,10 +76,10 @@ def inverse_difference(history, yhat, interval=1):
 series = read_csv('dataset.csv', header=None)
 # seasonal difference
 X = series.values
-days_in_year = 365
+days_in_year = 30
 differenced = difference(X, days_in_year)
 # fit model
-model = ARIMA(differenced, order=(6,1,1))
+model = ARIMA(differenced, order=(10,0,0))
 model_fit = model.fit(disp=0)
 # multi-step out-of-sample forecast
 start_index = len(differenced)
@@ -88,4 +93,3 @@ for yhat in forecast:
 	print('Day %d: %f' % (day, inverted))
 	history.append(inverted)
 	day += 1
-"""
