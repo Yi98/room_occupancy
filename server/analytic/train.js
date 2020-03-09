@@ -1,24 +1,87 @@
-import SimpleLinearRegression from 'ml-regression-simple-linear';
+const http = require('http');
 
-const x = [0.5, 1, 1.5, 2, 2.5];
-const y = [0, 1, 2, 3, 4];
+const date = require('date-and-time');
+const createCsvWriter = require('csv-writer').createObjectCsvWriter;
 
-const regression = new SimpleLinearRegression(x, y);
+let tempTrain = [];
 
-regression.slope // 2
-regression.intercept // -1
-regression.coefficients // [-1, 2]
+const getAllRoomData = () => {
 
-regression.predict(3); // 5
-regression.computeX(3.5); // 2.25
+  var options = {
+    host: 'localhost',
+    port: 3000,
+    path: '/api/rooms/5db583ed1c9d4400009a20f2/?period=yearly',
+    method: 'GET'
+  };
 
-regression.toString(); // 'f(x) = 2 * x - 1'
+  http.request(options, function (res) {
+    let results = '';
 
-regression.score(x, y);
-// { r: 1, r2: 1, chi2: 0, rmsd: 0 }
+    res.setEncoding('utf8');
+    res.on('data', function (chunk) {
+      results += chunk;
+    });
 
-const json = regression.toJSON();
-// { name: 'simpleLinearRegression', slope: 2, intercept: -1 }
-const loaded = SimpleLinearRegression.load(json);
-loaded.predict(5) // 9
-console.log(loaded.predict(3));
+    res.on('end', function () {
+      results = JSON.parse(results);
+
+      for (let i = 0; i < results.room.people.length; i++) {
+        const trainingData = {};
+
+        trainingData.date = date.format(new Date(results.room.people[i].time), 'YYYY/MM/DD HH');
+        trainingData.people = results.room.people[i].data;
+        tempTrain.push(trainingData);
+      }
+
+      console.log(tempTrain);
+
+      tempTrain.sort(function (a, b) {
+        // Turn your strings into dates, and then subtract them
+        // to get a value that is either negative, positive, or zero.
+        return new Date(a.date) - new Date(b.date);
+      });
+
+      writeToCsv(tempTrain);
+    })
+
+  }).end();
+}
+
+
+const writeToCsv = (data) => {
+  const csvWriter = createCsvWriter({
+    path: 'people.csv',
+    header: [
+      { id: 'date', title: 'Date' },
+      { id: 'people', title: 'People' }
+    ]
+  });
+
+
+  csvWriter.writeRecords(data)
+    .then(() => {
+      console.log('...Done');
+    });
+};
+
+
+const trainAndPredict = () => {
+  let results;
+
+  var spawn = require("child_process").spawn;
+
+  var process = spawn('python', ["arima.py"]);
+
+  process.stdout.on('data', function (data) {
+    results += data;
+  })
+
+  process.stdout.on('end', function (data) {
+    console.log(results);
+  })
+};
+
+
+// getAllRoomData();
+// writeToCsv();
+trainAndPredict();
