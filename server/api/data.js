@@ -11,9 +11,9 @@ router.get('/:roomId/humidity', DataController.getHumidity);
 
 router.get('/:roomId/people', DataController.getPeople);
 
-router.post('/:roomId/sensor', cache.deleteTodayData, DataController.postSensorData);
+router.post('/:roomId/sensor', DataController.postSensorData);
 
-router.post('/:roomId/people', cache.deleteTodayData, DataController.postPeople);
+router.post('/:roomId/people', DataController.postPeople);
 
 
 module.exports = router;
