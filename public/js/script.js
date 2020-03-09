@@ -2119,6 +2119,32 @@ xhttp.open("GET", `${domain}/api/rooms/` + roomId + `?period=custom&start=` + st
 xhttp.send();
 }
 
+function no_data_to_display(){
+	$('#allChart').highcharts({
+        chart: {
+            plotBackgroundColor: null,
+            plotBorderWidth: null,
+            plotShadow: false
+		},
+		credits: false,
+		exporting:{
+			buttons:{
+				contextButton:{
+						enabled:false
+					}
+			}
+		},
+        title: {
+            text: 'No data found'
+        },
+        series: [{
+            type: 'pie',
+            name: 'unknown',
+            data: []
+        }]
+    });
+}
+
 function showAllChart(x,y1,y2,y3){
 	
 	Highcharts.chart('allChart', {
