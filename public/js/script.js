@@ -296,6 +296,7 @@ function showTodayTrends(roomId) {
 
 	for (var i = 0; i <= diff_in_time; i++) {
 		var timeCounter = parseInt(startTime.substring(0, 2)) + i;
+		timeCounter = moment(timeCounter, "H HH").format("HH");
 		hourTime.push(timeCounter.toString().concat(':00'));
 	}
 
@@ -304,8 +305,8 @@ function showTodayTrends(roomId) {
 	xhr.onreadystatechange = function () {
 		if (this.readyState == 4 && this.status == 200) {
 			var result = this.response;
-			console.log(result);
 			document.getElementById("room_name").innerHTML = result.room.name;
+			console.log(result);
 			//Initialise the array
 			for (var i = 0; i < hourTime.length; i++) {
 				peopleData[i] = 0;
@@ -321,7 +322,7 @@ function showTodayTrends(roomId) {
 				var m_dataDate = moment(result.room.people[index].time);
 				if (m_startDate.format("D") == m_dataDate.format("D")) {
 					for (var i = 0; i < hourTime.length; i++) {
-						if (m_dataDate.format("H").toString().concat(':00') == hourTime[i]) {
+						if (m_dataDate.format("HH").toString().concat(':00') == hourTime[i]) {
 							peopleData[i] = peopleData[i] + result.room.people[index].data;
 							peopleDataCounter[i]++;
 						}
@@ -334,7 +335,7 @@ function showTodayTrends(roomId) {
 				var m_dataDate = moment(result.room.temperature[index].time);
 				if (m_startDate.format("D") == m_dataDate.format("D")) {
 					for (var i = 0; i < hourTime.length; i++) {
-						if (m_dataDate.format("H").toString().concat(':00') == hourTime[i]) {
+						if (m_dataDate.format("HH").toString().concat(':00') == hourTime[i]) {
 							tempData[i] = tempData[i] + result.room.temperature[index].data;
 							tempDataCounter[i]++;
 						}
@@ -347,7 +348,7 @@ function showTodayTrends(roomId) {
 				var m_dataDate = moment(result.room.humidity[index].time);
 				if (m_startDate.format("D") == m_dataDate.format("D")) {
 					for (var i = 0; i < hourTime.length; i++) {
-						if (m_dataDate.format("H").toString().concat(':00') == hourTime[i]) {
+						if (m_dataDate.format("HH").toString().concat(':00') == hourTime[i]) {
 							humidData[i] = humidData[i] + result.room.humidity[index].data;
 							humidDataCounter[i]++;
 						}
@@ -478,6 +479,7 @@ function showYesterdayTrends(roomId) {
 
 	for (var i = 0; i <= diff_in_time; i++) {
 		var timeCounter = parseInt(startTime.substring(0, 2)) + i;
+		timeCounter = moment(timeCounter, "H HH").format("HH");
 		hourTime.push(timeCounter.toString().concat(':00'));
 	}
 
@@ -503,7 +505,7 @@ function showYesterdayTrends(roomId) {
 				var m_dataDate = moment(result.room.people[index].time);
 				if (m_startDate.format("L") == m_dataDate.format("L")) {
 				for (var i = 0; i < hourTime.length; i++) {
-					if (m_dataDate.format("H").toString().concat(':00') == hourTime[i]) {
+					if (m_dataDate.format("HH").toString().concat(':00') == hourTime[i]) {
 					peopleData[i] = peopleData[i] + result.room.people[index].data;
 					peopleDataCounter[i]++;
 					}
@@ -516,7 +518,7 @@ function showYesterdayTrends(roomId) {
 				var m_dataDate = moment(result.room.temperature[index].time);
 				if (m_startDate.format("L") == m_dataDate.format("L")) {
 				for (var i = 0; i < hourTime.length; i++) {
-					if (m_dataDate.format("H").toString().concat(':00') == hourTime[i]) {
+					if (m_dataDate.format("HH").toString().concat(':00') == hourTime[i]) {
 					tempData[i] = tempData[i] + result.room.temperature[index].data;
 					tempDataCounter[i]++;
 					}
@@ -529,7 +531,7 @@ function showYesterdayTrends(roomId) {
 				var m_dataDate = moment(result.room.humidity[index].time);
 				if (m_startDate.format("L") == m_dataDate.format("L")) {
 				for (var i = 0; i < hourTime.length; i++) {
-					if (m_dataDate.format("H").toString().concat(':00') == hourTime[i]) {
+					if (m_dataDate.format("HH").toString().concat(':00') == hourTime[i]) {
 					humidData[i] = humidData[i] + result.room.humidity[index].data;
 					humidDataCounter[i]++;
 					}
