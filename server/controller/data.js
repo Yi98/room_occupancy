@@ -90,8 +90,6 @@ exports.postSensorData = (req, res) => {
     socket.emit("sensor", { temperature: req.body.tempData, humidity: req.body.humidData, roomId: req.params.roomId, store: true });
   }
 
-  // socket.emit("sensor", {temperature: req.body.tempData, humidity: req.body.humidData, roomId: req.params.roomId, store:true});
-
   if (req.body.store == 'true') {
     Room.findById(req.params.roomId)
       .then(room => {
@@ -100,7 +98,7 @@ exports.postSensorData = (req, res) => {
         }
 
         fetchedRoom = room;
-        const currentTemp = new Temperature({ data: req.body.tempData });
+        const currentTemp = new Temperature({ data: req.body.tempData, time: new Date(req.body.datetime) });
         return currentTemp.save();
       })
       .then(temp => {
@@ -109,7 +107,7 @@ exports.postSensorData = (req, res) => {
         }
 
         fetchedRoom.temperature.push(temp);
-        const currentHumid = new Humidity({ data: req.body.humidData });
+        const currentHumid = new Humidity({ data: req.body.humidData, time: new Date(req.body.datetime) });
         return currentHumid.save();
       })
       .then(humid => {
