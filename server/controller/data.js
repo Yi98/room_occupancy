@@ -207,39 +207,42 @@ exports.postPeople = (req, res) => {
     socket.emit("people", { people: req.body.data, roomId: req.params.roomId, store: true });
   }
 
-  if (req.body.store != 1) {
+  if (req.body.store != '1') {
     return res.status(200).json({ message: 'Successfully push people data to client' });
   }
 
-  Room.findById(req.params.roomId)
-    .then(room => {
-      if (!room) {
-        return res.status(404).json({ message: `Room ${req.params.roomId} not found` });
-      }
 
-      fetchedRoom = room;
-      const currentPeople = new People({ data: socketPeopleCount });
-      return currentPeople.save();
-    })
-    .then(people => {
-      if (!people) {
-        return res.status(500).json({ message: 'Failed to create people object' });
-      }
+  if (req.body.store == '1') {
+    Room.findById(req.params.roomId)
+      .then(room => {
+        if (!room) {
+          return res.status(404).json({ message: `Room ${req.params.roomId} not found` });
+        }
 
-      fetchedRoom.people.push(people);
-      return fetchedRoom.save();
-    })
-    .then(room => {
-      if (!room) {
-        return res.status(404).json({ message: 'Fail to post number of people to room' });
-      }
+        fetchedRoom = room;
+        const currentPeople = new People( { data: socketPeopleCount , time: Date(req.body.datetime)} );
+        return currentPeople.save();
+      })
+      .then(people => {
+        if (!people) {
+          return res.status(500).json({ message: 'Failed to create people object' });
+        }
 
-      res.status(200).json({ message: 'Successfully post number of people' });
-    })
-    .catch(err => {
-      res.status(500).json({
-        message: 'Failed to post number of people',
-        err
-      });
-    })
+        fetchedRoom.people.push(people);
+        return fetchedRoom.save();
+      })
+      .then(room => {
+        if (!room) {
+          return res.status(404).json({ message: 'Fail to post number of people to room' });
+        }
+
+        res.status(200).json({ message: 'Successfully post number of people' });
+      })
+      .catch(err => {
+        res.status(500).json({
+          message: 'Failed to post number of people',
+          err
+        });
+      })
+  }
 };
