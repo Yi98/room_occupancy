@@ -99,7 +99,7 @@ exports.postSensorData = (req, res) => {
         }
 
         fetchedRoom = room;
-        const currentTemp = new Temperature({ data: req.body.tempData, time: new Date(req.body.datetime) });
+        const currentTemp = new Temperature({ data: req.body.tempData, time: Date(req.body.datetime) });
         return currentTemp.save();
       })
       .then(temp => {
@@ -108,7 +108,7 @@ exports.postSensorData = (req, res) => {
         }
 
         fetchedRoom.temperature.push(temp);
-        const currentHumid = new Humidity({ data: req.body.humidData, time: new Date(req.body.datetime) });
+        const currentHumid = new Humidity({ data: req.body.humidData, time: Date(req.body.datetime) });
         return currentHumid.save();
       })
       .then(humid => {
