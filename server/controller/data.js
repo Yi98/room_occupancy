@@ -83,7 +83,7 @@ exports.getPeople = (req, res) => {
 exports.postSensorData = (req, res) => {
   let fetchedRoom;
 
-  if (req.body.store != true) {
+  if (req.body.store != 'true') {
     socket.emit("sensor", { temperature: req.body.tempData, humidity: req.body.humidData, roomId: req.params.roomId, store: false });
     return res.status(200).json({ message: 'Successfully push sensor data to client' });
   } else {
