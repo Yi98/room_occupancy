@@ -92,7 +92,7 @@ exports.postSensorData = (req, res) => {
 
   // socket.emit("sensor", {temperature: req.body.tempData, humidity: req.body.humidData, roomId: req.params.roomId, store:true});
 
-  if (req.body.store == true) {
+  if (req.body.store == 'true') {
     Room.findById(req.params.roomId)
       .then(room => {
         if (!room) {

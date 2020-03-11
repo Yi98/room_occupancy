@@ -49,7 +49,7 @@ days_in_year = 365
 
 differenced = difference(X, days_in_year)
 # fit model
-model = ARIMA(differenced, order=(10,0,0))
+model = ARIMA(differenced, order=(0,1,1))
 model_fit = model.fit(disp=0)
 # one-step out-of sample forecast
 forecast = model_fit.forecast()[0]
@@ -76,10 +76,10 @@ def inverse_difference(history, yhat, interval=1):
 series = read_csv('dataset.csv', header=None)
 # seasonal difference
 X = series.values
-days_in_year = 30
+days_in_year = 24
 differenced = difference(X, days_in_year)
 # fit model
-model = ARIMA(differenced, order=(10,0,0))
+model = ARIMA(differenced, order=(0,1,1))
 model_fit = model.fit(disp=0)
 # multi-step out-of-sample forecast
 start_index = len(differenced)
