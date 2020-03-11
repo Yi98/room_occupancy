@@ -180,14 +180,12 @@ exports.postPeople = (req, res) => {
           let newPeopleCount = data.replace(re, (roomId + ":" + String(parseInt(previousPeopleCount) + parseInt(req.body.data))));
           socketPeopleCount = "" + String(parseInt(previousPeopleCount) + parseInt(req.body.data));
 
-          // if (req.body.store != true) {
-          //   socket.emit("people", {people: socketPeopleCount, roomId: req.params.roomId, store: false});
-          // } else {
-          //   socket.emit("people", {people: socketPeopleCount, roomId: req.params.roomId, store: true});
-          // }
-
-          socket.emit("people", {people: socketPeopleCount, roomId: req.params.roomId, store: true });
-
+          if (req.body.store != '1') {
+            socket.emit("people", {people: socketPeopleCount, roomId: req.params.roomId, store: false});
+          } else {
+            socket.emit("people", {people: socketPeopleCount, roomId: req.params.roomId, store: true});
+          }
+          
           // Replace the line to new line with updated value
           fs.writeFile("people.txt", newPeopleCount, "utf-8", function (err) {
             if (err) {
