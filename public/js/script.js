@@ -321,7 +321,7 @@ xhr.onreadystatechange = function() {
 		var m_dataDate = moment(result.room.people[index].time);
 		if (m_startDate.format("D") == m_dataDate.format("D")) {
 		for (var i = 0; i < hourTime.length; i++) {
-			if (m_dataDate.utc().format("H").toString().concat(':00') == hourTime[i]) {
+			if (m_dataDate.format("H").toString().concat(':00') == hourTime[i]) {
 			peopleData[i] = peopleData[i] + result.room.people[index].data;
 			peopleDataCounter[i]++;
 			}
@@ -334,7 +334,7 @@ xhr.onreadystatechange = function() {
 		var m_dataDate = moment(result.room.temperature[index].time);
 		if (m_startDate.format("D") == m_dataDate.format("D")) {
 		for (var i = 0; i < hourTime.length; i++) {
-			if (m_dataDate.utc().format("H").toString().concat(':00') == hourTime[i]) {
+			if (m_dataDate.format("H").toString().concat(':00') == hourTime[i]) {
 			tempData[i] = tempData[i] + result.room.temperature[index].data;
 			tempDataCounter[i]++;
 			}
@@ -347,7 +347,7 @@ xhr.onreadystatechange = function() {
 		var m_dataDate = moment(result.room.humidity[index].time);
 		if (m_startDate.format("D") == m_dataDate.format("D")) {
 		for (var i = 0; i < hourTime.length; i++) {
-			if (m_dataDate.utc().format("H").toString().concat(':00') == hourTime[i]) {
+			if (m_dataDate.format("H").toString().concat(':00') == hourTime[i]) {
 			humidData[i] = humidData[i] + result.room.humidity[index].data;
 			humidDataCounter[i]++;
 			}
