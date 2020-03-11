@@ -67,7 +67,7 @@ const trainAndPredict = () => {
 
   var spawn = require("child_process").spawn;
 
-  var process = spawn('python', ["arima.py", 'dummy.csv']);
+  var process = spawn('python', ["arima.py", 'daily-minimum-temperatures.csv']);
 
   process.stdout.on('data', function (data) {
     results += data;
@@ -84,7 +84,7 @@ const generateDummyData = () => {
   let min;
   let max;
 
-  for (let k = 1; k <= 12; k++) { // a year (month)
+  for (let k = 1; k <= 6; k++) { // a year (month)
     for (let i = 1; i <= 30; i++) { // a month (day)
       for (let j = 0; j < 24; j++) {  // a day (hour)
 
