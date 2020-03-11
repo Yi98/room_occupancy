@@ -186,7 +186,7 @@ exports.postPeople = (req, res) => {
           //   socket.emit("people", {people: socketPeopleCount, roomId: req.params.roomId, store: true});
           // }
 
-          socket.emit("people", { previous: previousPeopleCount, people: socketPeopleCount, roomId: req.params.roomId, store: true });
+          socket.emit("people", {people: socketPeopleCount, roomId: req.params.roomId, store: true });
 
           // Replace the line to new line with updated value
           fs.writeFile("people.txt", newPeopleCount, "utf-8", function (err) {
@@ -204,7 +204,7 @@ exports.postPeople = (req, res) => {
 
   if (found == false) {
     fs.appendFileSync("people.txt", req.params.roomId + ":" + req.body.data + "\n");
-    socket.emit("people", { people: req.body.data, roomId: req.params.roomId, store: true });
+    // socket.emit("people", { people: req.body.data, roomId: req.params.roomId, store: true });
   }
 
   if (req.body.store != '1') {
