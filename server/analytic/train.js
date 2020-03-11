@@ -6,11 +6,10 @@ const createCsvWriter = require('csv-writer').createObjectCsvWriter;
 let tempTrain = [];
 
 const getAllRoomData = () => {
-
   var options = {
     host: 'localhost',
     port: 3000,
-    path: '/api/rooms/5db583ed1c9d4400009a20f2/?period=yearly',
+    path: '/api/rooms/5db043344a270c2b48ee776a/?period=yearly',
     method: 'GET'
   };
 
@@ -36,8 +35,6 @@ const getAllRoomData = () => {
       console.log(tempTrain);
 
       tempTrain.sort(function (a, b) {
-        // Turn your strings into dates, and then subtract them
-        // to get a value that is either negative, positive, or zero.
         return new Date(a.date) - new Date(b.date);
       });
 
@@ -48,19 +45,19 @@ const getAllRoomData = () => {
 }
 
 
-const writeToCsv = (data) => {
+const writeToCsv = (data, fileName) => {
   const csvWriter = createCsvWriter({
-    path: 'people.csv',
+    path: fileName,
     header: [
       { id: 'date', title: 'Date' },
       { id: 'people', title: 'People' }
     ]
   });
 
-
   csvWriter.writeRecords(data)
     .then(() => {
-      console.log('...Done');
+      console.log('Done writing data to csv');
+      trainAndPredict();
     });
 };
 
@@ -70,7 +67,7 @@ const trainAndPredict = () => {
 
   var spawn = require("child_process").spawn;
 
-  var process = spawn('python', ["arima.py"]);
+  var process = spawn('python', ["arima.py", 'dummy.csv']);
 
   process.stdout.on('data', function (data) {
     results += data;
@@ -82,6 +79,43 @@ const trainAndPredict = () => {
 };
 
 
+const generateDummyData = () => {
+  const records = [];
+  let min;
+  let max;
+
+  for (let k = 1; k <= 12; k++) { // a year (month)
+    for (let i = 1; i <= 30; i++) { // a month (day)
+      for (let j = 0; j < 24; j++) {  // a day (hour)
+
+        // simulate peak hour on 8pm everyday
+        if (j == 20) {
+          min = 40;
+          max = 50;
+        }
+        else if (j == 8 || j == 14) {
+          min = 30;
+          max = 40;
+        }
+        else {
+          min = 5;
+          max = 20;
+        }
+
+        const record = {};
+        record.date = i + '/1' + '/2020 ' + j + ':00';
+        record.people = Math.floor(Math.random() * (max - min + 1) + min);
+
+        records.push(record);
+      }
+    }
+  }
+
+  writeToCsv(records, 'dummy.csv');
+
+};
+
+
 // getAllRoomData();
 // writeToCsv();
-trainAndPredict();
+generateDummyData();
