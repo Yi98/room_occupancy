@@ -14,6 +14,7 @@ const roomApi = require('./server/api/room');
 const userApi = require('./server/api/user');
 const dataApi = require('./server/api/data');
 const dataController = require('./server/controller/data');
+const forecastController = require('./server/controller/forecast');
 const port = 3000;
 
 dotenv.config();
@@ -29,6 +30,7 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 mongoose.Promise = global.Promise;
 
 dataController.sensorSocket(io);
+forecastController.connectSocket(io);
 
 app.use(cors());
 app.use(session({
@@ -50,4 +52,3 @@ app.use('/', routes);
 server.listen((process.env.PORT || port), _ => {
   console.log('Server running on ' + port);
 });
-

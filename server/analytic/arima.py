@@ -28,15 +28,15 @@ dataset, validation = series[0:split_point], series[split_point:]
 # split_point = len(series) - 700
 # dataset, validation = series[0:split_point], series[split_point: len(series) - 693]
 print('Dataset %d, Validation %d' % (len(dataset), len(validation)))
-dataset.to_csv('dataset.csv', index=False, header=False)
-validation.to_csv('validation.csv', index=False, header=False)
+dataset.to_csv('./server/analytic/data/dataset.csv', index=False, header=False)
+validation.to_csv('./server/analytic/data/validation.csv', index=False, header=False)
 
 
 def checkAccuracy():
 	# Calculate performance
 	# load dataset
-	trainSet = read_csv('dataset.csv', header=None)
-	testSet = read_csv('validation.csv', header=None)
+	trainSet = read_csv('./server/analytic/data/dataset.csv', header=None)
+	testSet = read_csv('./server/analytic/data/validation.csv', header=None)
 	# seasonal difference
 	X = trainSet.values
 	Y = testSet.values
@@ -66,7 +66,7 @@ def inverse_difference(history, yhat, interval=1):
 	return yhat + history[-interval]
 
 # load dataset
-series = read_csv('dataset.csv', header=None)
+series = read_csv('./server/analytic/data/dataset.csv', header=None)
 # seasonal difference
 X = series.values
 days_in_year = 24
@@ -94,7 +94,7 @@ checkAccuracy()
 
 ###SARIMA
 print('\n\n\n SARIMA')
-series = read_csv('dataset.csv', header=None)
+series = read_csv('./server/analytic/data/dataset.csv', header=None)
 X = series.values
 model = sm.tsa.statespace.SARIMAX(X, order=(3,0,3), seasonal_order=(0,0,0,0))
 model_fit = model.fit(disp=0)

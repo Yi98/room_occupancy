@@ -6,6 +6,10 @@ var socket = io();
 
 let currentRoom;
 
+socket.on('forecast', function(forecast) {
+	console.log(forecast);
+});
+
 socket.on("people", function (msg) {
 	// for loop assign to all room their respective sensor data
 	let roomCards = document.getElementsByClassName("roomCard");
@@ -30,7 +34,6 @@ socket.on("people", function (msg) {
 			roomName = document.getElementsByClassName("roomName")[i].innerHTML;
 
 			// Check this 
-			console.log((parseFloat(maxCapacity[i].innerHTML) - division) / (parseFloat(maxCapacity[i].innerHTML)) * 100);
 
 			document.getElementsByClassName('status-indicator-outer')[i].style.width = ((parseFloat(maxCapacity[i].innerHTML) - division) / (parseFloat(maxCapacity[i].innerHTML)) * 100) + '%';
 		}
@@ -304,7 +307,6 @@ function showTodayTrends(roomId) {
 	xhr.onreadystatechange = function () {
 		if (this.readyState == 4 && this.status == 200) {
 			var result = this.response;
-			console.log(result);
 			document.getElementById("room_name").innerHTML = result.room.name;
 			//Initialise the array
 			for (var i = 0; i < hourTime.length; i++) {
@@ -1360,7 +1362,6 @@ function showCustomTrends(roomId) {
 		if (this.readyState == 4 && this.status == 200) {
 			var result = this.response;
 			document.getElementById("room_name").innerHTML = result.room.name;
-			console.log(result);
 			//Today Chart
 			if (m_diff_in_days == 0) {
 				for (var i = 0; i <= diff_in_time; i++) {
@@ -1716,7 +1717,6 @@ function showCustomTrends(roomId) {
 					//Initialise the weeklyTime array
 					tempStart = d_startDate.add(7, 'days').format('MM-DD-YYYY');
 					tempStart2 = d_startDate2.add(7, 'days').format('MM-DD-YYYY');
-					console.log(m_diff_in_days);
 					for (var i = 0; i < Math.ceil(m_diff_in_days / 6); i++) {
 						if (d_startDate <= m_endDate) {
 							weeklyTime[i] = "Week " + (i + 1);
@@ -1938,7 +1938,6 @@ function showCustomTrends(roomId) {
 
 			//Monthly Chart
 			if (m_diff_in_days > 30 /*&& m_diff_in_days <= 364*/) {
-				console.log(result);
 				var monthlyTime = [];
 				var startMonth2 = moment(dateRange.substring(0, 10), 'MM-DD-YYYY');
 
