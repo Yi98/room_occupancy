@@ -6,7 +6,7 @@ exports.connectSocket = (io) => {
   socket = io;
 
   io.on("connection", function (socket) {
-    console.log("forecast socket connected");
+    // console.log("forecast socket connected");
   })
 }
 

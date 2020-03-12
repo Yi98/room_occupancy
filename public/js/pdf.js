@@ -247,6 +247,7 @@ window.generateReport = function (data, peopleChart, temperatureChart, humidityC
     // Number of People's chart on specific time range
     let peopleChartFinal = new Buffer(peopleChart64, "base64");
     doc.image(peopleChartFinal, 70, doc.y, {height:300});
+    sessionStorage.setItem("pplChart",peopleChartFinal);
     
     doc.moveDown();
 

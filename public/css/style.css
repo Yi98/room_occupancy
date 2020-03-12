@@ -656,7 +656,7 @@ i.deleteNoticeIcon:hover {
 	 stroke-width: 0;
 }
  .highcharts-background {
-	 fill: #e0e0e3;
+	 fill: #FFFFFFFF;
 }
  .highcharts-plot-border, .highcharts-plot-background {
 	 fill: none;
@@ -671,13 +671,13 @@ i.deleteNoticeIcon:hover {
 }
 
  .highcharts-subtitle {
-	 fill: #3e3e40;
+	 fill: #606060FF;
 	 text-transform: uppercase;
 }
 /* Axes */
  .highcharts-axis-line {
 	 fill: none;
-	 stroke: #3e3e40;
+	 stroke: #606060FF;
 }
  .highcharts-yaxis .highcharts-axis-line {
 	 stroke-width: 0;
@@ -686,13 +686,13 @@ i.deleteNoticeIcon:hover {
 	 fill: #3e3e40;
 }
  .highcharts-axis-labels {
-	 fill: #3e3e40;
+	 fill: #606060FF;
 	 cursor: default;
-	 font-size: 1.2em;
+	 font-size: 1.25em;
 }
  .highcharts-grid-line {
 	 fill: none;
-	 stroke: #3e3e40;
+	 stroke: #e7e2e2;
 }
  .highcharts-xaxis-grid .highcharts-grid-line {
 	 stroke-width: 0;
