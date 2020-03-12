@@ -675,7 +675,7 @@ var d_startDate = m_startDate;
 //Initialise the dailyTime array
 for (var i = 0; m_endDate.isSameOrAfter(d_startDate); i++) {
 	tempDailyTime[i] = d_startDate.format("D");
-	dailyTime[i] = d_startDate.format("dddd, MMMM D");
+	dailyTime[i] = d_startDate.format("dddd, M/D");
 	d_startDate.add(1, 'day');
 }
 
