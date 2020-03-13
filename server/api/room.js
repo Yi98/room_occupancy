@@ -5,7 +5,7 @@ const cache = require('../middleware/cache');
 
 const RoomController = require('../controller/room');
 
-//router.get('/details', cache.getRoomsDetails, RoomController.getRoomsDetails);
+// router.get('/details', cache.getRoomsDetails, RoomController.getRoomsDetails);
 
 router.get('/details', RoomController.getRoomsDetails);
 

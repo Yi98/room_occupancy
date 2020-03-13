@@ -1,5 +1,4 @@
 const http = require('http');
-
 const date = require('date-and-time');
 const createCsvWriter = require('csv-writer').createObjectCsvWriter;
 
@@ -45,7 +44,7 @@ const getAllRoomData = () => {
 }
 
 
-const writeToCsv = (data, fileName) => {
+async function writeToCsv(data, fileName) {
   const csvWriter = createCsvWriter({
     path: fileName,
     header: [
@@ -62,29 +61,30 @@ const writeToCsv = (data, fileName) => {
 };
 
 
-const trainAndPredict = () => {
+async function trainAndPredict() {
   let results;
 
   var spawn = require("child_process").spawn;
 
-  var process = spawn('python', ["arima.py", 'dummy.csv']);
+  var thread = spawn('python', ["./server/analytic/arima.py", './server/analytic/data/daily-minimum-temperatures.csv']);
 
-  process.stdout.on('data', function (data) {
+  thread.stdout.on('data', function (data) {
     results += data;
   })
 
-  process.stdout.on('end', function (data) {
+  thread.stdout.on('end', function (data) {
     console.log(results);
+    // return results;
+    process.send(results)
   })
 };
 
-
-const generateDummyData = () => {
+async function generateDummyData() {
   const records = [];
   let min;
   let max;
 
-  for (let k = 1; k <= 12; k++) { // a year (month)
+  for (let k = 1; k <= 2; k++) { // a year (month)
     for (let i = 1; i <= 30; i++) { // a month (day)
       for (let j = 0; j < 24; j++) {  // a day (hour)
 
@@ -111,11 +111,9 @@ const generateDummyData = () => {
     }
   }
 
-  writeToCsv(records, 'dummy.csv');
-
+  writeToCsv(records, './server/analytic/data/dummy.csv');
 };
 
-
-// getAllRoomData();
-// writeToCsv();
-generateDummyData();
+process.on('message', message => {
+  generateDummyData();
+});
