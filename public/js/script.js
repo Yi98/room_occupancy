@@ -1,6 +1,6 @@
-// const domain = 'http://localhost:3000';
+const domain = 'http://localhost:3000';
 // const domain = 'http://192.168.99.100:3000';
-const domain = 'https://roomoccupancy.herokuapp.com'; 
+//const domain = 'https://roomoccupancy.herokuapp.com'; 
 
 var reportTable = $('#reportTable').DataTable( {
     dom: 'Bfrtip',
@@ -34,7 +34,7 @@ var reportTable = $('#reportTable').DataTable( {
                 }
                 
                 var days = sessionStorage.getItem("checkDay");
-                
+                s
                 var date;
 
                 var high_ppl_data, low_ppl_data, high_ppl_date, low_temp_date, high_temp_data, low_temp_data, high_temp_date, low_temp_date, high_humid_data, low_humid_data, high_humid_date, low_humid_date, date;
@@ -2805,6 +2805,8 @@ function passRoomNameData(roomId) {
 
 			for (room in result.rooms) {
 				if (result.rooms[room]._id === roomId) {
+                    document.getElementById("passRoomId").value = roomId;
+                    console.log(document.getElementById("passRoomId").value);
 					document.getElementById("roomName").value = result.rooms[room].name;
 				}
 			}
@@ -2838,30 +2840,43 @@ function passRoomMaxCapacityData(roomId) {
 	xhttp.send();
 }
 
-function updateRoomName(roomId) {
-	//    var xhttp = new XMLHttpRequest();
-	//    xhttp.responseType = 'json';
-	//
-	//    xhttp.onreadystatechange = function () {
-	//        if(this.readyState == 4 && this.status == 200) {
-	//            var result = this.response;
-	//            
-	//            for(room in result.rooms)
-	//            {
-	//                if(result.rooms[room]._id === roomId)
-	//                {
-	//                    console.log("this is get specify room");
-	//                    console.log(result.rooms[room].name);
-	//                    console.log(result.rooms[room].maxCapacity);
-	//                }
-	//            }
-	//            
-	//        }
-	//    }
-	//            
-	//    xhttp.open("GET",`${domain}/api/rooms/details`, true);	
-	//    xhttp.send();
+function updateRoomName() {
+    var roomId = document.getElementById("passRoomId").value;
+    var name = document.getElementById("roomName").value;
+    
+	$("#spinner").show();
 
+	var xhttp = new XMLHttpRequest();
+	xhttp.responseType = 'json';
+	var url = `${domain}/api/rooms/` + roomId;
+	var params = 'roomName=' + name;
+
+	xhttp.open('PUT', url, true);
+	xhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
+	xhttp.onreadystatechange = function () {
+		if (xhttp.readyState == 4 && xhttp.status == 200) {
+			$("#spinner").hide();
+
+			var element = document.getElementById("roomEditAlert");
+			element.classList.add("alert-success");
+
+			document.getElementById("roomEditAlert").innerHTML = '<strong>' + xhttp.response.message + '</strong> <button type="button" class="close" onclick="closeRoomEditAlert()"><span>&times;</span></button>';
+			$("#roomEditAlert").show();
+		}
+
+		if (xhttp.readyState == 4 && xhttp.status == 401) {
+			$("#spinner").hide();
+
+			var element = document.getElementById("roomEditAlert");
+			element.classList.add("alert-danger");
+
+			document.getElementById("roomEditAlert").innerHTML = '<strong>' + xhttp.response.message + '</strong> <button type="button" class="close" onclick="closeRoomEditAlert()"><span>&times;</span></button>';
+			$("#roomEditAlert").show();
+		}
+	}
+
+	xhttp.send(params);
 }
 
 function showUserTable() {
@@ -3498,6 +3513,10 @@ function closeUserEditAlert() {
 
 function closeUserEditModalAlert() {
 	$("#userEditModalAlert").hide();
+};
+
+function closeRoomEditAlert() {
+	$("#roomEditAlert").hide();
 };
 
 function closeResetAlert() {

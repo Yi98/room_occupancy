@@ -143,6 +143,35 @@ exports.addRoom = (req, res) => {
     })
 };
 
+// edit a room name ->  /api/rooms/:roomId (PUT)
+exports.editRoomName = (req, res) => {
+  Room.findById(req.params.roomId)
+    .then(room => {
+      if (!room) {
+        return res.status(404).json({message: `Room ${req.params.id} not found`});
+      }
+      
+      if(req.body.roomName != null){
+        room.name = req.body.roomName;
+      }
+
+      return room.save();
+    })
+    .then(updatedRoomName => {
+      console.log(updatedRoomName.name);
+      res.status(200).json({
+        message: "Room's name has been changed",
+        updatedRoomName
+      });
+    })
+    .catch(err => {
+      res.status(500).json({
+        message: "Failed to edit room's name",
+        err
+      })
+    })
+};
+
 
 // delete a room ->  /api/room/:roomId (DELETE)
 exports.deleteRoom = (req, res) => {
