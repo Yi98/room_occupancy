@@ -1,138 +1,6 @@
-// const domain = 'http://localhost:3000';
+const domain = 'http://localhost:3000';
 // const domain = 'http://192.168.99.100:3000';
-const domain = 'https://roomoccupancy.herokuapp.com'; 
-
-var socket = io();
-
-let currentRoom;
-
-socket.on('forecast', function(forecast) {
-	console.log(forecast);
-});
-
-socket.on("people", function (msg) {
-	// for loop assign to all room their respective sensor data
-	let roomCards = document.getElementsByClassName("roomCard");
-	let noticeTime = moment().format('MMM DD, h:mm A');
-	let notify = false;
-	let addToNotifications = true;
-	let outerRoomId;
-	let roomName;
-	let roomStatus;
-	let notifications;
-
-	for (let i = 0; i < roomCards.length; i++) {
-		let roomId = roomCards[i].getElementsByClassName("roomId");
-		let maxCapacity = document.getElementsByClassName('maxCapacity');
-		let division = (msg.people / parseFloat(maxCapacity[i].innerHTML)) * 50;
-
-		if (roomId[0].innerHTML == msg.roomId) {
-			outerRoomId = msg.roomId;
-
-			document.getElementsByClassName("people")[i].innerHTML = msg.people;
-			document.getElementsByClassName('lastUpdatedTime')[i].innerHTML = noticeTime;
-			roomName = document.getElementsByClassName("roomName")[i].innerHTML;
-
-			// Check this 
-
-			document.getElementsByClassName('status-indicator-outer')[i].style.width = ((parseFloat(maxCapacity[i].innerHTML) - division) / (parseFloat(maxCapacity[i].innerHTML)) * 100) + '%';
-		}
-	}
-
-
-	// Push notifications
-	if (!localStorage.getItem('notifications')) {
-		localStorage.setItem("notifications", JSON.stringify([]));
-	}
-
-	if (msg.previous <= 10 && msg.people > 10) {
-		notify = true;
-		roomStatus = 'full';
-	}
-	else if (msg.previous <= 5 && msg.people > 5) {
-		notify = true;
-		roomStatus = 'moderate';
-	}
-
-	if (notify) {
-		notifications = JSON.parse(localStorage.getItem('notifications'));
-
-		notifications.push({ noticeTime, roomName, roomStatus });
-
-		$('#noticeMain').prepend(`<div class="noticeContainer"><p class="m-0 noticeTime">${noticeTime}</p><p style="font-size:0.9rem;">${roomName} has reached <strong>${roomStatus}</strong> capacity.
-				<button onclick="closeNoticeRow(this)" type="button" class="close closeBtn mr-3" aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
-			</p></div>`);
-
-		document.getElementById('emptyNotice').style.display = "none";
-
-		const noticeNum = document.getElementById('noticeNum');
-		noticeNum.innerHTML = Number(noticeNum.innerHTML) + 1;
-		noticeNum.style.display = "inline";
-
-		localStorage.setItem('notifications', JSON.stringify(notifications));
-	}
-
-	if (currentRoom == roomName) {
-		onUpdateTrend(outerRoomId, roomName);
-	}
-});
-
-
-socket.on("sensor", function (msg) {
-	// for loop assign to all room their respective sensor data
-	//let roomCards = document.getElementsByClassName("room-card");
-	let roomCards = document.getElementsByClassName("roomCard");
-	let noticeTime = moment().format('MMM DD, h:mm A');
-	let outerRoomId;
-	let roomName;
-
-	for (let i = 0; i < roomCards.length; i++) {
-		//let roomId = roomCards[i].getElementsByClassName("room-id");
-		let roomId = roomCards[i].getElementsByClassName("roomId");
-		// change 0 to i later
-		if (roomId[0].innerHTML == msg.roomId) {
-			outerRoomId = msg.roomId;
-			document.getElementsByClassName("temperature")[i].innerHTML = msg.temperature;
-			document.getElementsByClassName("humidity")[i].innerHTML = msg.humidity;
-			document.getElementsByClassName('lastUpdatedTime')[i].innerHTML = noticeTime;
-			roomName = document.getElementsByClassName("roomName")[i].innerHTML;
-		}
-	}
-
-	if (currentRoom == roomName) {
-		onUpdateTrend(outerRoomId, roomName);
-	}
-
-});
-
-function searchRoom() {
-	var input, filter, ul, li, i, a, txtValue;
-	input = document.getElementById("search");
-	filter = input.value.toUpperCase();
-
-	const roomCards = document.getElementsByClassName('roomCard');
-	let available = 0;
-
-	for (i = 0; i < roomCards.length; i++) {
-		a = roomCards[i].getElementsByTagName("h4")[0];
-		txtValue = a.textContent || a.innerText;
-		if (txtValue.toUpperCase().indexOf(filter) > -1) {
-			roomCards[i].style.display = "";
-			available++;
-		} else {
-			roomCards[i].style.display = "none";
-		}
-	}
-
-	if (available == 0) {
-		document.getElementById('noRoomCard').style.display = "block";
-	}
-	else {
-		document.getElementById('noRoomCard').style.display = "none";
-	}
-}
+// const domain = 'https://roomoccupancy.herokuapp.com';
 
 var reportTable = $('#reportTable').DataTable( {
 	dom: 'Bfrtip',
@@ -419,6 +287,138 @@ function generatePDF(){
 	reportTable.buttons('0').trigger();
 } 
 
+var socket = io();
+
+let currentRoom;
+
+socket.on('forecast', function(forecast) {
+	console.log(forecast);
+});
+
+socket.on("people", function (msg) {
+	// for loop assign to all room their respective sensor data
+	let roomCards = document.getElementsByClassName("roomCard");
+	let noticeTime = moment().format('MMM DD, h:mm A');
+	let notify = false;
+	let addToNotifications = true;
+	let outerRoomId;
+	let roomName;
+	let roomStatus;
+	let notifications;
+
+	for (let i = 0; i < roomCards.length; i++) {
+		let roomId = roomCards[i].getElementsByClassName("roomId");
+		let maxCapacity = document.getElementsByClassName('maxCapacity');
+		let division = (msg.people / parseFloat(maxCapacity[i].innerHTML)) * 50;
+
+		if (roomId[0].innerHTML == msg.roomId) {
+			outerRoomId = msg.roomId;
+
+			document.getElementsByClassName("people")[i].innerHTML = msg.people;
+			document.getElementsByClassName('lastUpdatedTime')[i].innerHTML = noticeTime;
+			roomName = document.getElementsByClassName("roomName")[i].innerHTML;
+
+			// Check this 
+
+			document.getElementsByClassName('status-indicator-outer')[i].style.width = ((parseFloat(maxCapacity[i].innerHTML) - division) / (parseFloat(maxCapacity[i].innerHTML)) * 100) + '%';
+		}
+	}
+
+
+	// Push notifications
+	if (!localStorage.getItem('notifications')) {
+		localStorage.setItem("notifications", JSON.stringify([]));
+	}
+
+	if (msg.previous <= 10 && msg.people > 10) {
+		notify = true;
+		roomStatus = 'full';
+	}
+	else if (msg.previous <= 5 && msg.people > 5) {
+		notify = true;
+		roomStatus = 'moderate';
+	}
+
+	if (notify) {
+		notifications = JSON.parse(localStorage.getItem('notifications'));
+
+		notifications.push({ noticeTime, roomName, roomStatus });
+
+		$('#noticeMain').prepend(`<div class="noticeContainer"><p class="m-0 noticeTime">${noticeTime}</p><p style="font-size:0.9rem;">${roomName} has reached <strong>${roomStatus}</strong> capacity.
+				<button onclick="closeNoticeRow(this)" type="button" class="close closeBtn mr-3" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</p></div>`);
+
+		document.getElementById('emptyNotice').style.display = "none";
+
+		const noticeNum = document.getElementById('noticeNum');
+		noticeNum.innerHTML = Number(noticeNum.innerHTML) + 1;
+		noticeNum.style.display = "inline";
+
+		localStorage.setItem('notifications', JSON.stringify(notifications));
+	}
+
+	if (currentRoom == roomName) {
+		onUpdateTrend(outerRoomId, roomName);
+	}
+});
+
+
+socket.on("sensor", function (msg) {
+	// for loop assign to all room their respective sensor data
+	//let roomCards = document.getElementsByClassName("room-card");
+	let roomCards = document.getElementsByClassName("roomCard");
+	let noticeTime = moment().format('MMM DD, h:mm A');
+	let outerRoomId;
+	let roomName;
+
+	for (let i = 0; i < roomCards.length; i++) {
+		//let roomId = roomCards[i].getElementsByClassName("room-id");
+		let roomId = roomCards[i].getElementsByClassName("roomId");
+		// change 0 to i later
+		if (roomId[0].innerHTML == msg.roomId) {
+			outerRoomId = msg.roomId;
+			document.getElementsByClassName("temperature")[i].innerHTML = msg.temperature;
+			document.getElementsByClassName("humidity")[i].innerHTML = msg.humidity;
+			document.getElementsByClassName('lastUpdatedTime')[i].innerHTML = noticeTime;
+			roomName = document.getElementsByClassName("roomName")[i].innerHTML;
+		}
+	}
+
+	if (currentRoom == roomName) {
+		onUpdateTrend(outerRoomId, roomName);
+	}
+
+});
+
+function searchRoom() {
+	var input, filter, ul, li, i, a, txtValue;
+	input = document.getElementById("search");
+	filter = input.value.toUpperCase();
+
+	const roomCards = document.getElementsByClassName('roomCard');
+	let available = 0;
+
+	for (i = 0; i < roomCards.length; i++) {
+		a = roomCards[i].getElementsByTagName("h4")[0];
+		txtValue = a.textContent || a.innerText;
+		if (txtValue.toUpperCase().indexOf(filter) > -1) {
+			roomCards[i].style.display = "";
+			available++;
+		} else {
+			roomCards[i].style.display = "none";
+		}
+	}
+
+	if (available == 0) {
+		document.getElementById('noRoomCard').style.display = "block";
+	}
+	else {
+		document.getElementById('noRoomCard').style.display = "none";
+	}
+}
+
 
 function showChart() {
 	var url_string = window.location.href;
@@ -596,7 +596,6 @@ function insert_data_pdf(x, day, peopleData, tempData, humidData, hourTime){
 				low_humid_date = hourTime[low_humid_index];
 				sessionStorage.setItem(day + "HumidLowestDate", low_humid_date);
 			}
-
 }
 
 function showTodayTrends(roomId) {
