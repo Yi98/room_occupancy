@@ -2219,7 +2219,6 @@ function passRoomNameData(roomId) {
 			for (room in result.rooms) {
 				if (result.rooms[room]._id === roomId) {
                     document.getElementById("passRoomId").value = roomId;
-                    console.log(document.getElementById("passRoomId").value);
 					document.getElementById("roomName").value = result.rooms[room].name;
 				}
 			}
@@ -2270,6 +2269,10 @@ function updateRoomName() {
 	xhttp.onreadystatechange = function () {
 		if (xhttp.readyState == 4 && xhttp.status == 200) {
 			$("#spinner").hide();
+            
+            document.getElementById("showRoom").innerHTML = "";
+            var table = document.getElementById("showRoom").innerHTML;
+            table = showRoomTable();
 
 			var element = document.getElementById("roomEditAlert");
 			element.classList.add("alert-success");
@@ -2280,6 +2283,10 @@ function updateRoomName() {
 
 		if (xhttp.readyState == 4 && xhttp.status == 401) {
 			$("#spinner").hide();
+            
+            document.getElementById("showRoom").innerHTML = "";
+            var table = document.getElementById("showRoom").innerHTML;
+            table = showRoomTable();
 
 			var element = document.getElementById("roomEditAlert");
 			element.classList.add("alert-danger");
