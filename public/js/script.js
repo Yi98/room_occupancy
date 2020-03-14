@@ -1,285 +1,285 @@
 const domain = 'http://localhost:3000';
 // const domain = 'http://192.168.99.100:3000';
-// const domain = 'https://roomoccupancy.herokuapp.com';
+//const domain = 'https://roomoccupancy.herokuapp.com'; 
 
 var reportTable = $('#reportTable').DataTable( {
-	dom: 'Bfrtip',
-	buttons: [
-			{
-					extend: 'pdfHtml5',
-					download: 'open',
-					alignment: 'center',
-					text: 'Export PDF',
-					customize: function(doc) {
-							let room_name = document.getElementById("room_name").innerHTML;
-							let date_range = document.getElementById("choosenRange").innerHTML;
-							let time_range = document.getElementById("choosenTimeRange").innerHTML;
-							
-							let peopleChart, temperatureChart, humidityChart;
-							let charts = Highcharts.charts; // Obtain all the Highcharts objects
+    dom: 'Bfrtip',
+    buttons: [
+        {
+            extend: 'pdfHtml5',
+            download: 'open',
+            alignment: 'center',
+            text: 'Export PDF',
+            customize: function(doc) {
+                let room_name = document.getElementById("room_name").innerHTML;
+                let date_range = document.getElementById("choosenRange").innerHTML;
+                let time_range = document.getElementById("choosenTimeRange").innerHTML;
+                
+                let peopleChart, temperatureChart, humidityChart;
+                let charts = Highcharts.charts; // Obtain all the Highcharts objects
 
-							// Loop through the Highcharts object array and make assignment according to the their respective renderTo.id
-							for (let i = 0; i < charts.length; i++) {
-									if (charts[i].renderTo.id == "peopleChart") {
-											peopleChart = charts[i].getSVG();
-									}
+                // Loop through the Highcharts object array and make assignment according to the their respective renderTo.id
+                for (let i = 0; i < charts.length; i++) {
+                    if (charts[i].renderTo.id == "peopleChart") {
+                        peopleChart = charts[i].getSVG();
+                    }
 
-									if (charts[i].renderTo.id == "temperatureChart") {
-											temperatureChart = charts[i].getSVG();
-									}
+                    if (charts[i].renderTo.id == "temperatureChart") {
+                        temperatureChart = charts[i].getSVG();
+                    }
 
-									if (charts[i].renderTo.id == "humidityChart") {
-											humidityChart = charts[i].getSVG();
-									}
-							}
-							
-							var days = sessionStorage.getItem("checkDay");
-							
-							var date;
+                    if (charts[i].renderTo.id == "humidityChart") {
+                        humidityChart = charts[i].getSVG();
+                    }
+                }
+                
+                var days = sessionStorage.getItem("checkDay");
+                
+                var date;
 
-							var high_ppl_data, low_ppl_data, high_ppl_date, low_temp_date, high_temp_data, low_temp_data, high_temp_date, low_temp_date, high_humid_data, low_humid_data, high_humid_date, low_humid_date, date;
+                var high_ppl_data, low_ppl_data, high_ppl_date, low_temp_date, high_temp_data, low_temp_data, high_temp_date, low_temp_date, high_humid_data, low_humid_data, high_humid_date, low_humid_date, date;
 
 
-							if(days === '0')
-							{
-									date = "Hour";
+                if(days === '0')
+                {
+                    date = "Hour";
 
-									high_ppl_data = sessionStorage.getItem("todayPeopleHighestData");
-									high_ppl_date = sessionStorage.getItem("todayPeopleHighestDate");
-									high_temp_data = sessionStorage.getItem("todayTempHighestData");
-									high_temp_date = sessionStorage.getItem("todayTempHighestDate");
-									high_humid_data = sessionStorage.getItem("todayHumidHighestData");
-									high_humid_date = sessionStorage.getItem("todayHumidHighestDate");
-									low_ppl_data = sessionStorage.getItem("todayPeopleLowestData");
-									low_ppl_date = sessionStorage.getItem("todayPeopleLowestDate");
-									low_temp_data = sessionStorage.getItem("todayTempLowestData");
-									low_temp_date = sessionStorage.getItem("todayTempLowestDate");
-									low_humid_data = sessionStorage.getItem("todayHumidLowestData");
-									low_humid_date = sessionStorage.getItem("todayHumidLowestDate");
-							}
-							else if(days === '1')
-							{
-									date = "Day";
+                    high_ppl_data = sessionStorage.getItem("todayPeopleHighestData");
+                    high_ppl_date = sessionStorage.getItem("todayPeopleHighestDate");
+                    high_temp_data = sessionStorage.getItem("todayTempHighestData");
+                    high_temp_date = sessionStorage.getItem("todayTempHighestDate");
+                    high_humid_data = sessionStorage.getItem("todayHumidHighestData");
+                    high_humid_date = sessionStorage.getItem("todayHumidHighestDate");
+                    low_ppl_data = sessionStorage.getItem("todayPeopleLowestData");
+                    low_ppl_date = sessionStorage.getItem("todayPeopleLowestDate");
+                    low_temp_data = sessionStorage.getItem("todayTempLowestData");
+                    low_temp_date = sessionStorage.getItem("todayTempLowestDate");
+                    low_humid_data = sessionStorage.getItem("todayHumidLowestData");
+                    low_humid_date = sessionStorage.getItem("todayHumidLowestDate");
+                }
+                else if(days === '1')
+                {
+                    date = "Day";
 
-									high_ppl_data = sessionStorage.getItem("dailyPeopleHighestData");
-									high_ppl_date = sessionStorage.getItem("dailyPeopleHighestDate");
-									high_temp_data = sessionStorage.getItem("dailyTempHighestData");
-									high_temp_date = sessionStorage.getItem("dailyTempHighestDate");
-									high_humid_data = sessionStorage.getItem("dailyHumidHighestData");
-									high_humid_date = sessionStorage.getItem("dailyHumidHighestDate");
-									low_ppl_data = sessionStorage.getItem("dailyPeopleLowestData");
-									low_ppl_date = sessionStorage.getItem("dailyPeopleLowestDate");
-									low_temp_data = sessionStorage.getItem("dailyTempLowestData");
-									low_temp_date = sessionStorage.getItem("dailyTempLowestDate");
-									low_humid_data = sessionStorage.getItem("dailyHumidLowestData");
-									low_humid_date = sessionStorage.getItem("dailyHumidLowestDate");
-							}
-							else if(days === '2')
-							{
-									date = "Week";
+                    high_ppl_data = sessionStorage.getItem("dailyPeopleHighestData");
+                    high_ppl_date = sessionStorage.getItem("dailyPeopleHighestDate");
+                    high_temp_data = sessionStorage.getItem("dailyTempHighestData");
+                    high_temp_date = sessionStorage.getItem("dailyTempHighestDate");
+                    high_humid_data = sessionStorage.getItem("dailyHumidHighestData");
+                    high_humid_date = sessionStorage.getItem("dailyHumidHighestDate");
+                    low_ppl_data = sessionStorage.getItem("dailyPeopleLowestData");
+                    low_ppl_date = sessionStorage.getItem("dailyPeopleLowestDate");
+                    low_temp_data = sessionStorage.getItem("dailyTempLowestData");
+                    low_temp_date = sessionStorage.getItem("dailyTempLowestDate");
+                    low_humid_data = sessionStorage.getItem("dailyHumidLowestData");
+                    low_humid_date = sessionStorage.getItem("dailyHumidLowestDate");
+                }
+                else if(days === '2')
+                {
+                    date = "Week";
 
-									high_ppl_data = sessionStorage.getItem("weeklyPeopleHighestData");
-									high_ppl_date = sessionStorage.getItem("weeklyPeopleHighestDate");
-									high_temp_data = sessionStorage.getItem("weeklyTempHighestData");
-									high_temp_date = sessionStorage.getItem("weeklyTempHighestDate");
-									high_humid_data = sessionStorage.getItem("weeklyHumidHighestData");
-									high_humid_date = sessionStorage.getItem("weeklyHumidHighestDate");
-									low_ppl_data = sessionStorage.getItem("weeklyPeopleLowestData");
-									low_ppl_date = sessionStorage.getItem("weeklyPeopleLowestDate");
-									low_temp_data = sessionStorage.getItem("weeklyTempLowestData");
-									low_temp_date = sessionStorage.getItem("weeklyTempLowestDate");
-									low_humid_data = sessionStorage.getItem("weeklyHumidLowestData");
-									low_humid_date = sessionStorage.getItem("weeklyHumidLowestDate");
-							}
-							else if(days === '3')
-							{
-									date = "Month";
+                    high_ppl_data = sessionStorage.getItem("weeklyPeopleHighestData");
+                    high_ppl_date = sessionStorage.getItem("weeklyPeopleHighestDate");
+                    high_temp_data = sessionStorage.getItem("weeklyTempHighestData");
+                    high_temp_date = sessionStorage.getItem("weeklyTempHighestDate");
+                    high_humid_data = sessionStorage.getItem("weeklyHumidHighestData");
+                    high_humid_date = sessionStorage.getItem("weeklyHumidHighestDate");
+                    low_ppl_data = sessionStorage.getItem("weeklyPeopleLowestData");
+                    low_ppl_date = sessionStorage.getItem("weeklyPeopleLowestDate");
+                    low_temp_data = sessionStorage.getItem("weeklyTempLowestData");
+                    low_temp_date = sessionStorage.getItem("weeklyTempLowestDate");
+                    low_humid_data = sessionStorage.getItem("weeklyHumidLowestData");
+                    low_humid_date = sessionStorage.getItem("weeklyHumidLowestDate");
+                }
+                else if(days === '3')
+                {
+                    date = "Month";
 
-									high_ppl_data = sessionStorage.getItem("monthlyPeopleHighestData");
-									high_ppl_date = sessionStorage.getItem("monthlyPeopleHighestDate");
-									high_temp_data = sessionStorage.getItem("monthlyTempHighestData");
-									high_temp_date = sessionStorage.getItem("monthlyTempHighestDate");
-									high_humid_data = sessionStorage.getItem("monthlyHumidHighestData");
-									high_humid_date = sessionStorage.getItem("monthlyHumidHighestDate");
-									low_ppl_data = sessionStorage.getItem("monthlyPeopleLowestData");
-									low_ppl_date = sessionStorage.getItem("monthlyPeopleLowestDate");
-									low_temp_data = sessionStorage.getItem("monthlyTempLowestData");
-									low_temp_date = sessionStorage.getItem("monthlyTempLowestDate");
-									low_humid_data = sessionStorage.getItem("monthlyHumidLowestData");
-									low_humid_date = sessionStorage.getItem("monthlyHumidLowestDate");      
-							}
-	
-							doc.info = {
-									title: room_name + ' Report ' + '(' + date_range + ')'
-							}
-						 
-							doc.content[0] = {
-									text: 'Report on ' + room_name,
-									alignment: 'center',
-									fontSize: 14,
-									width: '*',
-									margin: [0, 10]
-							}
-							
-							doc.content[1] = {
-									text: 'Date: ' + date_range,
-									alignment: 'center',
-									fontSize: 14,
-									width: '*',
-									margin: [0, 10]
-							}
-							
-							doc.content[2] = {
-									text: 'Time: ' + time_range,
-									alignment: 'center',
-									fontSize: 14,
-									width: '*',
-									margin: [0, 10]
-							}
-							
-							doc.content[3] = {
-									text: 'Insights',
-									alignment: 'center',
-									fontSize: 14,
-									bold: true,
-									width: '*',
-									margin: [0, 10]
-							}
-							
-							doc.content[4] = {
-									canvas: [{ type: 'line', x1: 0, y1: 2, x2: 510, y2: 2, lineWidth: 1 }]
-							}
-							
-							doc.content[5] = {
-									text: 'Table of People',
-									alignment: 'center',
-									fontSize: 14,
-									width: '*',
-									 margin: [0, 30, 0, 10]
-							}
-							
-							doc.content[6] = {
-									table: {
-											widths: [100, '*', '*'],
-											body: [
-													[
-															{},
-															{text: date, alignment: 'center', fontSize: 12},
-															{text: 'Value', alignment: 'center', fontSize: 12}
-													],
-													[
-															{text: 'Highest', alignment: 'center', fontSize: 12},
-															{text: high_ppl_date, alignment: 'center', fontSize: 12},
-															{text: high_ppl_data, alignment: 'center', fontSize: 12}
-													],
-													[
-															{text: 'Lowest', alignment: 'center', fontSize: 12},
-															{text: low_ppl_date, alignment: 'center', fontSize: 12},
-															{text: low_ppl_data, alignment: 'center', fontSize: 12}
-													]
-											]
-									}
-							}
-							
-							doc.content[7] = {
-									text: 'Table of Temperature',
-									alignment: 'center',
-									fontSize: 14,
-									width: '*',
-									 margin: [0, 30, 0, 10]
-							}
-							
-							doc.content[8] = {
-									table: {
-											widths: [100, '*', '*'],
-											body: [
-													[
-															{},
-															{text: date, alignment: 'center', fontSize: 12},
-															{text: 'Value', alignment: 'center', fontSize: 12}
-													],
-													[
-															{text: 'Highest', alignment: 'center', fontSize: 12},
-															{text: high_temp_date, alignment: 'center', fontSize: 12},
-															{text: high_temp_data, alignment: 'center', fontSize: 12}
-													],
-													[
-															{text: 'Lowest', alignment: 'center', fontSize: 12},
-															{text: low_temp_date, alignment: 'center', fontSize: 12},
-															{text: low_temp_data, alignment: 'center', fontSize: 12}
-													]
-											]
-									}
-							}
-							
-							doc.content[9] = {
-									text: 'Table of Humidity',
-									alignment: 'center',
-									fontSize: 14,
-									width: '*',
-									margin: [0, 30, 0, 10]
-							}
-							
-							doc.content[10] = {
-									table: {
-											widths: [100, '*', '*'],
-											body: [
-													[
-															{},
-															{text: date, alignment: 'center', fontSize: 12},
-															{text: 'Value', alignment: 'center', fontSize: 12}
-													],
-													[
-															{text: 'Highest', alignment: 'center', fontSize: 12},
-															{text: high_humid_date, alignment: 'center', fontSize: 12},
-															{text: high_humid_data, alignment: 'center', fontSize: 12}
-													],
-													[
-															{text: 'Lowest', alignment: 'center', fontSize: 12},
-															{text: low_humid_date, alignment: 'center', fontSize: 12},
-															{text: low_humid_data, alignment: 'center', fontSize: 12}
-													]
-											]
-									},
-									pageBreak: 'after'
-							}
-							
-							doc.content[11] = {
-									text: 'Charts',
-									alignment: 'center',
-									fontSize: 14,
-									bold: true,
-									width: '*',
-									margin: [0, 10]
-							}
-							
-							doc.content[12] = {
-									canvas: [{ type: 'line', x1: 0, y1: 2, x2: 510, y2: 2, lineWidth: 1 }]
-							}
-							
-							doc.content[13] = {
-									svg: peopleChart,
-									width: 520,
-									height: 300,
-									margin: [0, 20]
-							}
-							
-							doc.content[14] = {
-									svg: temperatureChart,
-									width: 520,
-									height: 300,
-									margin: [0, 20]
-							}
-							
-							doc.content[15] = {
-									svg: humidityChart,
-									width: 520,
-									height: 300,
-									margin: [0, 20]
-							}
-					}
-			}
-	]
+                    high_ppl_data = sessionStorage.getItem("monthlyPeopleHighestData");
+                    high_ppl_date = sessionStorage.getItem("monthlyPeopleHighestDate");
+                    high_temp_data = sessionStorage.getItem("monthlyTempHighestData");
+                    high_temp_date = sessionStorage.getItem("monthlyTempHighestDate");
+                    high_humid_data = sessionStorage.getItem("monthlyHumidHighestData");
+                    high_humid_date = sessionStorage.getItem("monthlyHumidHighestDate");
+                    low_ppl_data = sessionStorage.getItem("monthlyPeopleLowestData");
+                    low_ppl_date = sessionStorage.getItem("monthlyPeopleLowestDate");
+                    low_temp_data = sessionStorage.getItem("monthlyTempLowestData");
+                    low_temp_date = sessionStorage.getItem("monthlyTempLowestDate");
+                    low_humid_data = sessionStorage.getItem("monthlyHumidLowestData");
+                    low_humid_date = sessionStorage.getItem("monthlyHumidLowestDate");      
+                }
+    
+                doc.info = {
+                    title: room_name + ' Report ' + '(' + date_range + ')'
+                }
+               
+                doc.content[0] = {
+                    text: 'Report on ' + room_name,
+                    alignment: 'center',
+                    fontSize: 14,
+                    width: '*',
+                    margin: [0, 10]
+                }
+                
+                doc.content[1] = {
+                    text: 'Date: ' + date_range,
+                    alignment: 'center',
+                    fontSize: 14,
+                    width: '*',
+                    margin: [0, 10]
+                }
+                
+                doc.content[2] = {
+                    text: 'Time: ' + time_range,
+                    alignment: 'center',
+                    fontSize: 14,
+                    width: '*',
+                    margin: [0, 10]
+                }
+                
+                doc.content[3] = {
+                    text: 'Insights',
+                    alignment: 'center',
+                    fontSize: 14,
+                    bold: true,
+                    width: '*',
+                    margin: [0, 10]
+                }
+                
+                doc.content[4] = {
+                    canvas: [{ type: 'line', x1: 0, y1: 2, x2: 510, y2: 2, lineWidth: 1 }]
+                }
+                
+                doc.content[5] = {
+                    text: 'Table of People',
+                    alignment: 'center',
+                    fontSize: 14,
+                    width: '*',
+                     margin: [0, 30, 0, 10]
+                }
+                
+                doc.content[6] = {
+                    table: {
+                        widths: [100, '*', '*'],
+                        body: [
+                            [
+                                {},
+                                {text: date, alignment: 'center', fontSize: 12},
+                                {text: 'Value', alignment: 'center', fontSize: 12}
+                            ],
+                            [
+                                {text: 'Highest', alignment: 'center', fontSize: 12},
+                                {text: high_ppl_date, alignment: 'center', fontSize: 12},
+                                {text: high_ppl_data, alignment: 'center', fontSize: 12}
+                            ],
+                            [
+                                {text: 'Lowest', alignment: 'center', fontSize: 12},
+                                {text: low_ppl_date, alignment: 'center', fontSize: 12},
+                                {text: low_ppl_data, alignment: 'center', fontSize: 12}
+                            ]
+                        ]
+                    }
+                }
+                
+                doc.content[7] = {
+                    text: 'Table of Temperature',
+                    alignment: 'center',
+                    fontSize: 14,
+                    width: '*',
+                     margin: [0, 30, 0, 10]
+                }
+                
+                doc.content[8] = {
+                    table: {
+                        widths: [100, '*', '*'],
+                        body: [
+                            [
+                                {},
+                                {text: date, alignment: 'center', fontSize: 12},
+                                {text: 'Value', alignment: 'center', fontSize: 12}
+                            ],
+                            [
+                                {text: 'Highest', alignment: 'center', fontSize: 12},
+                                {text: high_temp_date, alignment: 'center', fontSize: 12},
+                                {text: high_temp_data, alignment: 'center', fontSize: 12}
+                            ],
+                            [
+                                {text: 'Lowest', alignment: 'center', fontSize: 12},
+                                {text: low_temp_date, alignment: 'center', fontSize: 12},
+                                {text: low_temp_data, alignment: 'center', fontSize: 12}
+                            ]
+                        ]
+                    }
+                }
+                
+                doc.content[9] = {
+                    text: 'Table of Humidity',
+                    alignment: 'center',
+                    fontSize: 14,
+                    width: '*',
+                    margin: [0, 30, 0, 10]
+                }
+                
+                doc.content[10] = {
+                    table: {
+                        widths: [100, '*', '*'],
+                        body: [
+                            [
+                                {},
+                                {text: date, alignment: 'center', fontSize: 12},
+                                {text: 'Value', alignment: 'center', fontSize: 12}
+                            ],
+                            [
+                                {text: 'Highest', alignment: 'center', fontSize: 12},
+                                {text: high_humid_date, alignment: 'center', fontSize: 12},
+                                {text: high_humid_data, alignment: 'center', fontSize: 12}
+                            ],
+                            [
+                                {text: 'Lowest', alignment: 'center', fontSize: 12},
+                                {text: low_humid_date, alignment: 'center', fontSize: 12},
+                                {text: low_humid_data, alignment: 'center', fontSize: 12}
+                            ]
+                        ]
+                    },
+                    pageBreak: 'after'
+                }
+                
+                doc.content[11] = {
+                    text: 'Charts',
+                    alignment: 'center',
+                    fontSize: 14,
+                    bold: true,
+                    width: '*',
+                    margin: [0, 10]
+                }
+                
+                doc.content[12] = {
+                    canvas: [{ type: 'line', x1: 0, y1: 2, x2: 510, y2: 2, lineWidth: 1 }]
+                }
+                
+                doc.content[13] = {
+                    svg: peopleChart,
+                    width: 520,
+                    height: 300,
+                    margin: [0, 20]
+                }
+                
+                doc.content[14] = {
+                    svg: temperatureChart,
+                    width: 520,
+                    height: 300,
+                    margin: [0, 20]
+                }
+                
+                doc.content[15] = {
+                    svg: humidityChart,
+                    width: 520,
+                    height: 300,
+                    margin: [0, 20]
+                }
+            }
+        }
+    ]
 } );
 
 
@@ -2218,6 +2218,7 @@ function passRoomNameData(roomId) {
 
 			for (room in result.rooms) {
 				if (result.rooms[room]._id === roomId) {
+                    document.getElementById("passRoomId").value = roomId;
 					document.getElementById("roomName").value = result.rooms[room].name;
 				}
 			}
@@ -2251,30 +2252,51 @@ function passRoomMaxCapacityData(roomId) {
 	xhttp.send();
 }
 
-function updateRoomName(roomId) {
-	//    var xhttp = new XMLHttpRequest();
-	//    xhttp.responseType = 'json';
-	//
-	//    xhttp.onreadystatechange = function () {
-	//        if(this.readyState == 4 && this.status == 200) {
-	//            var result = this.response;
-	//            
-	//            for(room in result.rooms)
-	//            {
-	//                if(result.rooms[room]._id === roomId)
-	//                {
-	//                    console.log("this is get specify room");
-	//                    console.log(result.rooms[room].name);
-	//                    console.log(result.rooms[room].maxCapacity);
-	//                }
-	//            }
-	//            
-	//        }
-	//    }
-	//            
-	//    xhttp.open("GET",`${domain}/api/rooms/details`, true);	
-	//    xhttp.send();
+function updateRoomName() {
+    var roomId = document.getElementById("passRoomId").value;
+    var name = document.getElementById("roomName").value;
+    
+	$("#spinner").show();
 
+	var xhttp = new XMLHttpRequest();
+	xhttp.responseType = 'json';
+	var url = `${domain}/api/rooms/` + roomId;
+	var params = 'roomName=' + name;
+
+	xhttp.open('PUT', url, true);
+	xhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
+	xhttp.onreadystatechange = function () {
+		if (xhttp.readyState == 4 && xhttp.status == 200) {
+			$("#spinner").hide();
+            
+            document.getElementById("showRoom").innerHTML = "";
+            var table = document.getElementById("showRoom").innerHTML;
+            table = showRoomTable();
+
+			var element = document.getElementById("roomEditAlert");
+			element.classList.add("alert-success");
+
+			document.getElementById("roomEditAlert").innerHTML = '<strong>' + xhttp.response.message + '</strong> <button type="button" class="close" onclick="closeRoomEditAlert()"><span>&times;</span></button>';
+			$("#roomEditAlert").show();
+		}
+
+		if (xhttp.readyState == 4 && xhttp.status == 401) {
+			$("#spinner").hide();
+            
+            document.getElementById("showRoom").innerHTML = "";
+            var table = document.getElementById("showRoom").innerHTML;
+            table = showRoomTable();
+
+			var element = document.getElementById("roomEditAlert");
+			element.classList.add("alert-danger");
+
+			document.getElementById("roomEditAlert").innerHTML = '<strong>' + xhttp.response.message + '</strong> <button type="button" class="close" onclick="closeRoomEditAlert()"><span>&times;</span></button>';
+			$("#roomEditAlert").show();
+		}
+	}
+
+	xhttp.send(params);
 }
 
 function showUserTable() {
@@ -2911,6 +2933,10 @@ function closeUserEditAlert() {
 
 function closeUserEditModalAlert() {
 	$("#userEditModalAlert").hide();
+};
+
+function closeRoomEditAlert() {
+	$("#roomEditAlert").hide();
 };
 
 function closeResetAlert() {
