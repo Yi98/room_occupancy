@@ -295,7 +295,12 @@ socket.on('forecast', function(forecast) {
 	console.log(forecast);
 });
 
+//socket.emit("people", {people: socketPeopleCount, roomId: req.params.roomId, store: true});
+
 socket.on("people", function (msg) {
+	// List of room in the room list page
+	// let roomList = document.getElementsByClassName("roomRow");
+
 	// for loop assign to all room their respective sensor data
 	let roomCards = document.getElementsByClassName("roomCard");
 	let noticeTime = moment().format('MMM DD, h:mm A');
@@ -321,6 +326,9 @@ socket.on("people", function (msg) {
 			// Check this 
 
 			document.getElementsByClassName('status-indicator-outer')[i].style.width = ((parseFloat(maxCapacity[i].innerHTML) - division) / (parseFloat(maxCapacity[i].innerHTML)) * 100) + '%';
+
+			// Room list page
+			//document.getElementsByClassName("roomRow")[i].getElementById("editPeopleCountbtn").innerHTML = msg.people;
 		}
 	}
 
@@ -2192,12 +2200,14 @@ function showRoomTable() {
 				//                console.log(result.rooms[room].maxCapacity);
 				//                
 				document.getElementById("showRoom").innerHTML +=
-					'<tbody>' + '<tr>' +
-					'<td style="display: none;">' + result.rooms[room]._id + '</td>' +
+					'<tbody>' + '<tr class="roomRow">' +
+					'<td class="roomId" style="display: none;">' + result.rooms[room]._id + '</td>' +
 					'<td>' + result.rooms[room].name + '</td>' +
 					'<td>' + result.rooms[room].maxCapacity + '</td>' +
 					'<td>' + '<button class = "editRoomNamebtn btn btn-success" id = "editRoomNamebtn" data-toggle="modal" data-target="#roomNameModal" onclick="passRoomNameData(&#39;' + result.rooms[room]._id + '&#39;)"> <span class="fa fa-edit" style="color: white;"></span></button>' + '</td>' +
-					'<td>' + '<button class = "btn btn-success" id = "editRoomCapacitybtn" data-toggle="modal" data-target="#roomMaxCapacityModal" onclick="passRoomMaxCapacityData(&#39;' + result.rooms[room]._id + '&#39;)"> <span class="fa fa-edit" style="color: white;"></span></button>' + '</td>' + '</tr>' + '</tbody>';
+					'<td>' + '<button class = "btn btn-success" id = "editRoomCapacitybtn" data-toggle="modal" data-target="#roomMaxCapacityModal" onclick="passRoomMaxCapacityData(&#39;' + result.rooms[room]._id + '&#39;)"> <span class="fa fa-edit" style="color: white;"></span></button>' + '</td>' + 
+					'<td>' + '<button class = "btn btn-success" id = "editPeopleCountbtn" data-toggle="modal" data-target="#peopleCountModal" onclick="passCurrentPeopleData(&#39;' + result.rooms[room]._id + '&#39;)"> <span class="fa fa-edit" style="color: white;"></span></button>' + '</td>'
+					'</tr>' + '</tbody>';
 			}
 		}
 	}
@@ -2249,6 +2259,64 @@ function passRoomMaxCapacityData(roomId) {
 
 	xhttp.open("GET", `${domain}/api/rooms/details`, true);
 	xhttp.send();
+}
+
+// Bong testing
+function passCurrentPeopleData(roomId) {
+	var xhttp = new XMLHttpRequest();
+	xhttp.responseType = 'json';
+    console.log("Room Id" , roomId);
+	xhttp.onreadystatechange = function () {
+		if (this.readyState == 4 && this.status == 200) {
+			var result = this.response;
+
+			document.getElementById("currentPeopleCount").value = result.people;
+			document.getElementById("currentRoomRowId").innerHTML = roomId;
+		}
+	}
+
+	xhttp.open("GET", `${domain}/api/data/${roomId}/people/real-time`, true);
+	xhttp.send();
+}
+
+function editCurrentPeopleCount() {
+	let roomId = document.getElementById("currentRoomRowId").innerHTML;
+	let editedPeopleCount = document.getElementById("currentPeopleCount").value;
+
+	var xhttp = new XMLHttpRequest();
+	xhttp.responseType = 'json';
+	var url = `${domain}/api/data/${roomId}/people/`;
+	var params = 'data=' + editedPeopleCount;
+
+	xhttp.open('PUT', url, true);
+	xhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
+	xhttp.onreadystatechange = function () {
+		if (xhttp.readyState == 4 && xhttp.status == 200) {
+			message = "People count changed to " + editedPeopleCount + ".";
+            
+			var element = document.getElementById("editPeopleCountAlert");
+			element.classList.add("alert-success");
+
+			document.getElementById("editPeopleCountAlert").innerHTML = '<strong>' + message + '</strong> <button type="button" class="close" onclick="closeEditPeopleCountAlert()"><span>&times;</span></button>';
+			$("#editPeopleCountAlert").show();
+		}
+
+		if (xhttp.readyState == 4 && xhttp.status == 401) {
+            message = "People count changing failed, Please try again later !";
+			var element = document.getElementById("editPeopleCountAlert");
+			element.classList.add("alert-danger");
+
+			document.getElementById("editPeopleCountAlert").innerHTML = '<strong>' + message + '</strong> <button type="button" class="close" onclick="closeEditPeopleCountAlert()"><span>&times;</span></button>';
+			$("#editPeopleCountAlert").show();
+		}
+	}
+
+	xhttp.send(params);
+}
+
+function resetCurrentPeopleCount() {
+	document.getElementById("currentPeopleCount").value = 0;
 }
 
 function updateRoomName(roomId) {
@@ -2912,6 +2980,10 @@ function closeUserEditAlert() {
 function closeUserEditModalAlert() {
 	$("#userEditModalAlert").hide();
 };
+
+function closeEditPeopleCountAlert() {
+	$("#editPeopleCountAlert").hide();
+}
 
 function closeResetAlert() {
 	$("#resetAlert").hide();

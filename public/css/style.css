@@ -1736,3 +1736,8 @@ label:focus,
 .intro-tooltip {
 	text-align: justify;
 }
+
+#editPeopleCountAlert {
+    margin-top: 30px;
+    display: none;							
+}

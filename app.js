@@ -17,7 +17,7 @@ const dataController = require('./server/controller/data');
 const forecastController = require('./server/controller/forecast');
 const port = 3000;
 
-dotenv.config();
+dotenv.config({ path: 'env' });
 
 mongoose.connect(process.env.DB_CRIDENTIALS, {
   useNewUrlParser: true,
