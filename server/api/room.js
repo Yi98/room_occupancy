@@ -15,6 +15,10 @@ router.get('/', RoomController.getRooms);
 
 router.post('/', cache.deleteRoomsDetails, RoomController.addRoom);
 
+router.put('/:roomId', RoomController.editRoomName);
+
+router.put('/:roomId', RoomController.editRoomMaxCapacity);
+
 router.delete('/:roomId', RoomController.deleteRoom);
 
 module.exports = router;

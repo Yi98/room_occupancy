@@ -173,9 +173,10 @@
           <div class="modal-body">
              <label for="roomName">Room name:</label>
              <input type="text" id="roomName" name="roomName"><br><br>
+             <input type="text" id="passRoomId" style="display: none;">
           </div>
           <div class="modal-footer">
-               <button type="button" class="btn btn-primary" onclick="updateRoomName(id)">Save changes</button>
+               <button type="button" class="btn btn-primary" onclick="updateRoomName()" data-dismiss="modal">Save changes</button>
                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
           </div>
         </div>
