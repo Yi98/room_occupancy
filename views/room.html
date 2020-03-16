@@ -140,6 +140,7 @@
                   <th>Edit Name</th>
                   <!--<th>Edit</th>-->
                   <th>Edit Max Capacity</th>
+                  <th>Edit Current People Count</th>
                 </tr>
               </thead>
               <tbody id="showRoom">
@@ -206,6 +207,33 @@
       </div>
     </div>
     
+    <!-- Edit People Count Modal -->
+    <div class="modal fade" id="peopleCountModal" tabindex="-1" role="dialog" aria-labelledby="peopleCountModal" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Current People Count</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="modal-body">
+                <div class="alert alert-dismissible fade show" role="alert" id="editPeopleCountAlert"></div>
+                <label for="currentPeopleCount">Current people count:</label>
+                <span style="display:none" id="currentRoomRowId"></span>
+                <input type="text" id="currentPeopleCount" name="currentPeopleCount">
+                <button type="button" class="btn btn-danger" onclick="resetCurrentPeopleCount()">Reset</button>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" onclick="editCurrentPeopleCount()">Save changes</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Virtual assistance modal -->
 	<div class="modal fade" id="vaModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
 		<div class="modal-dialog modal-lg modal-dialog-centered" role="document">
