@@ -2218,7 +2218,7 @@ function passRoomNameData(roomId) {
 
 			for (room in result.rooms) {
 				if (result.rooms[room]._id === roomId) {
-                    document.getElementById("passRoomId").value = roomId;
+                    document.getElementById("passRoomIdName").value = roomId;
 					document.getElementById("roomName").value = result.rooms[room].name;
 				}
 			}
@@ -2241,6 +2241,7 @@ function passRoomMaxCapacityData(roomId) {
 
 			for (room in result.rooms) {
 				if (result.rooms[room]._id === roomId) {
+					document.getElementById("passRoomIdMaxCapacity").value = roomId;
 					document.getElementById("roomMaxCapacity").value = result.rooms[room].maxCapacity;
 				}
 			}
@@ -2252,16 +2253,42 @@ function passRoomMaxCapacityData(roomId) {
 	xhttp.send();
 }
 
-function updateRoomName() {
-    var roomId = document.getElementById("passRoomId").value;
-    var name = document.getElementById("roomName").value;
+function updateRoom() {
+	var roomIdName = document.getElementById("passRoomIdName").value;
+	var roomIdMaxCapacity = document.getElementById("passRoomIdMaxCapacity").value;
+	var name = document.getElementById("roomName").value;
+	var maxCapacity = document.getElementById("roomMaxCapacity").value;
     
 	$("#spinner").show();
 
 	var xhttp = new XMLHttpRequest();
 	xhttp.responseType = 'json';
-	var url = `${domain}/api/rooms/` + roomId;
-	var params = 'roomName=' + name;
+	var url;
+
+	if(roomIdName)
+	{
+		url = `${domain}/api/rooms/` + roomIdName;
+	} 
+	else if(roomIdMaxCapacity)
+	{
+		url = `${domain}/api/rooms/` + roomIdMaxCapacity;
+	}
+
+	var params;
+
+	if(name)
+	{
+		maxCapacity = ' ';
+		params = 'roomName=' + name + '&roomMaxCapacity=' + maxCapacity;
+	} 
+	else if(maxCapacity)
+	{
+		name = ' ';
+		params = 'roomName=' + name + '&roomMaxCapacity=' + maxCapacity;
+	}
+
+	document.getElementById('roomName').value = "";
+	document.getElementById('roomMaxCapacity').value = "";
 
 	xhttp.open('PUT', url, true);
 	xhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
