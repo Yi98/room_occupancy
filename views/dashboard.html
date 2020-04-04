@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-  <title>Dashboard</title>
+	<title>Dashboard</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
 	<!-- jQuery library -->
@@ -10,9 +10,15 @@
 
 	<!-- Latest compiled and minified CSS -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+		integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+		crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+		integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+		crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+		integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+		crossorigin="anonymous"></script>
 
 	<!-- tooltipster -->
 	<link rel="stylesheet" type="text/css" href="tooltipster-master/dist/css/tooltipster.bundle.min.css" />
@@ -21,13 +27,16 @@
 	<script type="text/javascript" src="tooltipster-master/dist/js/tooltipster.bundle.min.js"></script>
 
 	<!-- font awesome -->
-	<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">	<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
+	<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
+		integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+	<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no'
+		name='viewport' />
 	<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	<meta name="HandheldFriendly" content="true">
-	<link rel="stylesheet" href="/css/style.css" type="text/css"/>
-	
- 	<!-- socket.io -->
+	<link rel="stylesheet" href="/css/style.css" type="text/css" />
+
+	<!-- socket.io -->
 	<script src="/socket.io/socket.io.js"></script>
 
 	<!-- embed font -->
@@ -42,216 +51,278 @@
 	<!-- Moment.js -->
 	<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.3/moment.js"></script>
 
-	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-	
-	 <!-- DataTable -->
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.css">
-    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.js"></script>
+	<link rel="stylesheet" type="text/css" href="slick/slick.css" />
+	<link rel="stylesheet" type="text/css" href="slick/slick-theme.css" />
 
-    <!-- DataTable buttons and pdfmake -->
-    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
-    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/1.6.1/js/dataTables.buttons.min.js"></script>
-    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.flash.min.js"></script>
-    <script type="text/javascript" charset="utf8" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-    <script type="text/javascript" charset="utf8" src="https://cdn.jsdelivr.net/npm/pdfmake@0.1.65/build/pdfmake.min.js"></script>
-    <script type="text/javascript" charset="utf8" src="https://cdn.jsdelivr.net/npm/pdfmake@0.1.65/build/vfs_fonts.js"></script>
-    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.html5.min.js"></script>
-    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.print.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.6.1/css/buttons.dataTables.min.css">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+	<!-- DataTable -->
+	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.css">
+	<script type="text/javascript" charset="utf8"
+		src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.js"></script>
+
+	<!-- DataTable buttons and pdfmake -->
+	<script type="text/javascript" charset="utf8"
+		src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+	<script type="text/javascript" charset="utf8"
+		src="https://cdn.datatables.net/buttons/1.6.1/js/dataTables.buttons.min.js"></script>
+	<script type="text/javascript" charset="utf8"
+		src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.flash.min.js"></script>
+	<script type="text/javascript" charset="utf8"
+		src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+	<script type="text/javascript" charset="utf8"
+		src="https://cdn.jsdelivr.net/npm/pdfmake@0.1.65/build/pdfmake.min.js"></script>
+	<script type="text/javascript" charset="utf8"
+		src="https://cdn.jsdelivr.net/npm/pdfmake@0.1.65/build/vfs_fonts.js"></script>
+	<script type="text/javascript" charset="utf8"
+		src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.html5.min.js"></script>
+	<script type="text/javascript" charset="utf8"
+		src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.print.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
+	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.6.1/css/buttons.dataTables.min.css">
+
+	<script type="text/javascript" src="slick/slick.min.js"></script>
 
 </head>
 
 <body onload="onLoadDashboard();">
-  <div class="container-fluid">
-    <div class="row nav-wrapper align-self-center">
-      <div class="col-md-2 col-sm-12 col-xs-12 left-menu-1">
-        <a href="/dashboard"><img src="images/logo.jpeg" class="img-fluid logo mt-3" alt="logo"></a>
-      </div>
-      <div class="col-md-10 col-sm-12 col-xs-12 right-menu-1 mt-3 align-self-center">
+	<div class="container-fluid">
+		<div class="row nav-wrapper align-self-center">
+			<div class="col-md-2 col-sm-12 col-xs-12 left-menu-1">
+				<a href="/dashboard"><img src="images/logo.jpeg" class="img-fluid logo mt-3" alt="logo"></a>
+			</div>
+			<div class="col-md-10 col-sm-12 col-xs-12 right-menu-1 mt-3 align-self-center">
 				<div class="row">
 					<div class="col-md-2 col-page-title">
 						<p class="pageTitle pt-1">Dashboard</p>
 					</div>
 					<div class="col-md-8 col-sm-8 col-xs-8 p-0 pb-3">
-						<input data-intro="You can also search for rooms here." data-position="right" data-step="6" type="text" id="search" class="form-control searchRoom m-0" placeholder="Search for rooms ..." onkeyup="searchRoom()">
+						<input data-intro="You can also search for rooms here." data-position="right" data-step="6" type="text"
+							id="search" class="form-control searchRoom m-0" placeholder="Search for rooms ..." onkeyup="searchRoom()">
 					</div>
 					<div class="col-md-2 col-sm-4 col-xs-4">
 						<p class="right-menu-icons float-right mr-4">
-							<a href="#" data-placement="top" data-toggle="tooltip" title="Log Out"><i class="fa fa-sign-out" id="logoutBtn" onclick="onLogout()"></i></a>
+							<a href="#" data-placement="top" data-toggle="tooltip" title="Log Out"><i class="fa fa-sign-out"
+									id="logoutBtn" onclick="onLogout()"></i></a>
 						</p>
 						<p class="right-menu-icons float-right mr-4">
 							<a href="#" data-toggle="modal" data-target="#vaModal" title="Web Tour"><i class="fa fa-info"></i></a>
 						</p>
 					</div>
 				</div>
-      </div>
-	</div>
-		
-    <div class="row main-wrapper">
-       <div class="col-md-2 col-sm-12 col-xs-12 left-menu-2">
-        <nav class="navbar text-center" id="myNavbar">
-          <ul class="navbar-nav">
-            <li class="nav-item"><a class="nav-link active disabled">Dashboard</a></li>
-                <li class="nav-item"><a href="/users" class="nav-link">Users</a></li>
-                <li class="nav-item"><a href="/rooms" class="nav-link">Rooms</a></li>
-                <!-- <li class="nav-item mt-3" style="cursor: pointer;" data-toggle="modal" data-target="#addRoomModal"><a class="nav-link">Add new room <i class="fa fa-plus text-white ml-1"></i></a></li> -->
-            </ul>
-        </nav>
-        </div>
+			</div>
+		</div>
+
+		<div class="row main-wrapper">
+			<div class="col-md-2 col-sm-12 col-xs-12 left-menu-2">
+				<nav class="navbar text-center" id="myNavbar">
+					<ul class="navbar-nav">
+						<li class="nav-item"><a class="nav-link active disabled">Dashboard</a></li>
+						<li class="nav-item"><a href="/users" class="nav-link">Users</a></li>
+						<li class="nav-item"><a href="/rooms" class="nav-link">Rooms</a></li>
+						<!-- <li class="nav-item mt-3" style="cursor: pointer;" data-toggle="modal" data-target="#addRoomModal"><a class="nav-link">Add new room <i class="fa fa-plus text-white ml-1"></i></a></li> -->
+					</ul>
+				</nav>
+			</div>
 			<div class="col-md-10 col-sm-12 col-xs-12 c right-menu-2">
 				<div class="row mt-3 mb-4">
-					<div data-intro="These are the room cards showing the current state of the room." data-step="1" id="scrolling-wrapper">
+					<div data-intro="These are the room cards showing the current state of the room." data-step="1"
+						id="scrolling-wrapper">
 						<div id="roomCardContainer" class="col-md-12">
 							<div id="placeholderRooms">
-								<div class="tempRoomCard card mr-4 border-0 shadow-sm py-4 mt-2 mb-3 bg-white rounded" style="width: 24rem; height: 14rem;" onclick="onRoomClicked('${result.rooms[room].name}')">
-										<div class="skeleton-wrapper-inner">
-											<div class="skeleton-wrapper-body">
-												<div class="skeleton-author"></div>
-												<div class="skeleton-content-1"></div>
-												<div class="skeleton-content-2"></div>
-												<div class="skeleton-content-3"></div>
-												<div class="skeleton-content-4"></div>
-											</div>
+								<div class="tempRoomCard card mr-4 border-0 shadow-sm py-4 mt-2 mb-3 bg-white rounded"
+									style="width: 24rem; height: 14rem;" onclick="onRoomClicked('${result.rooms[room].name}')">
+									<div class="skeleton-wrapper-inner">
+										<div class="skeleton-wrapper-body">
+											<div class="skeleton-author"></div>
+											<div class="skeleton-content-1"></div>
+											<div class="skeleton-content-2"></div>
+											<div class="skeleton-content-3"></div>
+											<div class="skeleton-content-4"></div>
 										</div>
+									</div>
 								</div>
 
-								<div class="tempRoomCard card mr-4 border-0 shadow-sm py-4 mt-2 mb-3 bg-white rounded" style="width: 24rem; height: 14rem;" onclick="onRoomClicked('${result.rooms[room].name}')">
-										<div class="skeleton-wrapper-inner">
-											<div class="skeleton-wrapper-body">
-												<div class="skeleton-author"></div>
-												<div class="skeleton-content-1"></div>
-												<div class="skeleton-content-2"></div>
-												<div class="skeleton-content-3"></div>
-												<div class="skeleton-content-4"></div>
-											</div>
+								<div class="tempRoomCard card mr-4 border-0 shadow-sm py-4 mt-2 mb-3 bg-white rounded"
+									style="width: 24rem; height: 14rem;" onclick="onRoomClicked('${result.rooms[room].name}')">
+									<div class="skeleton-wrapper-inner">
+										<div class="skeleton-wrapper-body">
+											<div class="skeleton-author"></div>
+											<div class="skeleton-content-1"></div>
+											<div class="skeleton-content-2"></div>
+											<div class="skeleton-content-3"></div>
+											<div class="skeleton-content-4"></div>
 										</div>
+									</div>
 								</div>
 
-								<div class="tempRoomCard card mr-4 border-0 shadow-sm py-4 mt-2 mb-3 bg-white rounded" style="width: 24rem; height: 14rem;" onclick="onRoomClicked('${result.rooms[room].name}')">
-										<div class="skeleton-wrapper-inner">
-											<div class="skeleton-wrapper-body">
-												<div class="skeleton-author"></div>
-												<div class="skeleton-content-1"></div>
-												<div class="skeleton-content-2"></div>
-												<div class="skeleton-content-3"></div>
-												<div class="skeleton-content-4"></div>
-											</div>
+								<div class="tempRoomCard card mr-4 border-0 shadow-sm py-4 mt-2 mb-3 bg-white rounded"
+									style="width: 24rem; height: 14rem;" onclick="onRoomClicked('${result.rooms[room].name}')">
+									<div class="skeleton-wrapper-inner">
+										<div class="skeleton-wrapper-body">
+											<div class="skeleton-author"></div>
+											<div class="skeleton-content-1"></div>
+											<div class="skeleton-content-2"></div>
+											<div class="skeleton-content-3"></div>
+											<div class="skeleton-content-4"></div>
 										</div>
+									</div>
 								</div>
 
-								<div class="tempRoomCard card mr-4 border-0 shadow-sm py-4 mt-2 mb-3 bg-white rounded" style="width: 24rem; height: 14rem;" onclick="onRoomClicked('${result.rooms[room].name}')">
-										<div class="skeleton-wrapper-inner">
-											<div class="skeleton-wrapper-body">
-												<div class="skeleton-author"></div>
-												<div class="skeleton-content-1"></div>
-												<div class="skeleton-content-2"></div>
-												<div class="skeleton-content-3"></div>
-												<div class="skeleton-content-4"></div>
-											</div>
+								<div class="tempRoomCard card mr-4 border-0 shadow-sm py-4 mt-2 mb-3 bg-white rounded"
+									style="width: 24rem; height: 14rem;" onclick="onRoomClicked('${result.rooms[room].name}')">
+									<div class="skeleton-wrapper-inner">
+										<div class="skeleton-wrapper-body">
+											<div class="skeleton-author"></div>
+											<div class="skeleton-content-1"></div>
+											<div class="skeleton-content-2"></div>
+											<div class="skeleton-content-3"></div>
+											<div class="skeleton-content-4"></div>
 										</div>
+									</div>
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
 
-				<div class="row mt-3">
-					<div class="col-lg-4 col-md-12">
-						<div class="row">
-							<div class="col-md-12">
-								<div data-intro="Here are the insights of the room that you have selected." data-position="right" data-step="3" id="insightItem" class="card mx-auto border-0 shadow-sm p-2 mb-4 bg-white rounded" style="width: 100%;">
-									<div class="card-body pt-2">
-										<h6 class="card-title mb-4" style="display: inline-block">Today's insights
-											<div class="spinner dotsLoading ml-3" style="display: none;">
-												<div class="bounce1"></div>
-												<div class="bounce2"></div>
-												<div class="bounce3"></div>
-											</div>
-										 	<span class="defaultRoom" id="insightRoom">- Select a room</span>
-										</h6>
-										<div class="dropdown float-right">
-											</div>
-										<div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
-												<div class="carousel-inner">
-													<div class="carousel-item active pt-2">
-														<h5 class="text-center">Highest no. of people</h5>
-														<p class="text-center"><span id="hPeople">N/A</span></p>
+				<div class="your-class">
+					<div>
+						<div class="row mt-3">
+							<div class="col-lg-4 col-md-12">
+								<div class="row">
+									<div class="col-md-12">
+										<div data-intro="Here are the insights of the room that you have selected." data-position="right"
+											data-step="3" id="insightItem" class="card mx-auto border-0 shadow-sm p-2 mb-4 bg-white rounded"
+											style="width: 100%;">
+											<div class="card-body pt-2">
+												<h6 class="card-title mb-4" style="display: inline-block">Today's insights
+													<div class="spinner dotsLoading ml-3" style="display: none;">
+														<div class="bounce1"></div>
+														<div class="bounce2"></div>
+														<div class="bounce3"></div>
 													</div>
-													<div class="carousel-item  pt-2">
-														<h5 class="text-center">Highest temperature</h5>
-														<p class="text-center"><span id="hTemp">N/A</span></p>
-													</div>
-													<div class="carousel-item pt-2">
-														<h5 class="text-center">Lowest temperature</h5>
-														<p  class="text-center"><span id="lTemp">N/A</span></p>
-													</div>
-													<div class="carousel-item pt-2">
-														<h5 class="text-center">Highest humidity</h5>
-														<p class="text-center"><span id="hHumid">N/A</span></p>
-													</div>
-													<div class="carousel-item pt-2">
-														<h5 class="text-center">Lowest humidity</h5>
-														<p class="text-center"><span id="lHumid">N/A</span></p>
-													</div>
+													<span class="defaultRoom" id="insightRoom">- Select a room</span>
+												</h6>
+												<div class="dropdown float-right">
 												</div>
-												<a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
-													<span class="carousel-control-prev-icon text-dark" aria-hidden="true"></span>
-													<span class="sr-only">Previous</span>
-												</a>
-												<a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
-													<span class="carousel-control-next-icon text-dark" aria-hidden="true"></span>
-													<span class="sr-only">Next</span>
-												</a>
+												<div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+													<div class="carousel-inner">
+														<div class="carousel-item active pt-2">
+															<h5 class="text-center">Highest no. of people</h5>
+															<p class="text-center"><span id="hPeople">N/A</span></p>
+														</div>
+														<div class="carousel-item  pt-2">
+															<h5 class="text-center">Highest temperature</h5>
+															<p class="text-center"><span id="hTemp">N/A</span></p>
+														</div>
+														<div class="carousel-item pt-2">
+															<h5 class="text-center">Lowest temperature</h5>
+															<p class="text-center"><span id="lTemp">N/A</span></p>
+														</div>
+														<div class="carousel-item pt-2">
+															<h5 class="text-center">Highest humidity</h5>
+															<p class="text-center"><span id="hHumid">N/A</span></p>
+														</div>
+														<div class="carousel-item pt-2">
+															<h5 class="text-center">Lowest humidity</h5>
+															<p class="text-center"><span id="lHumid">N/A</span></p>
+														</div>
+													</div>
+													<a class="carousel-control-prev" href="#carouselExampleControls" role="button"
+														data-slide="prev">
+														<span class="carousel-control-prev-icon text-dark" aria-hidden="true"></span>
+														<span class="sr-only">Previous</span>
+													</a>
+													<a class="carousel-control-next" href="#carouselExampleControls" role="button"
+														data-slide="next">
+														<span class="carousel-control-next-icon text-dark" aria-hidden="true"></span>
+														<span class="sr-only">Next</span>
+													</a>
+												</div>
 											</div>
+										</div>
 									</div>
-									</div>
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-md-12">
-								<div data-intro="When a room exceeds its capcity, the notifications will be shown here." data-position="right" data-step="5" id="noticeItem" class="card mx-auto border-0 shadow-sm p-2 mb-1 bg-white rounded" style="width: 100%; height: 267px;">
-									<div id="noticeRow" class="card-body pt-2">
-										<h6 class="card-title border-bottom pb-3"><i class="fa fa-bell mr-1"></i>Notification<span class="badge badge-pill badge-danger ml-2" id="noticeNum">0</span><p onclick="onClearNotices()" id="clearNotice" class="float-right">Clear all</p></h6>
-										<p class="text-center pt-4" id="emptyNotice">No notification right now !</p>
-										<div id="noticeMain" style="height: 150px; overflow:auto;"><div id="wow"></div></div>
+								</div>
+								<div class="row">
+									<div class="col-md-12">
+										<div data-intro="When a room exceeds its capcity, the notifications will be shown here."
+											data-position="right" data-step="5" id="noticeItem"
+											class="card mx-auto border-0 shadow-sm p-2 mb-1 bg-white rounded"
+											style="width: 100%; height: 267px;">
+											<div id="noticeRow" class="card-body pt-2">
+												<h6 class="card-title border-bottom pb-3"><i class="fa fa-bell mr-1"></i>Notification<span
+														class="badge badge-pill badge-danger ml-2" id="noticeNum">0</span>
+													<p onclick="onClearNotices()" id="clearNotice" class="float-right">Clear all
+													</p>
+												</h6>
+												<p class="text-center pt-4" id="emptyNotice">No notification right now !</p>
+												<div id="noticeMain" style="height: 150px; overflow:auto;">
+													<div id="wow"></div>
+												</div>
+											</div>
+										</div>
 									</div>
 								</div>
 							</div>
-						</div>
-					</div>
 
-					<div class="col-lg-8 col-md-12">
-						<div class="row">
-							<div class="col-md-12">
-								<div data-intro="Here are the trends of the room that you have selected." data-position="left" data-step="4" class="card border-0 shadow-sm p-2 bg-white rounded w-100">
-									<div class="card-body pt-2">
-										<h6 class="card-title mb-4" style="display:inline-block;">Today's trends 
-											<div class="spinner dotsLoading ml-3" style="display: none;">
-												<div class="bounce1"></div>
-												<div class="bounce2"></div>
-												<div class="bounce3"></div>
+							<div class="col-lg-8 col-md-12">
+								<div class="row">
+									<div class="col-md-12">
+										<div data-intro="Here are the trends of the room that you have selected." data-position="left"
+											data-step="4" class="card border-0 shadow-sm p-2 bg-white rounded w-100">
+											<div class="card-body pt-2">
+												<h6 class="card-title mb-4" style="display:inline-block;">Today's trends
+													<div class="spinner dotsLoading ml-3" style="display: none;">
+														<div class="bounce1"></div>
+														<div class="bounce2"></div>
+														<div class="bounce3"></div>
+													</div>
+													<span class="defaultRoom" id="trendRoom">- Select a room</span>
+												</h6>
+												<div class="dropdown float-right">
+													<a id="viewRoomDetails" href="/chart/5d935b95ea295d622c1f7e7d">more
+														details</a>
+												</div>
+												<div id="graph-container">
+													<canvas id="dashTrendChart"></canvas>
+												</div>
 											</div>
-											<span class="defaultRoom" id="trendRoom">- Select a room</span>
-										</h6>
-										<div class="dropdown float-right">
-											<a id="viewRoomDetails" href="/chart/5d935b95ea295d622c1f7e7d">more details</a>	
-										</div>
-										<div id="graph-container">
-											<canvas id="dashTrendChart"></canvas>
 										</div>
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
-				</div>				
-    	</div>
+					<div>
+						<div class="row">
+							<div class="col-lg-12">
+								<div class="row">
+									<div class="col-lg-9">
+										<h5>Forecast</h5>
+									</div>
+									<div class="col-lg-3 m-0">
+										<select class="custom-select shadow-none" id="inputGroupSelect01" style="border-color: rgb(206, 206, 206);">
+											<option selected>Hourly</option>
+											<option value="1">Weekly</option>
+											<option value="2">Monthly</option>
+										</select>
+									</div>
+								</div>
+								<div id="forecast-container h-25">
+									<canvas id="forecastChart" height="100%"></canvas>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
 
 	<!-- Add room modal -->
-	<div class="modal fade" id="addRoomModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+	<div class="modal fade" id="addRoomModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle"
+		aria-hidden="true">
 		<div class="modal-dialog modal-dialog-centered" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
@@ -273,51 +344,59 @@
 	</div>
 
 	<!-- Virtual assistance modal -->
-	<div class="modal fade" id="vaModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+	<div class="modal fade" id="vaModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle"
+		aria-hidden="true">
 		<div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-				<img id="va-image" src="images/va.png" alt="Virtual assistance">
-				<div class="modal-content">
-						<div id="va-intro-container" class="modal-body py-4 px-4">
-							<h5 class="text-justify va-intro">Hi! I am your virtual assistance, Jahni. Do you want me to give you a website tour?</h5>
-						</div>
-						<div id="va-primary-footer" class="modal-footer">
-							<button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="onDismissTour()">No, thanks</button>
-							<button type="button" class="btn btn-primary" data-dismiss="modal" onclick="beginWebTour()">Yes, sure</button>
-						</div>
-					</div>
+			<img id="va-image" src="images/va.png" alt="Virtual assistance">
+			<div class="modal-content">
+				<div id="va-intro-container" class="modal-body py-4 px-4">
+					<h5 class="text-justify va-intro">Hi! I am your virtual assistance, Jahni. Do you want me to give
+						you a website tour?</h5>
+				</div>
+				<div id="va-primary-footer" class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="onDismissTour()">No,
+						thanks</button>
+					<button type="button" class="btn btn-primary" data-dismiss="modal" onclick="beginWebTour()">Yes,
+						sure</button>
+				</div>
+			</div>
 		</div>
 	</div>
 
 
 	<!-- Virtual assistance deny modal -->
-	<div class="modal fade" id="vaModal-deny" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-			<div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-					<img id="va-image" src="images/va.png" alt="Virtual assistance">
-					<div class="modal-content">
-						<div id="va-conclude-container" class="modal-body py-4 px-4">
-							<h5 class="text-justify va-intro">Alright! You can always find me on ' <i class="fa fa-info"></i> ' at the top anytime if you need help.</h5>
-						</div>
-						<div id="va-secondary-footer" class="modal-footer">
-							<button type="button" class="btn btn-primary pull-right" data-dismiss="modal">Okay</button>
-						</div>
-					</div>
+	<div class="modal fade" id="vaModal-deny" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle"
+		aria-hidden="true">
+		<div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+			<img id="va-image" src="images/va.png" alt="Virtual assistance">
+			<div class="modal-content">
+				<div id="va-conclude-container" class="modal-body py-4 px-4">
+					<h5 class="text-justify va-intro">Alright! You can always find me on ' <i class="fa fa-info"></i> '
+						at the top anytime if you need help.</h5>
+				</div>
+				<div id="va-secondary-footer" class="modal-footer">
+					<button type="button" class="btn btn-primary pull-right" data-dismiss="modal">Okay</button>
+				</div>
 			</div>
 		</div>
+	</div>
 
 	<!-- Complete tour modal -->
-	<div class="modal fade" id="completeTourModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-			<div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-					<img id="va-image" src="images/va.png" alt="Virtual assistance">
-					<div class="modal-content">
-							<div id="va-intro-container" class="modal-body py-4 px-4">
-								<h5 class="text-justify va-intro">That's it! You can always find me on ' <i class="fa fa-info"></i> ' at the top anytime if you need help.</h5>
-							</div>
-							<div id="va-secondary-footer" class="modal-footer">
-								<button type="button" class="btn btn-primary pull-right" data-dismiss="modal">Okay</button>
-							</div>
-						</div>
+	<div class="modal fade" id="completeTourModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle"
+		aria-hidden="true">
+		<div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+			<img id="va-image" src="images/va.png" alt="Virtual assistance">
+			<div class="modal-content">
+				<div id="va-intro-container" class="modal-body py-4 px-4">
+					<h5 class="text-justify va-intro">That's it! You can always find me on ' <i class="fa fa-info"></i>
+						' at the top anytime if you need help.</h5>
+				</div>
+				<div id="va-secondary-footer" class="modal-footer">
+					<button type="button" class="btn btn-primary pull-right" data-dismiss="modal">Okay</button>
+				</div>
 			</div>
 		</div>
+	</div>
 
 	<!-- intro.js -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/intro.js/2.9.3/intro.min.js"></script>
@@ -325,4 +404,5 @@
 	<!-- javascript -->
 	<script src="js/script.js" type="text/javascript"></script>
 </body>
+
 </html>

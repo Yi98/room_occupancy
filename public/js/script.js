@@ -2,296 +2,296 @@ const domain = 'http://localhost:3000';
 // const domain = 'http://192.168.99.100:3000';
 //const domain = 'https://roomoccupancy.herokuapp.com'; 
 
-var reportTable = $('#reportTable').DataTable( {
-    dom: 'Bfrtip',
-    buttons: [
-        {
-            extend: 'pdfHtml5',
-            download: 'open',
-            alignment: 'center',
-            text: 'Export PDF',
-            customize: function(doc) {
-                let room_name = document.getElementById("room_name").innerHTML;
-                let date_range = document.getElementById("choosenRange").innerHTML;
-                let time_range = document.getElementById("choosenTimeRange").innerHTML;
-                
-                let peopleChart, temperatureChart, humidityChart;
-                let charts = Highcharts.charts; // Obtain all the Highcharts objects
+var reportTable = $('#reportTable').DataTable({
+	dom: 'Bfrtip',
+	buttons: [
+		{
+			extend: 'pdfHtml5',
+			download: 'open',
+			alignment: 'center',
+			text: 'Export PDF',
+			customize: function (doc) {
+				let room_name = document.getElementById("room_name").innerHTML;
+				let date_range = document.getElementById("choosenRange").innerHTML;
+				let time_range = document.getElementById("choosenTimeRange").innerHTML;
 
-                // Loop through the Highcharts object array and make assignment according to the their respective renderTo.id
-                for (let i = 0; i < charts.length; i++) {
-                    if (charts[i].renderTo.id == "peopleChart") {
-                        peopleChart = charts[i].getSVG();
-                    }
+				let peopleChart, temperatureChart, humidityChart;
+				let charts = Highcharts.charts; // Obtain all the Highcharts objects
 
-                    if (charts[i].renderTo.id == "temperatureChart") {
-                        temperatureChart = charts[i].getSVG();
-                    }
+				// Loop through the Highcharts object array and make assignment according to the their respective renderTo.id
+				for (let i = 0; i < charts.length; i++) {
+					if (charts[i].renderTo.id == "peopleChart") {
+						peopleChart = charts[i].getSVG();
+					}
 
-                    if (charts[i].renderTo.id == "humidityChart") {
-                        humidityChart = charts[i].getSVG();
-                    }
-                }
-                
-                var days = sessionStorage.getItem("checkDay");
-                
-                var date;
+					if (charts[i].renderTo.id == "temperatureChart") {
+						temperatureChart = charts[i].getSVG();
+					}
 
-                var high_ppl_data, low_ppl_data, high_ppl_date, low_temp_date, high_temp_data, low_temp_data, high_temp_date, low_temp_date, high_humid_data, low_humid_data, high_humid_date, low_humid_date, date;
+					if (charts[i].renderTo.id == "humidityChart") {
+						humidityChart = charts[i].getSVG();
+					}
+				}
 
+				var days = sessionStorage.getItem("checkDay");
 
-                if(days === '0')
-                {
-                    date = "Hour";
+				var date;
 
-                    high_ppl_data = sessionStorage.getItem("todayPeopleHighestData");
-                    high_ppl_date = sessionStorage.getItem("todayPeopleHighestDate");
-                    high_temp_data = sessionStorage.getItem("todayTempHighestData");
-                    high_temp_date = sessionStorage.getItem("todayTempHighestDate");
-                    high_humid_data = sessionStorage.getItem("todayHumidHighestData");
-                    high_humid_date = sessionStorage.getItem("todayHumidHighestDate");
-                    low_ppl_data = sessionStorage.getItem("todayPeopleLowestData");
-                    low_ppl_date = sessionStorage.getItem("todayPeopleLowestDate");
-                    low_temp_data = sessionStorage.getItem("todayTempLowestData");
-                    low_temp_date = sessionStorage.getItem("todayTempLowestDate");
-                    low_humid_data = sessionStorage.getItem("todayHumidLowestData");
-                    low_humid_date = sessionStorage.getItem("todayHumidLowestDate");
-                }
-                else if(days === '1')
-                {
-                    date = "Day";
-
-                    high_ppl_data = sessionStorage.getItem("dailyPeopleHighestData");
-                    high_ppl_date = sessionStorage.getItem("dailyPeopleHighestDate");
-                    high_temp_data = sessionStorage.getItem("dailyTempHighestData");
-                    high_temp_date = sessionStorage.getItem("dailyTempHighestDate");
-                    high_humid_data = sessionStorage.getItem("dailyHumidHighestData");
-                    high_humid_date = sessionStorage.getItem("dailyHumidHighestDate");
-                    low_ppl_data = sessionStorage.getItem("dailyPeopleLowestData");
-                    low_ppl_date = sessionStorage.getItem("dailyPeopleLowestDate");
-                    low_temp_data = sessionStorage.getItem("dailyTempLowestData");
-                    low_temp_date = sessionStorage.getItem("dailyTempLowestDate");
-                    low_humid_data = sessionStorage.getItem("dailyHumidLowestData");
-                    low_humid_date = sessionStorage.getItem("dailyHumidLowestDate");
-                }
-                else if(days === '2')
-                {
-                    date = "Week";
-
-                    high_ppl_data = sessionStorage.getItem("weeklyPeopleHighestData");
-                    high_ppl_date = sessionStorage.getItem("weeklyPeopleHighestDate");
-                    high_temp_data = sessionStorage.getItem("weeklyTempHighestData");
-                    high_temp_date = sessionStorage.getItem("weeklyTempHighestDate");
-                    high_humid_data = sessionStorage.getItem("weeklyHumidHighestData");
-                    high_humid_date = sessionStorage.getItem("weeklyHumidHighestDate");
-                    low_ppl_data = sessionStorage.getItem("weeklyPeopleLowestData");
-                    low_ppl_date = sessionStorage.getItem("weeklyPeopleLowestDate");
-                    low_temp_data = sessionStorage.getItem("weeklyTempLowestData");
-                    low_temp_date = sessionStorage.getItem("weeklyTempLowestDate");
-                    low_humid_data = sessionStorage.getItem("weeklyHumidLowestData");
-                    low_humid_date = sessionStorage.getItem("weeklyHumidLowestDate");
-                }
-                else if(days === '3')
-                {
-                    date = "Month";
-
-                    high_ppl_data = sessionStorage.getItem("monthlyPeopleHighestData");
-                    high_ppl_date = sessionStorage.getItem("monthlyPeopleHighestDate");
-                    high_temp_data = sessionStorage.getItem("monthlyTempHighestData");
-                    high_temp_date = sessionStorage.getItem("monthlyTempHighestDate");
-                    high_humid_data = sessionStorage.getItem("monthlyHumidHighestData");
-                    high_humid_date = sessionStorage.getItem("monthlyHumidHighestDate");
-                    low_ppl_data = sessionStorage.getItem("monthlyPeopleLowestData");
-                    low_ppl_date = sessionStorage.getItem("monthlyPeopleLowestDate");
-                    low_temp_data = sessionStorage.getItem("monthlyTempLowestData");
-                    low_temp_date = sessionStorage.getItem("monthlyTempLowestDate");
-                    low_humid_data = sessionStorage.getItem("monthlyHumidLowestData");
-                    low_humid_date = sessionStorage.getItem("monthlyHumidLowestDate");      
-                }
-    
-                doc.info = {
-                    title: room_name + ' Report ' + '(' + date_range + ')'
-                }
-               
-                doc.content[0] = {
-                    text: 'Report on ' + room_name,
-                    alignment: 'center',
-                    fontSize: 14,
-                    width: '*',
-                    margin: [0, 10]
-                }
-                
-                doc.content[1] = {
-                    text: 'Date: ' + date_range,
-                    alignment: 'center',
-                    fontSize: 14,
-                    width: '*',
-                    margin: [0, 10]
-                }
-                
-                doc.content[2] = {
-                    text: 'Time: ' + time_range,
-                    alignment: 'center',
-                    fontSize: 14,
-                    width: '*',
-                    margin: [0, 10]
-                }
-                
-                doc.content[3] = {
-                    text: 'Insights',
-                    alignment: 'center',
-                    fontSize: 14,
-                    bold: true,
-                    width: '*',
-                    margin: [0, 10]
-                }
-                
-                doc.content[4] = {
-                    canvas: [{ type: 'line', x1: 0, y1: 2, x2: 510, y2: 2, lineWidth: 1 }]
-                }
-                
-                doc.content[5] = {
-                    text: 'Table of People',
-                    alignment: 'center',
-                    fontSize: 14,
-                    width: '*',
-                     margin: [0, 30, 0, 10]
-                }
-                
-                doc.content[6] = {
-                    table: {
-                        widths: [100, '*', '*'],
-                        body: [
-                            [
-                                {},
-                                {text: date, alignment: 'center', fontSize: 12},
-                                {text: 'Value', alignment: 'center', fontSize: 12}
-                            ],
-                            [
-                                {text: 'Highest', alignment: 'center', fontSize: 12},
-                                {text: high_ppl_date, alignment: 'center', fontSize: 12},
-                                {text: high_ppl_data, alignment: 'center', fontSize: 12}
-                            ],
-                            [
-                                {text: 'Lowest', alignment: 'center', fontSize: 12},
-                                {text: low_ppl_date, alignment: 'center', fontSize: 12},
-                                {text: low_ppl_data, alignment: 'center', fontSize: 12}
-                            ]
-                        ]
-                    }
-                }
-                
-                doc.content[7] = {
-                    text: 'Table of Temperature',
-                    alignment: 'center',
-                    fontSize: 14,
-                    width: '*',
-                     margin: [0, 30, 0, 10]
-                }
-                
-                doc.content[8] = {
-                    table: {
-                        widths: [100, '*', '*'],
-                        body: [
-                            [
-                                {},
-                                {text: date, alignment: 'center', fontSize: 12},
-                                {text: 'Value', alignment: 'center', fontSize: 12}
-                            ],
-                            [
-                                {text: 'Highest', alignment: 'center', fontSize: 12},
-                                {text: high_temp_date, alignment: 'center', fontSize: 12},
-                                {text: high_temp_data, alignment: 'center', fontSize: 12}
-                            ],
-                            [
-                                {text: 'Lowest', alignment: 'center', fontSize: 12},
-                                {text: low_temp_date, alignment: 'center', fontSize: 12},
-                                {text: low_temp_data, alignment: 'center', fontSize: 12}
-                            ]
-                        ]
-                    }
-                }
-                
-                doc.content[9] = {
-                    text: 'Table of Humidity',
-                    alignment: 'center',
-                    fontSize: 14,
-                    width: '*',
-                    margin: [0, 30, 0, 10]
-                }
-                
-                doc.content[10] = {
-                    table: {
-                        widths: [100, '*', '*'],
-                        body: [
-                            [
-                                {},
-                                {text: date, alignment: 'center', fontSize: 12},
-                                {text: 'Value', alignment: 'center', fontSize: 12}
-                            ],
-                            [
-                                {text: 'Highest', alignment: 'center', fontSize: 12},
-                                {text: high_humid_date, alignment: 'center', fontSize: 12},
-                                {text: high_humid_data, alignment: 'center', fontSize: 12}
-                            ],
-                            [
-                                {text: 'Lowest', alignment: 'center', fontSize: 12},
-                                {text: low_humid_date, alignment: 'center', fontSize: 12},
-                                {text: low_humid_data, alignment: 'center', fontSize: 12}
-                            ]
-                        ]
-                    },
-                    pageBreak: 'after'
-                }
-                
-                doc.content[11] = {
-                    text: 'Charts',
-                    alignment: 'center',
-                    fontSize: 14,
-                    bold: true,
-                    width: '*',
-                    margin: [0, 10]
-                }
-                
-                doc.content[12] = {
-                    canvas: [{ type: 'line', x1: 0, y1: 2, x2: 510, y2: 2, lineWidth: 1 }]
-                }
-                
-                doc.content[13] = {
-                    svg: peopleChart,
-                    width: 520,
-                    height: 300,
-                    margin: [0, 20]
-                }
-                
-                doc.content[14] = {
-                    svg: temperatureChart,
-                    width: 520,
-                    height: 300,
-                    margin: [0, 20]
-                }
-                
-                doc.content[15] = {
-                    svg: humidityChart,
-                    width: 520,
-                    height: 300,
-                    margin: [0, 20]
-                }
-            }
-        }
-    ]
-} );
+				var high_ppl_data, low_ppl_data, high_ppl_date, low_temp_date, high_temp_data, low_temp_data, high_temp_date, low_temp_date, high_humid_data, low_humid_data, high_humid_date, low_humid_date, date;
 
 
-function generatePDF(){
+				if (days === '0') {
+					date = "Hour";
+
+					high_ppl_data = sessionStorage.getItem("todayPeopleHighestData");
+					high_ppl_date = sessionStorage.getItem("todayPeopleHighestDate");
+					high_temp_data = sessionStorage.getItem("todayTempHighestData");
+					high_temp_date = sessionStorage.getItem("todayTempHighestDate");
+					high_humid_data = sessionStorage.getItem("todayHumidHighestData");
+					high_humid_date = sessionStorage.getItem("todayHumidHighestDate");
+					low_ppl_data = sessionStorage.getItem("todayPeopleLowestData");
+					low_ppl_date = sessionStorage.getItem("todayPeopleLowestDate");
+					low_temp_data = sessionStorage.getItem("todayTempLowestData");
+					low_temp_date = sessionStorage.getItem("todayTempLowestDate");
+					low_humid_data = sessionStorage.getItem("todayHumidLowestData");
+					low_humid_date = sessionStorage.getItem("todayHumidLowestDate");
+				}
+				else if (days === '1') {
+					date = "Day";
+
+					high_ppl_data = sessionStorage.getItem("dailyPeopleHighestData");
+					high_ppl_date = sessionStorage.getItem("dailyPeopleHighestDate");
+					high_temp_data = sessionStorage.getItem("dailyTempHighestData");
+					high_temp_date = sessionStorage.getItem("dailyTempHighestDate");
+					high_humid_data = sessionStorage.getItem("dailyHumidHighestData");
+					high_humid_date = sessionStorage.getItem("dailyHumidHighestDate");
+					low_ppl_data = sessionStorage.getItem("dailyPeopleLowestData");
+					low_ppl_date = sessionStorage.getItem("dailyPeopleLowestDate");
+					low_temp_data = sessionStorage.getItem("dailyTempLowestData");
+					low_temp_date = sessionStorage.getItem("dailyTempLowestDate");
+					low_humid_data = sessionStorage.getItem("dailyHumidLowestData");
+					low_humid_date = sessionStorage.getItem("dailyHumidLowestDate");
+				}
+				else if (days === '2') {
+					date = "Week";
+
+					high_ppl_data = sessionStorage.getItem("weeklyPeopleHighestData");
+					high_ppl_date = sessionStorage.getItem("weeklyPeopleHighestDate");
+					high_temp_data = sessionStorage.getItem("weeklyTempHighestData");
+					high_temp_date = sessionStorage.getItem("weeklyTempHighestDate");
+					high_humid_data = sessionStorage.getItem("weeklyHumidHighestData");
+					high_humid_date = sessionStorage.getItem("weeklyHumidHighestDate");
+					low_ppl_data = sessionStorage.getItem("weeklyPeopleLowestData");
+					low_ppl_date = sessionStorage.getItem("weeklyPeopleLowestDate");
+					low_temp_data = sessionStorage.getItem("weeklyTempLowestData");
+					low_temp_date = sessionStorage.getItem("weeklyTempLowestDate");
+					low_humid_data = sessionStorage.getItem("weeklyHumidLowestData");
+					low_humid_date = sessionStorage.getItem("weeklyHumidLowestDate");
+				}
+				else if (days === '3') {
+					date = "Month";
+
+					high_ppl_data = sessionStorage.getItem("monthlyPeopleHighestData");
+					high_ppl_date = sessionStorage.getItem("monthlyPeopleHighestDate");
+					high_temp_data = sessionStorage.getItem("monthlyTempHighestData");
+					high_temp_date = sessionStorage.getItem("monthlyTempHighestDate");
+					high_humid_data = sessionStorage.getItem("monthlyHumidHighestData");
+					high_humid_date = sessionStorage.getItem("monthlyHumidHighestDate");
+					low_ppl_data = sessionStorage.getItem("monthlyPeopleLowestData");
+					low_ppl_date = sessionStorage.getItem("monthlyPeopleLowestDate");
+					low_temp_data = sessionStorage.getItem("monthlyTempLowestData");
+					low_temp_date = sessionStorage.getItem("monthlyTempLowestDate");
+					low_humid_data = sessionStorage.getItem("monthlyHumidLowestData");
+					low_humid_date = sessionStorage.getItem("monthlyHumidLowestDate");
+				}
+
+				doc.info = {
+					title: room_name + ' Report ' + '(' + date_range + ')'
+				}
+
+				doc.content[0] = {
+					text: 'Report on ' + room_name,
+					alignment: 'center',
+					fontSize: 14,
+					width: '*',
+					margin: [0, 10]
+				}
+
+				doc.content[1] = {
+					text: 'Date: ' + date_range,
+					alignment: 'center',
+					fontSize: 14,
+					width: '*',
+					margin: [0, 10]
+				}
+
+				doc.content[2] = {
+					text: 'Time: ' + time_range,
+					alignment: 'center',
+					fontSize: 14,
+					width: '*',
+					margin: [0, 10]
+				}
+
+				doc.content[3] = {
+					text: 'Insights',
+					alignment: 'center',
+					fontSize: 14,
+					bold: true,
+					width: '*',
+					margin: [0, 10]
+				}
+
+				doc.content[4] = {
+					canvas: [{ type: 'line', x1: 0, y1: 2, x2: 510, y2: 2, lineWidth: 1 }]
+				}
+
+				doc.content[5] = {
+					text: 'Table of People',
+					alignment: 'center',
+					fontSize: 14,
+					width: '*',
+					margin: [0, 30, 0, 10]
+				}
+
+				doc.content[6] = {
+					table: {
+						widths: [100, '*', '*'],
+						body: [
+							[
+								{},
+								{ text: date, alignment: 'center', fontSize: 12 },
+								{ text: 'Value', alignment: 'center', fontSize: 12 }
+							],
+							[
+								{ text: 'Highest', alignment: 'center', fontSize: 12 },
+								{ text: high_ppl_date, alignment: 'center', fontSize: 12 },
+								{ text: high_ppl_data, alignment: 'center', fontSize: 12 }
+							],
+							[
+								{ text: 'Lowest', alignment: 'center', fontSize: 12 },
+								{ text: low_ppl_date, alignment: 'center', fontSize: 12 },
+								{ text: low_ppl_data, alignment: 'center', fontSize: 12 }
+							]
+						]
+					}
+				}
+
+				doc.content[7] = {
+					text: 'Table of Temperature',
+					alignment: 'center',
+					fontSize: 14,
+					width: '*',
+					margin: [0, 30, 0, 10]
+				}
+
+				doc.content[8] = {
+					table: {
+						widths: [100, '*', '*'],
+						body: [
+							[
+								{},
+								{ text: date, alignment: 'center', fontSize: 12 },
+								{ text: 'Value', alignment: 'center', fontSize: 12 }
+							],
+							[
+								{ text: 'Highest', alignment: 'center', fontSize: 12 },
+								{ text: high_temp_date, alignment: 'center', fontSize: 12 },
+								{ text: high_temp_data, alignment: 'center', fontSize: 12 }
+							],
+							[
+								{ text: 'Lowest', alignment: 'center', fontSize: 12 },
+								{ text: low_temp_date, alignment: 'center', fontSize: 12 },
+								{ text: low_temp_data, alignment: 'center', fontSize: 12 }
+							]
+						]
+					}
+				}
+
+				doc.content[9] = {
+					text: 'Table of Humidity',
+					alignment: 'center',
+					fontSize: 14,
+					width: '*',
+					margin: [0, 30, 0, 10]
+				}
+
+				doc.content[10] = {
+					table: {
+						widths: [100, '*', '*'],
+						body: [
+							[
+								{},
+								{ text: date, alignment: 'center', fontSize: 12 },
+								{ text: 'Value', alignment: 'center', fontSize: 12 }
+							],
+							[
+								{ text: 'Highest', alignment: 'center', fontSize: 12 },
+								{ text: high_humid_date, alignment: 'center', fontSize: 12 },
+								{ text: high_humid_data, alignment: 'center', fontSize: 12 }
+							],
+							[
+								{ text: 'Lowest', alignment: 'center', fontSize: 12 },
+								{ text: low_humid_date, alignment: 'center', fontSize: 12 },
+								{ text: low_humid_data, alignment: 'center', fontSize: 12 }
+							]
+						]
+					},
+					pageBreak: 'after'
+				}
+
+				doc.content[11] = {
+					text: 'Charts',
+					alignment: 'center',
+					fontSize: 14,
+					bold: true,
+					width: '*',
+					margin: [0, 10]
+				}
+
+				doc.content[12] = {
+					canvas: [{ type: 'line', x1: 0, y1: 2, x2: 510, y2: 2, lineWidth: 1 }]
+				}
+
+				doc.content[13] = {
+					svg: peopleChart,
+					width: 520,
+					height: 300,
+					margin: [0, 20]
+				}
+
+				doc.content[14] = {
+					svg: temperatureChart,
+					width: 520,
+					height: 300,
+					margin: [0, 20]
+				}
+
+				doc.content[15] = {
+					svg: humidityChart,
+					width: 520,
+					height: 300,
+					margin: [0, 20]
+				}
+			}
+		}
+	]
+});
+
+$(document).ready(function () {
+	$('.your-class').slick();
+});
+
+
+function generatePDF() {
 	reportTable.buttons('0').trigger();
-} 
+}
 
 var socket = io();
 
 let currentRoom;
 
-socket.on('forecast', function(forecast) {
+socket.on('forecast', function (forecast) {
 	console.log(forecast);
 });
 
@@ -529,81 +529,81 @@ function xhrChart(roomId) {
 	}
 }
 
-function insert_data_pdf(x, day, peopleData, tempData, humidData, hourTime){
-			checkDay = x;
-			sessionStorage.setItem("checkDay", checkDay);
+function insert_data_pdf(x, day, peopleData, tempData, humidData, hourTime) {
+	checkDay = x;
+	sessionStorage.setItem("checkDay", checkDay);
 
-			high_ppl_data = Math.max.apply(Math, (peopleData.filter(v => !isNaN(v))));
+	high_ppl_data = Math.max.apply(Math, (peopleData.filter(v => !isNaN(v))));
 
-			if (high_ppl_data == "-Infinity") {
-				sessionStorage.setItem(day + "PeopleHighestData", "N/A");
-				sessionStorage.setItem(day + "PeopleHighestDate", "N/A");
-			} else {
-				sessionStorage.setItem(day + "PeopleHighestData", high_ppl_data);
-				high_ppl_index = peopleData.indexOf(high_ppl_data);
-				high_ppl_date = hourTime[high_ppl_index];
-				sessionStorage.setItem(day+ "PeopleHighestDate", high_ppl_date);
-			}
+	if (high_ppl_data == "-Infinity") {
+		sessionStorage.setItem(day + "PeopleHighestData", "N/A");
+		sessionStorage.setItem(day + "PeopleHighestDate", "N/A");
+	} else {
+		sessionStorage.setItem(day + "PeopleHighestData", high_ppl_data);
+		high_ppl_index = peopleData.indexOf(high_ppl_data);
+		high_ppl_date = hourTime[high_ppl_index];
+		sessionStorage.setItem(day + "PeopleHighestDate", high_ppl_date);
+	}
 
-			low_ppl_data = Math.min.apply(Math, (peopleData.filter(v => !isNaN(v))));
+	low_ppl_data = Math.min.apply(Math, (peopleData.filter(v => !isNaN(v))));
 
-			if (low_ppl_data == "Infinity") {
-				sessionStorage.setItem(day + "PeopleLowestData", "N/A");
-				sessionStorage.setItem(day + "PeopleLowestDate", "N/A");
-			} else {
-				sessionStorage.setItem(day + "PeopleLowestData", low_ppl_data);
-				low_ppl_index = peopleData.indexOf(low_ppl_data);
-				lowppldate = hourTime[low_ppl_index];
-				sessionStorage.setItem(day + "PeopleLowestDate", lowppldate);
-			}
+	if (low_ppl_data == "Infinity") {
+		sessionStorage.setItem(day + "PeopleLowestData", "N/A");
+		sessionStorage.setItem(day + "PeopleLowestDate", "N/A");
+	} else {
+		sessionStorage.setItem(day + "PeopleLowestData", low_ppl_data);
+		low_ppl_index = peopleData.indexOf(low_ppl_data);
+		lowppldate = hourTime[low_ppl_index];
+		sessionStorage.setItem(day + "PeopleLowestDate", lowppldate);
+	}
 
-			high_temp_data = Math.max.apply(Math, (tempData.filter(v => !isNaN(v))));
+	high_temp_data = Math.max.apply(Math, (tempData.filter(v => !isNaN(v))));
 
-			if (high_temp_data == "-Infinity") {
-				sessionStorage.setItem(day + "TempHighestData", "N/A");
-				sessionStorage.setItem(day + "TempHighestDate", "N/A");
-			} else {
-				sessionStorage.setItem(day + "TempHighestData", high_temp_data);
-				high_temp_index = tempData.indexOf(high_temp_data);
-				high_temp_date = hourTime[high_temp_index];
-				sessionStorage.setItem(day + "TempHighestDate", high_temp_date);
-			}
+	if (high_temp_data == "-Infinity") {
+		sessionStorage.setItem(day + "TempHighestData", "N/A");
+		sessionStorage.setItem(day + "TempHighestDate", "N/A");
+	} else {
+		sessionStorage.setItem(day + "TempHighestData", high_temp_data);
+		high_temp_index = tempData.indexOf(high_temp_data);
+		high_temp_date = hourTime[high_temp_index];
+		sessionStorage.setItem(day + "TempHighestDate", high_temp_date);
+	}
 
-			low_temp_data = Math.min.apply(Math, (tempData.filter(v => !isNaN(v))));
+	low_temp_data = Math.min.apply(Math, (tempData.filter(v => !isNaN(v))));
 
-			if (low_temp_data == "Infinity") {
-				sessionStorage.setItem(day + "TempLowestData", "N/A");
-				sessionStorage.setItem(day + "TempLowestDate", "N/A");
-			} else {
-				sessionStorage.setItem(day + "TempLowestData", low_temp_data);
-				low_temp_index = tempData.indexOf(low_temp_data);
-				low_temp_date = hourTime[low_temp_index];
-				sessionStorage.setItem(day + "TempLowestDate", low_temp_date);
-			}
+	if (low_temp_data == "Infinity") {
+		sessionStorage.setItem(day + "TempLowestData", "N/A");
+		sessionStorage.setItem(day + "TempLowestDate", "N/A");
+	} else {
+		sessionStorage.setItem(day + "TempLowestData", low_temp_data);
+		low_temp_index = tempData.indexOf(low_temp_data);
+		low_temp_date = hourTime[low_temp_index];
+		sessionStorage.setItem(day + "TempLowestDate", low_temp_date);
+	}
 
-			high_humid_data = Math.max.apply(Math, (humidData.filter(v => !isNaN(v))));
+	high_humid_data = Math.max.apply(Math, (humidData.filter(v => !isNaN(v))));
 
-			if (high_humid_data == "-Infinity") {
-				sessionStorage.setItem(day + "HumidHighestData", "N/A");
-				sessionStorage.setItem(day + "HumidHighestDate", "N/A");
-			} else {
-				sessionStorage.setItem(day + "HumidHighestData", high_humid_data);
-				high_humid_index = humidData.indexOf(high_humid_data);
-				high_humid_date = hourTime[high_humid_index];
-				sessionStorage.setItem(day + "HumidHighestDate", high_humid_date);
-			}
+	if (high_humid_data == "-Infinity") {
+		sessionStorage.setItem(day + "HumidHighestData", "N/A");
+		sessionStorage.setItem(day + "HumidHighestDate", "N/A");
+	} else {
+		sessionStorage.setItem(day + "HumidHighestData", high_humid_data);
+		high_humid_index = humidData.indexOf(high_humid_data);
+		high_humid_date = hourTime[high_humid_index];
+		sessionStorage.setItem(day + "HumidHighestDate", high_humid_date);
+	}
 
-			low_humid_data = Math.min.apply(Math, (humidData.filter(v => !isNaN(v))));
+	low_humid_data = Math.min.apply(Math, (humidData.filter(v => !isNaN(v))));
 
-			if (low_humid_data == "Infinity") {
-				sessionStorage.setItem(day + "HumidLowestData", "N/A");
-				sessionStorage.setItem(day + "HumidLowestDate", "N/A");
-			} else {
-				sessionStorage.setItem(day + "HumidLowestData", low_humid_data);
-				low_humid_index = humidData.indexOf(low_humid_data);
-				low_humid_date = hourTime[low_humid_index];
-				sessionStorage.setItem(day + "HumidLowestDate", low_humid_date);
-			}
+	if (low_humid_data == "Infinity") {
+		sessionStorage.setItem(day + "HumidLowestData", "N/A");
+		sessionStorage.setItem(day + "HumidLowestDate", "N/A");
+	} else {
+		sessionStorage.setItem(day + "HumidLowestData", low_humid_data);
+		low_humid_index = humidData.indexOf(low_humid_data);
+		low_humid_date = hourTime[low_humid_index];
+		sessionStorage.setItem(day + "HumidLowestDate", low_humid_date);
+	}
 }
 
 function showTodayTrends(roomId) {
@@ -709,7 +709,7 @@ function showTodayTrends(roomId) {
 				no_data_to_display();
 			}
 
-			insert_data_pdf(0,"today", peopleData,tempData,humidData,hourTime);
+			insert_data_pdf(0, "today", peopleData, tempData, humidData, hourTime);
 		}
 	};
 	xhr.open("GET", `${domain}/api/rooms/` + roomId + `?period=today`, true);
@@ -760,39 +760,39 @@ function showYesterdayTrends(roomId) {
 			for (var index in result.room.people) {
 				var m_dataDate = moment(result.room.people[index].time);
 				if (m_startDate.format("L") == m_dataDate.format("L")) {
-				for (var i = 0; i < hourTime.length; i++) {
-					if (m_dataDate.format("HH").toString().concat(':00') == hourTime[i]) {
-					peopleData[i] = peopleData[i] + result.room.people[index].data;
-					peopleDataCounter[i]++;
+					for (var i = 0; i < hourTime.length; i++) {
+						if (m_dataDate.format("HH").toString().concat(':00') == hourTime[i]) {
+							peopleData[i] = peopleData[i] + result.room.people[index].data;
+							peopleDataCounter[i]++;
+						}
 					}
 				}
-			}
 			}
 
 			//Temperature Chart
 			for (var index in result.room.temperature) {
 				var m_dataDate = moment(result.room.temperature[index].time);
 				if (m_startDate.format("L") == m_dataDate.format("L")) {
-				for (var i = 0; i < hourTime.length; i++) {
-					if (m_dataDate.format("HH").toString().concat(':00') == hourTime[i]) {
-					tempData[i] = tempData[i] + result.room.temperature[index].data;
-					tempDataCounter[i]++;
+					for (var i = 0; i < hourTime.length; i++) {
+						if (m_dataDate.format("HH").toString().concat(':00') == hourTime[i]) {
+							tempData[i] = tempData[i] + result.room.temperature[index].data;
+							tempDataCounter[i]++;
+						}
 					}
 				}
-			}
 			}
 
 			//Humidity Chart
 			for (var index in result.room.humidity) {
 				var m_dataDate = moment(result.room.humidity[index].time);
 				if (m_startDate.format("L") == m_dataDate.format("L")) {
-				for (var i = 0; i < hourTime.length; i++) {
-					if (m_dataDate.format("HH").toString().concat(':00') == hourTime[i]) {
-					humidData[i] = humidData[i] + result.room.humidity[index].data;
-					humidDataCounter[i]++;
+					for (var i = 0; i < hourTime.length; i++) {
+						if (m_dataDate.format("HH").toString().concat(':00') == hourTime[i]) {
+							humidData[i] = humidData[i] + result.room.humidity[index].data;
+							humidDataCounter[i]++;
+						}
 					}
 				}
-			}
 			}
 
 			//Check whether the chart have data
@@ -825,106 +825,106 @@ function showYesterdayTrends(roomId) {
 				no_data_to_display();
 			}
 
-			insert_data_pdf(0,"today", peopleData,tempData,humidData,hourTime);
+			insert_data_pdf(0, "today", peopleData, tempData, humidData, hourTime);
 		}
 	};
 	xhr.open("GET", `${domain}/api/rooms/` + roomId + `?period=yesterday`, true);
 	xhr.send();
 }
-  
+
 function showWeeklyTrends(roomId) {
-var dateRange = document.getElementById("choosenRange").innerHTML.toString();
-var timeRange = document.getElementById("choosenTimeRange").innerHTML.toString();
-var startDate = new Date(dateRange.substring(0, 10));
-var endDate = new Date(dateRange.substring(13, 23));
-var m_startDate = moment(dateRange.substring(0, 10), 'MM-DD-YYYY');
-var m_endDate = moment(dateRange.substring(13, 23), 'MM-DD-YYYY');
-var m_diff_in_days = m_endDate.diff(m_startDate, 'days');
-var startTime = timeRange.substring(0, 5);
-var endTime = timeRange.substring(8, 13);
-var diff_in_time = parseInt(endTime.substring(0, 2)) - parseInt(startTime.substring(0, 2));
-var peopleData = []; // people data
-var peopleDataCounter = []; // people data counter
-var tempData = []; // temp data
-var tempDataCounter = []; // temp data counter
-var humidData = []; // humidity data
-var humidDataCounter = []; // humidity data counter
-var tempDailyTime = [];
-var dailyTime = []; // var dailyTime = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-var data_ready = false;
-var d_startDate = m_startDate;
+	var dateRange = document.getElementById("choosenRange").innerHTML.toString();
+	var timeRange = document.getElementById("choosenTimeRange").innerHTML.toString();
+	var startDate = new Date(dateRange.substring(0, 10));
+	var endDate = new Date(dateRange.substring(13, 23));
+	var m_startDate = moment(dateRange.substring(0, 10), 'MM-DD-YYYY');
+	var m_endDate = moment(dateRange.substring(13, 23), 'MM-DD-YYYY');
+	var m_diff_in_days = m_endDate.diff(m_startDate, 'days');
+	var startTime = timeRange.substring(0, 5);
+	var endTime = timeRange.substring(8, 13);
+	var diff_in_time = parseInt(endTime.substring(0, 2)) - parseInt(startTime.substring(0, 2));
+	var peopleData = []; // people data
+	var peopleDataCounter = []; // people data counter
+	var tempData = []; // temp data
+	var tempDataCounter = []; // temp data counter
+	var humidData = []; // humidity data
+	var humidDataCounter = []; // humidity data counter
+	var tempDailyTime = [];
+	var dailyTime = []; // var dailyTime = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+	var data_ready = false;
+	var d_startDate = m_startDate;
 
 
-//Initialise the dailyTime array
-for (var i = 0; m_endDate.isSameOrAfter(d_startDate); i++) {
-	tempDailyTime[i] = d_startDate.format("D");
-	dailyTime[i] = d_startDate.format("dddd, M/D");
-	d_startDate.add(1, 'day');
-}
-
-var xhr = new XMLHttpRequest();
-xhr.responseType = 'json';
-xhr.onreadystatechange = function() {
-	if (this.readyState == 4 && this.status == 200) {
-	var result = this.response;
-	console.log(result);
-	document.getElementById("room_name").innerHTML = result.room.name;
-
-	//Initialise the data array
-	for (var i = 0; i < dailyTime.length; i++) {
-		peopleData[i] = 0;
-		peopleDataCounter[i] = 0;
-		tempData[i] = 0;
-		tempDataCounter[i] = 0;
-		humidData[i] = 0;
-		humidDataCounter[i] = 0;
+	//Initialise the dailyTime array
+	for (var i = 0; m_endDate.isSameOrAfter(d_startDate); i++) {
+		tempDailyTime[i] = d_startDate.format("D");
+		dailyTime[i] = d_startDate.format("dddd, M/D");
+		d_startDate.add(1, 'day');
 	}
 
-	//People Chart
-	for (var index in result.room.people) {
-		var m_dataDate = moment(result.room.people[index].time);
-		if (m_dataDate.hours() >= parseInt(startTime.substring(0, 2)) && m_dataDate.hours() <= parseInt(endTime.substring(0, 2))) {
+	var xhr = new XMLHttpRequest();
+	xhr.responseType = 'json';
+	xhr.onreadystatechange = function () {
+		if (this.readyState == 4 && this.status == 200) {
+			var result = this.response;
+			console.log(result);
+			document.getElementById("room_name").innerHTML = result.room.name;
+
+			//Initialise the data array
 			for (var i = 0; i < dailyTime.length; i++) {
-				if (m_dataDate.format("D") == tempDailyTime[i]) {
-					peopleData[i] = peopleData[i] + result.room.people[index].data;
-					peopleDataCounter[i]++;
+				peopleData[i] = 0;
+				peopleDataCounter[i] = 0;
+				tempData[i] = 0;
+				tempDataCounter[i] = 0;
+				humidData[i] = 0;
+				humidDataCounter[i] = 0;
+			}
+
+			//People Chart
+			for (var index in result.room.people) {
+				var m_dataDate = moment(result.room.people[index].time);
+				if (m_dataDate.hours() >= parseInt(startTime.substring(0, 2)) && m_dataDate.hours() <= parseInt(endTime.substring(0, 2))) {
+					for (var i = 0; i < dailyTime.length; i++) {
+						if (m_dataDate.format("D") == tempDailyTime[i]) {
+							peopleData[i] = peopleData[i] + result.room.people[index].data;
+							peopleDataCounter[i]++;
+						}
+					}
 				}
 			}
-		}
-	}
 
-	//Temperature Chart
-	for (var index in result.room.temperature) {
-		var m_dataDate = moment(result.room.temperature[index].time);
-		if (m_dataDate.hours() >= parseInt(startTime.substring(0, 2)) && m_dataDate.hours() <= parseInt(endTime.substring(0, 2))) {
-			for (var i = 0; i < dailyTime.length; i++) {
-				if (m_dataDate.format("D") == tempDailyTime[i]) {
-				tempData[i] = tempData[i] + result.room.temperature[index].data;
-				tempDataCounter[i]++;
+			//Temperature Chart
+			for (var index in result.room.temperature) {
+				var m_dataDate = moment(result.room.temperature[index].time);
+				if (m_dataDate.hours() >= parseInt(startTime.substring(0, 2)) && m_dataDate.hours() <= parseInt(endTime.substring(0, 2))) {
+					for (var i = 0; i < dailyTime.length; i++) {
+						if (m_dataDate.format("D") == tempDailyTime[i]) {
+							tempData[i] = tempData[i] + result.room.temperature[index].data;
+							tempDataCounter[i]++;
+						}
+					}
 				}
 			}
-		}
-	}
 
-	//Humidity Chart
-	for (var index in result.room.humidity) {
-		var m_dataDate = moment(result.room.humidity[index].time);
-		if (m_dataDate.hours() >= parseInt(startTime.substring(0, 2)) && m_dataDate.hours() <= parseInt(endTime.substring(0, 2))) {
-			for (var i = 0; i < dailyTime.length; i++) {
-				if (m_dataDate.format("D") == tempDailyTime[i]) {
-				humidData[i] = humidData[i] + result.room.humidity[index].data;
-				humidDataCounter[i]++;
+			//Humidity Chart
+			for (var index in result.room.humidity) {
+				var m_dataDate = moment(result.room.humidity[index].time);
+				if (m_dataDate.hours() >= parseInt(startTime.substring(0, 2)) && m_dataDate.hours() <= parseInt(endTime.substring(0, 2))) {
+					for (var i = 0; i < dailyTime.length; i++) {
+						if (m_dataDate.format("D") == tempDailyTime[i]) {
+							humidData[i] = humidData[i] + result.room.humidity[index].data;
+							humidDataCounter[i]++;
+						}
+					}
 				}
 			}
-		}
-	}
-	
-	//Check whether the chart have data
-	for (var i = 0; i < dailyTime.length; i++) {
-		if (peopleData[i] > 0 || tempData[i] > 0 || humidData[i] > 0) {
-		data_ready = true;
-		}
-	}
+
+			//Check whether the chart have data
+			for (var i = 0; i < dailyTime.length; i++) {
+				if (peopleData[i] > 0 || tempData[i] > 0 || humidData[i] > 0) {
+					data_ready = true;
+				}
+			}
 
 			//Get the average for each data in the time
 			for (var i = 0; i < peopleData.length; i++) {
@@ -949,7 +949,7 @@ xhr.onreadystatechange = function() {
 				no_data_to_display();
 			}
 
-			insert_data_pdf(1,"daily", peopleData,tempData,humidData,dailyTime);
+			insert_data_pdf(1, "daily", peopleData, tempData, humidData, dailyTime);
 		}
 	};
 	xhr.open("GET", `${domain}/api/rooms/` + roomId + `?period=weekly`, true);
@@ -1140,7 +1140,7 @@ function showMonthlyTrends(roomId) {
 				no_data_to_display();
 			}
 
-			insert_data_pdf(2,"weekly", peopleData,tempData,humidData,weeklyTime);
+			insert_data_pdf(2, "weekly", peopleData, tempData, humidData, weeklyTime);
 		}
 	};
 	xhr.open("GET", `${domain}/api/rooms/` + roomId + `?period=monthly`, true);
@@ -1277,11 +1277,11 @@ function showYearlyTrends(roomId) {
 				no_data_to_display();
 			}
 
-			insert_data_pdf(3,"monthly", peopleData,tempData,humidData,monthlyTime);
-	}
-};
-xhr.open("GET", `${domain}/api/rooms/` + roomId + `?period=yearly`, true);
-xhr.send();
+			insert_data_pdf(3, "monthly", peopleData, tempData, humidData, monthlyTime);
+		}
+	};
+	xhr.open("GET", `${domain}/api/rooms/` + roomId + `?period=yearly`, true);
+	xhr.send();
 }
 
 function showCustomTrends(roomId) {
@@ -1400,7 +1400,7 @@ function showCustomTrends(roomId) {
 					no_data_to_display();
 				}
 
-				insert_data_pdf(0,"today", peopleData,tempData,humidData,hourTime);
+				insert_data_pdf(0, "today", peopleData, tempData, humidData, hourTime);
 			}
 
 			//Daily Chart
@@ -1509,7 +1509,7 @@ function showCustomTrends(roomId) {
 						no_data_to_display();
 					}
 
-					insert_data_pdf(1,"daily", peopleData,tempData,humidData,dailyTime);
+					insert_data_pdf(1, "daily", peopleData, tempData, humidData, dailyTime);
 				}
 			}
 
@@ -1531,7 +1531,7 @@ function showCustomTrends(roomId) {
 					//Initialise the weeklyTime array
 					tempStart = d_startDate.add(7, 'days').format('MM-DD-YYYY');
 					tempStart2 = d_startDate2.add(7, 'days').format('MM-DD-YYYY');
-				
+
 					for (var i = 0; i < Math.ceil(m_diff_in_days / 6); i++) {
 						if (d_startDate <= m_endDate) {
 							weeklyTime[i] = "Week " + (i + 1);
@@ -1674,7 +1674,7 @@ function showCustomTrends(roomId) {
 						no_data_to_display();
 					}
 
-					insert_data_pdf(2,"weekly", peopleData,tempData,humidData,weeklyTime);
+					insert_data_pdf(2, "weekly", peopleData, tempData, humidData, weeklyTime);
 				}
 			}
 
@@ -1778,7 +1778,7 @@ function showCustomTrends(roomId) {
 					no_data_to_display();
 				}
 
-				insert_data_pdf(3,"monthly", peopleData,tempData,humidData,monthlyTime);
+				insert_data_pdf(3, "monthly", peopleData, tempData, humidData, monthlyTime);
 			}
 		}
 	};
@@ -2205,9 +2205,9 @@ function showRoomTable() {
 					'<td>' + result.rooms[room].name + '</td>' +
 					'<td>' + result.rooms[room].maxCapacity + '</td>' +
 					'<td>' + '<button class = "editRoomNamebtn btn btn-success" id = "editRoomNamebtn" data-toggle="modal" data-target="#roomNameModal" onclick="passRoomNameData(&#39;' + result.rooms[room]._id + '&#39;)"> <span class="fa fa-edit" style="color: white;"></span></button>' + '</td>' +
-					'<td>' + '<button class = "btn btn-success" id = "editRoomCapacitybtn" data-toggle="modal" data-target="#roomMaxCapacityModal" onclick="passRoomMaxCapacityData(&#39;' + result.rooms[room]._id + '&#39;)"> <span class="fa fa-edit" style="color: white;"></span></button>' + '</td>' + 
+					'<td>' + '<button class = "btn btn-success" id = "editRoomCapacitybtn" data-toggle="modal" data-target="#roomMaxCapacityModal" onclick="passRoomMaxCapacityData(&#39;' + result.rooms[room]._id + '&#39;)"> <span class="fa fa-edit" style="color: white;"></span></button>' + '</td>' +
 					'<td>' + '<button class = "btn btn-success" id = "editPeopleCountbtn" data-toggle="modal" data-target="#peopleCountModal" onclick="passCurrentPeopleData(&#39;' + result.rooms[room]._id + '&#39;)"> <span class="fa fa-edit" style="color: white;"></span></button>' + '</td>'
-					'</tr>' + '</tbody>';
+				'</tr>' + '</tbody>';
 			}
 		}
 	}
@@ -2228,7 +2228,7 @@ function passRoomNameData(roomId) {
 
 			for (room in result.rooms) {
 				if (result.rooms[room]._id === roomId) {
-                    document.getElementById("passRoomIdName").value = roomId;
+					document.getElementById("passRoomIdName").value = roomId;
 					document.getElementById("roomName").value = result.rooms[room].name;
 				}
 			}
@@ -2267,7 +2267,7 @@ function passRoomMaxCapacityData(roomId) {
 function passCurrentPeopleData(roomId) {
 	var xhttp = new XMLHttpRequest();
 	xhttp.responseType = 'json';
-    console.log("Room Id" , roomId);
+	console.log("Room Id", roomId);
 	xhttp.onreadystatechange = function () {
 		if (this.readyState == 4 && this.status == 200) {
 			var result = this.response;
@@ -2297,7 +2297,7 @@ function editCurrentPeopleCount() {
 		if (xhttp.readyState == 4 && xhttp.status == 200) {
 			$("#spinner").hide();
 			message = "People count changed to " + editedPeopleCount + ".";
-            
+
 			var element = document.getElementById("editPeopleCountAlert");
 			element.classList.add("alert-success");
 
@@ -2307,7 +2307,7 @@ function editCurrentPeopleCount() {
 
 		if (xhttp.readyState == 4 && xhttp.status == 401) {
 			$("#spinner").hide();
-            message = "People count changing failed, Please try again later !";
+			message = "People count changing failed, Please try again later !";
 			var element = document.getElementById("editPeopleCountAlert");
 			element.classList.add("alert-danger");
 
@@ -2328,31 +2328,27 @@ function updateRoom() {
 	var roomIdMaxCapacity = document.getElementById("passRoomIdMaxCapacity").value;
 	var name = document.getElementById("roomName").value;
 	var maxCapacity = document.getElementById("roomMaxCapacity").value;
-    
+
 	$("#spinner").show();
 
 	var xhttp = new XMLHttpRequest();
 	xhttp.responseType = 'json';
 	var url;
 
-	if(roomIdName)
-	{
+	if (roomIdName) {
 		url = `${domain}/api/rooms/` + roomIdName;
-	} 
-	else if(roomIdMaxCapacity)
-	{
+	}
+	else if (roomIdMaxCapacity) {
 		url = `${domain}/api/rooms/` + roomIdMaxCapacity;
 	}
 
 	var params;
 
-	if(name)
-	{
+	if (name) {
 		maxCapacity = ' ';
 		params = 'roomName=' + name + '&roomMaxCapacity=' + maxCapacity;
-	} 
-	else if(maxCapacity)
-	{
+	}
+	else if (maxCapacity) {
 		name = ' ';
 		params = 'roomName=' + name + '&roomMaxCapacity=' + maxCapacity;
 	}
@@ -2366,10 +2362,10 @@ function updateRoom() {
 	xhttp.onreadystatechange = function () {
 		if (xhttp.readyState == 4 && xhttp.status == 200) {
 			$("#spinner").hide();
-            
-            document.getElementById("showRoom").innerHTML = "";
-            var table = document.getElementById("showRoom").innerHTML;
-            table = showRoomTable();
+
+			document.getElementById("showRoom").innerHTML = "";
+			var table = document.getElementById("showRoom").innerHTML;
+			table = showRoomTable();
 
 			var element = document.getElementById("roomEditAlert");
 			element.classList.add("alert-success");
@@ -2380,10 +2376,10 @@ function updateRoom() {
 
 		if (xhttp.readyState == 4 && xhttp.status == 401) {
 			$("#spinner").hide();
-            
-            document.getElementById("showRoom").innerHTML = "";
-            var table = document.getElementById("showRoom").innerHTML;
-            table = showRoomTable();
+
+			document.getElementById("showRoom").innerHTML = "";
+			var table = document.getElementById("showRoom").innerHTML;
+			table = showRoomTable();
 
 			var element = document.getElementById("roomEditAlert");
 			element.classList.add("alert-danger");
@@ -4016,4 +4012,56 @@ function onDismissChartTour() {
 }
 
 
-      
+// Forecast Chart
+let dashForecastChart = document.getElementById('forecastChart').getContext('2d');
+
+let peopleForecast = dashForecastChart.createLinearGradient(500, 0, 100, 0);
+peopleForecast.addColorStop(0, "#764ba2");
+peopleForecast.addColorStop(1, "#667eea");
+
+let forecastTimeline = ['0:00', '1:00', '2:00', '3:00', '4:00', '5:00', '6:00', '7:00', '8:00', '9:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00', '24:00'];
+
+let currentForecastHour = moment().hours();
+forecastTimeline = forecastTimeline.slice(0, currentForecastHour + 1);
+
+let forecastData = [];
+
+for (let i = 0; i < forecastTimeline.length; i++) {
+	forecastData.push(0);
+}
+
+let forecastChart = new Chart(dashForecastChart, {
+	// The type of chart we want to create
+	type: 'line',
+
+	// The data for our dataset
+	data: {
+		labels: forecastTimeline,
+		datasets: [{
+			label: 'No. of People',
+			backgroundColor: peopleForecast,
+			borderColor: peopleForecast,
+			data: forecastData,
+			fill: false
+		}
+		]
+	},
+
+	// Configuration options go here
+	options: {
+		scales: {
+			xAxes: [{
+				barPercentage: 0.4
+			}],
+			yAxes: [{
+				scaleLabel: {
+					display: true,
+					labelString: 'Number of people'
+				},
+				ticks: {
+					beginAtZero: true
+				}
+			}]
+		}
+	}
+});

@@ -73,7 +73,7 @@ async function trainAndPredict() {
   })
 
   thread.stdout.on('end', function (data) {
-    console.log(results);
+    // console.log(results);
     // return results;
     process.send(results)
   })
@@ -85,7 +85,7 @@ async function generateDummyData() {
   let max;
 
   for (let k = 1; k <= 1; k++) { // a year (month)
-    for (let i = 1; i <= 3; i++) { // a month (day)
+    for (let i = 1; i <= 7; i++) { // a month (day)
       for (let j = 0; j < 24; j++) {  // a day (hour)
 
         // simulate peak hour on 8pm everyday
