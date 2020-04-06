@@ -142,5 +142,5 @@ function trainAndPredict(filePath) {
 
 process.on('message', message => {
   // generateDummyData();
-  getAllRoomData('5db03ec62040a70a38244de1', 'weekly');
+  getRoomData('5db03ec62040a70a38244de1', 'weekly');
 });

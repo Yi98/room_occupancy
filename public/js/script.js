@@ -287,8 +287,11 @@ var socket = io();
 
 let currentRoom;
 
-socket.on('forecast', function (forecast) {
-	console.log(forecast);
+socket.on('forecast', function (forecastResults) {
+	console.log(forecastResults.result);
+	forecastChart.data.datasets[0].data = forecastResults.result;
+
+	forecastChart.update();
 });
 
 //socket.emit("people", {people: socketPeopleCount, roomId: req.params.roomId, store: true});
@@ -4019,10 +4022,7 @@ let peopleForecast = dashForecastChart.createLinearGradient(500, 0, 100, 0);
 peopleForecast.addColorStop(0, "#764ba2");
 peopleForecast.addColorStop(1, "#667eea");
 
-let forecastTimeline = ['0:00', '1:00', '2:00', '3:00', '4:00', '5:00', '6:00', '7:00', '8:00', '9:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00', '24:00'];
-
-let currentForecastHour = moment().hours();
-forecastTimeline = forecastTimeline.slice(0, currentForecastHour + 1);
+let forecastTimeline = ['0:00', '1:00', '2:00', '3:00', '4:00', '5:00', '6:00', '7:00', '8:00', '9:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00'];
 
 let forecastData = [];
 
