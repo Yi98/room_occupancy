@@ -278,10 +278,6 @@ var reportTable = $('#reportTable').DataTable({
 	]
 });
 
-$(document).ready(function () {
-	$('.your-class').slick();
-});
-
 
 function generatePDF() {
 	reportTable.buttons('0').trigger();
@@ -3823,6 +3819,10 @@ function horizontalWheelScroll() {
 function onLoadDashboard() {
 	showDashboardRooms();
 	horizontalWheelScroll();
+
+	$(document).ready(function () {
+		$('.your-class').slick();
+	});
 
 	if (sessionStorage.getItem('firstLogin') != 'false') {
 		jQuery.noConflict();

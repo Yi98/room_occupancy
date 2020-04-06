@@ -4,11 +4,12 @@ const createCsvWriter = require('csv-writer').createObjectCsvWriter;
 
 let tempTrain = [];
 
-const getAllRoomData = () => {
+const getRoomData = (roomId, period) => {
+  // change host
   var options = {
     host: 'localhost',
     port: 3000,
-    path: '/api/rooms/5db043344a270c2b48ee776a/?period=yearly',
+    path: `/api/rooms/${roomId}/?period=${period}`,
     method: 'GET'
   };
 
@@ -23,12 +24,25 @@ const getAllRoomData = () => {
     res.on('end', function () {
       results = JSON.parse(results);
 
-      for (let i = 0; i < results.room.people.length; i++) {
-        const trainingData = {};
+      console.log(results.room.people);
+      const tempTrain = [];
 
-        trainingData.date = date.format(new Date(results.room.people[i].time), 'YYYY/MM/DD HH');
-        trainingData.people = results.room.people[i].data;
-        tempTrain.push(trainingData);
+      for (let i = 0; i < results.room.people.length; i++) {
+        // last 7 days -> next 24 hours
+        let formattedDate = date.format(new Date(results.room.people[i].time), 'YYYY-MM-DD HH:00');
+        let found = false;
+
+        for (let j = 0; j < tempTrain.length; j++) {
+          if (tempTrain[j].date == formattedDate) {
+            tempTrain[j].people = (tempTrain[j].people + results.room.people[i].data) / 2;
+            found = true;
+          }
+        }
+
+        if (!found) {
+          const newData = { date: formattedDate, people: results.room.people[i].data };
+          tempTrain.push(newData);
+        }
       }
 
       console.log(tempTrain);
@@ -37,16 +51,16 @@ const getAllRoomData = () => {
         return new Date(a.date) - new Date(b.date);
       });
 
-      writeToCsv(tempTrain);
+      writeToCsv(tempTrain, './server/analytic/data/dummy.csv');
     })
 
   }).end();
 }
 
 
-async function writeToCsv(data, fileName) {
+function writeToCsv(data, filePath) {
   const csvWriter = createCsvWriter({
-    path: fileName,
+    path: filePath,
     header: [
       { id: 'date', title: 'Date' },
       { id: 'people', title: 'People' }
@@ -56,30 +70,12 @@ async function writeToCsv(data, fileName) {
   csvWriter.writeRecords(data)
     .then(() => {
       console.log('Done writing data to csv');
-      trainAndPredict();
+      trainAndPredict(filePath);
     });
 };
 
 
-async function trainAndPredict() {
-  let results;
-
-  var spawn = require("child_process").spawn;
-
-  var thread = spawn('python', ["./server/analytic/arima.py", './server/analytic/data/daily-minimum-temperatures.csv']);
-
-  thread.stdout.on('data', function (data) {
-    results += data;
-  })
-
-  thread.stdout.on('end', function (data) {
-    // console.log(results);
-    // return results;
-    process.send(results)
-  })
-};
-
-async function generateDummyData() {
+function generateDummyData() {
   const records = [];
   let min;
   let max;
@@ -114,6 +110,37 @@ async function generateDummyData() {
   writeToCsv(records, './server/analytic/data/dummy.csv');
 };
 
+
+function trainAndPredict(filePath) {
+  let results;
+
+  var spawn = require("child_process").spawn;
+
+  // var thread = spawn('python', ["./server/analytic/arima.py", './server/analytic/data/daily-minimum-temperatures.csv']);
+  var thread = spawn('python', ["./server/analytic/arima.py", './server/analytic/data/dummy.csv']);
+
+  thread.stdout.on('data', function (data) {
+    results += data;
+  })
+
+  thread.stdout.on('end', function (data) {
+    const forecastResult = [];
+    results = results.replace('undefined', '');
+    results = results.replace('" "', '');
+
+    const stringifyResults = results.split('\r\n');
+
+    for (let i = 0; i < stringifyResults.length; i++) {
+      if (stringifyResults[i] == '') {
+        continue;
+      }
+      forecastResult.push(parseFloat(stringifyResults[i]));
+    }
+    process.send(forecastResult);
+  })
+};
+
 process.on('message', message => {
-  generateDummyData();
+  // generateDummyData();
+  getAllRoomData('5db03ec62040a70a38244de1', 'weekly');
 });

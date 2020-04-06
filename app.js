@@ -32,6 +32,10 @@ mongoose.Promise = global.Promise;
 dataController.sensorSocket(io);
 forecastController.connectSocket(io);
 
+
+// Start forecast
+forecastController.startForecast();
+
 app.use(cors());
 app.use(session({
   secret: 'fyp room occupancy',
