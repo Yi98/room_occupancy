@@ -30,7 +30,7 @@ const seedMonthlyPeopleData = (roomId) => {
 
 			fetchedRoom = room;
 
-			for (let i = 1; i <= 30; i++) {  // a month (30 days)
+			for (let i = 1; i <= 31; i++) {  // a month (30 days)
 				for (let j = 0; j < 24; j++) {  // a day (24 hours)
 					// simulate peak hour on 8pm everyday
 					if (j == 20) {
@@ -46,7 +46,7 @@ const seedMonthlyPeopleData = (roomId) => {
 						max = 20;
 					}
 
-					time = new Date(2020, 3, i, j, 15);
+					time = new Date(2020, 2, i, j, 15);
 					data = Math.floor(Math.random() * (max - min + 1) + min);
 
 					const currentPeople = new People({ time, data });
@@ -66,7 +66,6 @@ const seedMonthlyPeopleData = (roomId) => {
 					return fetchedRoom.save();
 				})
 				.then(room => {
-					console.log(room);
 					console.log('done');
 				})
 				.catch(err => {

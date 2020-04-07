@@ -29,8 +29,10 @@ exports.getRoom = (req, res) => {
 
     time = PeriodController.getCustomDate(startingDate, endingDate);
   }
+  else if (period == "trainingWeek") {
+    time = PeriodController.getTrainingWeek();
+  }
 
-  // console.log(time);
   startingDate = time.start;
   endingDate = time.end;
 

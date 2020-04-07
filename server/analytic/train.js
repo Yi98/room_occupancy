@@ -2,14 +2,13 @@ const http = require('http');
 const date = require('date-and-time');
 const createCsvWriter = require('csv-writer').createObjectCsvWriter;
 
-let tempTrain = [];
-
 const getRoomData = (roomId) => {
   // change host
   var options = {
     host: 'localhost',
     port: 3000,
-    path: `/api/rooms/${roomId}/?period=weekly`,
+    path: `/api/rooms/${roomId}/?period=trainingWeek`,
+    // path: `/api/rooms/${roomId}/?period=custom&start=2020-03-01&end=2020-04-30`,
     method: 'GET'
   };
 
@@ -17,6 +16,7 @@ const getRoomData = (roomId) => {
     let results = '';
 
     res.setEncoding('utf8');
+
     res.on('data', function (chunk) {
       results += chunk;
     });
@@ -24,15 +24,18 @@ const getRoomData = (roomId) => {
     res.on('end', function () {
       results = JSON.parse(results);
 
-      console.log(results.room.people);
       const tempTrain = [];
-      const tomorrow = date.addDays(new Date(), 1);
+      const today = new Date(2020, 3, 01);
+      const parsedToday = new Date(today.getFullYear(), today.getMonth(), today.getDate());
 
       for (let i = 0; i < results.room.people.length; i++) {
-        // last 7 days -> next 24 hours
-        if (!date.isSameDay(tomorrow, new Date(results.room.people[i].time))) {
-          let formattedDate = date.format(new Date(results.room.people[i].time), 'YYYY-MM-DD HH:00');
+        const currentDate = new Date(results.room.people[i].time);
+        const parsedCurrent = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
+        const threshold = date.subtract(parsedToday, parsedCurrent).toHours();
 
+        // last 168 horus (7 days) -> next 24 hours
+        if (threshold > 0 && threshold <= 168) {
+          let formattedDate = date.format(new Date(results.room.people[i].time), 'YYYY-MM-DD HH:00');
           let found = false;
 
           for (let j = 0; j < tempTrain.length; j++) {
@@ -49,13 +52,13 @@ const getRoomData = (roomId) => {
         }
       }
 
+      // sort the date
       tempTrain.sort(function (a, b) {
         return new Date(a.date) - new Date(b.date);
       });
 
       writeToCsv(tempTrain, './server/analytic/data/dummy.csv');
     })
-
   }).end();
 }
 
@@ -119,7 +122,6 @@ function trainAndPredict(filePath) {
 
   var spawn = require("child_process").spawn;
 
-  // var thread = spawn('python', ["./server/analytic/arima.py", './server/analytic/data/daily-minimum-temperatures.csv']);
   var thread = spawn('python', ["./server/analytic/arima.py", filePath]);
 
   thread.stdout.on('data', function (data) {

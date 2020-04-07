@@ -46,11 +46,19 @@ const getCustomDate = function(startingDate, endingDate) {
   return {start, end};
 }
 
+const getTrainingWeek = function() {
+  start = date.format(date.addDays(current, -8) , dateFormat);
+  end = date.format(date.addDays(current, 0) , dateFormat);
+
+  return {start, end};
+}
+
 module.exports = {
   getToday,
   getYesterday,
   getLastWeek,
   getLastMonth,
   getLastYear,
-  getCustomDate
+  getCustomDate,
+  getTrainingWeek
 }
