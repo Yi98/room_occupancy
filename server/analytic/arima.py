@@ -1,6 +1,5 @@
 # line plot of time series
 from pandas import read_csv
-from matplotlib import pyplot
 from statsmodels.tsa.arima_model import ARIMA
 from pmdarima import auto_arima
 from sklearn.metrics import mean_squared_error
@@ -11,7 +10,6 @@ import sys
 
 # load dataset
 series = read_csv(sys.argv[1], header=0, index_col=0)
-pyplot.show()
 
 
 series = read_csv(sys.argv[1], header=0, index_col=0)

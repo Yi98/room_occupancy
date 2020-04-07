@@ -18,7 +18,7 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 mongoose.Promise = global.Promise;
 
 
-const seedPeopleData = (roomId) => {
+const seedMonthlyPeopleData = (roomId) => {
 	let peoplePromises = [];
 	let fetchedRoom;
 
@@ -30,27 +30,29 @@ const seedPeopleData = (roomId) => {
 
 			fetchedRoom = room;
 
-			for (let j = 0; j < 24; j++) {  // a day (hour)
-				// simulate peak hour on 8pm everyday
-				if (j == 20) {
-					min = 40;
-					max = 50;
-				}
-				else if (j == 8 || j == 14) {
-					min = 30;
-					max = 40;
-				}
-				else {
-					min = 5;
-					max = 20;
-				}
+			for (let i = 1; i <= 30; i++) {  // a month (30 days)
+				for (let j = 0; j < 24; j++) {  // a day (24 hours)
+					// simulate peak hour on 8pm everyday
+					if (j == 20) {
+						min = 40;
+						max = 50;
+					}
+					else if (j == 8 || j == 14) {
+						min = 30;
+						max = 40;
+					}
+					else {
+						min = 5;
+						max = 20;
+					}
 
-				time = new Date(2020, 3, 3, j);
-				data = Math.floor(Math.random() * (max - min + 1) + min);
+					time = new Date(2020, 3, i, j, 15);
+					data = Math.floor(Math.random() * (max - min + 1) + min);
 
-				const currentPeople = new People({ time, data });
+					const currentPeople = new People({ time, data });
 
-				peoplePromises.push(currentPeople.save());
+					peoplePromises.push(currentPeople.save());
+				}
 			}
 
 
@@ -77,6 +79,7 @@ const seedPeopleData = (roomId) => {
 }
 
 
+
 const deletePeopleData = () => {
 	Room.findById('5db03ec62040a70a38244de1')
 		.then(room => {
@@ -92,5 +95,5 @@ const deletePeopleData = () => {
 }
 
 
-seedPeopleData('5db03ec62040a70a38244de1');
+seedMonthlyPeopleData('5db03ec62040a70a38244de1');
 // deletePeopleData();

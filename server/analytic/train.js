@@ -4,12 +4,12 @@ const createCsvWriter = require('csv-writer').createObjectCsvWriter;
 
 let tempTrain = [];
 
-const getRoomData = (roomId, period) => {
+const getRoomData = (roomId) => {
   // change host
   var options = {
     host: 'localhost',
     port: 3000,
-    path: `/api/rooms/${roomId}/?period=${period}`,
+    path: `/api/rooms/${roomId}/?period=weekly`,
     method: 'GET'
   };
 
@@ -26,26 +26,28 @@ const getRoomData = (roomId, period) => {
 
       console.log(results.room.people);
       const tempTrain = [];
+      const tomorrow = date.addDays(new Date(), 1);
 
       for (let i = 0; i < results.room.people.length; i++) {
         // last 7 days -> next 24 hours
-        let formattedDate = date.format(new Date(results.room.people[i].time), 'YYYY-MM-DD HH:00');
-        let found = false;
+        if (!date.isSameDay(tomorrow, new Date(results.room.people[i].time))) {
+          let formattedDate = date.format(new Date(results.room.people[i].time), 'YYYY-MM-DD HH:00');
 
-        for (let j = 0; j < tempTrain.length; j++) {
-          if (tempTrain[j].date == formattedDate) {
-            tempTrain[j].people = (tempTrain[j].people + results.room.people[i].data) / 2;
-            found = true;
+          let found = false;
+
+          for (let j = 0; j < tempTrain.length; j++) {
+            if (tempTrain[j].date == formattedDate) {
+              tempTrain[j].people = (tempTrain[j].people + results.room.people[i].data) / 2;
+              found = true;
+            }
+          }
+
+          if (!found) {
+            const newData = { date: formattedDate, people: results.room.people[i].data };
+            tempTrain.push(newData);
           }
         }
-
-        if (!found) {
-          const newData = { date: formattedDate, people: results.room.people[i].data };
-          tempTrain.push(newData);
-        }
       }
-
-      console.log(tempTrain);
 
       tempTrain.sort(function (a, b) {
         return new Date(a.date) - new Date(b.date);
@@ -81,7 +83,7 @@ function generateDummyData() {
   let max;
 
   for (let k = 1; k <= 1; k++) { // a year (month)
-    for (let i = 1; i <= 7; i++) { // a month (day)
+    for (let i = 1; i <= 17; i++) { // a month (day)
       for (let j = 0; j < 24; j++) {  // a day (hour)
 
         // simulate peak hour on 8pm everyday
@@ -99,7 +101,8 @@ function generateDummyData() {
         }
 
         const record = {};
-        record.date = i + '/1' + '/2020 ' + j + ':00';
+        // record.date = i + '/1' + '/2020 ' + j + ':00';
+        record.date = '2020-01-' + i + ' ' + j + ':00';
         record.people = Math.floor(Math.random() * (max - min + 1) + min);
 
         records.push(record);
@@ -107,7 +110,7 @@ function generateDummyData() {
     }
   }
 
-  writeToCsv(records, './server/analytic/data/dummy.csv');
+  writeToCsv(records, './server/analytic/data/research.csv');
 };
 
 
@@ -117,7 +120,7 @@ function trainAndPredict(filePath) {
   var spawn = require("child_process").spawn;
 
   // var thread = spawn('python', ["./server/analytic/arima.py", './server/analytic/data/daily-minimum-temperatures.csv']);
-  var thread = spawn('python', ["./server/analytic/arima.py", './server/analytic/data/dummy.csv']);
+  var thread = spawn('python', ["./server/analytic/arima.py", filePath]);
 
   thread.stdout.on('data', function (data) {
     results += data;
@@ -142,5 +145,5 @@ function trainAndPredict(filePath) {
 
 process.on('message', message => {
   // generateDummyData();
-  getRoomData('5db03ec62040a70a38244de1', 'weekly');
+  getRoomData('5db03ec62040a70a38244de1');
 });

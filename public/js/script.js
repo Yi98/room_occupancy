@@ -287,9 +287,11 @@ var socket = io();
 
 let currentRoom;
 
-socket.on('forecast', function (forecastResults) {
-	console.log(forecastResults.result);
-	forecastChart.data.datasets[0].data = forecastResults.result;
+socket.on('forecast', function (forecast) {
+	const forecastResults = forecast.result.map(data => Math.round(data));
+
+	console.log(forecastResults);
+	forecastChart.data.datasets[0].data = forecastResults;
 
 	forecastChart.update();
 });
