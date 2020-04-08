@@ -1177,8 +1177,8 @@ function showYearlyTrends(roomId) {
 			document.getElementById("room_name").innerHTML = result.room.name;
 			var startMonth = m_startDate;
 
-			for (var i = 0; i < m_diff_in_days / 31; i++) {
-				monthlyTime[i] = startMonth.format("MMM");
+			for (var i = 0; i < m_diff_in_days / 30; i++) {
+				monthlyTime[i] = startMonth.format("MMMYYYY");
 				startMonth.add(1, 'months');
 			}
 
@@ -1196,15 +1196,13 @@ function showYearlyTrends(roomId) {
 			for (var index in result.room.people) {
 				var dataDate = new Date(result.room.people[index].time);
 				var m_dataDate = moment(result.room.people[index].time);
-				if (dataDate >= startDate && dataDate <= endDate) {
-					if (dataDate.getUTCHours() >= parseInt(startTime.substring(0, 2)) && dataDate.getUTCHours() <= parseInt(endTime.substring(0, 2))) {
+				if (dataDate.getUTCHours() >= parseInt(startTime.substring(0, 2)) && dataDate.getUTCHours() <= parseInt(endTime.substring(0, 2))) {
 
-						for (var i = 0; i < monthlyTime.length; i++) {
-							if (m_dataDate.format("MMM") == monthlyTime[i]) {
-								peopleData[i] = peopleData[i] + result.room.people[index].data;
-								newppldata.push(peopleData[i]);
-								peopleDataCounter[i]++;
-							}
+					for (var i = 0; i < monthlyTime.length; i++) {
+						if (m_dataDate.format("MMMYYYY") == monthlyTime[i]) {
+							peopleData[i] = peopleData[i] + result.room.people[index].data;
+							newppldata.push(peopleData[i]);
+							peopleDataCounter[i]++;
 						}
 					}
 				}
@@ -1214,13 +1212,11 @@ function showYearlyTrends(roomId) {
 			for (var index in result.room.temperature) {
 				var dataDate = new Date(result.room.temperature[index].time);
 				var m_dataDate = moment(result.room.temperature[index].time);
-				if (dataDate >= startDate && dataDate <= endDate) {
-					if (dataDate.getUTCHours() >= parseInt(startTime.substring(0, 2)) && dataDate.getUTCHours() <= parseInt(endTime.substring(0, 2))) {
-						for (var i = 0; i < monthlyTime.length; i++) {
-							if (m_dataDate.format("MMM") == monthlyTime[i]) {
-								tempData[i] = tempData[i] + result.room.temperature[index].data;
-								tempDataCounter[i]++;
-							}
+				if (dataDate.getUTCHours() >= parseInt(startTime.substring(0, 2)) && dataDate.getUTCHours() <= parseInt(endTime.substring(0, 2))) {
+					for (var i = 0; i < monthlyTime.length; i++) {
+						if (m_dataDate.format("MMMYYYY") == monthlyTime[i]) {
+							tempData[i] = tempData[i] + result.room.temperature[index].data;
+							tempDataCounter[i]++;
 						}
 					}
 				}
@@ -1230,24 +1226,22 @@ function showYearlyTrends(roomId) {
 			for (var index in result.room.humidity) {
 				var dataDate = new Date(result.room.humidity[index].time);
 				var m_dataDate = moment(result.room.humidity[index].time);
-				if (dataDate >= startDate && dataDate <= endDate) {
-					if (dataDate.getUTCHours() >= parseInt(startTime.substring(0, 2)) && dataDate.getUTCHours() <= parseInt(endTime.substring(0, 2))) {
-						for (var i = 0; i < monthlyTime.length; i++) {
-							if (m_dataDate.format("MMM") == monthlyTime[i]) {
-								humidData[i] = humidData[i] + result.room.humidity[index].data;
-								humidDataCounter[i]++;
-							}
+				if (dataDate.getUTCHours() >= parseInt(startTime.substring(0, 2)) && dataDate.getUTCHours() <= parseInt(endTime.substring(0, 2))) {
+					for (var i = 0; i < monthlyTime.length; i++) {
+						if (m_dataDate.format("MMMYYYY") == monthlyTime[i]) {
+							humidData[i] = humidData[i] + result.room.humidity[index].data;
+							humidDataCounter[i]++;
 						}
 					}
 				}
 			}
 
 			var startMonth2 = moment(dateRange.substring(0, 10), 'MM-DD-YYYY');
-			for (var i = 0; i < 12; i++) {
+			for (var i = 0; i < m_diff_in_days / 30; i++) {
 				monthlyTime[i] = startMonth2.format("MMM-YYYY");
 				startMonth2.add(1, 'months');
 			}
-
+			
 			//Check whether the chart have data
 			for (var i = 0; i < monthlyTime.length; i++) {
 				if (peopleData[i] > 0 || tempData[i] > 0 || humidData[i] > 0) {
