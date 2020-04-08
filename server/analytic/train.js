@@ -7,8 +7,8 @@ const getRoomData = (roomId) => {
   var options = {
     host: 'localhost',
     port: 3000,
-    path: `/api/rooms/${roomId}/?period=trainingWeek`,
-    // path: `/api/rooms/${roomId}/?period=custom&start=2020-03-01&end=2020-04-30`,
+    // path: `/api/rooms/${roomId}/?period=trainingWeek`,
+    path: `/api/rooms/${roomId}/?period=custom&start=2020-09-01&end=2020-10-01`,
     method: 'GET'
   };
 
@@ -25,7 +25,7 @@ const getRoomData = (roomId) => {
       results = JSON.parse(results);
 
       const tempTrain = [];
-      const today = new Date(2020, 3, 01);
+      const today = new Date(2020, 8, 14);
       const parsedToday = new Date(today.getFullYear(), today.getMonth(), today.getDate());
 
       for (let i = 0; i < results.room.people.length; i++) {
