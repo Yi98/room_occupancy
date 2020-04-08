@@ -2713,7 +2713,8 @@ function CheckResetPassword(input) {
 		element.classList.add("alert-danger");
 
 		document.getElementById("resetAlert").innerHTML = '<strong>Your New Password or Confirm Password is invalid. Please enter a password which contain 8 to 12 character, at least one numeric digit, one uppercase and one lowercase letter!</strong> <button type="button" class="close" onclick="closeResetAlert()"><span>&times;</span></button>';
-		$("#userAlert").show();
+		$("#resetAlert").show();
+		$("#spinner_reset").hide();
 
 		return false;
 
