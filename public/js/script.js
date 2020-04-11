@@ -1241,7 +1241,7 @@ function showYearlyTrends(roomId) {
 				monthlyTime[i] = startMonth2.format("MMM-YYYY");
 				startMonth2.add(1, 'months');
 			}
-			
+
 			//Check whether the chart have data
 			for (var i = 0; i < monthlyTime.length; i++) {
 				if (peopleData[i] > 0 || tempData[i] > 0 || humidData[i] > 0) {
@@ -3736,6 +3736,7 @@ function onRoomClicked(roomName, roomId, updateView) {
 
 				document.getElementById('insightRoom').innerHTML = " - " + roomName;
 				document.getElementById('trendRoom').innerHTML = " - " + roomName;
+				document.getElementById('forecastRoom').innerHTML = " - " + roomName;
 				document.getElementById('viewRoomDetails').href = `/chart/${roomId}`;
 			}
 		}
@@ -3754,7 +3755,7 @@ const onForecastRoom = (roomId) => {
 			return response.json();
 		})
 		.then(data => {
-			console.log(data);
+			// console.log(data);
 		})
 		.catch(err => {
 			console.log(err);
@@ -3838,7 +3839,9 @@ function onLoadDashboard() {
 	horizontalWheelScroll();
 
 	$(document).ready(function () {
-		$('.your-class').slick();
+		$('.your-class').slick({
+			infinite: false
+		});
 	});
 
 	if (sessionStorage.getItem('firstLogin') != 'false') {
