@@ -3821,7 +3821,9 @@ function onLoadDashboard() {
 	horizontalWheelScroll();
 
 	$(document).ready(function () {
-		$('.your-class').slick();
+		$('.your-class').slick({
+			infinite: false
+		 });
 	});
 
 	if (sessionStorage.getItem('firstLogin') != 'false') {
