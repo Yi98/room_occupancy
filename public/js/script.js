@@ -339,13 +339,29 @@ socket.on("people", function (msg) {
 		localStorage.setItem("notifications", JSON.stringify([]));
 	}
 
-	if (msg.previous <= 10 && msg.people > 10) {
-		notify = true;
-		roomStatus = 'full';
-	}
-	else if (msg.previous <= 5 && msg.people > 5) {
-		notify = true;
-		roomStatus = 'moderate';
+	var noticeMode = document.getElementById("notificationMode").checked;
+
+	if(noticeMode == false)
+	{
+		if (msg.previous <= 20 && msg.people > 20) {
+			notify = true;
+			roomStatus = 'full (COVID-19)';
+		}
+		else if (msg.previous <= 12 && msg.people > 12) {
+			notify = true;
+			roomStatus = 'moderate (COVID-19)';
+		}
+	} 
+	else
+	{
+		if (msg.previous <= 10 && msg.people > 10) {
+			notify = true;
+			roomStatus = 'full';
+		}
+		else if (msg.previous <= 5 && msg.people > 5) {
+			notify = true;
+			roomStatus = 'moderate';
+		}
 	}
 
 	if (notify) {
@@ -2181,19 +2197,9 @@ function showRoomTable() {
 		if (this.readyState == 4 && this.status == 200) {
 			$("#spinner").hide();
 			var result = this.response;
-			//            console.log("this is the room result");
-			//            console.log(result);
-			//            
+       
 			for (room in result.rooms) {
-				//                console.log("this is inside the loop");
-				//                console.log(result.rooms[room]);
-				//                console.log("this is the room id");
-				//                console.log(result.rooms[room]._id);
-				//                console.log("this is the room name");
-				//                console.log(result.rooms[room].name);
-				//                console.log("this is the room capacity");
-				//                console.log(result.rooms[room].maxCapacity);
-				//                
+             
 				document.getElementById("showRoom").innerHTML +=
 					'<tbody>' + '<tr class="roomRow">' +
 					'<td class="roomId" style="display: none;">' + result.rooms[room]._id + '</td>' +

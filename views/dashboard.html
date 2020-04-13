@@ -83,6 +83,9 @@
 
 	<script type="text/javascript" src="slick/slick.min.js"></script>
 
+	<link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/css/bootstrap4-toggle.min.css" rel="stylesheet">
+	<script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"></script>
+
 </head>
 
 <body onload="onLoadDashboard();">
@@ -253,6 +256,7 @@
 											<div id="noticeRow" class="card-body pt-2">
 												<h6 class="card-title border-bottom pb-3"><i class="fa fa-bell mr-1"></i>Notification<span
 														class="badge badge-pill badge-danger ml-2" id="noticeNum">0</span>
+													<input id="notificationMode" type="checkbox" checked data-toggle="toggle" data-size="sm" data-on="Normal" data-off="COVID-19" data-onstyle="success" data-offstyle="danger">
 													<p onclick="onClearNotices()" id="clearNotice" class="float-right">Clear all
 													</p>
 												</h6>
