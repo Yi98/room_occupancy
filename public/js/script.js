@@ -1257,7 +1257,7 @@ function showYearlyTrends(roomId) {
 				monthlyTime[i] = startMonth2.format("MMM-YYYY");
 				startMonth2.add(1, 'months');
 			}
-			
+
 			//Check whether the chart have data
 			for (var i = 0; i < monthlyTime.length; i++) {
 				if (peopleData[i] > 0 || tempData[i] > 0 || humidData[i] > 0) {
@@ -3616,6 +3616,9 @@ function onRoomClicked(roomName, roomId, updateView) {
 		}
 	}
 
+	// forecast room data;
+	onForecastRoom(roomId);
+
 	// Trend's variables
 	timeline = ['0:00', '1:00', '2:00', '3:00', '4:00', '5:00', '6:00', '7:00', '8:00', '9:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00', '24:00'];
 	let newPeople = [];
@@ -3739,6 +3742,7 @@ function onRoomClicked(roomName, roomId, updateView) {
 
 				document.getElementById('insightRoom').innerHTML = " - " + roomName;
 				document.getElementById('trendRoom').innerHTML = " - " + roomName;
+				document.getElementById('forecastRoom').innerHTML = " - " + roomName;
 				document.getElementById('viewRoomDetails').href = `/chart/${roomId}`;
 			}
 		}
@@ -3748,6 +3752,20 @@ function onRoomClicked(roomName, roomId, updateView) {
 
 	xhttp.send();
 
+}
+
+
+const onForecastRoom = (roomId) => {
+	fetch(`${domain}/api/forecast/people?roomId=${roomId}`)
+		.then(response => {
+			return response.json();
+		})
+		.then(data => {
+			// console.log(data);
+		})
+		.catch(err => {
+			console.log(err);
+		});
 }
 
 function closeNoticeRow(element) {
@@ -3829,7 +3847,7 @@ function onLoadDashboard() {
 	$(document).ready(function () {
 		$('.your-class').slick({
 			infinite: false
-		 });
+		});
 	});
 
 	if (sessionStorage.getItem('firstLogin') != 'false') {

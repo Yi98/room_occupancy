@@ -16,6 +16,18 @@ exports.startForecast = () => {
 
   predictiveModel.on('message', result => {
     console.log(result);
-    socket.emit('forecast', {result});
+    socket.emit('forecast', { result });
+  });
+}
+
+exports.forecastDailyPeople = (req, res) => {
+  const roomId = req.query.roomId;
+
+  const predictiveModel = fork('./server/analytic/train.js', [roomId]);
+  predictiveModel.send('start predicting');
+
+  predictiveModel.on('message', result => {
+    console.log(result);
+    socket.emit('forecast', { result });
   });
 }

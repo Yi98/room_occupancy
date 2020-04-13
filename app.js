@@ -13,6 +13,7 @@ const routes = require('./server/routes/route');
 const roomApi = require('./server/api/room');
 const userApi = require('./server/api/user');
 const dataApi = require('./server/api/data');
+const forecastApi = require('./server/api/forecast');
 const dataController = require('./server/controller/data');
 const forecastController = require('./server/controller/forecast');
 const port = 3000;
@@ -33,9 +34,6 @@ dataController.sensorSocket(io);
 forecastController.connectSocket(io);
 
 
-// Start forecast
-forecastController.startForecast();
-
 app.use(cors());
 app.use(session({
   secret: 'fyp room occupancy',
@@ -50,6 +48,7 @@ app.use(bodyParser.json())
 app.use('/api/rooms', roomApi);
 app.use('/api/data', dataApi);
 app.use('/api/users', userApi);
+app.use('/api/forecast', forecastApi);
 app.use('/', routes);
 
 
