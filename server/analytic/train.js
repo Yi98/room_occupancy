@@ -1,16 +1,19 @@
 const http = require('http');
+const https = require('https');
 const date = require('date-and-time');
 const createCsvWriter = require('csv-writer').createObjectCsvWriter;
 
 const getRoomData = (roomId) => {
   // change host
   var options = {
-    host: 'localhost',
-    port: 3000,
-    // path: `/api/rooms/${roomId}/?period=trainingWeek`,
-    path: `/api/rooms/${roomId}/?period=custom&start=2020-09-01&end=2020-10-01`,
+    // host: 'localhost',
+    // port: 3000,
+    host: 'roomoccupancy.herokuapp.com',
+    path: `/api/rooms/${roomId}/?period=trainingWeek`,
+    // path: `/api/rooms/${roomId}/?period=custom&start=2020-01-01&end=2020-11-30`,
     method: 'GET'
   };
+
 
   http.request(options, function (res) {
     let results = '';
@@ -25,7 +28,7 @@ const getRoomData = (roomId) => {
       results = JSON.parse(results);
 
       const tempTrain = [];
-      const today = new Date(2020, 8, 14);
+      const today = new Date();
       const parsedToday = new Date(today.getFullYear(), today.getMonth(), today.getDate());
 
       for (let i = 0; i < results.room.people.length; i++) {
