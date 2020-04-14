@@ -15,7 +15,7 @@ const getRoomData = (roomId) => {
   };
 
 
-  http.request(options, function (res) {
+  https.request(options, function (res) {
     let results = '';
 
     res.setEncoding('utf8');
