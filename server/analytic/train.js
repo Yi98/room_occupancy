@@ -6,16 +6,16 @@ const createCsvWriter = require('csv-writer').createObjectCsvWriter;
 const getRoomData = (roomId) => {
   // change host
   var options = {
-    // host: 'localhost',
-    // port: 3000,
-    host: 'roomoccupancy.herokuapp.com',
+    host: 'localhost',
+    port: 3000,
+    // host: 'roomoccupancy.herokuapp.com',
     path: `/api/rooms/${roomId}/?period=trainingWeek`,
     // path: `/api/rooms/${roomId}/?period=custom&start=2020-01-01&end=2020-11-30`,
     method: 'GET'
   };
 
 
-  https.request(options, function (res) {
+  http.request(options, function (res) {
     let results = '';
 
     res.setEncoding('utf8');
