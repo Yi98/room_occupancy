@@ -159,9 +159,6 @@ exports.deleteUser = (req, res) => {
 
 // check login cridentials -> /api/users/login (POST)
 exports.login = (req, res) => {
-
-  forecastController.startForecast();
-
   User.findOne({ email: req.body.email })
     .then(user => {
       if (!user) {

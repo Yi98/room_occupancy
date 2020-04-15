@@ -7,6 +7,7 @@ const getRoomData = (roomId) => {
   // change host
   var options = {
     host: 'localhost',
+    // host: '192.168.99.100',
     port: 3000,
     // host: 'roomoccupancy.herokuapp.com',
     path: `/api/rooms/${roomId}/?period=trainingWeek`,
