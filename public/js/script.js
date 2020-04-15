@@ -289,8 +289,7 @@ let currentRoom;
 
 socket.on('forecast', function (forecast) {
 	const forecastResults = forecast.result.map(data => Math.round(data));
-
-	console.log(forecastResults);
+	
 	forecastChart.data.datasets[0].data = forecastResults;
 
 	forecastChart.update();
@@ -3606,6 +3605,9 @@ function onRoomClicked(roomName, roomId, updateView) {
 	const dotsLoaders = document.getElementsByClassName('dotsLoading');
 	const defaultRooms = document.getElementsByClassName('defaultRoom');
 
+	$('#forecast-spinner').show();
+	$('#forecastChart').hide();
+
 	if (updateView) {
 		for (let i = 0; i < dotsLoaders.length; i++) {
 			dotsLoaders[i].style.display = "inline";
@@ -3730,7 +3732,7 @@ function onRoomClicked(roomName, roomId, updateView) {
 			trendChart.data.labels = timeline;
 
 			trendChart.update();
-
+	
 			if (updateView) {
 				for (let i = 0; i < dotsLoaders.length; i++) {
 					dotsLoaders[i].style.display = "none";
@@ -3744,7 +3746,14 @@ function onRoomClicked(roomName, roomId, updateView) {
 				document.getElementById('trendRoom').innerHTML = " - " + roomName;
 				document.getElementById('forecastRoom').innerHTML = " - " + roomName;
 				document.getElementById('viewRoomDetails').href = `/chart/${roomId}`;
+				
+				setTimeout(function () { 
+					$('#forecast-spinner').hide();
+					$('#forecastChart').show();
+				}, 15000);
+
 			}
+			
 		}
 	};
 
