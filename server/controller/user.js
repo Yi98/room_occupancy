@@ -6,9 +6,6 @@ const crypto = require('crypto');
 const User = require('../models/User');
 const cacheSingleton = require('../class/Cache');
 
-const forecastController = require('../controller/forecast');
-
-
 // get one user with specific id ->  /api/users/:id (GET)
 exports.getUser = (req, res) => {
   User.findById({ _id: req.params.id })
@@ -159,9 +156,6 @@ exports.deleteUser = (req, res) => {
 
 // check login cridentials -> /api/users/login (POST)
 exports.login = (req, res) => {
-
-  forecastController.startForecast();
-
   User.findOne({ email: req.body.email })
     .then(user => {
       if (!user) {
