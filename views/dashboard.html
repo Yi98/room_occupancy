@@ -319,7 +319,18 @@
 									</div>
 								</div>
 								<div id="forecast-container h-25">
-									<div class="d-flex h-100 justify-content-center mt-3"><div class="align-self-center"><div id="forecast-spinner" class="spinner-border text-danger" style="width:3rem; height:3rem; display:none"><span class="sr-only">Loading...</span></div></div></div>
+									<div class="d-flex h-100 justify-content-center mt-4">
+										<div class="align-self-center">
+											<div id="forecast-notice" style="display:none;"> Forecasting might take a while but good things worth waiting </div>
+										</div>
+									</div>
+									<div class="align-self-center">
+										<div id="forecast-spinner" class="spinner mt-0" style="display: none;">
+											<div class="bounce1"></div>
+											<div class="bounce2"></div>
+											<div class="bounce3"></div>
+										</div>
+									</div>
 									<canvas id="forecastChart" height="100%"></canvas>
 								</div>
 							</div>

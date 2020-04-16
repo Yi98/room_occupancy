@@ -3606,6 +3606,7 @@ function onRoomClicked(roomName, roomId, updateView) {
 	const defaultRooms = document.getElementsByClassName('defaultRoom');
 
 	$('#forecast-spinner').show();
+	$('#forecast-notice').show();
 	$('#forecastChart').hide();
 
 	if (updateView) {
@@ -3748,7 +3749,8 @@ function onRoomClicked(roomName, roomId, updateView) {
 				document.getElementById('viewRoomDetails').href = `/chart/${roomId}`;
 				
 				setTimeout(function () { 
-					$('#forecast-spinner').hide();
+					$('#forecast-spinner').hide();					
+					$('#forecast-notice').hide();
 					$('#forecastChart').show();
 				}, 15000);
 
