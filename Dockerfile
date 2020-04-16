@@ -4,6 +4,7 @@ WORKDIR /tmp
 COPY requirements.txt /tmp
 RUN pip install -r requirements.txt
 
+
 FROM node:10
 
 # Create app directory

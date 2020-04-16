@@ -1,5 +1,5 @@
-// const domain = 'http://localhost:3000';
-const domain = 'http://192.168.99.100:3000';
+const domain = 'http://localhost:3000';
+// const domain = 'http://192.168.99.100:3000';
 // const domain = 'https://roomoccupancy.herokuapp.com'; 
 
 var reportTable = $('#reportTable').DataTable({

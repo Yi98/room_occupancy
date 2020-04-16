@@ -6,8 +6,8 @@ const createCsvWriter = require('csv-writer').createObjectCsvWriter;
 const getRoomData = (roomId) => {
   // change host
   var options = {
-    // host: 'localhost',
-    host: '192.168.99.100',
+    host: 'localhost',
+    // host: '192.168.99.100',
     port: 3000,
     // host: 'roomoccupancy.herokuapp.com',
     path: `/api/rooms/${roomId}/?period=trainingWeek`,
@@ -152,6 +152,5 @@ function trainAndPredict(filePath) {
 process.on('message', message => {
   // generateDummyData();
   const roomId = process.argv[2];
-  
   getRoomData(roomId);
 });
