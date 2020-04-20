@@ -342,7 +342,7 @@ socket.on("people", function (msg) {
 
 	if(noticeMode == false)
 	{
-		if (msg.previous <= 20 && msg.people > 20) {
+		if (msg.previous <= 25 && msg.people > 25) {
 			notify = true;
 			roomStatus = 'full (COVID-19)';
 		}
@@ -4099,3 +4099,273 @@ let forecastChart = new Chart(dashForecastChart, {
 		}
 	}
 });
+
+// simulate real-time update for client testing
+function realTimeUpdate()
+{
+	var msg = [
+		{
+			roomId: "5d8f019f1c9d44000090f440", 
+			name: "Leisure Area",
+			people: 0,
+			previous: 1,
+			temperature: 29.7,
+			humidity: 52.2,
+			max_capacity: 50
+		},
+		{
+			roomId: "5d935b95ea295d622c1f7e7d", 
+			name: "BYOD",
+			people: 3,
+			previous: 2,
+			temperature: 26.8,
+			humidity: 59.5,
+			max_capacity: 50
+		},
+		{
+			roomId: "5db03ec62040a70a38244de1", 
+			name: "24-hours Study Area",
+			people: 4,
+			previous: 3,
+			temperature: 27.3,
+			humidity: 65.9,
+			max_capacity: 50
+		}
+	]
+
+	let currentRoom = 'Leisure Area';
+	let roomCards = document.getElementsByClassName("roomCard");
+	let noticeTime = moment().format('MMM DD, h:mm A');
+	let notify_Leisure = false;
+	let notify_BYOD = false;
+	let notify_Study = false;
+	let outerRoomId;
+	let roomName;
+	let roomNameLeisure;
+	let roomNameBYOD;
+	let roomNameStudy;
+	let roomStatusLeisure;
+	let roomStatusBYOD;
+	let roomStatusStudy;
+	let notificationsLeisure;
+	let notificationsBYOD;
+	let notificationsStudy;
+
+	setInterval(function(){  
+		for (let i = 0; i < 3; i++) {
+
+			if(msg[i].people >= 0  && msg[i].people < 30)
+			{
+				msg[i].people += 1;
+			}
+			else
+			{
+				msg[i].people -= 16;
+			}
+
+			if(msg[i].previous >= 0  && msg[i].previous <= 30)
+			{
+				msg[i].previous = msg[i].people - 1;
+			}
+			else
+			{
+				msg[i].previous -= 15;
+			}
+
+			if(msg[i].temperature >= 14  && msg[i].temperature <= 35)
+			{
+				msg[i].temperature += 2;
+			}
+			else
+			{
+				msg[i].temperature = 20.5;
+			}
+
+			if(msg[i].humidity >= 50  && msg[i].humidity <= 75)
+			{
+				msg[i].humidity += 2;
+			}
+			else
+			{
+				msg[i].humidity = 56.2;
+			}
+			
+			let roomId = roomCards[i].getElementsByClassName("roomId");
+			let maxCapacity = document.getElementsByClassName('maxCapacity');
+			let division = (msg[i].people / parseFloat(maxCapacity[i].innerHTML)) * 50;
+
+			if (roomId[0].innerHTML == msg[i].roomId) {
+				outerRoomId = msg[i].roomId;
+
+				document.getElementsByClassName("people")[i].innerHTML = msg[i].people;
+				document.getElementsByClassName("temperature")[i].innerHTML = msg[i].temperature;
+				document.getElementsByClassName("humidity")[i].innerHTML = msg[i].humidity;
+				document.getElementsByClassName('lastUpdatedTime')[i].innerHTML = noticeTime;
+
+				// Check this 
+				document.getElementsByClassName('status-indicator-outer')[i].style.width = ((parseFloat(maxCapacity[i].innerHTML) - division) / (parseFloat(maxCapacity[i].innerHTML)) * 100) + '%';
+
+			}
+		}
+
+		localStorage.setItem("notis_Leisure", JSON.stringify([]));
+		localStorage.setItem("notis_BYOD", JSON.stringify([]));
+		localStorage.setItem("notis_Study", JSON.stringify([]));
+
+		// Push notifications
+		if (!localStorage.getItem('notis_Leisure')) {
+			localStorage.setItem("notis_Leisure", JSON.stringify([]));
+		}
+
+		if (!localStorage.getItem('notis_BYOD')) {
+			localStorage.setItem("notis_BYOD", JSON.stringify([]));
+		}
+
+		if (!localStorage.getItem('notis_Study')) {
+			localStorage.setItem("notis_Study", JSON.stringify([]));
+		}
+
+		var noticeMode = document.getElementById("notificationMode").checked;
+
+
+		if(noticeMode == false)
+		{
+			if (msg[0].previous <= 20 && msg[0].people > 20) {
+				notify_Leisure = true;
+				roomStatusLeisure = 'full (COVID-19)';
+				roomNameLeisure = 'Leisure Area';
+			}
+			else if (msg[0].previous <= 12 && msg[0].people > 12) {
+				notify_Leisure = true;
+				roomStatusLeisure = 'moderate (COVID-19)';
+				roomNameLeisure = 'Leisure Area';
+			}
+
+			if (msg[1].previous <= 20 && msg[1].people > 20) {
+				notify_BYOD = true;
+				roomStatusBYOD = 'full (COVID-19)';
+				roomNameBYOD = 'BYOD';
+			}
+			else if (msg[1].previous <= 12 && msg[1].people > 12) {
+				notify_BYOD = true;
+				roomStatusBYOD = 'moderate (COVID-19)';
+				roomNameBYOD = 'BYOD';
+			}
+
+			if (msg[2].previous <= 20 && msg[2].people > 20) {
+				notify_Study = true;
+				roomStatusStudy = 'full (COVID-19)';
+				roomNameStudy = '24-hours Study Area';	
+			}
+			else if (msg[2].previous <= 12 && msg[2].people > 12) {
+				notify_Study = true;
+				roomStatusStudy = 'moderate (COVID-19)';
+				roomNameStudy = '24-hours Study Area';
+			}
+		} 
+		else
+		{
+			if (msg[0].previous <= 10 && msg[0].people > 10) {
+				notify_Leisure = true;
+				roomStatusLeisure = 'full';
+				roomNameLeisure = 'Leisure Area';
+			}
+			else if (msg[0].previous <= 5 && msg[0].people > 5) {
+				notify_Leisure = true;
+				roomStatusLeisure = 'moderate';
+				roomNameLeisure = 'Leisure Area';
+			}
+
+			if (msg[1].previous <= 10 && msg[1].people > 10) {
+				notify_BYOD = true;
+				roomStatusBYOD = 'full';
+				roomNameBYOD = 'BYOD';	
+			}
+			else if (msg[1].previous <= 5 && msg[1].people > 5) {
+				notify_BYOD = true;
+				roomStatusBYOD = 'moderate';
+				roomNameBYOD = 'BYOD';	
+			}
+
+			if (msg[2].previous <= 10 && msg[2].people > 10) {
+				notify_Study = true;
+				roomStatusStudy = 'full';
+				roomNameStudy = '24-hours Study Area';
+			}
+			else if (msg[2].previous <= 5 && msg[2].people > 5) {
+				notify_Study = true;
+				roomStatusStudy = 'moderate';
+				roomNameStudy = '24-hours Study Area';
+			}
+		}
+		
+		if (notify_Leisure) {
+			notificationsLeisure = JSON.parse(localStorage.getItem('notis_Leisure'));
+
+			notificationsLeisure.push({ noticeTime, roomNameLeisure, roomStatusLeisure });
+
+			$('#noticeMain').prepend(`<div class="noticeContainer"><p class="m-0 noticeTime">${noticeTime}</p><p style="font-size:0.9rem;">${roomNameLeisure} has reached <strong>${roomStatusLeisure}</strong> capacity.
+					<button onclick="closeNoticeRow(this)" type="button" class="close closeBtn mr-3" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</p></div>`);
+
+			document.getElementById('emptyNotice').style.display = "none";
+
+			const noticeNum = document.getElementById('noticeNum');
+			noticeNum.innerHTML = Number(noticeNum.innerHTML) + 1;
+			noticeNum.style.display = "inline";
+
+			localStorage.setItem('notis_Leisure', JSON.stringify(notificationsLeisure));
+		}
+
+		if (notify_BYOD) {
+			notificationsBYOD = JSON.parse(localStorage.getItem('notis_BYOD'));
+
+			notificationsBYOD.push({ noticeTime, roomNameBYOD, roomStatusBYOD });
+
+			$('#noticeMain').prepend(`<div class="noticeContainer"><p class="m-0 noticeTime">${noticeTime}</p><p style="font-size:0.9rem;">${roomNameBYOD} has reached <strong>${roomStatusBYOD}</strong> capacity.
+					<button onclick="closeNoticeRow(this)" type="button" class="close closeBtn mr-3" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</p></div>`);
+
+			document.getElementById('emptyNotice').style.display = "none";
+
+			const noticeNum = document.getElementById('noticeNum');
+			noticeNum.innerHTML = Number(noticeNum.innerHTML) + 1;
+			noticeNum.style.display = "inline";
+
+			localStorage.setItem('notis_BYOD', JSON.stringify(notificationsBYOD));
+		}
+
+		if (notify_Study) {
+			notificationsStudy = JSON.parse(localStorage.getItem('notis_Study'));
+
+			notificationsStudy.push({ noticeTime, roomNameStudy, roomStatusStudy });
+
+			$('#noticeMain').prepend(`<div class="noticeContainer"><p class="m-0 noticeTime">${noticeTime}</p><p style="font-size:0.9rem;">${roomNameStudy} has reached <strong>${roomStatusStudy}</strong> capacity.
+					<button onclick="closeNoticeRow(this)" type="button" class="close closeBtn mr-3" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</p></div>`);
+
+			document.getElementById('emptyNotice').style.display = "none";
+
+			const noticeNum = document.getElementById('noticeNum');
+			noticeNum.innerHTML = Number(noticeNum.innerHTML) + 1;
+			noticeNum.style.display = "inline";
+
+			localStorage.setItem('notis_Study', JSON.stringify(notificationsStudy));
+		}
+
+		roomName = 'Leisure Area';
+		outerRoomId = '5d8f019f1c9d44000090f440';
+
+		if (currentRoom == roomName) {
+			onUpdateTrend(outerRoomId, roomName);
+		}
+
+	}, 5000);
+
+}
