@@ -273,6 +273,15 @@ var reportTable = $('#reportTable').DataTable({
 					height: 300,
 					margin: [0, 20]
 				}
+
+				doc.footer = 
+					function (currentPage, pageCount) {
+						return [{
+							columns: [
+								{ text: currentPage.toString() + '/' + pageCount, alignment: 'center', margin: [0,20], fontSize: 10 }
+							]
+						} ];
+					}
 			}
 		}
 	]
