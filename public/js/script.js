@@ -4142,13 +4142,11 @@ function realTimeUpdate()
 		}
 	]
 
-	let currentRoom = 'Leisure Area';
 	let roomCards = document.getElementsByClassName("roomCard");
 	let noticeTime = moment().format('MMM DD, h:mm A');
 	let notify_Leisure = false;
 	let notify_BYOD = false;
 	let notify_Study = false;
-	let outerRoomId;
 	let roomName;
 	let roomNameLeisure;
 	let roomNameBYOD;
@@ -4204,7 +4202,6 @@ function realTimeUpdate()
 			let division = (msg[i].people / parseFloat(maxCapacity[i].innerHTML)) * 50;
 
 			if (roomId[0].innerHTML == msg[i].roomId) {
-				outerRoomId = msg[i].roomId;
 
 				document.getElementsByClassName("people")[i].innerHTML = msg[i].people;
 				document.getElementsByClassName("temperature")[i].innerHTML = msg[i].temperature;
@@ -4366,13 +4363,6 @@ function realTimeUpdate()
 			noticeNum.style.display = "inline";
 
 			localStorage.setItem('notis_Study', JSON.stringify(notificationsStudy));
-		}
-
-		roomName = 'Leisure Area';
-		outerRoomId = '5d8f019f1c9d44000090f440';
-
-		if (currentRoom == roomName) {
-			onUpdateTrend(outerRoomId, roomName);
 		}
 
 	}, 5000);
