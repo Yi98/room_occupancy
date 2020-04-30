@@ -2201,22 +2201,46 @@ function showRoomTable() {
 	var xhttp = new XMLHttpRequest();
 	xhttp.responseType = 'json';
 
+	var showRoomID = document.getElementById("showRoomID");
+	
 	xhttp.onreadystatechange = function () {
 		if (this.readyState == 4 && this.status == 200) {
 			$("#spinner").hide();
 			var result = this.response;
        
 			for (room in result.rooms) {
-             
-				document.getElementById("showRoom").innerHTML +=
+			 
+				if(showRoomID.checked == false)
+				{
+					$("#roomID").show();
+
+					document.getElementById("showRoom").innerHTML +=
 					'<tbody>' + '<tr class="roomRow">' +
-					'<td class="roomId" style="display: none;">' + result.rooms[room]._id + '</td>' +
+					'<td class="roomId">' + result.rooms[room]._id + '</td>' +
 					'<td>' + result.rooms[room].name + '</td>' +
 					'<td>' + result.rooms[room].maxCapacity + '</td>' +
 					'<td>' + '<button class = "editRoomNamebtn btn btn-success" id = "editRoomNamebtn" data-toggle="modal" data-target="#roomNameModal" onclick="passRoomNameData(&#39;' + result.rooms[room]._id + '&#39;)"> <span class="fa fa-edit" style="color: white;"></span></button>' + '</td>' +
 					'<td>' + '<button class = "btn btn-success" id = "editRoomCapacitybtn" data-toggle="modal" data-target="#roomMaxCapacityModal" onclick="passRoomMaxCapacityData(&#39;' + result.rooms[room]._id + '&#39;)"> <span class="fa fa-edit" style="color: white;"></span></button>' + '</td>' +
 					'<td>' + '<button class = "btn btn-success" id = "editPeopleCountbtn" data-toggle="modal" data-target="#peopleCountModal" onclick="passCurrentPeopleData(&#39;' + result.rooms[room]._id + '&#39;)"> <span class="fa fa-edit" style="color: white;"></span></button>' + '</td>'
-				'</tr>' + '</tbody>';
+					'</tr>' + '</tbody>';
+
+				}
+				else
+				{
+					$("#roomID").hide();
+
+					document.getElementById("showRoom").innerHTML +=
+					'<tbody>' + '<tr class="roomRow">' +
+					'<td class="roomId"  style="display: none;">' + result.rooms[room]._id + '</td>' +
+					'<td>' + result.rooms[room].name + '</td>' +
+					'<td>' + result.rooms[room].maxCapacity + '</td>' +
+					'<td>' + '<button class = "editRoomNamebtn btn btn-success" id = "editRoomNamebtn" data-toggle="modal" data-target="#roomNameModal" onclick="passRoomNameData(&#39;' + result.rooms[room]._id + '&#39;)"> <span class="fa fa-edit" style="color: white;"></span></button>' + '</td>' +
+					'<td>' + '<button class = "btn btn-success" id = "editRoomCapacitybtn" data-toggle="modal" data-target="#roomMaxCapacityModal" onclick="passRoomMaxCapacityData(&#39;' + result.rooms[room]._id + '&#39;)"> <span class="fa fa-edit" style="color: white;"></span></button>' + '</td>' +
+					'<td>' + '<button class = "btn btn-success" id = "editPeopleCountbtn" data-toggle="modal" data-target="#peopleCountModal" onclick="passCurrentPeopleData(&#39;' + result.rooms[room]._id + '&#39;)"> <span class="fa fa-edit" style="color: white;"></span></button>' + '</td>'
+					'</tr>' + '</tbody>';
+
+				}
+				
 			}
 		}
 	}
@@ -4367,4 +4391,11 @@ function realTimeUpdate()
 
 	}, 5000);
 
+}
+
+function showHideRoomID()
+{
+	document.getElementById("showRoom").innerHTML = "";
+	var table = document.getElementById("showRoom").innerHTML;
+	table = showRoomTable();
 }
