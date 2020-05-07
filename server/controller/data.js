@@ -356,3 +356,10 @@ exports.getRealTimePeople = (req, res) => {
 
   res.status(200).json({ people: peopleCount });
 };
+
+
+exports.postSocialData = (req, res) => {
+  socket.emit("social", {highRiskCount: req.body.highRiskCount, lowRiskCount: req.body.midRiskCount, roomId: req.params.roomId});
+
+  res.status(200).json({message: `Successfully post social distancing data to room ${req.params.roomId}: High Risk: ${req.body.highRiskCount}, Mid Risk: ${req.body.midRiskCount}`});
+}

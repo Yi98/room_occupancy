@@ -296,15 +296,14 @@ var socket = io();
 
 let currentRoom;
 
-socket.on('forecast', function (forecast) {
-	// const forecastResults = forecast.result.map(data => Math.round(data));
 
-	// forecastChart.data.datasets[0].data = forecastResults;
+//Florence works on here
+socket.on('social', function (data) {
+  // Example data: {highRiskCount: "5", lowRiskCount: "3", roomId: "5db043344a270c2b48ee776a"}
 
-	// forecastChart.update();
+  // Tasks: display data to webpage
 });
 
-//socket.emit("people", {people: socketPeopleCount, roomId: req.params.roomId, store: true});
 
 socket.on("people", function (msg) {
 	// List of room in the room list page
@@ -421,7 +420,6 @@ socket.on("sensor", function (msg) {
 	if (currentRoom == roomName) {
 		onUpdateTrend(outerRoomId, roomName);
 	}
-
 });
 
 function searchRoom() {
