@@ -88,7 +88,7 @@
 
 </head>
 
-<body onload="onLoadDashboard();">
+<body onload="onLoadDashboard(); realTimeUpdate()">
 	<div class="container-fluid">
 		<div class="row nav-wrapper align-self-center">
 			<div class="col-md-2 col-sm-12 col-xs-12 left-menu-1">
@@ -273,7 +273,7 @@
 							<div class="col-lg-8 col-md-12">
 								<div class="row">
 									<div class="col-md-12">
-										<div data-intro="Here are the trends of the room that you have selected." data-position="left"
+										<div data-intro="Here are the trends of the room that you have selected. You can click on the next arrow icon button beside this trends to view the forecast chart." data-position="left"
 											data-step="4" class="card border-0 shadow-sm p-2 bg-white rounded w-100">
 											<div class="card-body pt-2">
 												<h6 class="card-title mb-4" style="display:inline-block;">Today's trends
@@ -319,7 +319,18 @@
 									</div>
 								</div>
 								<div id="forecast-container h-25">
-									<div class="d-flex h-100 justify-content-center mt-3"><div class="align-self-center"><div id="forecast-spinner" class="spinner-border text-danger" style="width:3rem; height:3rem; display:none"><span class="sr-only">Loading...</span></div></div></div>
+									<div class="d-flex h-100 justify-content-center mt-4">
+										<div class="align-self-center">
+											<div id="forecast-notice" style="display:none;"> Forecasting might take a while but good things worth waiting </div>
+										</div>
+									</div>
+									<div class="align-self-center">
+										<div id="forecast-spinner" class="spinner mt-0" style="display: none;">
+											<div class="bounce1"></div>
+											<div class="bounce2"></div>
+											<div class="bounce3"></div>
+										</div>
+									</div>
 									<canvas id="forecastChart" height="100%"></canvas>
 								</div>
 							</div>

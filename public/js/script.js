@@ -273,6 +273,15 @@ var reportTable = $('#reportTable').DataTable({
 					height: 300,
 					margin: [0, 20]
 				}
+
+				doc.footer = 
+					function (currentPage, pageCount) {
+						return [{
+							columns: [
+								{ text: currentPage.toString() + '/' + pageCount, alignment: 'center', margin: [0,20], fontSize: 10 }
+							]
+						} ];
+					}
 			}
 		}
 	]
@@ -340,8 +349,9 @@ socket.on("people", function (msg) {
 
 	var noticeMode = document.getElementById("notificationMode").checked;
 
-	if (noticeMode == false) {
-		if (msg.previous <= 20 && msg.people > 20) {
+	if(noticeMode == false)
+	{
+		if (msg.previous <= 25 && msg.people > 25) {
 			notify = true;
 			roomStatus = 'full (COVID-19)';
 		}
@@ -2190,22 +2200,46 @@ function showRoomTable() {
 	var xhttp = new XMLHttpRequest();
 	xhttp.responseType = 'json';
 
+	var showRoomID = document.getElementById("showRoomID");
+	
 	xhttp.onreadystatechange = function () {
 		if (this.readyState == 4 && this.status == 200) {
 			$("#spinner").hide();
 			var result = this.response;
 
 			for (room in result.rooms) {
+			 
+				if(showRoomID.checked == false)
+				{
+					$("#roomID").show();
 
-				document.getElementById("showRoom").innerHTML +=
+					document.getElementById("showRoom").innerHTML +=
 					'<tbody>' + '<tr class="roomRow">' +
-					'<td class="roomId" style="display: none;">' + result.rooms[room]._id + '</td>' +
+					'<td class="roomId">' + result.rooms[room]._id + '</td>' +
 					'<td>' + result.rooms[room].name + '</td>' +
 					'<td>' + result.rooms[room].maxCapacity + '</td>' +
 					'<td>' + '<button class = "editRoomNamebtn btn btn-success" id = "editRoomNamebtn" data-toggle="modal" data-target="#roomNameModal" onclick="passRoomNameData(&#39;' + result.rooms[room]._id + '&#39;)"> <span class="fa fa-edit" style="color: white;"></span></button>' + '</td>' +
 					'<td>' + '<button class = "btn btn-success" id = "editRoomCapacitybtn" data-toggle="modal" data-target="#roomMaxCapacityModal" onclick="passRoomMaxCapacityData(&#39;' + result.rooms[room]._id + '&#39;)"> <span class="fa fa-edit" style="color: white;"></span></button>' + '</td>' +
 					'<td>' + '<button class = "btn btn-success" id = "editPeopleCountbtn" data-toggle="modal" data-target="#peopleCountModal" onclick="passCurrentPeopleData(&#39;' + result.rooms[room]._id + '&#39;)"> <span class="fa fa-edit" style="color: white;"></span></button>' + '</td>'
-				'</tr>' + '</tbody>';
+					'</tr>' + '</tbody>';
+
+				}
+				else
+				{
+					$("#roomID").hide();
+
+					document.getElementById("showRoom").innerHTML +=
+					'<tbody>' + '<tr class="roomRow">' +
+					'<td class="roomId"  style="display: none;">' + result.rooms[room]._id + '</td>' +
+					'<td>' + result.rooms[room].name + '</td>' +
+					'<td>' + result.rooms[room].maxCapacity + '</td>' +
+					'<td>' + '<button class = "editRoomNamebtn btn btn-success" id = "editRoomNamebtn" data-toggle="modal" data-target="#roomNameModal" onclick="passRoomNameData(&#39;' + result.rooms[room]._id + '&#39;)"> <span class="fa fa-edit" style="color: white;"></span></button>' + '</td>' +
+					'<td>' + '<button class = "btn btn-success" id = "editRoomCapacitybtn" data-toggle="modal" data-target="#roomMaxCapacityModal" onclick="passRoomMaxCapacityData(&#39;' + result.rooms[room]._id + '&#39;)"> <span class="fa fa-edit" style="color: white;"></span></button>' + '</td>' +
+					'<td>' + '<button class = "btn btn-success" id = "editPeopleCountbtn" data-toggle="modal" data-target="#peopleCountModal" onclick="passCurrentPeopleData(&#39;' + result.rooms[room]._id + '&#39;)"> <span class="fa fa-edit" style="color: white;"></span></button>' + '</td>'
+					'</tr>' + '</tbody>';
+
+				}
+				
 			}
 		}
 	}
@@ -3604,6 +3638,7 @@ function onRoomClicked(roomName, roomId, updateView) {
 	const defaultRooms = document.getElementsByClassName('defaultRoom');
 
 	$('#forecast-spinner').show();
+	$('#forecast-notice').show();
 	$('#forecastChart').hide();
 
 	if (updateView) {
@@ -3744,9 +3779,10 @@ function onRoomClicked(roomName, roomId, updateView) {
 				document.getElementById('trendRoom').innerHTML = " - " + roomName;
 				document.getElementById('forecastRoom').innerHTML = " - " + roomName;
 				document.getElementById('viewRoomDetails').href = `/chart/${roomId}`;
-
-				setTimeout(function () {
-					$('#forecast-spinner').hide();
+				
+				setTimeout(function () { 
+					$('#forecast-spinner').hide();					
+					$('#forecast-notice').hide();
 					$('#forecastChart').show();
 				}, 15000);
 
@@ -4100,3 +4136,270 @@ let forecastChart = new Chart(dashForecastChart, {
 		}
 	}
 });
+
+// simulate real-time update for client testing
+function realTimeUpdate()
+{
+	var msg = [
+		{
+			roomId: "5d8f019f1c9d44000090f440", 
+			name: "Leisure Area",
+			people: 0,
+			previous: 1,
+			temperature: 29.7,
+			humidity: 52.2,
+			max_capacity: 50
+		},
+		{
+			roomId: "5d935b95ea295d622c1f7e7d", 
+			name: "BYOD",
+			people: 3,
+			previous: 2,
+			temperature: 26.8,
+			humidity: 59.5,
+			max_capacity: 50
+		},
+		{
+			roomId: "5db03ec62040a70a38244de1", 
+			name: "24-hours Study Area",
+			people: 4,
+			previous: 3,
+			temperature: 27.3,
+			humidity: 65.9,
+			max_capacity: 50
+		}
+	]
+
+	let roomCards = document.getElementsByClassName("roomCard");
+	let noticeTime = moment().format('MMM DD, h:mm A');
+	let notify_Leisure = false;
+	let notify_BYOD = false;
+	let notify_Study = false;
+	let roomName;
+	let roomNameLeisure;
+	let roomNameBYOD;
+	let roomNameStudy;
+	let roomStatusLeisure;
+	let roomStatusBYOD;
+	let roomStatusStudy;
+	let notificationsLeisure;
+	let notificationsBYOD;
+	let notificationsStudy;
+
+	setInterval(function(){  
+		for (let i = 0; i < 3; i++) {
+
+			if(msg[i].people >= 0  && msg[i].people < 30)
+			{
+				msg[i].people += 1;
+			}
+			else
+			{
+				msg[i].people -= 16;
+			}
+
+			if(msg[i].previous >= 0  && msg[i].previous <= 30)
+			{
+				msg[i].previous = msg[i].people - 1;
+			}
+			else
+			{
+				msg[i].previous -= 15;
+			}
+
+			if(msg[i].temperature >= 14  && msg[i].temperature <= 35)
+			{
+				msg[i].temperature += 2;
+			}
+			else
+			{
+				msg[i].temperature = 20.5;
+			}
+
+			if(msg[i].humidity >= 50  && msg[i].humidity <= 75)
+			{
+				msg[i].humidity += 2;
+			}
+			else
+			{
+				msg[i].humidity = 56.2;
+			}
+			
+			let roomId = roomCards[i].getElementsByClassName("roomId");
+			let maxCapacity = document.getElementsByClassName('maxCapacity');
+			let division = (msg[i].people / parseFloat(maxCapacity[i].innerHTML)) * 50;
+
+			if (roomId[0].innerHTML == msg[i].roomId) {
+
+				document.getElementsByClassName("people")[i].innerHTML = msg[i].people;
+				document.getElementsByClassName("temperature")[i].innerHTML = msg[i].temperature;
+				document.getElementsByClassName("humidity")[i].innerHTML = msg[i].humidity;
+				document.getElementsByClassName('lastUpdatedTime')[i].innerHTML = noticeTime;
+
+				// Check this 
+				document.getElementsByClassName('status-indicator-outer')[i].style.width = ((parseFloat(maxCapacity[i].innerHTML) - division) / (parseFloat(maxCapacity[i].innerHTML)) * 100) + '%';
+
+			}
+		}
+
+		localStorage.setItem("notis_Leisure", JSON.stringify([]));
+		localStorage.setItem("notis_BYOD", JSON.stringify([]));
+		localStorage.setItem("notis_Study", JSON.stringify([]));
+
+		// Push notifications
+		if (!localStorage.getItem('notis_Leisure')) {
+			localStorage.setItem("notis_Leisure", JSON.stringify([]));
+		}
+
+		if (!localStorage.getItem('notis_BYOD')) {
+			localStorage.setItem("notis_BYOD", JSON.stringify([]));
+		}
+
+		if (!localStorage.getItem('notis_Study')) {
+			localStorage.setItem("notis_Study", JSON.stringify([]));
+		}
+
+		var noticeMode = document.getElementById("notificationMode").checked;
+
+
+		if(noticeMode == false)
+		{
+			if (msg[0].previous <= 20 && msg[0].people > 20) {
+				notify_Leisure = true;
+				roomStatusLeisure = 'full (COVID-19)';
+				roomNameLeisure = 'Leisure Area';
+			}
+			else if (msg[0].previous <= 12 && msg[0].people > 12) {
+				notify_Leisure = true;
+				roomStatusLeisure = 'moderate (COVID-19)';
+				roomNameLeisure = 'Leisure Area';
+			}
+
+			if (msg[1].previous <= 20 && msg[1].people > 20) {
+				notify_BYOD = true;
+				roomStatusBYOD = 'full (COVID-19)';
+				roomNameBYOD = 'BYOD';
+			}
+			else if (msg[1].previous <= 12 && msg[1].people > 12) {
+				notify_BYOD = true;
+				roomStatusBYOD = 'moderate (COVID-19)';
+				roomNameBYOD = 'BYOD';
+			}
+
+			if (msg[2].previous <= 20 && msg[2].people > 20) {
+				notify_Study = true;
+				roomStatusStudy = 'full (COVID-19)';
+				roomNameStudy = '24-hours Study Area';	
+			}
+			else if (msg[2].previous <= 12 && msg[2].people > 12) {
+				notify_Study = true;
+				roomStatusStudy = 'moderate (COVID-19)';
+				roomNameStudy = '24-hours Study Area';
+			}
+		} 
+		else
+		{
+			if (msg[0].previous <= 10 && msg[0].people > 10) {
+				notify_Leisure = true;
+				roomStatusLeisure = 'full';
+				roomNameLeisure = 'Leisure Area';
+			}
+			else if (msg[0].previous <= 5 && msg[0].people > 5) {
+				notify_Leisure = true;
+				roomStatusLeisure = 'moderate';
+				roomNameLeisure = 'Leisure Area';
+			}
+
+			if (msg[1].previous <= 10 && msg[1].people > 10) {
+				notify_BYOD = true;
+				roomStatusBYOD = 'full';
+				roomNameBYOD = 'BYOD';	
+			}
+			else if (msg[1].previous <= 5 && msg[1].people > 5) {
+				notify_BYOD = true;
+				roomStatusBYOD = 'moderate';
+				roomNameBYOD = 'BYOD';	
+			}
+
+			if (msg[2].previous <= 10 && msg[2].people > 10) {
+				notify_Study = true;
+				roomStatusStudy = 'full';
+				roomNameStudy = '24-hours Study Area';
+			}
+			else if (msg[2].previous <= 5 && msg[2].people > 5) {
+				notify_Study = true;
+				roomStatusStudy = 'moderate';
+				roomNameStudy = '24-hours Study Area';
+			}
+		}
+		
+		if (notify_Leisure) {
+			notificationsLeisure = JSON.parse(localStorage.getItem('notis_Leisure'));
+
+			notificationsLeisure.push({ noticeTime, roomNameLeisure, roomStatusLeisure });
+
+			$('#noticeMain').prepend(`<div class="noticeContainer"><p class="m-0 noticeTime">${noticeTime}</p><p style="font-size:0.9rem;">${roomNameLeisure} has reached <strong>${roomStatusLeisure}</strong> capacity.
+					<button onclick="closeNoticeRow(this)" type="button" class="close closeBtn mr-3" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</p></div>`);
+
+			document.getElementById('emptyNotice').style.display = "none";
+
+			const noticeNum = document.getElementById('noticeNum');
+			noticeNum.innerHTML = Number(noticeNum.innerHTML) + 1;
+			noticeNum.style.display = "inline";
+
+			localStorage.setItem('notis_Leisure', JSON.stringify(notificationsLeisure));
+		}
+
+		if (notify_BYOD) {
+			notificationsBYOD = JSON.parse(localStorage.getItem('notis_BYOD'));
+
+			notificationsBYOD.push({ noticeTime, roomNameBYOD, roomStatusBYOD });
+
+			$('#noticeMain').prepend(`<div class="noticeContainer"><p class="m-0 noticeTime">${noticeTime}</p><p style="font-size:0.9rem;">${roomNameBYOD} has reached <strong>${roomStatusBYOD}</strong> capacity.
+					<button onclick="closeNoticeRow(this)" type="button" class="close closeBtn mr-3" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</p></div>`);
+
+			document.getElementById('emptyNotice').style.display = "none";
+
+			const noticeNum = document.getElementById('noticeNum');
+			noticeNum.innerHTML = Number(noticeNum.innerHTML) + 1;
+			noticeNum.style.display = "inline";
+
+			localStorage.setItem('notis_BYOD', JSON.stringify(notificationsBYOD));
+		}
+
+		if (notify_Study) {
+			notificationsStudy = JSON.parse(localStorage.getItem('notis_Study'));
+
+			notificationsStudy.push({ noticeTime, roomNameStudy, roomStatusStudy });
+
+			$('#noticeMain').prepend(`<div class="noticeContainer"><p class="m-0 noticeTime">${noticeTime}</p><p style="font-size:0.9rem;">${roomNameStudy} has reached <strong>${roomStatusStudy}</strong> capacity.
+					<button onclick="closeNoticeRow(this)" type="button" class="close closeBtn mr-3" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</p></div>`);
+
+			document.getElementById('emptyNotice').style.display = "none";
+
+			const noticeNum = document.getElementById('noticeNum');
+			noticeNum.innerHTML = Number(noticeNum.innerHTML) + 1;
+			noticeNum.style.display = "inline";
+
+			localStorage.setItem('notis_Study', JSON.stringify(notificationsStudy));
+		}
+
+	}, 5000);
+
+}
+
+function showHideRoomID()
+{
+	document.getElementById("showRoom").innerHTML = "";
+	var table = document.getElementById("showRoom").innerHTML;
+	table = showRoomTable();
+}
