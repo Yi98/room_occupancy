@@ -18,6 +18,10 @@ exports.forecastDailyPeople = (req, res) => {
 
   predictiveModel.on('message', result => {
     console.log(result);
+    res.status(200).json({
+      result
+    });
+    
     socket.emit('forecast', { result });
   });
 }
