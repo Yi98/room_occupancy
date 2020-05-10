@@ -4260,7 +4260,7 @@ function realTimeUpdate()
 
 		if(noticeMode == false)
 		{
-			if (msg[0].previous <= 20 && msg[0].people > 20) {
+			if (msg[0].previous <= 18 && msg[0].people > 18) {
 				notify_Leisure = true;
 				roomStatusLeisure = 'full (COVID-19)';
 				roomNameLeisure = 'Leisure Area';
@@ -4271,7 +4271,7 @@ function realTimeUpdate()
 				roomNameLeisure = 'Leisure Area';
 			}
 
-			if (msg[1].previous <= 20 && msg[1].people > 20) {
+			if (msg[1].previous <= 18 && msg[1].people > 18) {
 				notify_BYOD = true;
 				roomStatusBYOD = 'full (COVID-19)';
 				roomNameBYOD = 'BYOD';
@@ -4282,7 +4282,7 @@ function realTimeUpdate()
 				roomNameBYOD = 'BYOD';
 			}
 
-			if (msg[2].previous <= 20 && msg[2].people > 20) {
+			if (msg[2].previous <= 18 && msg[2].people > 18) {
 				notify_Study = true;
 				roomStatusStudy = 'full (COVID-19)';
 				roomNameStudy = '24-hours Study Area';	
