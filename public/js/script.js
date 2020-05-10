@@ -296,15 +296,14 @@ var socket = io();
 
 let currentRoom;
 
-socket.on('forecast', function (forecast) {
-	const forecastResults = forecast.result.map(data => Math.round(data));
-	
-	forecastChart.data.datasets[0].data = forecastResults;
 
-	forecastChart.update();
+//Florence works on here
+socket.on('social', function (data) {
+  // Example data: {highRiskCount: "5", lowRiskCount: "3", roomId: "5db043344a270c2b48ee776a"}
+
+  // Tasks: display data to webpage
 });
 
-//socket.emit("people", {people: socketPeopleCount, roomId: req.params.roomId, store: true});
 
 socket.on("people", function (msg) {
 	// List of room in the room list page
@@ -359,9 +358,8 @@ socket.on("people", function (msg) {
 			notify = true;
 			roomStatus = 'moderate (COVID-19)';
 		}
-	} 
-	else
-	{
+	}
+	else {
 		if (msg.previous <= 10 && msg.people > 10) {
 			notify = true;
 			roomStatus = 'full';
@@ -422,7 +420,6 @@ socket.on("sensor", function (msg) {
 	if (currentRoom == roomName) {
 		onUpdateTrend(outerRoomId, roomName);
 	}
-
 });
 
 function searchRoom() {
@@ -2207,7 +2204,7 @@ function showRoomTable() {
 		if (this.readyState == 4 && this.status == 200) {
 			$("#spinner").hide();
 			var result = this.response;
-       
+
 			for (room in result.rooms) {
 			 
 				if(showRoomID.checked == false)
@@ -3766,7 +3763,7 @@ function onRoomClicked(roomName, roomId, updateView) {
 			trendChart.data.labels = timeline;
 
 			trendChart.update();
-	
+
 			if (updateView) {
 				for (let i = 0; i < dotsLoaders.length; i++) {
 					dotsLoaders[i].style.display = "none";
@@ -3788,7 +3785,7 @@ function onRoomClicked(roomName, roomId, updateView) {
 				}, 15000);
 
 			}
-			
+
 		}
 	};
 
@@ -3804,8 +3801,13 @@ const onForecastRoom = (roomId) => {
 		.then(response => {
 			return response.json();
 		})
-		.then(data => {
-			// console.log(data);
+		.then(forecast => {
+			console.log(forecast);
+			const forecastResults = forecast.result.map(data => Math.round(data));
+
+			forecastChart.data.datasets[0].data = forecastResults;
+
+			forecastChart.update();
 		})
 		.catch(err => {
 			console.log(err);

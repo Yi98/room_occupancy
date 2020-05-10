@@ -15,7 +15,10 @@ router.post('/:roomId/sensor', DataController.postSensorData);
 
 router.post('/:roomId/people', DataController.postPeople);
 
+router.post('/:roomId/social', DataController.postSocialData);
+
 router.put('/:roomId/people', DataController.putPeople);
+
 
 // bong testing
 router.get("/:roomId/people/real-time", DataController.getRealTimePeople);

@@ -1,5 +1,4 @@
 const http = require('http');
-const https = require('https');
 const date = require('date-and-time');
 const createCsvWriter = require('csv-writer').createObjectCsvWriter;
 
@@ -32,8 +31,10 @@ const getRoomData = (roomId) => {
       const today = new Date();
       const parsedToday = new Date(today.getFullYear(), today.getMonth(), today.getDate());
 
-      for (let i = 0; i < results.room.people.length; i++) {
+
+      for (let i = 0; i < results.room.people.length; i++) {  
         const currentDate = new Date(results.room.people[i].time);
+        // const currentDate = date.addHours(new Date(results.room.people[i].time), 8);
         const parsedCurrent = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
         const threshold = date.subtract(parsedToday, parsedCurrent).toHours();
 
@@ -56,6 +57,9 @@ const getRoomData = (roomId) => {
         }
       }
 
+      console.log(tempTrain);
+
+
       // sort the date
       tempTrain.sort(function (a, b) {
         return new Date(a.date) - new Date(b.date);
@@ -67,7 +71,7 @@ const getRoomData = (roomId) => {
 }
 
 
-function writeToCsv(data, filePath) {
+function writeToCsv(data, filePath) {  
   const csvWriter = createCsvWriter({
     path: filePath,
     header: [
@@ -123,6 +127,7 @@ function generateDummyData() {
 
 function trainAndPredict(filePath) {
   let results;
+  let error;
 
   var spawn = require("child_process").spawn;
 
@@ -134,10 +139,14 @@ function trainAndPredict(filePath) {
 
   thread.stdout.on('end', function (data) {
     const forecastResult = [];
+
     results = results.replace('undefined', '');
     results = results.replace('" "', '');
 
-    const stringifyResults = results.split('\r\n');
+
+    // const stringifyResults = results.split('\r\n');
+    const stringifyResults = results.split('\n');
+
 
     for (let i = 0; i < stringifyResults.length; i++) {
       if (stringifyResults[i] == '') {
@@ -147,6 +156,15 @@ function trainAndPredict(filePath) {
     }
     process.send(forecastResult);
   })
+
+  thread.stderr.on('data', function (data) {
+    error += data;
+  })
+
+  thread.stderr.on('end', function (data) {
+    console.log('Error:' + error);
+  })
+
 };
 
 process.on('message', message => {
