@@ -4212,9 +4212,13 @@ function realTimeUpdate()
 	let notificationsLeisure;
 	let notificationsBYOD;
 	let notificationsStudy;
+	var count = 0;
+	var testUpdate;
 
-	setInterval(function(){  
+	testUpdate = setInterval(function(){  
 		var noticeMode = document.getElementById("notificationMode").checked;
+
+		count ++;
 
 		for (let i = 0; i < 3; i++) {
 
@@ -4427,6 +4431,11 @@ function realTimeUpdate()
 			noticeNum.style.display = "inline";
 
 			localStorage.setItem('notis_Study', JSON.stringify(notificationsStudy));
+
+			if(count == 20)
+			{
+				clearInterval(testUpdate);
+			}
 		}
 
 	}, 5000);
