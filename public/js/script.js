@@ -297,11 +297,34 @@ var socket = io();
 let currentRoom;
 
 
-//Florence works on here
 socket.on('social', function (data) {
   // Example data: {highRiskCount: "5", lowRiskCount: "3", roomId: "5db043344a270c2b48ee776a"}
 
   // Tasks: display data to webpage
+  let roomCards = document.getElementsByClassName("roomCard");
+  let noticeTime = moment().format('MMM DD, h:mm A');
+
+  var noticeMode = document.getElementById("notificationMode").checked;
+
+	for (let i = 0; i < roomCards.length; i++) {
+		
+		let roomId = roomCards[i].getElementsByClassName("roomId");
+		// change 0 to i later
+		if (roomId[0].innerHTML == data.roomId) {
+			document.getElementsByClassName("highRisk")[i].innerHTML = data.highRiskCount;
+
+			if(noticeMode == false)
+			{
+				document.getElementsByClassName('high_risk')[i].style.visibility = 'visible';
+			}
+			else
+			{
+				document.getElementsByClassName('high_risk')[i].style.visibility = 'hidden';
+			}
+
+			document.getElementsByClassName('lastUpdatedTime')[i].innerHTML = noticeTime;
+		}
+	}
 });
 
 
@@ -2064,7 +2087,8 @@ function showDashboardRooms() {
 							<h6>Number of people: <span class="roomData people">N/A</span></h6>
 							<h6>Temperature: <span class="roomData temperature">N/A</span></h6>
 							<h6>Humidity: <span class="roomData humidity">N/A</span></h6>
-							<p class="lastUpdated mt-4">Last updated: <span class="lastUpdatedTime">N/A<span></p>
+							<h6 class="high_risk" style="visibility: hidden;">High Risk: <span class="roomData highRisk">N/A</span></h6>
+							<p class="lastUpdated mt-2">Last updated: <span class="lastUpdatedTime">N/A<span></p>
 							<span class="roomId" style="display:none">${result.rooms[room]._id}</span>
 							<span class="maxCapacity" style="display:none">${result.rooms[room].maxCapacity}</span>
 						</div>
@@ -2083,7 +2107,8 @@ function showDashboardRooms() {
 							<h6>Number of people: <span class="roomData people">N/A</span></h6>
 							<h6>Temperature: <span class="roomData temperature">N/A</span></h6>
 							<h6>Humidity: <span class="roomData humidity">N/A</span></h6>
-							<p class="lastUpdated mt-4">Last updated: <span class="lastUpdatedTime">N/A<span></p>
+							<h6 class="high_risk" style="visibility: hidden;">High Risk: <span class="roomData highRisk">N/A</span></h6>
+							<p class="lastUpdated mt-2">Last updated: <span class="lastUpdatedTime">N/A<span></p>
 							<div class="status-indicator"></div>
 							<span class="roomId" style="display:none">${result.rooms[room]._id}</span>
 							<span class="maxCapacity" style="display:none">${result.rooms[room].maxCapacity}</span>
@@ -2097,6 +2122,7 @@ function showDashboardRooms() {
 				<div id="noRoomCard" class="card mr-4 border-0 shadow-sm py-4 mt-2 mb-4 bg-white rounded" style="width: 24rem; height: 14rem; display: none"	>
 					<div class="card-body pt-2 text-center">
 						<h4 class="card-title mb-4">Room not found :(</h4>
+						<h6 style="color: white">empty</h6>
 						<h6 style="color: white">empty</h6>
 						<h6 style="color: white">empty</h6>
 						<h6 style="color: white">empty</h6>
@@ -4146,7 +4172,8 @@ function realTimeUpdate()
 			previous: 1,
 			temperature: 29.7,
 			humidity: 52.2,
-			max_capacity: 50
+			max_capacity: 50,
+			highRiskCount: 5
 		},
 		{
 			roomId: "5d935b95ea295d622c1f7e7d", 
@@ -4155,7 +4182,8 @@ function realTimeUpdate()
 			previous: 2,
 			temperature: 26.8,
 			humidity: 59.5,
-			max_capacity: 50
+			max_capacity: 50,
+			highRiskCount: 3
 		},
 		{
 			roomId: "5db03ec62040a70a38244de1", 
@@ -4164,7 +4192,8 @@ function realTimeUpdate()
 			previous: 3,
 			temperature: 27.3,
 			humidity: 65.9,
-			max_capacity: 50
+			max_capacity: 50,
+			highRiskCount: 4
 		}
 	]
 
@@ -4185,6 +4214,8 @@ function realTimeUpdate()
 	let notificationsStudy;
 
 	setInterval(function(){  
+		var noticeMode = document.getElementById("notificationMode").checked;
+
 		for (let i = 0; i < 3; i++) {
 
 			if(msg[i].people >= 0  && msg[i].people < 30)
@@ -4232,7 +4263,17 @@ function realTimeUpdate()
 				document.getElementsByClassName("people")[i].innerHTML = msg[i].people;
 				document.getElementsByClassName("temperature")[i].innerHTML = msg[i].temperature;
 				document.getElementsByClassName("humidity")[i].innerHTML = msg[i].humidity;
+				document.getElementsByClassName("highRisk")[i].innerHTML = msg[i].highRiskCount;
 				document.getElementsByClassName('lastUpdatedTime')[i].innerHTML = noticeTime;
+
+				if(noticeMode == false)
+				{
+					document.getElementsByClassName('high_risk')[i].style.visibility = 'visible';
+				}
+				else
+				{
+					document.getElementsByClassName('high_risk')[i].style.visibility = 'hidden';
+				}
 
 				// Check this 
 				document.getElementsByClassName('status-indicator-outer')[i].style.width = ((parseFloat(maxCapacity[i].innerHTML) - division) / (parseFloat(maxCapacity[i].innerHTML)) * 100) + '%';
@@ -4256,9 +4297,6 @@ function realTimeUpdate()
 		if (!localStorage.getItem('notis_Study')) {
 			localStorage.setItem("notis_Study", JSON.stringify([]));
 		}
-
-		var noticeMode = document.getElementById("notificationMode").checked;
-
 
 		if(noticeMode == false)
 		{
