@@ -3097,6 +3097,14 @@ function closeResetAlert() {
 	$("#resetAlert").hide();
 };
 
+function closeProfileAlert() {
+	$("#changePasswordAlert").hide();
+};
+
+function closeProfileResultAlert() {
+	$("#profileResultAlert").hide();
+};
+
 function openForgetEmail() {
 	var modal = document.getElementById("modalEmail");
 	modal.style.display = "block";
@@ -4109,6 +4117,41 @@ function onDismissChartTour() {
 	});
 }
 
+function beginProfileWebTour() {
+	jQuery.noConflict();
+
+	introJs()
+		.setOptions({
+			'hidePrev': true,
+			'hideNext': true,
+			'showBullets': false,
+			'showProgress': true,
+			'exitOnOverlayClick': false,
+			'showStepNumbers': false,
+			'tooltipClass': 'intro-tooltip',
+			'overlayOpacity': 0.7
+		})
+		.oncomplete(function () {
+			$('#completeProfileTourModal').modal('show');
+		})
+		.start();
+
+	sessionStorage.setItem('firstLogin', 'false');
+}
+
+
+function onDismissProfileTour() {
+	jQuery.noConflict();
+
+	$('#vaProfileModal-deny').modal({
+		show: true
+	});
+
+	$('#vaProfileModal-deny').on('hidden.bs.modal', function () {
+		sessionStorage.setItem('firstLogin', 'false');
+	});
+}
+
 
 // Forecast Chart
 let dashForecastChart = document.getElementById('forecastChart').getContext('2d');
@@ -4448,3 +4491,193 @@ function showHideRoomID()
 	var table = document.getElementById("showRoom").innerHTML;
 	table = showRoomTable();
 }
+
+function showCurrentUser()
+{
+	var userName = document.getElementById('userName');
+
+	var xhttp = new XMLHttpRequest();
+	xhttp.responseType = 'json';
+
+	xhttp.onreadystatechange = function () {
+		if (this.readyState == 4 && this.status == 200) {
+
+			var result = this.response;
+		
+			for (var user in result.users) {
+
+				if(result.users[user]._id == sessionStorage.getItem("passLoginUserID"))
+				{
+					userName.innerHTML = '&nbsp;&nbsp;' + result.users[user].username;
+				}
+			};
+		}
+	};
+
+	xhttp.open("GET", `${domain}/api/users`, true);
+	xhttp.send();
+
+	$('#profileSpinner').hide();
+	$("#changePasswordAlert").hide();
+	$("#profileResultAlert").hide();
+}
+
+function showProfileDetails()
+{
+	var name = document.getElementById('profileUserName');
+	var role = document.getElementById('profileUserRole');
+	var email = document.getElementById('profileUserEmail');
+	var profileTitle = document.getElementById('profileTitle');
+
+	var xhttp = new XMLHttpRequest();
+	xhttp.responseType = 'json';
+
+	xhttp.onreadystatechange = function () {
+		if (this.readyState == 4 && this.status == 200) {
+
+			var result = this.response;
+		
+			for (var user in result.users) {
+
+				if(result.users[user]._id == sessionStorage.getItem("passLoginUserID"))
+				{
+					profileTitle.innerHTML = result.users[user].username + "'s" + '&nbsp;&nbsp;' + 'Profile';
+					name.innerHTML = result.users[user].username;
+					role.innerHTML = result.users[user].role;
+					email.innerHTML = result.users[user].email;
+				}
+			};
+		}
+	};
+
+	xhttp.open("GET", `${domain}/api/users`, true);
+	xhttp.send();
+}
+
+function changePassword()
+{
+	$("#profileSpinner").show();
+
+	if (document.getElementById("newPassword").value !== document.getElementById("confirmNewPassword").value) {
+		$("#profileSpinner").hide();
+
+		document.getElementById("changePasswordAlert").innerHTML = '<strong>Your new password and confirm new password is not the same.\nPlease enter again!!</strong> <button type="button" class="close" onclick="closeProfileAlert()"><span>&times;</span></button>';
+		$("#changePasswordAlert").show();
+	}
+
+	CheckProfileChangePassword(document.getElementById("confirmNewPassword"));
+
+	if (document.getElementById("confirmNewPassword").value === "") {
+		$("#profileSpinner").hide();
+
+		document.getElementById("changePasswordAlert").innerHTML = '<strong>Please fill in your confirm new password!!</strong> <button type="button" class="close" onclick="closeProfileAlert()"><span>&times;</span></button>';
+		$("#changePasswordAlert").show();
+	}
+
+	CheckProfileChangePassword(document.getElementById("newPassword"));
+
+	if (document.getElementById("newPassword").value === "") {
+		$("#profileSpinner").hide();
+
+		document.getElementById("changePasswordAlert").innerHTML = '<strong>Please fill in your new password!!</strong> <button type="button" class="close" onclick="closeProfileAlert()"><span>&times;</span></button>';
+		$("#changePasswordAlert").show();
+	}
+
+	if (document.getElementById("newPassword").value !== ""
+		&& document.getElementById("confirmNewPassword").value !== ""
+		&& document.getElementById("newPassword").value === document.getElementById("confirmNewPassword").value
+		&& CheckProfileChangePassword(document.getElementById("newPassword")) === true
+		&& CheckProfileChangePassword(document.getElementById("confirmNewPassword")) === true) {
+		var xhttp = new XMLHttpRequest();
+		xhttp.responseType = 'json';
+
+		var url = `${domain}/api/users/changePassword`;
+
+		var password = document.getElementById("newPassword").value;
+		var id = sessionStorage.getItem("passLoginUserID");
+
+		var params = `id=${id}&newPassword=${password}`;
+
+		xhttp.open('POST', url, true);
+
+		xhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
+		xhttp.onreadystatechange = function () {
+			if (xhttp.readyState == 4 && xhttp.status == 200) {
+				if (xhttp.response.message == 'Successfully change password') {
+					$("#profileSpinner").hide();
+
+					var element = document.getElementById("profileResultAlert");
+					element.classList.remove("alert-danger")
+					element.classList.add("alert-success");
+
+					jQuery.noConflict();
+					$('#changePasswordModal').modal('hide');
+
+					document.getElementById("profileResultAlert").innerHTML = '<strong>Successfully change password</strong> <button type="button" class="close" onclick="closeProfileResultAlert()"><span>&times;</span></button>';
+					$("#profileResultAlert").show();
+
+					document.getElementById("profileNewPasswordHint").innerHTML = '';
+					document.getElementById("profileNewConfirmPasswordHint").innerHTML = '';
+					document.getElementById("newPassword").value = '';
+					document.getElementById("confirmNewPassword").value = '';
+				}
+			}
+
+			if (xhttp.readyState == 4 && xhttp.status == 404) {
+				$("#profileSpinner").hide();
+
+				document.getElementById("profileResultAlert").innerHTML = '<strong>Failed to change password.\nPlease try again.</strong> <button type="button" class="close" onclick="closeProfileResultAlert()"><span>&times;</span></button>';
+				$("#profileResultAlert").show();
+
+				jQuery.noConflict();
+				$('#changePasswordModal').modal('hide');
+
+			}
+
+			if (xhttp.readyState == 4 && xhttp.status == 500) {
+				$("#profileSpinner").hide();
+
+				document.getElementById("profileResultAlert").innerHTML = '<strong>Failed to change password due to internal server error.\n Please try again later.</strong> <button type="button" class="close" onclick="closeProfileResultAlert()"><span>&times;</span></button>';
+				$("#profileResultAlert").show();
+
+				jQuery.noConflict();
+				$('#changePasswordModal').modal('hide');
+			}
+		}
+
+		xhttp.send(params);
+	}
+
+}
+
+function profileNewpsdHint() {
+	if (document.getElementById("newPassword").value === '') {
+		document.getElementById("profileNewPasswordHint").innerHTML = '*8-12 character, one uppercase, one lowercase and one numeric digit';
+	}
+}
+
+function profileNewconfirmpsdHint() {
+	if (document.getElementById("confirmNewPassword").value === '') {
+		document.getElementById("profileNewConfirmPasswordHint").innerHTML = '*8-12 character, one uppercase, one lowercase and one numeric digit';
+	}
+}
+
+function CheckProfileChangePassword(input) {
+	var validPassword = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,12}$/;
+
+	if (input.value.match(validPassword)) {
+		return true;
+	}
+	else {
+		var element = document.getElementById("changePasswordAlert");
+		element.classList.add("alert-danger");
+
+		document.getElementById("changePasswordAlert").innerHTML = '<strong>Your New Password or Confirm New Password is invalid. Please enter a password which contain 8 to 12 character, at least one numeric digit, one uppercase and one lowercase letter!</strong> <button type="button" class="close" onclick="closeProfileAlert()"><span>&times;</span></button>';
+		$("#changePasswordAlert").show();
+		$("#profileSpinner").hide();
+
+		return false;
+
+	}
+};

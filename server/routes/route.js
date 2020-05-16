@@ -35,6 +35,10 @@ router.get('/rooms', auth, (req, res) => {
   res.sendFile(path.join(__dirname, '../../views/room.html'));
 });
 
+router.get('/profile', auth, (req, res) => {
+  res.sendFile(path.join(__dirname, '../../views/profile.html'));
+});
+
 //  Page not found
 router.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../../views/page_not_found.html'));

@@ -88,7 +88,7 @@
 
 </head>
 
-<body onload="onLoadDashboard(); realTimeUpdate()">
+<body onload="onLoadDashboard(); realTimeUpdate(); showCurrentUser();">
 	<div class="container-fluid">
 		<div class="row nav-wrapper align-self-center">
 			<div class="col-md-2 col-sm-12 col-xs-12 left-menu-1">
@@ -120,6 +120,14 @@
 			<div class="col-md-2 col-sm-12 col-xs-12 left-menu-2">
 				<nav class="navbar text-center" id="myNavbar">
 					<ul class="navbar-nav">
+						<li class="nav-item">
+							<a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="nav-link dropdown-toggle"><i class="fa fa-user" style="color: white;"><i style="color: white; font-family: Roboto, Helvetica Neue, Arial, sans-serif; font-style: normal;" id="userName"></i></i></a>
+							<ul class="collapse list-unstyled" id="pageSubmenu">
+								<li>
+									<a href="/profile" class="nav-link">Profile</a>
+								</li>
+							</ul>
+						</li>
 						<li class="nav-item"><a class="nav-link active disabled">Dashboard</a></li>
 						<li class="nav-item"><a href="/users" class="nav-link">Users</a></li>
 						<li class="nav-item"><a href="/rooms" class="nav-link">Rooms</a></li>

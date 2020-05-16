@@ -285,3 +285,29 @@ exports.resetPassword = (req, res) => {
       });
     })
 };
+
+// change the password of the user ->  api/users/changePassword (POST)
+exports.changePassword = (req, res) => {
+  User.findById(req.body.id)
+    .then(user => {
+      if (!user) {
+        return res.status(404).json({ message: `User ${req.params.id} not found` });
+      }
+
+      fetchedUser = user;
+      return bcrypt.hash(req.body.newPassword, 15);
+      
+    })
+    .then(hash => {
+      fetchedUser.password = hash;
+      fetchedUser.save();
+
+      res.status(200).json({ message: 'Successfully change password' });
+    })
+    .catch(err => {
+      res.status(500).json({
+        message: 'Failed to change password',
+        err
+      });
+    })
+};

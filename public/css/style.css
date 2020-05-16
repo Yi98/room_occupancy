@@ -62,6 +62,15 @@ html, body{
     background-size: 80%;
 }
 
+#profileSpinner{
+    position: absolute;
+    height: 80px;
+    width: 80px;
+    top: 35%;
+    left: 40%;
+    background-size: 80%;
+}
+
 #loginAlert {
     margin-top: 30px;
     display: none;							
@@ -137,6 +146,15 @@ hr {
 	font-family: "Roboto", "Helvetica Neue", "Arial", "sans-serif";
 	font-weight: bold;
 	border-radius: 2px;
+}
+
+#myNavbar ul li #pageSubmenu li a:hover{
+	background-color:#6D6E72;
+	opacity: 0.5;
+	color:white;
+	font-family: "Roboto", "Helvetica Neue", "Arial", "sans-serif";
+	border-radius: 2px;
+	text-decoration: none;
 }
 
 .searchRoom{
