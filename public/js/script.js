@@ -383,11 +383,11 @@ socket.on("people", function (msg) {
 		}
 	}
 	else {
-		if (msg.previous <= 10 && msg.people > 10) {
+		if (msg.previous <= 50 && msg.people > 50) {
 			notify = true;
 			roomStatus = 'full';
 		}
-		else if (msg.previous <= 5 && msg.people > 5) {
+		else if (msg.previous <= 25 && msg.people > 25) {
 			notify = true;
 			roomStatus = 'moderate';
 		}
@@ -2144,66 +2144,21 @@ function directToPdf() {
 	let charts = Highcharts.charts; // Obtain all the Highcharts objects
 	let count = 0;
 
-	console.log("this is the highchart");
-	console.log(Highcharts);
-	//    console.log("this is charts");
-	//    console.log(charts);
-
-	//    for(let x = 0; x < Highcharts.charts.length; x++)
-	//    {
-	//        console.log("this is the highchart loop");
-	//        console.log(Highcharts.charts[x].renderTo.id);
-	//        
-	//    }
-
-	console.log("this is charts");
-	console.log(charts);
 	// Loop through the Highcharts object array and make assignment according to the their respective renderTo.id
 	for (let i = 0; i < charts.length; i++) {
-		console.log("count of how many undefined");
-		console.log("this is outside the loop place");
-		console.log(count);
-		console.log("this is the charts i outside the loop");
-		console.log(charts[i]);
 
-		if (typeof charts[i].renderTo.id == 'undefined') {
-			console.log("this is the charts i");
-			console.log(charts[i]);
-			count++;
-			console.log("this is count number");
-			console.log(count);
-		}
-
-		//        console.log("this is count number");
-		//        console.log(count);
-		console.log("this is chart console");
-		console.log(charts[i].renderTo);
-		console.log(charts[i].renderTo.id);
 		if (charts[i].renderTo.id == "peopleChart") {
 			peopleChart = charts[i].getSVG();
-		} else if (typeof (charts[i].renderTo) == 'undefined') {
-			console.log("oh no");
-		}
+		} 
 
 		if (charts[i].renderTo.id == "temperatureChart") {
 			temperatureChart = charts[i].getSVG();
-		} else if (typeof (charts[i].renderTo) == 'undefined') {
-			console.log("oh no");
-		}
+		} 
 
 		if (charts[i].renderTo.id == "humidityChart") {
 			humidityChart = charts[i].getSVG();
-		} else if (typeof (charts[i].renderTo) == 'undefined') {
-			console.log("oh no");
 		}
 
-
-		console.log("this is people chart");
-		console.log(peopleChart);
-		console.log("this is temperature chart");
-		console.log(temperatureChart);
-		console.log("this is humidity chart");
-		console.log(humidityChart);
 	}
 
 	// Open the new window that show the PDF file
@@ -2461,8 +2416,6 @@ function showUserTable() {
 		if (this.readyState == 4 && this.status == 200) {
 			$("#spinner").hide();
 			var result = this.response;
-			console.log("this is user data");
-			console.log(result);
 			var c = 0;
 			var a = 0;
 
@@ -2647,6 +2600,8 @@ function addUser() {
 		$("#userAlert").show();
 	}
 
+	ValidateEmail(document.getElementById("uemail"));
+
 	if (document.getElementById("uemail").value === "") {
 		document.getElementById("userAlert").innerHTML = '<strong>Please fill in your email!</strong> <button type="button" class="close" onclick="closeUserAlert()"><span>&times;</span></button>';
 		$("#userAlert").show();
@@ -2664,7 +2619,8 @@ function addUser() {
 		&& document.getElementById("role").value !== "Pick a Role"
 		&& (document.getElementById("upsd").value === document.getElementById("cupsd").value)
 		&& CheckPassword(document.getElementById("upsd")) === true
-		&& CheckPassword(document.getElementById("cupsd")) === true) {
+		&& CheckPassword(document.getElementById("cupsd")) === true
+		&& ValidateEmail(document.getElementById("uemail")) === true) {
 		$("#spinner_adduser").show();
 		var xhttp = new XMLHttpRequest();
 		xhttp.responseType = 'json';
@@ -2737,13 +2693,6 @@ function CheckPassword(input) {
 	var validPassword = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,12}$/;
 
 	if (input.value.match(validPassword)) {
-		//        var element = document.getElementById("userAlert");
-		//        element.classList.remove("alert-danger")
-		//        element.classList.add("alert-success");
-		//        
-		//        document.getElementById("userAlert").innerHTML = '<strong>Your Password is valid!</strong> <button type="button" class="close" onclick="closeUserAlert()"><span>&times;</span></button>';
-		//        $("#userAlert").show();
-
 		return true;
 	}
 	else {
@@ -3025,27 +2974,6 @@ async function login() {
 		xhttp.send(params);
 	}
 };
-//
-//console.log("adlsandlksnlf");
-//
-//$("#loginPassword").keyup(function(event) { 
-//    if (event.keyCode === 13) { 
-//        $("#loginSubmitbtn").click(); 
-//        console.log("yes");
-//    } 
-//}); 
-
-//$('#loginPassword').keypress(function(event){
-//    var keycode = (event.keyCode ? event.keyCode : event.which);
-//    if(keycode == '13'){
-//        alert('You pressed a "enter" key in textbox');  
-//    }
-//});
-//
-//$(document).ready(function() {
-//    console.log( "ready!" );
-//});
-
 
 // enter key will trigger login button
 function triggerLogin(event) {
@@ -4677,6 +4605,24 @@ function CheckProfileChangePassword(input) {
 		document.getElementById("changePasswordAlert").innerHTML = '<strong>Your New Password or Confirm New Password is invalid. Please enter a password which contain 8 to 12 character, at least one numeric digit, one uppercase and one lowercase letter!</strong> <button type="button" class="close" onclick="closeProfileAlert()"><span>&times;</span></button>';
 		$("#changePasswordAlert").show();
 		$("#profileSpinner").hide();
+
+		return false;
+
+	}
+};
+
+function ValidateEmail(input) {
+	var emailformat = /^\w+([\.-]?\w+)*@swinburne.edu.my/;
+
+	if (input.value.match(emailformat)) {
+		return true;
+	}
+	else {
+		var element = document.getElementById("userAlert");
+		element.classList.add("alert-danger");
+
+		document.getElementById("userAlert").innerHTML = '<strong>You have entered an invalid email address. Please use Swinburne email to register!</strong> <button type="button" class="close" onclick="closeUserAlert()"><span>&times;</span></button>';
+		$("#userAlert").show();
 
 		return false;
 
