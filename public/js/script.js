@@ -2520,6 +2520,7 @@ function showUserTable() {
 			if ((sessionStorage.getItem("passLoginUserRole")) == "staff") {
 				$("[data-toggle='toggle']").prop('disabled', true);
 				$("[data-toggle='collapse']").prop('disabled', true);
+				$('#userNameToggle').prop('disabled', false);
 
 			}
 		}
