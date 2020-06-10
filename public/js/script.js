@@ -161,7 +161,7 @@ var reportTable = $('#reportTable').DataTable({
 							[
 								{},
 								{ text: date, alignment: 'center', fontSize: 12 },
-								{ text: 'Value', alignment: 'center', fontSize: 12 }
+								{ text: 'Number of People', alignment: 'center', fontSize: 12 }
 							],
 							[
 								{ text: 'Highest', alignment: 'center', fontSize: 12 },
@@ -192,7 +192,7 @@ var reportTable = $('#reportTable').DataTable({
 							[
 								{},
 								{ text: date, alignment: 'center', fontSize: 12 },
-								{ text: 'Value', alignment: 'center', fontSize: 12 }
+								{ text: 'Temperature (°C)', alignment: 'center', fontSize: 12 }
 							],
 							[
 								{ text: 'Highest', alignment: 'center', fontSize: 12 },
@@ -223,7 +223,7 @@ var reportTable = $('#reportTable').DataTable({
 							[
 								{},
 								{ text: date, alignment: 'center', fontSize: 12 },
-								{ text: 'Value', alignment: 'center', fontSize: 12 }
+								{ text: 'Humidity (RH)', alignment: 'center', fontSize: 12 }
 							],
 							[
 								{ text: 'Highest', alignment: 'center', fontSize: 12 },
